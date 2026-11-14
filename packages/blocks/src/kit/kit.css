@@ -1,0 +1,206 @@
+/*
+ * The block kit stylesheet: the token vocabulary every block uses (report 02, D5; decision 0001).
+ * Tailwind's default theme is wiped, so a block can only use these tokens: `p-4`, `text-xl`,
+ * `bg-red-500` or `md:` produce nothing, and the class check in test/contract.test.ts fails on them.
+ *
+ * Token NAMES are the contract. Token VALUES come from a theme on [data-site] (theme/draft.css for
+ * now). `@theme inline` makes utilities read the theme's variables directly, so a surface or a
+ * theme can change them lower in the page (report 02, the :root trap).
+ */
+@layer theme, base, components, utilities;
+@import "tailwindcss/preflight.css" layer(base);
+@import "tailwindcss/utilities.css" layer(utilities);
+
+@theme {
+  --*: initial;
+  /* Container query sizes, measured on the block's own box: @md: and @lg: */
+  --container-md: 40rem;
+  --container-lg: 64rem;
+  /* Content widths */
+  --container-content: 72rem;
+  --container-prose: 40rem;
+  --container-wide: 90rem;
+  /* Aspect ratios */
+  --aspect-portrait: 4 / 5;
+  --aspect-square: 1 / 1;
+  --aspect-landscape: 3 / 2;
+  --aspect-wide: 16 / 9;
+}
+
+@theme inline {
+  /* Colour roles. Each surface maps them to the theme's palette. */
+  --color-bg: var(--role-bg);
+  --color-fg: var(--role-fg);
+  --color-fg-muted: var(--role-fg-muted);
+  --color-accent: var(--role-accent);
+  --color-accent-fg: var(--role-accent-fg);
+  --color-border: var(--role-border);
+  --color-transparent: transparent;
+  --color-current: currentColor;
+  /* Spacing */
+  --spacing-0: 0;
+  --spacing-px: 1px;
+  --spacing-2xs: var(--space-2xs);
+  --spacing-xs: var(--space-xs);
+  --spacing-sm: var(--space-sm);
+  --spacing-md: var(--space-md);
+  --spacing-lg: var(--space-lg);
+  --spacing-xl: var(--space-xl);
+  --spacing-2xl: var(--space-2xl);
+  --spacing-section: var(--space-section);
+  --spacing-gutter: var(--space-gutter);
+  --spacing-columns: var(--space-columns);
+  --spacing-tap: 2.75rem;
+  /* Corners */
+  --radius-control: var(--corner-control);
+  --radius-card: var(--corner-card);
+  --radius-media: var(--corner-media);
+  --radius-full: 9999px;
+  --radius-none: 0;
+}
+
+@layer base {
+  [data-site] {
+    container-type: inline-size;
+    background: var(--p-base-bg);
+    color: var(--p-base-fg);
+    font-family: var(--type-body-family);
+  }
+  [data-surface="base"] {
+    --role-bg: var(--p-base-bg);
+    --role-fg: var(--p-base-fg);
+    --role-fg-muted: var(--p-base-fg-muted);
+    --role-accent: var(--p-base-accent);
+    --role-accent-fg: var(--p-base-accent-fg);
+    --role-border: var(--p-base-border);
+  }
+  [data-surface="muted"] {
+    --role-bg: var(--p-muted-bg);
+    --role-fg: var(--p-muted-fg);
+    --role-fg-muted: var(--p-muted-fg-muted);
+    --role-accent: var(--p-muted-accent);
+    --role-accent-fg: var(--p-muted-accent-fg);
+    --role-border: var(--p-muted-border);
+  }
+  [data-surface="brand"] {
+    --role-bg: var(--p-brand-bg);
+    --role-fg: var(--p-brand-fg);
+    --role-fg-muted: var(--p-brand-fg-muted);
+    --role-accent: var(--p-brand-accent);
+    --role-accent-fg: var(--p-brand-accent-fg);
+    --role-border: var(--p-brand-border);
+  }
+  [data-surface="inverse"] {
+    --role-bg: var(--p-inverse-bg);
+    --role-fg: var(--p-inverse-fg);
+    --role-fg-muted: var(--p-inverse-fg-muted);
+    --role-accent: var(--p-inverse-accent);
+    --role-accent-fg: var(--p-inverse-accent-fg);
+    --role-border: var(--p-inverse-border);
+  }
+  [data-block-id] {
+    container-type: inline-size;
+  }
+}
+
+/* Eight composite text styles. Blocks never set font size, weight or line height directly. */
+@utility type-display {
+  font-family: var(--type-display-family);
+  font-size: var(--type-display-size);
+  line-height: var(--type-display-leading);
+  letter-spacing: var(--type-display-tracking);
+  font-weight: var(--type-display-weight);
+  text-transform: var(--type-display-case, none);
+}
+@utility type-h2 {
+  font-family: var(--type-h2-family);
+  font-size: var(--type-h2-size);
+  line-height: var(--type-h2-leading);
+  letter-spacing: var(--type-h2-tracking);
+  font-weight: var(--type-h2-weight);
+  text-transform: var(--type-h2-case, none);
+}
+@utility type-h3 {
+  font-family: var(--type-h3-family);
+  font-size: var(--type-h3-size);
+  line-height: var(--type-h3-leading);
+  letter-spacing: var(--type-h3-tracking);
+  font-weight: var(--type-h3-weight);
+}
+@utility type-lead {
+  font-family: var(--type-body-family);
+  font-size: var(--type-lead-size);
+  line-height: var(--type-lead-leading);
+}
+@utility type-body {
+  font-family: var(--type-body-family);
+  font-size: var(--type-body-size);
+  line-height: var(--type-body-leading);
+}
+@utility type-small {
+  font-family: var(--type-body-family);
+  font-size: var(--type-small-size);
+  line-height: var(--type-small-leading);
+}
+@utility type-eyebrow {
+  font-family: var(--type-eyebrow-family, var(--type-body-family));
+  font-size: var(--type-eyebrow-size);
+  line-height: 1.3;
+  letter-spacing: var(--type-eyebrow-tracking);
+  font-weight: var(--type-eyebrow-weight);
+  text-transform: var(--type-eyebrow-case, none);
+}
+@utility type-button {
+  font-family: var(--type-body-family);
+  font-size: var(--type-button-size);
+  line-height: 1.2;
+  font-weight: var(--type-button-weight);
+  letter-spacing: var(--type-button-tracking, 0);
+}
+
+/* Images crop at their focal point. The Picture primitive sets --fx and --fy. */
+@utility media-cover {
+  object-fit: cover;
+  object-position: var(--fx, 50%) var(--fy, 50%);
+}
+
+/* Buttons: one primitive reads the theme's button style once, for every block. */
+@utility btn {
+  text-decoration: none;
+  &[data-button="solid"] {
+    background: var(--role-accent);
+    color: var(--role-accent-fg);
+  }
+  &[data-button="outline"] {
+    box-shadow: inset 0 0 0 1.5px currentColor;
+  }
+  &[data-button="text"] {
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+    padding-inline: 0;
+  }
+  &:focus-visible {
+    outline: 2px solid var(--role-accent);
+    outline-offset: 2px;
+  }
+}
+
+/* Rich text: paragraphs and lists keep a steady rhythm. */
+@utility prose-flow {
+  & > * + * {
+    margin-block-start: var(--space-sm);
+  }
+  & ul {
+    list-style: disc;
+    padding-inline-start: 1.25em;
+  }
+  & ol {
+    list-style: decimal;
+    padding-inline-start: 1.25em;
+  }
+  & a {
+    color: var(--role-accent);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+}

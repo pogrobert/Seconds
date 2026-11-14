@@ -351,7 +351,10 @@ export const fixtures: { [S in M0Section]: Fixtures<S> } = {
         headline: 'لون يكبر معك بشكل جميل',
         subhead: AR,
         primaryCta: { label: 'احجز استشارة', to: booking },
-        media: img(1, 'مصففة شعر تنهي صبغة نحاسية'),
+        gallery: [img(1, 'مصففة شعر'), img(2, 'صبغة نحاسية'), img(3, 'الفريق')].map((image, i) => ({
+          id: id('i', i + 1),
+          image,
+        })),
       },
       context: ctx('rtl'),
     },

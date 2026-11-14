@@ -1,0 +1,239 @@
+import type {
+  BlockId,
+  Business,
+  CollectionValue,
+  ContentOf,
+  Cta,
+  ImageRef,
+  LinkTarget,
+  RichText as RichTextValue,
+  SectionTypeName,
+} from '@repo/spec'
+import type { CSSProperties, ReactNode } from 'react'
+import type { Surface } from '../manifest/contract.ts'
+
+// The kit: the only building pieces a block may use besides plain HTML elements and token classes.
+// Primitives make the markup choices that themes depend on, once, for every block.
+
+/** Everything a block gets besides its content. Built by the renderer. */
+export type RenderCtx = {
+  id: BlockId
+  section: SectionTypeName
+  type: string
+  variant: string
+  surface: Surface
+  /** The first block on a page gets h1; every other block starts at h2. */
+  headingLevel: 1 | 2
+  /** The theme's button style, read once by ButtonLink. */
+  button: 'solid' | 'outline' | 'text'
+  href: (to: LinkTarget) => string
+  image: (
+    img: ImageRef,
+    o: { sizes: string; aspect?: number },
+  ) => { src: string; srcSet?: string; width: number; height: number }
+  business: Business
+  collection: (id: string) => CollectionValue | undefined
+}
+
+export type BlockProps<S extends SectionTypeName> = {
+  content: ContentOf<S>
+  variant: string
+  ctx: RenderCtx
+}
+
+/** Joins class names. Every part must be a literal string so the class check can read it. */
+export const cx = (...parts: (string | false | null | undefined)[]) =>
+  parts.filter(Boolean).join(' ')
+
+export function Section(p: {
+  ctx: RenderCtx
+  label?: string
+  className?: string
+  children: ReactNode
+}) {
+  return (
+    <section
+      data-block-id={p.ctx.id}
+      data-section={p.ctx.section}
+      data-block-type={p.ctx.type}
+      data-variant={p.ctx.variant}
+      data-surface={p.ctx.surface}
+      aria-label={p.label}
+      className={cx('bg-bg text-fg py-section px-gutter', p.className)}
+    >
+      {p.children}
+    </section>
+  )
+}
+
+export function Container(p: {
+  width?: 'content' | 'prose' | 'wide'
+  className?: string
+  children: ReactNode
+}) {
+  const w =
+    p.width === 'prose' ? 'max-w-prose' : p.width === 'wide' ? 'max-w-wide' : 'max-w-content'
+  return <div className={cx('mx-auto w-full', w, p.className)}>{p.children}</div>
+}
+
+export function Heading(p: {
+  ctx: RenderCtx
+  style: 'display' | 'h2' | 'h3'
+  slot: string
+  className?: string
+  children: ReactNode
+}) {
+  const level = p.style === 'h3' ? 3 : p.style === 'display' ? p.ctx.headingLevel : 2
+  const Tag = `h${level}` as 'h1' | 'h2' | 'h3'
+  const style = p.style === 'display' ? 'type-display' : p.style === 'h2' ? 'type-h2' : 'type-h3'
+  return (
+    <Tag data-slot={p.slot} className={cx(style, 'max-w-full text-balance', p.className)}>
+      {p.children}
+    </Tag>
+  )
+}
+
+export function Text(p: {
+  style: 'lead' | 'body' | 'small'
+  slot?: string
+  muted?: boolean
+  className?: string
+  children: ReactNode
+}) {
+  const style = p.style === 'lead' ? 'type-lead' : p.style === 'small' ? 'type-small' : 'type-body'
+  return (
+    <p
+      data-slot={p.slot}
+      className={cx(style, 'text-pretty', p.muted && 'text-fg-muted', p.className)}
+    >
+      {p.children}
+    </p>
+  )
+}
+
+export function Eyebrow(p: { slot?: string; children: ReactNode }) {
+  return (
+    <p data-slot={p.slot ?? 'eyebrow'} className="type-eyebrow text-fg-muted">
+      {p.children}
+    </p>
+  )
+}
+
+export function ButtonLink(p: {
+  ctx: RenderCtx
+  cta: Cta
+  slot: string
+  priority: 'primary' | 'secondary'
+}) {
+  return (
+    <a
+      href={p.ctx.href(p.cta.to)}
+      data-slot={p.slot}
+      data-button={p.priority === 'primary' ? p.ctx.button : 'outline'}
+      className="btn type-button inline-flex min-h-tap items-center justify-center rounded-control px-md"
+    >
+      {p.cta.label}
+    </a>
+  )
+}
+
+export function Actions(p: { ctx: RenderCtx; primary?: Cta; secondary?: Cta; className?: string }) {
+  if (!p.primary && !p.secondary) return null
+  return (
+    <div className={cx('flex flex-wrap gap-sm', p.className)}>
+      {p.primary && <ButtonLink ctx={p.ctx} cta={p.primary} slot="primaryCta" priority="primary" />}
+      {p.secondary && (
+        <ButtonLink ctx={p.ctx} cta={p.secondary} slot="secondaryCta" priority="secondary" />
+      )}
+    </div>
+  )
+}
+
+/** The only primitive allowed an inline style: the focal point as two custom properties. */
+/** How much of the page width an image takes on wide screens. The kit writes the browser hint. */
+export type Share = 'full' | 'half' | 'third' | 'quarter'
+const SIZES: Record<Share, string> = {
+  full: '100vw',
+  half: '(min-width: 1024px) 50vw, 100vw',
+  third: '(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw',
+  quarter: '(min-width: 1024px) 25vw, 50vw',
+}
+
+export function Picture(p: {
+  ctx: RenderCtx
+  image: ImageRef
+  share: Share
+  aspect?: number
+  priority?: boolean
+  slot?: string
+  className?: string
+}) {
+  const sizes = SIZES[p.share]
+  const a = p.ctx.image(p.image, { sizes, aspect: p.aspect })
+  const fx = Math.round((p.image.focal?.x ?? 0.5) * 100)
+  const fy = Math.round((p.image.focal?.y ?? 0.5) * 100)
+  const focal = { '--fx': `${fx}%`, '--fy': `${fy}%` } as CSSProperties
+  return (
+    <img
+      src={a.src}
+      srcSet={a.srcSet}
+      sizes={sizes}
+      width={a.width}
+      height={a.height}
+      alt={p.image.alt}
+      loading={p.priority ? 'eager' : 'lazy'}
+      fetchPriority={p.priority ? 'high' : undefined}
+      decoding="async"
+      data-slot={p.slot}
+      style={focal}
+      className={cx('media-cover block rounded-media', p.className)}
+    />
+  )
+}
+
+/** Rich text: paragraphs, bullet and numbered lists, quotes. Text nodes only, so always escaped. */
+export function RichText(p: {
+  ctx: RenderCtx
+  value: RichTextValue
+  slot: string
+  className?: string
+}) {
+  const out: ReactNode[] = []
+  let list: { style: 'bullet' | 'number'; items: ReactNode[] } | null = null
+  const spans = (para: RichTextValue[number]) =>
+    para.spans.map((s, i) => {
+      let node: ReactNode = s.text
+      if (s.marks?.includes('em')) node = <em>{node}</em>
+      if (s.marks?.includes('strong')) node = <strong>{node}</strong>
+      if (s.link) node = <a href={p.ctx.href(s.link)}>{node}</a>
+      return <span key={i}>{node}</span>
+    })
+  const flush = () => {
+    if (!list) return
+    const Tag = list.style === 'bullet' ? 'ul' : 'ol'
+    out.push(<Tag key={`l${out.length}`}>{list.items}</Tag>)
+    list = null
+  }
+  p.value.forEach((para, i) => {
+    if (para.style === 'bullet' || para.style === 'number') {
+      if (list && list.style !== para.style) flush()
+      list ??= { style: para.style, items: [] }
+      list.items.push(<li key={i}>{spans(para)}</li>)
+      return
+    }
+    flush()
+    out.push(
+      para.style === 'quote' ? (
+        <blockquote key={i}>{spans(para)}</blockquote>
+      ) : (
+        <p key={i}>{spans(para)}</p>
+      ),
+    )
+  })
+  flush()
+  return (
+    <div data-slot={p.slot} className={cx('prose-flow type-body', p.className)}>
+      {out}
+    </div>
+  )
+}
