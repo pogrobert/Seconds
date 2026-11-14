@@ -1,0 +1,36 @@
+packages:
+  - apps/*
+  - packages/*
+  - tools/*
+
+# One version per dependency. Packages refer to these as "catalog:".
+# Pinned exactly. Versions from docs/technical/04-platform.md, except where
+# its pin was younger than minimumReleaseAge on 2026-11-14 (wrangler,
+# @cloudflare/vite-plugin, @biomejs/biome): there the newest older version.
+catalog:
+  react: 19.3.1
+  react-dom: 19.3.1
+  "@types/react": 19.3.0
+  "@types/react-dom": 19.3.0
+  "@types/node": 26.6.6
+  "@tanstack/react-start": 1.169.5
+  "@tanstack/react-router": 1.170.46
+  vite: 8.3.8
+  "@vitejs/plugin-react": 6.3.0
+  "@cloudflare/vite-plugin": 1.68.0
+  wrangler: 4.160.0
+  tailwindcss: 4.3.5
+  "@tailwindcss/vite": 4.3.5
+  typescript: 7.0.2
+  zod: 4.6.7
+  vitest: 4.1.12
+  "@biomejs/biome": 2.6.6
+
+# Supply-chain settings.
+minimumReleaseAge: 4320 # minutes: skip versions younger than 3 days
+trustPolicy: no-downgrade
+blockExoticSubdeps: true
+onlyBuiltDependencies: # only these may run install scripts
+  - "@biomejs/biome"
+  - esbuild
+  - workerd

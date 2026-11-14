@@ -1,0 +1,58 @@
+{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true },
+  "files": {
+    "includes": ["**", "!**/routeTree.gen.ts", "!**/worker-configuration.d.ts", "!docs"]
+  },
+  "formatter": { "indentStyle": "space", "indentWidth": 2, "lineWidth": 100 },
+  "javascript": { "formatter": { "quoteStyle": "single", "semicolons": "asNeeded" } },
+  "linter": { "rules": { "preset": "recommended" } },
+  "overrides": [
+    {
+      "includes": ["packages/spec/**", "packages/pipeline/**", "packages/blocks/src/manifest/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "paths": {
+                  "react": "Pure package: no React. Only blocks/components and render may use it.",
+                  "react-dom": "Pure package: no React.",
+                  "@repo/blocks/components": "The pipeline reads block manifests, never components."
+                },
+                "patterns": [
+                  {
+                    "group": ["cloudflare:*"],
+                    "message": "Only apps/web/src/server/env.ts touches Cloudflare."
+                  },
+                  { "group": ["node:*"], "message": "Pure package: no Node built-ins." }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["packages/blocks/**", "packages/render/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": ["cloudflare:*"],
+                    "message": "Only apps/web/src/server/env.ts touches Cloudflare."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
