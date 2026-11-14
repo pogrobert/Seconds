@@ -1,4 +1,5 @@
 import type { BlockManifest } from '@repo/blocks/manifest'
+import { M0_FAMILIES } from '@repo/blocks/themes'
 import type { SectionTypeName } from '@repo/spec'
 import type { SectionPlan, SitePlan } from './assemble.ts'
 
@@ -16,7 +17,12 @@ const s = (type: string, variant: string, extra: Partial<SectionPlan> = {}): Sec
   ...extra,
 })
 
-const STYLE = { family: 'draft@1', axes: {}, mode: 'light' as const }
+// The default family per kind, from the research's best fits among M0's three (docs/research/07).
+const style = (family: (typeof M0_FAMILIES)[number]) => ({
+  family: `${family}@1`,
+  axes: {},
+  mode: 'light' as const,
+})
 
 export const DEFAULT_PLANS: Record<Kind, SitePlan> = {
   restaurant: {
@@ -29,7 +35,7 @@ export const DEFAULT_PLANS: Record<Kind, SitePlan> = {
       s('cta/band', 'centered', { surface: 'brand' }),
     ],
     after: [s('footer/simple', 'centered', { surface: 'muted' })],
-    style: STYLE,
+    style: style('poster'),
   },
   salon: {
     before: [s('header/classic', 'inline')],
@@ -42,7 +48,7 @@ export const DEFAULT_PLANS: Record<Kind, SitePlan> = {
       s('cta/band', 'centered', { surface: 'brand' }),
     ],
     after: [s('footer/simple', 'inline', { surface: 'muted' })],
-    style: STYLE,
+    style: style('quiet'),
   },
   clinic: {
     before: [s('header/utility', 'bar')],
@@ -55,7 +61,7 @@ export const DEFAULT_PLANS: Record<Kind, SitePlan> = {
       s('cta/band', 'centered', { surface: 'brand' }),
     ],
     after: [s('footer/columns', 'columns', { surface: 'muted' })],
-    style: STYLE,
+    style: style('soft'),
   },
   trades: {
     before: [s('header/utility', 'bar')],
@@ -68,7 +74,7 @@ export const DEFAULT_PLANS: Record<Kind, SitePlan> = {
       s('hours-location/split', 'compact', { navLabel: 'Contact' }),
     ],
     after: [s('footer/simple', 'inline', { surface: 'muted' })],
-    style: STYLE,
+    style: style('poster'),
   },
   fitness: {
     before: [s('header/classic', 'inline')],
@@ -81,7 +87,7 @@ export const DEFAULT_PLANS: Record<Kind, SitePlan> = {
       s('hours-location/panel', 'single', { navLabel: 'Visit' }),
     ],
     after: [s('footer/columns', 'columns', { surface: 'muted' })],
-    style: STYLE,
+    style: style('soft'),
   },
 }
 
@@ -135,6 +141,6 @@ export function randomPlan(
     before: base.before.map((x) => redraw(x, false)),
     sections: [...(first ? [redraw(first, false)] : []), ...middle],
     after: base.after.map((x) => redraw(x, false)),
-    style: base.style,
+    style: { ...base.style, family: `${pick(M0_FAMILIES)}@1` },
   }
 }

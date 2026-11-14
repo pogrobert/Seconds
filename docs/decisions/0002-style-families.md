@@ -1,6 +1,6 @@
-# 0002: Style families (draft, waiting for Robert's choice)
+# 0002: Style families
 
-**Status:** options drawn on 2026-11-14; nothing chosen. CLAUDE.md: design choices are Robert's.
+**Status:** Robert chose on 2026-11-14: **Poster, Quiet and Soft** are M0's three families. Workshop and Deep stay in the code as options, but are not used in M0. Questions 2 to 4 below are still open; none of them blocks M0.
 **Viewer:** https://claude.ai/artifact/CsxSj5jiajesqcp8Cw2BKq (private): the five families on the same five sample businesses, side by side.
 
 ## What a style family is
@@ -27,7 +27,7 @@ The code is in `packages/blocks/src/themes/index.ts`. Values come from `docs/res
 
 ## Choices for Robert
 
-1. Which three families M0 tests. The research suggests Poster, Quiet and Soft, which differ the most from each other. Workshop is the best fit for trades and could replace Quiet.
+1. ~~Which three families M0 tests.~~ Answered: Poster, Quiet and Soft.
 2. Whether Deep is its own family, or a dark setting any family can switch on.
 3. Anything to change within a family: fonts, corners, colour strategy.
 4. Whether the "Storybook" idea from the research (warm, illustrated) deserves a family.

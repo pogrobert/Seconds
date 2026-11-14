@@ -429,6 +429,9 @@ export const FAMILIES: Record<FamilyId, Family> = {
 
 export const FAMILY_IDS = Object.keys(FAMILIES) as FamilyId[]
 
+/** The three families M0 tests (Robert, 2026-11-14; docs/decisions/0002-style-families.md). */
+export const M0_FAMILIES = ['poster', 'quiet', 'soft'] as const satisfies readonly FamilyId[]
+
 /* ------------------------------------------------------------------ output */
 
 const role = (prefix: string, t: TypeRole) =>
