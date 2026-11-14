@@ -168,7 +168,7 @@ const escapeText = (s: string) =>
 export function renderDocument(
   spec: SiteSpec,
   pageId: PageId,
-  o: RenderOptions & { css: string },
+  o: RenderOptions & { css: string /** Extra head tags, such as a fonts link. */; head?: string },
 ): RenderedPage {
   const r = renderPage(spec, pageId, o)
   const page = spec.structure.pages[pageId]
@@ -178,6 +178,6 @@ export function renderDocument(
   const meta = pc?.description
     ? `<meta name="description" content="${escapeText(pc.description)}">`
     : ''
-  const html = `<!doctype html><html lang="${spec.settings.locale}" dir="${spec.settings.dir}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${escapeText(title)}</title>${meta}<style>${o.css}</style></head><body data-site>${r.html}</body></html>`
+  const html = `<!doctype html><html lang="${spec.settings.locale}" dir="${spec.settings.dir}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${escapeText(title)}</title>${meta}${o.head ?? ''}<style>${o.css}</style></head><body data-site>${r.html}</body></html>`
   return { ...r, html }
 }

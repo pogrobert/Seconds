@@ -9,8 +9,9 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run --passWithNoTests",
     "eval": "node src/index.ts",
-    "samples": "vitest run --config vitest.tasks.config.ts",
-    "block-log": "node src/block-log.ts"
+    "samples": "vitest run --config vitest.tasks.config.ts samples",
+    "block-log": "node src/block-log.ts",
+    "styles": "vitest run --config vitest.tasks.config.ts styles"
   },
   "dependencies": {
     "@repo/spec": "workspace:*",
@@ -21,6 +22,8 @@
   "devDependencies": {
     "@types/node": "catalog:",
     "@pogrobert/surfaces": "catalog:",
-    "react": "catalog:"
+    "react": "catalog:",
+    "playwright": "catalog:",
+    "@axe-core/playwright": "catalog:"
   }
 }

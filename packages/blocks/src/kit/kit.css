@@ -163,14 +163,17 @@
   line-height: var(--type-h3-leading);
   letter-spacing: var(--type-h3-tracking);
   font-weight: var(--type-h3-weight);
+  text-transform: var(--type-h3-case, none);
 }
 @utility type-lead {
   font-family: var(--type-body-family);
+  font-weight: var(--type-body-weight, 400);
   font-size: var(--type-lead-size);
   line-height: var(--type-lead-leading);
 }
 @utility type-body {
   font-family: var(--type-body-family);
+  font-weight: var(--type-body-weight, 400);
   font-size: var(--type-body-size);
   line-height: var(--type-body-leading);
 }
@@ -188,11 +191,12 @@
   text-transform: var(--type-eyebrow-case, none);
 }
 @utility type-button {
-  font-family: var(--type-body-family);
+  font-family: var(--type-button-family, var(--type-body-family));
   font-size: var(--type-button-size);
-  line-height: 1.2;
+  line-height: var(--type-button-leading, 1.2);
   font-weight: var(--type-button-weight);
   letter-spacing: var(--type-button-tracking, 0);
+  text-transform: var(--type-button-case, none);
 }
 
 /* Images crop at their focal point. The Picture primitive sets --fx and --fy. */
