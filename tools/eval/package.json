@@ -11,7 +11,8 @@
     "eval": "node src/index.ts",
     "samples": "vitest run --config vitest.tasks.config.ts samples",
     "block-log": "node src/block-log.ts",
-    "styles": "vitest run --config vitest.tasks.config.ts styles"
+    "styles": "vitest run --config vitest.tasks.config.ts styles",
+    "sheet": "vitest run --config vitest.tasks.config.ts sheet"
   },
   "dependencies": {
     "@repo/spec": "workspace:*",
@@ -24,6 +25,7 @@
     "@pogrobert/surfaces": "catalog:",
     "react": "catalog:",
     "playwright": "catalog:",
-    "@axe-core/playwright": "catalog:"
+    "@axe-core/playwright": "catalog:",
+    "react-dom": "catalog:"
   }
 }
