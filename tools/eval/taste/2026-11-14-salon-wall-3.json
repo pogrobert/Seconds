@@ -1,0 +1,628 @@
+{
+  "date": "2026-11-14",
+  "wall": "salon, round 3",
+  "url": "https://claude.ai/artifact/LeX3cwT7s2vwxhVY9JYKoi",
+  "rater": "Robert",
+  "verdict": "Pretty much all are fine and acceptable (his words). No site singled out as liked or disliked.",
+  "sites": [
+    {
+      "n": "01",
+      "label": {
+        "family": "poster",
+        "type": "oswald",
+        "palette": "tint",
+        "frame": "inset",
+        "photo": "mono",
+        "mode": "dark",
+        "rhythm": "calm",
+        "brand": "#1e2433",
+        "lead": "photo 5"
+      },
+      "headline": "Colour that grows out beautifully",
+      "blocks": [
+        "header/utility#minimal (base)",
+        "hero/photo#cover (base)",
+        "text-media/split#image-start (base)",
+        "price-list/menu#list (base)",
+        "cards/feature#tiles (base)",
+        "hours-location/panel#locations (base)",
+        "cta/band#centered (brand)",
+        "footer/wordmark#wordmark (muted)"
+      ],
+      "acceptable": true
+    },
+    {
+      "n": "02",
+      "label": {
+        "family": "quiet",
+        "type": "instrument",
+        "palette": "stone",
+        "frame": "inset",
+        "photo": "tint",
+        "mode": "dark",
+        "rhythm": "blocks",
+        "brand": "#a87a2a",
+        "lead": "photo 1"
+      },
+      "headline": "Hair that feels like yours",
+      "blocks": [
+        "header/classic#inline (inverse)",
+        "hero/overlay#bottom (base)",
+        "text-media/split#text-only (brand)",
+        "cards/steps#rows (base)",
+        "price-list/classic#leaders (brand)",
+        "cta/feature#photo-banner (inverse)",
+        "hours-location/panel#single (brand)",
+        "footer/columns#signup (inverse)"
+      ],
+      "acceptable": true
+    },
+    {
+      "n": "03",
+      "label": {
+        "family": "soft",
+        "type": "outfit",
+        "palette": "tint",
+        "frame": "inset",
+        "photo": "natural",
+        "mode": "dark",
+        "rhythm": "blocks",
+        "brand": "#b0563a",
+        "lead": "photo 2"
+      },
+      "headline": "Good hair, no fuss",
+      "blocks": [
+        "header/classic#inline (inverse)",
+        "hero/photo#triptych (base)",
+        "cards/list#compact (brand)",
+        "price-list/classic#leaders (base)",
+        "cta/feature#photo-banner (inverse)",
+        "hours-location/split#with-text (base)",
+        "footer/wordmark#wordmark (inverse)"
+      ],
+      "acceptable": true
+    },
+    {
+      "n": "04",
+      "label": {
+        "family": "poster",
+        "type": "shoulders",
+        "palette": "tint",
+        "frame": "inset",
+        "photo": "natural",
+        "mode": "light",
+        "rhythm": "blocks",
+        "brand": "#b0563a",
+        "lead": "photo 4"
+      },
+      "headline": "Colour that grows out beautifully",
+      "blocks": [
+        "header/utility#minimal (inverse)",
+        "hero/photo#portrait (base)",
+        "price-list/classic#leaders (brand)",
+        "text-media/feature#overlap (base)",
+        "cards/feature#accordion (brand)",
+        "hours-location/week#statement (base)",
+        "cta/band#split (inverse)",
+        "footer/simple#centered (brand)"
+      ],
+      "acceptable": true
+    },
+    {
+      "n": "05",
+      "label": {
+        "family": "quiet",
+        "type": "cormorant",
+        "palette": "paper",
+        "frame": "bleed",
+        "photo": "natural",
+        "mode": "light",
+        "rhythm": "dark-end",
+        "brand": "#5b4a7a",
+        "lead": "photo 1"
+      },
+      "headline": "Hair that feels like yours",
+      "blocks": [
+        "header/classic#stacked (base)",
+        "hero/photo#triptych (base)",
+        "text-media/split#text-only (base)",
+        "cards/list#compact (muted)",
+        "price-list/cards#featured (base)",
+        "hours-location/panel#single (inverse)",
+        "cta/feature#jumbo (inverse)",
+        "footer/columns#columns (inverse)"
+      ],
+      "acceptable": true
+    },
+    {
+      "n": "06",
+      "label": {
+        "family": "soft",
+        "type": "fraunces",
+        "palette": "tint",
+        "frame": "bleed",
+        "photo": "mono",
+        "mode": "dark",
+        "rhythm": "calm",
+        "brand": "#a87a2a",
+        "lead": "photo 1"
+      },
+      "headline": "Hair that feels like yours",
+      "blocks": [
+        "header/classic#inline (base)",
+        "hero/photo#portrait (base)",
+        "price-list/cards#groups (base)",
+        "text-media/feature#columns (base)",
+        "cards/feature#tiles (base)",
+        "cta/signup#stacked (brand)",
+        "hours-location/split#compact (base)",
+        "footer/columns#columns (muted)"
+      ],
+      "acceptable": true
+    },
+    {
+      "n": "07",
+      "label": {
+        "family": "poster",
+        "type": "anton",
+        "palette": "paper",
+        "frame": "inset",
+        "photo": "natural",
+        "mode": "light",
+        "rhythm": "blocks",
+        "brand": "#a87a2a",
+        "lead": "photo 1"
+      },
+      "headline": "Good hair, no fuss",
+      "blocks": [
+        "header/utility#bar (inverse)",
+        "hero/overlay#bottom (base)",
+        "text-media/feature#columns (brand)",
+        "cards/grid#images (base)",
+        "price-list/cards#groups (brand)",
+        "hours-location/week#statement (base)",
+        "cta/signup#inline (inverse)",
+        "footer/columns#columns (brand)"
+      ],
+      "acceptable": true
+    },
+    {
+      "n": "08",
+      "label": {
+        "family": "quiet",
+        "type": "cormorant",
+        "palette": "paper",
+        "frame": "bleed",
+        "photo": "natural",
+        "mode": "light",
+        "rhythm": "alternate",
+        "brand": "#b4566e",
+        "lead": "photo 5"
+      },
+      "headline": "Colour that grows out beautifully",
+      "blocks": [
+        "header/utility#bar (base)",
+        "hero/photo#half (base)",
+        "text-media/feature#quote (muted)",
+        "price-list/classic#menu-board (base)",
+        "cta/signup#inline (brand)",
+        "hours-location/panel#single (base)",
+        "footer/wordmark#signup (inverse)"
+      ],
+      "acceptable": true
+    },
+    {
+      "n": "09",
+      "label": {
+        "family": "soft",
+        "type": "outfit",
+        "palette": "tint",
+        "frame": "bleed",
+        "photo": "natural",
+        "mode": "light",
+        "rhythm": "dark-end",
+        "brand": "#141414",
+        "lead": "photo 2"
+      },
+      "headline": "Hair that feels like yours",
+      "blocks": [
+        "header/classic#inline (base)",
+        "hero/photo#cover (base)",
+        "text-media/split#image-start (base)",
+        "price-list/cards#featured (muted)",
+        "cta/band#centered (inverse)",
+        "hours-location/split#compact (inverse)",
+        "footer/simple#inline (inverse)"
+      ],
+      "acceptable": true
+    },
+    {
+      "n": "10",
+      "label": {
+        "family": "poster",
+        "type": "anton",
+        "palette": "tint",
+        "frame": "inset",
+        "photo": "tint",
+        "mode": "light",
+        "rhythm": "calm",
+        "brand": "#5b4a7a",
+        "lead": "photo 1"
+      },
+      "headline": "Good hair, no fuss",
+      "blocks": [
+        "header/utility#bar (base)",
+        "hero/editorial#framed (base)",
+        "price-list/classic#menu-board (base)",
+        "cards/grid#bordered (base)",
+        "text-media/feature#overlap (base)",
+        "hours-location/split#with-text (base)",
+        "cta/signup#inline (brand)",
+        "footer/simple#inline (muted)"
+      ],
+      "acceptable": true
+    },
+    {
+      "n": "11",
+      "label": {
+        "family": "quiet",
+        "type": "newsreader",
+        "palette": "stone",
+        "frame": "inset",
+        "photo": "natural",
+        "mode": "light",
+        "rhythm": "blocks",
+        "brand": "#141414",
+        "lead": "photo 5"
+      },
+      "headline": "Hair that feels like yours",
+      "blocks": [
+        "header/utility#bar (inverse)",
+        "hero/photo#triptych (base)",
+        "price-list/classic#leaders (brand)",
+        "text-media/split#text-only (base)",
+        "cards/list#two-column (brand)",
+        "hours-location/week#strip (base)",
+        "cta/feature#jumbo (inverse)",
+        "footer/wordmark#signup (brand)"
+      ],
+      "acceptable": true
+    },
+    {
+      "n": "12",
+      "label": {
+        "family": "soft",
+        "type": "geist",
+        "palette": "tint",
+        "frame": "inset",
+        "photo": "natural",
+        "mode": "dark",
+        "rhythm": "calm",
+        "brand": "#1e2433",
+        "lead": "photo 1"
+      },
+      "headline": "Colour that grows out beautifully",
+      "blocks": [
+        "header/utility#minimal (base)",
+        "hero/editorial#framed (base)",
+        "cards/list#two-column (base)",
+        "price-list/menu#list (base)",
+        "cta/band#centered (brand)",
+        "hours-location/week#statement (base)",
+        "footer/simple#inline (muted)"
+      ],
+      "acceptable": true
+    },
+    {
+      "n": "13",
+      "label": {
+        "family": "poster",
+        "type": "shoulders",
+        "palette": "tint",
+        "frame": "bleed",
+        "photo": "tint",
+        "mode": "light",
+        "rhythm": "blocks",
+        "brand": "#5b4a7a",
+        "lead": "photo 1"
+      },
+      "headline": "Hair that feels like yours",
+      "blocks": [
+        "header/utility#minimal (inverse)",
+        "hero/photo#portrait (base)",
+        "cards/feature#numbers (brand)",
+        "text-media/editorial#heading-aside (base)",
+        "price-list/classic#menu-board (brand)",
+        "cta/feature#split-panel (inverse)",
+        "hours-location/panel#single (brand)",
+        "footer/simple#inline (inverse)"
+      ],
+      "acceptable": true
+    },
+    {
+      "n": "14",
+      "label": {
+        "family": "quiet",
+        "type": "instrument",
+        "palette": "paper",
+        "frame": "bleed",
+        "photo": "natural",
+        "mode": "dark",
+        "rhythm": "dark-end",
+        "brand": "#5e7656",
+        "lead": "photo 4"
+      },
+      "headline": "Cut, colour and calm in Leith",
+      "blocks": [
+        "header/classic#stacked (base)",
+        "hero/photo#half (base)",
+        "price-list/cards#groups (base)",
+        "cards/steps#numbered (muted)",
+        "text-media/split#image-end (base)",
+        "cta/feature#jumbo (inverse)",
+        "hours-location/split#compact (inverse)",
+        "footer/simple#centered (inverse)"
+      ],
+      "acceptable": true
+    },
+    {
+      "n": "15",
+      "label": {
+        "family": "soft",
+        "type": "fraunces",
+        "palette": "tint",
+        "frame": "inset",
+        "photo": "tint",
+        "mode": "light",
+        "rhythm": "calm",
+        "brand": "#5b4a7a",
+        "lead": "photo 2"
+      },
+      "headline": "Cut, colour and calm in Leith",
+      "blocks": [
+        "header/utility#bar (base)",
+        "hero/overlay#bottom (base)",
+        "text-media/feature#columns (base)",
+        "price-list/cards#groups (base)",
+        "cards/grid#plain (base)",
+        "cta/signup#inline (brand)",
+        "hours-location/panel#single (base)",
+        "footer/wordmark#signup (muted)"
+      ],
+      "acceptable": true
+    },
+    {
+      "n": "16",
+      "label": {
+        "family": "poster",
+        "type": "oswald",
+        "palette": "tint",
+        "frame": "inset",
+        "photo": "tint",
+        "mode": "light",
+        "rhythm": "calm",
+        "brand": "#5e7656",
+        "lead": "photo 2"
+      },
+      "headline": "Colour that grows out beautifully",
+      "blocks": [
+        "header/classic#inline (base)",
+        "hero/editorial#card (base)",
+        "price-list/menu#list (base)",
+        "text-media/feature#columns (base)",
+        "cards/feature#accordion (base)",
+        "cta/feature#jumbo (brand)",
+        "hours-location/split#with-text (base)",
+        "footer/wordmark#wordmark (muted)"
+      ],
+      "acceptable": true
+    },
+    {
+      "n": "17",
+      "label": {
+        "family": "quiet",
+        "type": "cormorant",
+        "palette": "stone",
+        "frame": "inset",
+        "photo": "natural",
+        "mode": "light",
+        "rhythm": "calm",
+        "brand": "#5b4a7a",
+        "lead": "photo 1"
+      },
+      "headline": "Cut, colour and calm in Leith",
+      "blocks": [
+        "header/classic#inline (base)",
+        "hero/editorial#framed (base)",
+        "price-list/menu#list (base)",
+        "cards/list#two-column (base)",
+        "hours-location/week#strip (base)",
+        "cta/feature#split-panel (brand)",
+        "footer/wordmark#wordmark (muted)"
+      ],
+      "acceptable": true
+    },
+    {
+      "n": "18",
+      "label": {
+        "family": "soft",
+        "type": "geist",
+        "palette": "white",
+        "frame": "bleed",
+        "photo": "mono",
+        "mode": "light",
+        "rhythm": "calm",
+        "brand": "#1f5c63",
+        "lead": "photo 4"
+      },
+      "headline": "Colour that grows out beautifully",
+      "blocks": [
+        "header/utility#bar (base)",
+        "hero/editorial#card (base)",
+        "price-list/classic#menu-board (base)",
+        "text-media/feature#quote (base)",
+        "cards/feature#numbers (base)",
+        "cta/band#centered (brand)",
+        "hours-location/panel#single (base)",
+        "footer/wordmark#signup (muted)"
+      ],
+      "acceptable": true
+    },
+    {
+      "n": "19",
+      "label": {
+        "family": "poster",
+        "type": "anton",
+        "palette": "tint",
+        "frame": "inset",
+        "photo": "natural",
+        "mode": "light",
+        "rhythm": "dark-end",
+        "brand": "#b4566e",
+        "lead": "photo 2"
+      },
+      "headline": "Colour that grows out beautifully",
+      "blocks": [
+        "header/utility#minimal (base)",
+        "hero/editorial#framed (base)",
+        "price-list/menu#list (base)",
+        "text-media/split#text-only (muted)",
+        "cards/list#compact (base)",
+        "cta/signup#stacked (inverse)",
+        "hours-location/week#strip (inverse)",
+        "footer/simple#centered (inverse)"
+      ],
+      "acceptable": true
+    },
+    {
+      "n": "20",
+      "label": {
+        "family": "quiet",
+        "type": "cormorant",
+        "palette": "paper",
+        "frame": "bleed",
+        "photo": "tint",
+        "mode": "light",
+        "rhythm": "blocks",
+        "brand": "#5b4a7a",
+        "lead": "photo 1"
+      },
+      "headline": "Good hair, no fuss",
+      "blocks": [
+        "header/classic#stacked (inverse)",
+        "hero/editorial#framed (base)",
+        "price-list/cards#groups (brand)",
+        "text-media/feature#overlap (base)",
+        "cards/grid#images (brand)",
+        "cta/band#split (inverse)",
+        "hours-location/week#statement (brand)",
+        "footer/simple#centered (inverse)"
+      ],
+      "acceptable": true
+    },
+    {
+      "n": "21",
+      "label": {
+        "family": "soft",
+        "type": "outfit",
+        "palette": "tint",
+        "frame": "bleed",
+        "photo": "natural",
+        "mode": "dark",
+        "rhythm": "calm",
+        "brand": "#1f5c63",
+        "lead": "photo 4"
+      },
+      "headline": "Cut, colour and calm in Leith",
+      "blocks": [
+        "header/classic#stacked (base)",
+        "hero/photo#half (base)",
+        "price-list/cards#groups (base)",
+        "text-media/split#text-only (base)",
+        "cards/feature#accordion (base)",
+        "cta/feature#photo-banner (brand)",
+        "hours-location/panel#single (base)",
+        "footer/columns#columns (muted)"
+      ],
+      "acceptable": true
+    },
+    {
+      "n": "22",
+      "label": {
+        "family": "poster",
+        "type": "oswald",
+        "palette": "paper",
+        "frame": "inset",
+        "photo": "natural",
+        "mode": "dark",
+        "rhythm": "dark-end",
+        "brand": "#141414",
+        "lead": "photo 1"
+      },
+      "headline": "Hair that feels like yours",
+      "blocks": [
+        "header/classic#stacked (base)",
+        "hero/overlay#bottom (base)",
+        "price-list/cards#groups (base)",
+        "cards/feature#accordion (muted)",
+        "text-media/feature#overlap (base)",
+        "hours-location/week#strip (inverse)",
+        "cta/feature#photo-banner (inverse)",
+        "footer/simple#centered (inverse)"
+      ],
+      "acceptable": true
+    },
+    {
+      "n": "23",
+      "label": {
+        "family": "quiet",
+        "type": "cormorant",
+        "palette": "stone",
+        "frame": "bleed",
+        "photo": "tint",
+        "mode": "light",
+        "rhythm": "calm",
+        "brand": "#b0563a",
+        "lead": "photo 1"
+      },
+      "headline": "Hair that feels like yours",
+      "blocks": [
+        "header/utility#minimal (base)",
+        "hero/editorial#card (base)",
+        "cards/steps#rows (base)",
+        "text-media/editorial#gallery (base)",
+        "price-list/cards#groups (base)",
+        "cta/feature#split-panel (brand)",
+        "hours-location/panel#single (base)",
+        "footer/columns#columns (muted)"
+      ],
+      "acceptable": true
+    },
+    {
+      "n": "24",
+      "label": {
+        "family": "soft",
+        "type": "fraunces",
+        "palette": "white",
+        "frame": "bleed",
+        "photo": "tint",
+        "mode": "light",
+        "rhythm": "calm",
+        "brand": "#1e2433",
+        "lead": "photo 1"
+      },
+      "headline": "Good hair, no fuss",
+      "blocks": [
+        "header/utility#bar (base)",
+        "hero/photo#triptych (base)",
+        "text-media/split#image-end (base)",
+        "cards/list#compact (base)",
+        "price-list/menu#table (base)",
+        "hours-location/panel#single (base)",
+        "cta/feature#jumbo (brand)",
+        "footer/simple#centered (muted)"
+      ],
+      "acceptable": true
+    }
+  ]
+}

@@ -78,3 +78,15 @@ Robert's picks decide:
 - whether the shuffled section order reads better than the default order
 
 Corners and spacing could be dropped as settings altogether.
+
+## Robert's verdict (2026-11-14)
+
+"Pretty much all are fine and acceptable." He named no site as liked or disliked. The verdict is stored in `tools/eval/taste/2026-11-14-salon-wall-3.json`.
+
+**What it means:**
+
+- **For The Wall (M1):** random draws from this space already give sites the owner would accept. The Wall's basic promise holds for one salon: many different sites, all usable.
+- **For M0's blind test:**
+  - If random valid choices already look acceptable, the decision model can't win by avoiding ugly sites. It has to win on fit: whether a site suits its business and brief.
+  - All 24 Wall sites were for one salon, so this round did not test fit. The 30 briefs, across five kinds of business with different tones, will.
+- **The library's floor is acceptable;** what's left to decide is taste and fit. No option is removed on this evidence.
