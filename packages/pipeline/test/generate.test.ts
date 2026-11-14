@@ -16,6 +16,7 @@ import {
   resolveSite,
   type SectionPlan,
   slotOf,
+  tidy,
   typesafeDecisions,
 } from '../src/index.ts'
 
@@ -196,6 +197,19 @@ describe('generate()', () => {
     expect(site.record.decision.adapter).toBe('random')
     expect(site.record.questions.length).toBeGreaterThan(10)
     expect(site.record.decided.length).toBeGreaterThan(10)
+  })
+  it('tidies characters some fonts lack', () => {
+    expect(tidy({ a: ['queer\u2011friendly'], b: 'x\u202fy' })).toEqual({
+      a: ['queer-friendly'],
+      b: 'x y',
+    })
+  })
+  it('never offers a closing section as the first section', () => {
+    const q = compileQuestions('salon', photos, manifests).find(
+      (c) => c.question.id === 'page.first',
+    )
+    const keys = q?.question.kind === 'choice' ? q.question.options.map((o) => o.key) : []
+    expect(keys.some((k) => k.startsWith('cta') || k.startsWith('hours-location'))).toBe(false)
   })
   it('checks the words against their limits', () => {
     expect(checkCopy(copy, false)).toEqual([])

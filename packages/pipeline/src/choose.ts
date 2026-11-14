@@ -137,6 +137,8 @@ export function allowedVariants(
 
 /** Sections that may be left out. The banner, prices, visit and call to action always stay. */
 const OPTIONAL: readonly SectionTypeName[] = ['cards', 'text-media']
+/** Sections that close a page; never moved to the top. */
+const CLOSING: readonly SectionTypeName[] = ['cta', 'hours-location']
 
 /* ------------------------------------------------------------------ compile */
 
@@ -155,7 +157,7 @@ export type Binding =
 export type Compiled = { question: Question; binding: Binding }
 
 /** Bump when the wording of any question changes, so records can tell a wording change apart. */
-export const QUESTIONS_VERSION = 1
+export const QUESTIONS_VERSION = 2
 
 export function compileQuestions(
   kind: Kind,
@@ -288,7 +290,10 @@ export function compileQuestions(
       id: 'page.first',
       prompt:
         "Given the owner's brief in `brief`, which section should come first on this business's website, straight after the top banner?",
-      options: middle.map((s) => ({ key: slotOf(s), text: `${cap(sectionWords(s))}.` })),
+      // Content sections only: the call to action and the visit details belong lower down.
+      options: middle
+        .filter((s) => !CLOSING.includes(s.sectionType))
+        .map((s) => ({ key: slotOf(s), text: `${cap(sectionWords(s))}.` })),
     },
   )
 

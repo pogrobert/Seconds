@@ -77,6 +77,46 @@ The brand colour is the owner's in every arm. Blind pairs (A against B, A agains
   - the word limits
   - `generate()` with stand-ins
 
+## The live run (2026-11-14)
+
+Run on this computer, not on Cloudflare: TypeSafe `jev-1.14.0` and OpenRouter `openai/gpt-oss-120b` (served by Cerebras). Results are in `tools/eval/out/m0/live/`.
+
+**Measured:**
+
+| | Median | Slowest |
+|---|---|---|
+| Decision call (about 5,900 input tokens) | 254 ms | 402 ms |
+| Text call | 770 ms | 2,052 ms |
+| Both together (they run at the same time) | 771 ms | 2,053 ms |
+| Model cost per site | $0.00098 | $0.00121 |
+
+- **Totals:** 30 briefs and 90 sites. 0 failures, 0 text retries and 0 fallbacks to defaults. 0 page problems at 360 and 1280 px.
+- **Cost:** about $0.03 of OpenRouter credit for the whole run. Robert's key has a $3 cap.
+
+**What Jev chose:**
+- Loud or sporty briefs got Poster, mostly dark: the late-night restaurant, the sweaty studio, the colour salon, the cheeky electrician.
+- Calm, upmarket briefs got Quiet with a serif: the candlelit dining room, the colour studio, the premium studio, the lighting designer.
+- Gentle briefs got Soft: the frightened-patients dentist, the family dentist, the eco salon.
+- Overall it leans on favourites:
+  - Soft in 14 of 30, and Outfit in 11 of those 14
+  - the tall-photo banner (`hero/photo#portrait`) in 14 of 30
+  - the calm rhythm in 19 of 30
+
+**Three faults were fixed after a 2-brief trial:**
+1. The call to action could be chosen as the first section; now only content sections are offered (questions version 2).
+2. The writer turned a parking note into an address; it now gets the real address.
+3. The writer's non-breaking hyphens are now replaced with plain ones.
+
+**The words:** no invented prices, years or awards were found in the 30 copies. Every address the text mentions is the real one.
+
+**Blind rating page:** https://claude.ai/artifact/78QGdzPNntwTKEWhNDseXa
+- 60 pairs: A against B and A against C for every brief.
+- Site files have random names, and each brief's two pairs sit in different halves of the list.
+- Choices are saved in the page's storage, which only the owner can read or write.
+- The key is `tools/eval/out/m0/live/rating-key.json`; it never goes into the page.
+- Built by `node tools/eval/src/rating-page.ts live`.
+- **Known weakness:** site A appears in both pairs of its brief. An attentive rater could notice that the site seen twice is A.
+
 ## To run it for real
 
 1. Add `TYPESAFE_API_KEY` and `OPENROUTER_API_KEY` to the project's `.env` file. Never paste keys into the chat.

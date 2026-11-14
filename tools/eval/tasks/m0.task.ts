@@ -79,7 +79,10 @@ function factsOf(s: SampleBusiness, brief: Brief): string {
   )
   return [
     `Area: ${brief.place}.`,
-    loc?.note ? `Getting there: ${loc.note}` : '',
+    loc?.address
+      ? `Address: ${[...loc.address.lines, loc.address.locality, loc.address.postalCode].join(', ')}.`
+      : '',
+    loc?.note ? `Access and parking: ${loc.note}` : '',
     s.business.bookingUrl ? 'Takes bookings online.' : 'Takes bookings by phone.',
     `What they offer: ${items.filter(Boolean).join('; ')}.`,
   ]

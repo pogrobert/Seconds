@@ -264,7 +264,7 @@ export function openRouterText(o: {
           continue
         }
         try {
-          copy = JSON.parse(text) as Copy
+          copy = tidy(JSON.parse(text) as Copy)
           problems = checkCopy(copy, input.needSteps)
         } catch {
           problems = ['the answer was not valid JSON']
@@ -281,6 +281,19 @@ export function openRouterText(o: {
       return { copy: problems.length ? null : copy, problems, calls }
     },
   }
+}
+
+/**
+ * Plain characters in place of typographic ones some fonts lack: the non-breaking hyphen (U+2011)
+ * and the narrow and thin spaces that some models emit.
+ */
+export function tidy<T>(value: T): T {
+  if (typeof value === 'string')
+    return value.replace(/\u2011/g, '-').replace(/[\u202f\u2009]/g, ' ') as T
+  if (Array.isArray(value)) return value.map(tidy) as T
+  if (value && typeof value === 'object')
+    return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, tidy(v)])) as T
+  return value
 }
 
 /** Returns a fixed copy: for tests and for runs without a key. */
