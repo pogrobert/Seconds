@@ -16,6 +16,7 @@ export function testCtx(
   type: string,
   variant: string,
   context: Context,
+  rtl = false,
 ): RenderCtx {
   const href = (to: LinkTarget): string => {
     switch (to.type) {
@@ -47,6 +48,9 @@ export function testCtx(
     }),
     business: context.business,
     collection: (id) => context.collections[id],
+    locale: rtl ? 'ar' : 'en-GB',
+    dir: rtl ? 'rtl' : 'ltr',
+    formAction: (form) => `/_x/forms/${form.form}`,
   }
 }
 
@@ -73,4 +77,64 @@ export function classesIn(source: string): string[] {
   for (const m of source.matchAll(/cx\(([^)]*)\)/g))
     for (const s of (m[1] ?? '').matchAll(/'([^']*)'/g)) add(s[1] ?? '')
   return [...found]
+}
+
+/**
+ * The longest content a variant must hold: the shared "longest" case, cut down to the variant's own
+ * caps, keeping only the fields the variant shows. Required images missing from "longest" are taken
+ * from "typical". This is how each variant's character caps are proved in a real browser.
+ */
+export function contentAtCaps(
+  m: import('../src/manifest/contract.ts').BlockManifest,
+  variant: string,
+  longest: Record<string, unknown>,
+  typical: Record<string, unknown>,
+): Record<string, unknown> | null {
+  const v = m.variants[variant]
+  if (!v) return null
+  const out: Record<string, unknown> = {}
+  for (const f of v.uses as readonly string[]) {
+    const value =
+      longest[f] ??
+      ((v.requires as readonly string[] | undefined)?.includes(f) ? typical[f] : undefined)
+    if (value !== undefined) out[f] = value
+  }
+  for (const f of (v.requires ?? []) as readonly string[]) if (out[f] === undefined) return null
+  const cut = (s: string, n: number) => (s.length > n ? s.slice(0, n).trimEnd() : s)
+  const cutRich = (r: { style: string; spans: { text: string }[] }[], n: number) => {
+    const text = r.flatMap((p) => p.spans.map((s) => s.text)).join(' ')
+    return text.length > n ? [{ style: 'p', spans: [{ text: cut(text, n) }] }] : r
+  }
+  for (const [f, cap] of Object.entries(v.caps ?? {}) as [
+    string,
+    number | { max?: number; parts?: Record<string, number> },
+  ][]) {
+    const value = out[f]
+    if (value === undefined) continue
+    const max = typeof cap === 'number' ? cap : cap.max
+    if (typeof value === 'string' && max !== undefined) out[f] = cut(value, max)
+    else if (
+      Array.isArray(value) &&
+      value[0] &&
+      typeof value[0] === 'object' &&
+      'spans' in value[0] &&
+      max !== undefined
+    )
+      out[f] = cutRich(value as never, max)
+    else if (Array.isArray(value)) {
+      let list = max !== undefined ? value.slice(0, max) : value
+      if (typeof cap === 'object' && cap.parts)
+        list = list.map((item: Record<string, unknown>) => {
+          const copy = { ...item }
+          for (const [part, n] of Object.entries(cap.parts ?? {})) {
+            const pv = copy[part]
+            if (typeof pv === 'string') copy[part] = cut(pv, n)
+            else if (Array.isArray(pv)) copy[part] = cutRich(pv as never, n)
+          }
+          return copy
+        })
+      out[f] = list
+    }
+  }
+  return out
 }

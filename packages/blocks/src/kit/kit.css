@@ -101,6 +101,43 @@
   [data-block-id] {
     container-type: inline-size;
   }
+  [data-site] th {
+    font-weight: inherit;
+  }
+}
+
+/* Navigation: a click-to-open dropdown (<details>) and the phone menu (native popover). */
+@utility nav-dropdown {
+  & > summary {
+    list-style: none;
+  }
+  & > summary::after {
+    content: " ▾";
+  }
+  & > summary::-webkit-details-marker {
+    display: none;
+  }
+}
+@utility dropdown-panel {
+  position: absolute;
+  inset-inline-start: 0;
+  top: 100%;
+  z-index: 20;
+  min-inline-size: 12rem;
+  margin-block-start: var(--space-xs);
+  padding: var(--space-sm);
+  background: var(--role-bg);
+  border: 1px solid var(--role-border);
+  border-radius: var(--corner-card);
+}
+@utility menu-popover {
+  inset: 0 0 auto auto;
+  margin: 0;
+  inline-size: min(20rem, 100%);
+  padding: var(--space-lg) var(--space-md);
+  background: var(--role-bg);
+  color: var(--role-fg);
+  border: 1px solid var(--role-border);
 }
 
 /* Eight composite text styles. Blocks never set font size, weight or line height directly. */
@@ -203,4 +240,14 @@
     text-decoration: underline;
     text-underline-offset: 0.2em;
   }
+}
+
+/* Text over a photo: a shade in the section's own background colour, strongest where the text sits. */
+@utility scrim {
+  background: linear-gradient(
+    to top,
+    color-mix(in oklab, var(--role-bg) 88%, transparent) 0%,
+    color-mix(in oklab, var(--role-bg) 55%, transparent) 55%,
+    color-mix(in oklab, var(--role-bg) 15%, transparent) 100%
+  );
 }

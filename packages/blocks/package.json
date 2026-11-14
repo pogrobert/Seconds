@@ -10,16 +10,21 @@
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "test": "vitest run --passWithNoTests"
+    "test": "vitest run --passWithNoTests",
+    "registry": "node scripts/registry.ts && biome format --write src/manifest/index.ts src/components/index.ts",
+    "test:browser": "vitest run --config vitest.browser.config.ts"
   },
   "dependencies": {
     "@repo/spec": "workspace:*",
     "react": "catalog:"
   },
   "devDependencies": {
+    "@axe-core/playwright": "catalog:",
+    "@pogrobert/surfaces": "catalog:",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
+    "playwright": "catalog:",
     "react-dom": "catalog:",
     "tailwindcss": "catalog:"
   }
