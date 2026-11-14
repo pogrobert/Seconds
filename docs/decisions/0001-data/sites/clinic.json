@@ -1,0 +1,2484 @@
+{
+ "kind": "clinic",
+ "collected": "2026-11-14",
+ "sites": [
+  {
+   "name": "Hebden Bridge Dental Care",
+   "url": "https://hebdenbridgedentalcare.co.uk/",
+   "city_country": "Hebden Bridge, West Yorkshire, UK",
+   "platform_guess": "WordPress",
+   "quality": "average",
+   "pages_checked": [
+    "https://hebdenbridgedentalcare.co.uk/",
+    "https://hebdenbridgedentalcare.co.uk/the-team/",
+    "https://hebdenbridgedentalcare.co.uk/private-fee-guide/",
+    "https://hebdenbridgedentalcare.co.uk/treatments/dental-implants/"
+   ],
+   "sections": [
+    {
+     "page": "home",
+     "label": "Header",
+     "purpose": "address link, logo, phone, main nav with dropdowns",
+     "elements": [
+      "address",
+      "logo",
+      "phone",
+      "text link"
+     ],
+     "items": null,
+     "notes": "Nav has 6 top items with dropdowns (About Us, Dental Treatments, Fees and Plans, Contact Us incl. Refer a Patient).",
+     "order": 1
+    },
+    {
+     "page": "home",
+     "label": "Welcome to Hebden Bridge Dental Care",
+     "purpose": "hero with tagline",
+     "elements": [
+      "headline",
+      "subheadline",
+      "primary button",
+      "background image"
+     ],
+     "items": null,
+     "notes": "Tagline: Dental care you can trust. Button: Contact Us.",
+     "order": 2
+    },
+    {
+     "page": "home",
+     "label": "Dentist in Hebden Bridge",
+     "purpose": "practice introduction",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "single image"
+     ],
+     "items": null,
+     "notes": "States established over 50 years; private practice; inline list of services.",
+     "order": 3
+    },
+    {
+     "page": "home",
+     "label": "Dental Treatments",
+     "purpose": "treatment tiles linking to treatment pages",
+     "elements": [
+      "headline",
+      "repeated items",
+      "text link"
+     ],
+     "items": {
+      "count": 7,
+      "shape": "title link tile (no description)"
+     },
+     "notes": "Tiles: Examinations, Family, Cosmetic, Invisalign, Implants, Minor Oral Surgery, Periodontology.",
+     "order": 4
+    },
+    {
+     "page": "home",
+     "label": "Contact us to arrange an appointment",
+     "purpose": "enquiry form",
+     "elements": [
+      "headline",
+      "phone",
+      "contact form",
+      "primary button"
+     ],
+     "items": null,
+     "notes": "Form has an 'I'm interested in' dropdown (new patient, checkup, implants, cosmetic, straightening, gums, other); other fields not visible in extract.",
+     "order": 5
+    },
+    {
+     "page": "home",
+     "label": "You only have one smile. Look after it for life",
+     "purpose": "closing slogan CTA",
+     "elements": [
+      "headline",
+      "phone"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 6
+    },
+    {
+     "page": "home",
+     "label": "Opening hours",
+     "purpose": "hours",
+     "elements": [
+      "opening hours"
+     ],
+     "items": null,
+     "notes": "Mon-Fri 9.00-5.30 only, no emergency or out-of-hours info.",
+     "order": 7
+    },
+    {
+     "page": "home",
+     "label": "Location map",
+     "purpose": "map link and address",
+     "elements": [
+      "map",
+      "address",
+      "text link"
+     ],
+     "items": null,
+     "notes": "Map link goes to separate location page.",
+     "order": 8
+    },
+    {
+     "page": "home",
+     "label": "Footer",
+     "purpose": "link groups, company and credit-broker legal info",
+     "elements": [
+      "text link",
+      "legal links",
+      "address"
+     ],
+     "items": null,
+     "notes": "3 link columns (About, Treatments/Testimonials/Contact/Complaints, Fees: Private Fee Guide, Payment Plans, Finance, NHS Fees). Credit broker not lender notice, company number, copyright, Privacy and Cookie policy links. Cookie consent banner with unfilled template placeholders.",
+     "order": 9
+    },
+    {
+     "page": "team",
+     "label": "Meet the Team (page heading)",
+     "purpose": "team page title",
+     "elements": [
+      "headline"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 1
+    },
+    {
+     "page": "team",
+     "label": "Dentists and therapists",
+     "purpose": "profiles of clinicians",
+     "elements": [
+      "repeated items",
+      "single image",
+      "paragraph(s)"
+     ],
+     "items": {
+      "count": 8,
+      "shape": "name + credentials/role + GDC number + photo + bio paragraph(s)"
+     },
+     "notes": "GDC registration numbers shown per person (regulatory). Credentials include degrees, university, year, special interest. One profile has no photo. Bios mix training and personal background.",
+     "order": 2
+    },
+    {
+     "page": "team",
+     "label": "Other staff",
+     "purpose": "name and role list, no photos",
+     "elements": [
+      "repeated items"
+     ],
+     "items": {
+      "count": 14,
+      "shape": "name + role (+ GDC number)"
+     },
+     "notes": "Practice manager, 3 hygienists, lead nurse, 7 nurses, 2 receptionists listed as plain text with no sub-heading.",
+     "order": 3
+    },
+    {
+     "page": "team",
+     "label": "Closing CTA, hours, map/address",
+     "purpose": "same contact block as home",
+     "elements": [
+      "headline",
+      "phone",
+      "opening hours",
+      "map",
+      "address"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 4
+    },
+    {
+     "page": "fees",
+     "label": "Pay as you go fee guide (intro)",
+     "purpose": "fee page intro",
+     "elements": [
+      "headline",
+      "subheadline",
+      "paragraph(s)",
+      "single image"
+     ],
+     "items": null,
+     "notes": "Dated 'From April 1st 2025'. Disclaimer that complex treatment plans are assessed individually.",
+     "order": 1
+    },
+    {
+     "page": "fees",
+     "label": "Main fee table",
+     "purpose": "price list comparing pay-as-you-go and Denplan plan prices",
+     "elements": [
+      "price",
+      "repeated items"
+     ],
+     "items": {
+      "count": 37,
+      "shape": "treatment name + 4 price columns (Pay As You Go, Denplan Essential A, Essential B, Care)"
+     },
+     "notes": "Wide 5-column table, 12 groups (Examination, X-Rays, Hygiene, Fillings, Extractions, Root Canal, Crowns & Bridges, Dentures, Whitening, Orthodontics, Implants, Misc). Cells hold 'From', 'POA', 'Included', 'Free', '2 Included', 'Lab Free Only'. 'Swipe to view full table' on mobile.",
+     "order": 2
+    },
+    {
+     "page": "fees",
+     "label": "Denplan monthly fee bands",
+     "purpose": "membership plan monthly prices",
+     "elements": [
+      "price",
+      "repeated items"
+     ],
+     "items": {
+      "count": 7,
+      "shape": "band name (Cat A-E) + monthly price"
+     },
+     "notes": "Two groups: Denplan Care (5 bands) and Essentials (2 bands).",
+     "order": 3
+    },
+    {
+     "page": "fees",
+     "label": "Closing CTA, contact, footer",
+     "purpose": "contact block and footer",
+     "elements": [
+      "phone",
+      "opening hours",
+      "address",
+      "legal links"
+     ],
+     "items": null,
+     "notes": "Credit broker notice.",
+     "order": 4
+    },
+    {
+     "page": "treatment (implants)",
+     "label": "Dental Implants",
+     "purpose": "treatment detail page",
+     "elements": [
+      "headline",
+      "single image",
+      "paragraph(s)",
+      "icons"
+     ],
+     "items": null,
+     "notes": "Benefits as bullet points.",
+     "order": 1
+    },
+    {
+     "page": "treatment (implants)",
+     "label": "Image gallery",
+     "purpose": "clinic or implant photos",
+     "elements": [
+      "image gallery"
+     ],
+     "items": {
+      "count": 4,
+      "shape": "unlabelled photo"
+     },
+     "notes": "",
+     "order": 2
+    },
+    {
+     "page": "treatment (implants)",
+     "label": "Dental Implant Cases",
+     "purpose": "before and after photos",
+     "elements": [
+      "image gallery"
+     ],
+     "items": {
+      "count": 4,
+      "shape": "before image + after image"
+     },
+     "notes": "",
+     "order": 3
+    },
+    {
+     "page": "treatment (implants)",
+     "label": "Testimonials",
+     "purpose": "heading only",
+     "elements": [
+      "headline"
+     ],
+     "items": null,
+     "notes": "Heading rendered with no visible content in extraction.",
+     "order": 4
+    },
+    {
+     "page": "treatment (implants)",
+     "label": "Treatments we also offer",
+     "purpose": "cross-links",
+     "elements": [
+      "repeated items",
+      "text link"
+     ],
+     "items": {
+      "count": 6,
+      "shape": "title card link"
+     },
+     "notes": "",
+     "order": 5
+    },
+    {
+     "page": "treatment (implants)",
+     "label": "Contact us to arrange an appointment",
+     "purpose": "same enquiry form as home",
+     "elements": [
+      "contact form",
+      "phone",
+      "opening hours",
+      "address",
+      "map"
+     ],
+     "items": null,
+     "notes": "No prices or FAQs on page.",
+     "order": 6
+    }
+   ]
+  },
+  {
+   "name": "Roscam Family Dental Practice",
+   "url": "https://roscamdental.ie/",
+   "city_country": "Galway, Ireland",
+   "platform_guess": "WordPress with Elementor (CookieYes), agency-built",
+   "quality": "polished",
+   "pages_checked": [
+    "https://roscamdental.ie/",
+    "https://roscamdental.ie/services/",
+    "https://roscamdental.ie/about-us/"
+   ],
+   "sections": [
+    {
+     "page": "home",
+     "label": "Header",
+     "purpose": "logo, nav with mega-menu, booking button",
+     "elements": [
+      "logo",
+      "primary button",
+      "booking widget"
+     ],
+     "items": null,
+     "notes": "Services mega-menu with 11 items incl. Fee Guide and Emergency Dental Care. 'Schedule a Checkup' opens a booking popup (vendor not visible).",
+     "order": 1
+    },
+    {
+     "page": "home",
+     "label": "EMPOWERING YOU TO SMILE MORE",
+     "purpose": "hero",
+     "elements": [
+      "headline",
+      "subheadline",
+      "primary button",
+      "background image"
+     ],
+     "items": null,
+     "notes": "Booking popup button.",
+     "order": 2
+    },
+    {
+     "page": "home",
+     "label": "Who We Are",
+     "purpose": "short intro",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "text link"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 3
+    },
+    {
+     "page": "home",
+     "label": "A healthy smile from our family to yours",
+     "purpose": "tagline banner",
+     "elements": [
+      "quote/testimonial"
+     ],
+     "items": null,
+     "notes": "Tagline in banner style.",
+     "order": 4
+    },
+    {
+     "page": "home",
+     "label": "Quick links",
+     "purpose": "3 tiles to key service groups",
+     "elements": [
+      "repeated items",
+      "icons",
+      "text link"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "icon + title + link"
+     },
+     "notes": "Checkup, Fillings, Emergency Dental Care.",
+     "order": 5
+    },
+    {
+     "page": "home",
+     "label": "Services introduction",
+     "purpose": "intro and link to all services",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "primary button"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 6
+    },
+    {
+     "page": "home",
+     "label": "Why Choose Us",
+     "purpose": "3 reasons with carousel",
+     "elements": [
+      "repeated items",
+      "paragraph(s)"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "title + paragraph"
+     },
+     "notes": "Location with parking and bus route, modern family clinic, same-day emergencies (hedged wording).",
+     "order": 7
+    },
+    {
+     "page": "home",
+     "label": "Testimonials",
+     "purpose": "patient reviews",
+     "elements": [
+      "quote/testimonial",
+      "star rating",
+      "text link"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "first name + 5-star image + quote"
+     },
+     "notes": "First names only, no dates.",
+     "order": 8
+    },
+    {
+     "page": "home",
+     "label": "Book a checkup & clean today",
+     "purpose": "closing CTA",
+     "elements": [
+      "headline",
+      "primary button",
+      "booking widget"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 9
+    },
+    {
+     "page": "home",
+     "label": "Contact block and footer",
+     "purpose": "contact, social, policies",
+     "elements": [
+      "phone",
+      "email",
+      "address",
+      "social links",
+      "legal links",
+      "contact form",
+      "text link"
+     ],
+     "items": null,
+     "notes": "Policies: Privacy, Cookie, Cancellation. Email obfuscated. Floating call/email action bar. Contact form fields: first/last name, date, phone, email, how can we help. No opening hours shown. A job application form (14 fields incl. visa status, salary expectation) is embedded twice in the page with no visible role title. Cookie consent banner (CookieYes).",
+     "order": 10
+    },
+    {
+     "page": "services",
+     "label": "Services (hero)",
+     "purpose": "services overview intro with doctor photo",
+     "elements": [
+      "headline",
+      "subheadline",
+      "paragraph(s)",
+      "single image",
+      "primary button"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 1
+    },
+    {
+     "page": "services",
+     "label": "Our Approach to your Dental Care",
+     "purpose": "3-point approach",
+     "elements": [
+      "repeated items",
+      "paragraph(s)"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "checkmark + sentence"
+     },
+     "notes": "",
+     "order": 2
+    },
+    {
+     "page": "services",
+     "label": "Full-service dental practice",
+     "purpose": "service cards",
+     "elements": [
+      "repeated items",
+      "icons",
+      "text link"
+     ],
+     "items": {
+      "count": 9,
+      "shape": "icon + linked title + tagline"
+     },
+     "notes": "Cards are repeated twice on page.",
+     "order": 3
+    },
+    {
+     "page": "services",
+     "label": "What to expect at your appointment",
+     "purpose": "3 numbered steps",
+     "elements": [
+      "repeated items"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "number + text"
+     },
+     "notes": "Repeats the approach text.",
+     "order": 4
+    },
+    {
+     "page": "services",
+     "label": "FAQ",
+     "purpose": "accordion Q&A",
+     "elements": [
+      "repeated items"
+     ],
+     "items": {
+      "count": 11,
+      "shape": "question + answer (accordion)"
+     },
+     "notes": "Covers PRSI exam and clean for EUR 15, no carry-over of PRSI entitlements, Med 2 tax relief up to 20 percent, 72-hour cancellation policy, pregnancy, nervous patients, parking, bus, private health insurance. Irish-specific funding text.",
+     "order": 5
+    },
+    {
+     "page": "services",
+     "label": "Schedule an appointment today",
+     "purpose": "closing CTA",
+     "elements": [
+      "headline",
+      "primary button"
+     ],
+     "items": null,
+     "notes": "Fees live on a separate Fee Guide page, not read.",
+     "order": 6
+    },
+    {
+     "page": "about",
+     "label": "Intro and anchor links",
+     "purpose": "about intro",
+     "elements": [
+      "headline",
+      "text link",
+      "paragraph(s)"
+     ],
+     "items": null,
+     "notes": "Founded 2013 by Dr Neysan Chah; four values: family, friendliness, communication, excellence.",
+     "order": 1
+    },
+    {
+     "page": "about",
+     "label": "We Believe / Family Dentistry",
+     "purpose": "philosophy text",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "secondary button"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 2
+    },
+    {
+     "page": "about",
+     "label": "If You...",
+     "purpose": "3 numbered statements with CTA",
+     "elements": [
+      "repeated items",
+      "primary button"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "numbered sentence"
+     },
+     "notes": "",
+     "order": 3
+    },
+    {
+     "page": "about",
+     "label": "Meet The Team",
+     "purpose": "team cards that open popups",
+     "elements": [
+      "repeated items",
+      "single image"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "photo + name; click opens popup with qualifications + bio"
+     },
+     "notes": "Popup bios: degrees, special interest in orofacial pain, Irish Dental Association membership, personal hobbies.",
+     "order": 4
+    },
+    {
+     "page": "about",
+     "label": "What Our Patients Are Saying",
+     "purpose": "reviews",
+     "elements": [
+      "quote/testimonial",
+      "star rating",
+      "repeated items"
+     ],
+     "items": {
+      "count": 10,
+      "shape": "first name + star image + review text"
+     },
+     "notes": "Undated, no photos.",
+     "order": 5
+    },
+    {
+     "page": "about",
+     "label": "Book a checkup & clean today + contact form",
+     "purpose": "CTA and form",
+     "elements": [
+      "primary button",
+      "contact form",
+      "phone"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 6
+    }
+   ]
+  },
+  {
+   "name": "Bend Family Dentistry",
+   "url": "https://bendfamilydentistry.com/",
+   "city_country": "Bend, Oregon, USA (3 locations)",
+   "platform_guess": "WordPress",
+   "quality": "average",
+   "pages_checked": [
+    "https://bendfamilydentistry.com/",
+    "https://bendfamilydentistry.com/meet-the-doctors/",
+    "https://bendfamilydentistry.com/locations/"
+   ],
+   "sections": [
+    {
+     "page": "home",
+     "label": "Header",
+     "purpose": "logo and short nav",
+     "elements": [
+      "logo",
+      "text link"
+     ],
+     "items": null,
+     "notes": "Nav: Meet The Doctors, Join Our Team, Blog, Locations. No phone or address in header.",
+     "order": 1
+    },
+    {
+     "page": "home",
+     "label": "We Make You Feel Right at Home",
+     "purpose": "hero",
+     "elements": [
+      "headline",
+      "subheadline",
+      "primary button",
+      "background image"
+     ],
+     "items": null,
+     "notes": "Button: Our Locations.",
+     "order": 2
+    },
+    {
+     "page": "home",
+     "label": "Welcome To Bend Family Dentistry",
+     "purpose": "intro",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "single image"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 3
+    },
+    {
+     "page": "home",
+     "label": "State-Of-The-Art Care...",
+     "purpose": "technology and atmosphere",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "single image",
+      "image gallery"
+     ],
+     "items": {
+      "count": 11,
+      "shape": "linked image, no caption"
+     },
+     "notes": "",
+     "order": 4
+    },
+    {
+     "page": "home",
+     "label": "Our Doctors",
+     "purpose": "grid of doctors",
+     "elements": [
+      "repeated items",
+      "single image"
+     ],
+     "items": {
+      "count": 10,
+      "shape": "headshot + name"
+     },
+     "notes": "No titles or bios on home page; bios on separate page.",
+     "order": 5
+    },
+    {
+     "page": "home",
+     "label": "Testimonials / From Patients Like You",
+     "purpose": "quotes",
+     "elements": [
+      "quote/testimonial"
+     ],
+     "items": {
+      "count": 5,
+      "shape": "quote + name and initial"
+     },
+     "notes": "Undated.",
+     "order": 6
+    },
+    {
+     "page": "home",
+     "label": "Book Appointment",
+     "purpose": "heading with booking area",
+     "elements": [
+      "headline",
+      "booking widget"
+     ],
+     "items": null,
+     "notes": "Heading only in extract; widget not visible (possibly JS-embedded).",
+     "order": 7
+    },
+    {
+     "page": "home",
+     "label": "Footer",
+     "purpose": "social and legal",
+     "elements": [
+      "social links",
+      "legal links"
+     ],
+     "items": null,
+     "notes": "Facebook, Instagram, X, YouTube, Nextdoor (labelled 'Home'). Privacy Policy, HIPAA Notice of Privacy Practices PDF, Website Accessibility. No address, phone, hours, insurance info visible in extract.",
+     "order": 8
+    },
+    {
+     "page": "team",
+     "label": "Meet The Doctors (intro)",
+     "purpose": "page intro",
+     "elements": [
+      "headline",
+      "subheadline",
+      "paragraph(s)"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 1
+    },
+    {
+     "page": "team",
+     "label": "Video gallery",
+     "purpose": "video thumbnails",
+     "elements": [
+      "video",
+      "repeated items"
+     ],
+     "items": {
+      "count": 6,
+      "shape": "thumbnail with play icon, no caption"
+     },
+     "notes": "",
+     "order": 2
+    },
+    {
+     "page": "team",
+     "label": "Doctor profiles",
+     "purpose": "bios",
+     "elements": [
+      "repeated items",
+      "single image",
+      "paragraph(s)"
+     ],
+     "items": {
+      "count": 10,
+      "shape": "photo + name + Dental Office / Home / Education list + bio (110-260 words)"
+     },
+     "notes": "Bio length varies 110-260 words, includes personal hobbies and family; each doctor tied to an office.",
+     "order": 3
+    },
+    {
+     "page": "team",
+     "label": "Book Appointment",
+     "purpose": "heading",
+     "elements": [
+      "headline"
+     ],
+     "items": null,
+     "notes": "No visible content.",
+     "order": 4
+    },
+    {
+     "page": "locations",
+     "label": "Locations",
+     "purpose": "location finder",
+     "elements": [
+      "headline",
+      "map"
+     ],
+     "items": {
+      "count": 0,
+      "shape": "location name + address + phone + hours (not loaded in extract)"
+     },
+     "notes": "Locations list is dynamic and did not render; home page title says 3 locations. PARTLY READ.",
+     "order": 1
+    }
+   ]
+  },
+  {
+   "name": "Scotia Dental",
+   "url": "https://scotiadental.com/",
+   "city_country": "Halifax, Nova Scotia, Canada",
+   "platform_guess": "Dental marketing platform (URL pattern /site/...-halifax, likely Officite or similar)",
+   "quality": "average",
+   "pages_checked": [
+    "https://scotiadental.com/",
+    "https://scotiadental.com/site/dentists-halifax",
+    "https://scotiadental.com/site/new-patients-dentist-halifax"
+   ],
+   "sections": [
+    {
+     "page": "home",
+     "label": "Top bar and header",
+     "purpose": "logo, phone, appointment button, partner badge",
+     "elements": [
+      "logo",
+      "phone",
+      "primary button",
+      "accreditation badges"
+     ],
+     "items": null,
+     "notes": "Invisalign Provider badge.",
+     "order": 1
+    },
+    {
+     "page": "home",
+     "label": "Main navigation",
+     "purpose": "mega-menu with search",
+     "elements": [
+      "text link"
+     ],
+     "items": null,
+     "notes": "About, Services (8), Invisalign (3), Pediatrics, Emergencies, Patients, Careers, Contact, Search overlay.",
+     "order": 2
+    },
+    {
+     "page": "home",
+     "label": "Announcement bar",
+     "purpose": "CDCP notice",
+     "elements": [
+      "announcement bar",
+      "text link"
+     ],
+     "items": null,
+     "notes": "Canadian Dental Care Plan accepted.",
+     "order": 3
+    },
+    {
+     "page": "home",
+     "label": "New Patients Welcome (hero slider)",
+     "purpose": "hero slider",
+     "elements": [
+      "headline",
+      "subheadline",
+      "background image",
+      "repeated items"
+     ],
+     "items": {
+      "count": 5,
+      "shape": "feature line (CDCP, new patients, online booking, financing, comfort)"
+     },
+     "notes": "Slide image advertises Saturday hours while the footer says closed Saturdays.",
+     "order": 4
+    },
+    {
+     "page": "home",
+     "label": "New Patients Always Welcome",
+     "purpose": "intro",
+     "elements": [
+      "headline",
+      "paragraph(s)"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 5
+    },
+    {
+     "page": "home",
+     "label": "Service cards",
+     "purpose": "4 featured services",
+     "elements": [
+      "repeated items",
+      "single image",
+      "text link"
+     ],
+     "items": {
+      "count": 4,
+      "shape": "image + title + subtitle + Learn More link"
+     },
+     "notes": "",
+     "order": 6
+    },
+    {
+     "page": "home",
+     "label": "Welcome to Scotia Dental in Halifax",
+     "purpose": "about intro",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "single image",
+      "secondary button"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 7
+    },
+    {
+     "page": "home",
+     "label": "Meet Our Halifax Dentists",
+     "purpose": "dentist grid",
+     "elements": [
+      "repeated items",
+      "single image",
+      "text link"
+     ],
+     "items": {
+      "count": 9,
+      "shape": "portrait + name + role + short bio snippet"
+     },
+     "notes": "Roles: general, pediatric, periodontist. Sedation certifications mentioned.",
+     "order": 8
+    },
+    {
+     "page": "home",
+     "label": "Why Choose Scotia Dental?",
+     "purpose": "6 value cards",
+     "elements": [
+      "repeated items",
+      "icons",
+      "text link"
+     ],
+     "items": {
+      "count": 6,
+      "shape": "icon + title + text + link"
+     },
+     "notes": "",
+     "order": 9
+    },
+    {
+     "page": "home",
+     "label": "Invisalign section",
+     "purpose": "promo with cost calculator image",
+     "elements": [
+      "headline",
+      "single image",
+      "repeated items",
+      "accreditation badges"
+     ],
+     "items": {
+      "count": 2,
+      "shape": "card with link"
+     },
+     "notes": "",
+     "order": 10
+    },
+    {
+     "page": "home",
+     "label": "Visit us in Downtown Halifax",
+     "purpose": "location section",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "primary button",
+      "map"
+     ],
+     "items": null,
+     "notes": "Accessibility, free parking, transit notes.",
+     "order": 11
+    },
+    {
+     "page": "home",
+     "label": "FAQ",
+     "purpose": "accordion",
+     "elements": [
+      "repeated items"
+     ],
+     "items": {
+      "count": 8,
+      "shape": "question + expandable answer"
+     },
+     "notes": "CDCP, emergencies, first-appointment prep list, languages, financing.",
+     "order": 12
+    },
+    {
+     "page": "home",
+     "label": "Now Accepting New Patients",
+     "purpose": "closing CTA",
+     "elements": [
+      "headline",
+      "primary button"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 13
+    },
+    {
+     "page": "home",
+     "label": "Footer",
+     "purpose": "address, phone, hours, nav, legal",
+     "elements": [
+      "address",
+      "phone",
+      "opening hours",
+      "social links",
+      "text link",
+      "legal links"
+     ],
+     "items": null,
+     "notes": "Facebook only. Privacy, Accessibility, Sitemap. Sticky bottom bar with phone and Request Appointment. One location.",
+     "order": 14
+    },
+    {
+     "page": "team",
+     "label": "Meet Our Halifax Dentists",
+     "purpose": "dentist directory",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "primary button",
+      "repeated items",
+      "single image",
+      "text link"
+     ],
+     "items": {
+      "count": 9,
+      "shape": "portrait + name linked to bio page + specialty + Read Bio link"
+     },
+     "notes": "Credentials only on per-dentist bio pages (not read).",
+     "order": 1
+    },
+    {
+     "page": "team",
+     "label": "Now Accepting New Patients",
+     "purpose": "CTA",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "primary button"
+     ],
+     "items": null,
+     "notes": "CDCP banner above heading.",
+     "order": 2
+    },
+    {
+     "page": "new patients",
+     "label": "Your First Visit",
+     "purpose": "intro",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "primary button"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 1
+    },
+    {
+     "page": "new patients",
+     "label": "Relax. You're in Good Hands.",
+     "purpose": "reassurance copy",
+     "elements": [
+      "headline",
+      "paragraph(s)"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 2
+    },
+    {
+     "page": "new patients",
+     "label": "Your First Visit steps",
+     "purpose": "3 steps",
+     "elements": [
+      "repeated items",
+      "single image"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "image + heading + text"
+     },
+     "notes": "",
+     "order": 3
+    },
+    {
+     "page": "new patients",
+     "label": "Scotia Dental FAQs",
+     "purpose": "accordion",
+     "elements": [
+      "repeated items",
+      "text link"
+     ],
+     "items": {
+      "count": 13,
+      "shape": "question + answer"
+     },
+     "notes": "Insurance wording, 6 languages spoken, nervous patients, emergencies.",
+     "order": 4
+    },
+    {
+     "page": "new patients",
+     "label": "New Patient Form",
+     "purpose": "downloadable PDF with encryption notice",
+     "elements": [
+      "text link",
+      "paragraph(s)"
+     ],
+     "items": null,
+     "notes": "Privacy: email submission must be encrypted.",
+     "order": 5
+    },
+    {
+     "page": "new patients",
+     "label": "Patients sidebar and CTA",
+     "purpose": "sidebar links",
+     "elements": [
+      "text link",
+      "repeated items",
+      "single image",
+      "primary button"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "link"
+     },
+     "notes": "",
+     "order": 6
+    }
+   ]
+  },
+  {
+   "name": "Active Chiropractic",
+   "url": "https://activechiro.ca/",
+   "city_country": "Paris, Ontario, Canada",
+   "platform_guess": "WordPress (SiteWyze layouts, Gravity-style form)",
+   "quality": "polished",
+   "pages_checked": [
+    "https://activechiro.ca/",
+    "https://activechiro.ca/about/",
+    "https://activechiro.ca/conditions-we-treat/"
+   ],
+   "sections": [
+    {
+     "page": "home",
+     "label": "Header",
+     "purpose": "top bar with phone and email, logo, nav with 2 dropdowns",
+     "elements": [
+      "phone",
+      "email",
+      "logo",
+      "text link"
+     ],
+     "items": null,
+     "notes": "Nav: About, Chiropractic (4), Conditions, Services (9), Blog, FAQ, Contact.",
+     "order": 1
+    },
+    {
+     "page": "home",
+     "label": "Get Out of Pain. Get Back to Living.",
+     "purpose": "hero",
+     "elements": [
+      "headline",
+      "subheadline",
+      "primary button",
+      "secondary button",
+      "star rating",
+      "address",
+      "icons",
+      "repeated items"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "icon + short label (accepting new patients, direct billing, all ages)"
+     },
+     "notes": "Badges: accepting new patients, 5.0 Google rating with 200+ reviews.",
+     "order": 2
+    },
+    {
+     "page": "home",
+     "label": "Relief for the Pain Holding You Back",
+     "purpose": "conditions cards",
+     "elements": [
+      "repeated items",
+      "text link"
+     ],
+     "items": {
+      "count": 8,
+      "shape": "title + description + link"
+     },
+     "notes": "",
+     "order": 3
+    },
+    {
+     "page": "home",
+     "label": "A Complete Toolkit for Lasting Relief",
+     "purpose": "services cards",
+     "elements": [
+      "repeated items",
+      "text link"
+     ],
+     "items": {
+      "count": 6,
+      "shape": "title + description + Explore care link"
+     },
+     "notes": "",
+     "order": 4
+    },
+    {
+     "page": "home",
+     "label": "Care That's Built Around You",
+     "purpose": "why us bullets",
+     "elements": [
+      "headline",
+      "repeated items",
+      "secondary button"
+     ],
+     "items": {
+      "count": 4,
+      "shape": "bullet title + sentence"
+     },
+     "notes": "",
+     "order": 5
+    },
+    {
+     "page": "home",
+     "label": "Loved by Patients Across Brant County",
+     "purpose": "review summary",
+     "elements": [
+      "star rating",
+      "single image",
+      "text link"
+     ],
+     "items": null,
+     "notes": "Aggregate Google rating only (5.0, 204), no quotes.",
+     "order": 6
+    },
+    {
+     "page": "home",
+     "label": "Your Path to Feeling Better",
+     "purpose": "3 steps",
+     "elements": [
+      "repeated items"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "step title + text"
+     },
+     "notes": "States no referral needed.",
+     "order": 7
+    },
+    {
+     "page": "home",
+     "label": "Have a Question? Send Us a Message",
+     "purpose": "contact form",
+     "elements": [
+      "contact form",
+      "phone",
+      "paragraph(s)"
+     ],
+     "items": null,
+     "notes": "Name, phone, email fields; reply-in-clinic-hours and no-referral bullets.",
+     "order": 8
+    },
+    {
+     "page": "home",
+     "label": "Conveniently Located in Paris, Ontario",
+     "purpose": "visit block",
+     "elements": [
+      "address",
+      "phone",
+      "email",
+      "opening hours",
+      "primary button"
+     ],
+     "items": null,
+     "notes": "Hours split into morning/afternoon blocks that differ by weekday.",
+     "order": 9
+    },
+    {
+     "page": "home",
+     "label": "Ready to Get Back to Doing What You Love?",
+     "purpose": "closing CTA",
+     "elements": [
+      "headline",
+      "primary button",
+      "secondary button"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 10
+    },
+    {
+     "page": "home",
+     "label": "Footer",
+     "purpose": "address, hours, services links, rating badge",
+     "elements": [
+      "logo",
+      "address",
+      "phone",
+      "social links",
+      "star rating",
+      "opening hours",
+      "text link",
+      "legal links"
+     ],
+     "items": null,
+     "notes": "Facebook. Privacy policy. 'Website by SiteWyze' credit.",
+     "order": 11
+    },
+    {
+     "page": "about",
+     "label": "Hero",
+     "purpose": "about page hero",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "primary button"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 1
+    },
+    {
+     "page": "about",
+     "label": "Our Mission",
+     "purpose": "mission with trust badges",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "accreditation badges",
+      "primary button"
+     ],
+     "items": null,
+     "notes": "Direct billing statement; 'highest-rated' claim.",
+     "order": 2
+    },
+    {
+     "page": "about",
+     "label": "Our Goals for Your Treatment",
+     "purpose": "goals list",
+     "elements": [
+      "headline",
+      "repeated items"
+     ],
+     "items": {
+      "count": 6,
+      "shape": "goal statement"
+     },
+     "notes": "",
+     "order": 3
+    },
+    {
+     "page": "about",
+     "label": "A Place Where You'll Feel Right at Home",
+     "purpose": "clinic description",
+     "elements": [
+      "headline",
+      "single image",
+      "paragraph(s)",
+      "primary button"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 4
+    },
+    {
+     "page": "about",
+     "label": "Meet the Team",
+     "purpose": "providers and front desk",
+     "elements": [
+      "headline",
+      "repeated items",
+      "single image",
+      "paragraph(s)",
+      "text link"
+     ],
+     "items": {
+      "count": 7,
+      "shape": "2 providers: photo + name + title + bio + link to full bio; 5 front desk: photo + name + role"
+     },
+     "notes": "Providers include a chiropractor and a holistic nutritionist.",
+     "order": 5
+    },
+    {
+     "page": "about",
+     "label": "Professional Memberships",
+     "purpose": "regulator and association logos",
+     "elements": [
+      "logo strip",
+      "headline"
+     ],
+     "items": {
+      "count": 4,
+      "shape": "logo"
+     },
+     "notes": "College of Chiropractors of Ontario, OCA, CCA, CCPA.",
+     "order": 6
+    },
+    {
+     "page": "about",
+     "label": "Ready to Start Feeling Better?",
+     "purpose": "closing CTA",
+     "elements": [
+      "headline",
+      "primary button",
+      "phone"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 7
+    },
+    {
+     "page": "conditions",
+     "label": "Conditions We Treat",
+     "purpose": "page intro",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "primary button",
+      "secondary button",
+      "text link"
+     ],
+     "items": null,
+     "notes": "Jump-link row to category anchors.",
+     "order": 1
+    },
+    {
+     "page": "conditions",
+     "label": "Condition categories",
+     "purpose": "8 categories of condition cards",
+     "elements": [
+      "headline",
+      "repeated items"
+     ],
+     "items": {
+      "count": 64,
+      "shape": "condition name + one-sentence description, grouped under 8 category headings (Spine 13, Head 5, Shoulders 6, Hips/Legs 11, Injuries 10, Life Stage 5, Wellness 4)"
+     },
+     "notes": "Long grouped list; many items.",
+     "order": 2
+    },
+    {
+     "page": "conditions",
+     "label": "Trusted by Our Patients",
+     "purpose": "review widget",
+     "elements": [
+      "star rating",
+      "text link"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 3
+    },
+    {
+     "page": "conditions",
+     "label": "Not Sure if We Can Help?",
+     "purpose": "CTA with badges",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "primary button",
+      "phone",
+      "icons"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 4
+    },
+    {
+     "page": "conditions",
+     "label": "Disclaimer",
+     "purpose": "educational disclaimer",
+     "elements": [
+      "paragraph(s)"
+     ],
+     "items": null,
+     "notes": "Medical content disclaimer.",
+     "order": 5
+    }
+   ]
+  },
+  {
+   "name": "CityMed Physio and Massage",
+   "url": "https://www.citymedphysio.co.nz/",
+   "city_country": "Auckland (Wynyard Quarter), New Zealand",
+   "platform_guess": "WordPress (Macron Digital)",
+   "quality": "basic",
+   "pages_checked": [
+    "https://www.citymedphysio.co.nz/about-us/",
+    "https://www.citymedphysio.co.nz/services/"
+   ],
+   "sections": [
+    {
+     "page": "about",
+     "label": "Header",
+     "purpose": "logo, 6-link nav, phone",
+     "elements": [
+      "logo",
+      "phone",
+      "text link"
+     ],
+     "items": null,
+     "notes": "Nav: Home, Services, About, Patient Resources, Contact, Join Newsletter. Nav repeated twice.",
+     "order": 1
+    },
+    {
+     "page": "about",
+     "label": "About Us",
+     "purpose": "practice intro",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "single image",
+      "text link"
+     ],
+     "items": null,
+     "notes": "Links to the Physiotherapy Board of NZ and sister clinics.",
+     "order": 2
+    },
+    {
+     "page": "about",
+     "label": "Team: Jammie Tetzlaff",
+     "purpose": "director profile",
+     "elements": [
+      "single image",
+      "paragraph(s)",
+      "text link"
+     ],
+     "items": {
+      "count": 1,
+      "shape": "photo + name + credentials (MPNZ, BHSc, PGC) + bio"
+     },
+     "notes": "",
+     "order": 3
+    },
+    {
+     "page": "about",
+     "label": "Team: Dr Kimberley McLean",
+     "purpose": "chiropractor profile",
+     "elements": [
+      "single image",
+      "paragraph(s)",
+      "accreditation badges"
+     ],
+     "items": {
+      "count": 1,
+      "shape": "photo + name + role + bio + NZCA membership"
+     },
+     "notes": "Works limited hours at this clinic.",
+     "order": 4
+    },
+    {
+     "page": "about",
+     "label": "Pricing and booking",
+     "purpose": "price list and booking",
+     "elements": [
+      "price",
+      "repeated items",
+      "text link",
+      "phone"
+     ],
+     "items": {
+      "count": 2,
+      "shape": "visit type + duration + standard price + student/retired price"
+     },
+     "notes": "New patient 30 min $120 / $80; standard 15 min $65 / $50; ACC: $20 off all visits (ambiguous). Booking via external site (33bones) or phone.",
+     "order": 5
+    },
+    {
+     "page": "about",
+     "label": "Team: Lisa Barnett",
+     "purpose": "accounts and reception",
+     "elements": [
+      "paragraph(s)",
+      "text link"
+     ],
+     "items": {
+      "count": 1,
+      "shape": "name + role + text"
+     },
+     "notes": "",
+     "order": 6
+    },
+    {
+     "page": "about",
+     "label": "Get in touch",
+     "purpose": "contact block",
+     "elements": [
+      "phone",
+      "email",
+      "social links"
+     ],
+     "items": null,
+     "notes": "Brand names mixed (CityMed, QuayMed, Waiuku Health Plus); social icons unlabelled.",
+     "order": 7
+    },
+    {
+     "page": "about",
+     "label": "Location",
+     "purpose": "address and hours",
+     "elements": [
+      "address",
+      "opening hours"
+     ],
+     "items": null,
+     "notes": "Only QuayMed Wynyard address and hours shown, none for the CityMed location.",
+     "order": 8
+    },
+    {
+     "page": "about",
+     "label": "Membership badge",
+     "purpose": "professional body badge",
+     "elements": [
+      "accreditation badges"
+     ],
+     "items": null,
+     "notes": "Physiotherapy New Zealand.",
+     "order": 9
+    },
+    {
+     "page": "about",
+     "label": "Footer",
+     "purpose": "copyright and credit",
+     "elements": [
+      "legal links"
+     ],
+     "items": null,
+     "notes": "Copyright and agency credit only.",
+     "order": 10
+    },
+    {
+     "page": "services",
+     "label": "Services",
+     "purpose": "4 service cards",
+     "elements": [
+      "headline",
+      "repeated items",
+      "single image",
+      "text link"
+     ],
+     "items": {
+      "count": 4,
+      "shape": "image + linked title"
+     },
+     "notes": "Treatments Offered, Exercise, Massage Therapy, Self Management and Referral.",
+     "order": 1
+    },
+    {
+     "page": "services",
+     "label": "Booking call to action",
+     "purpose": "contact line",
+     "elements": [
+      "text link"
+     ],
+     "items": null,
+     "notes": "No ACC or fees info on this page.",
+     "order": 2
+    },
+    {
+     "page": "services",
+     "label": "Get in touch and Location",
+     "purpose": "contact and address",
+     "elements": [
+      "phone",
+      "email",
+      "social links",
+      "address",
+      "opening hours",
+      "accreditation badges"
+     ],
+     "items": null,
+     "notes": "Same block as About page. No map, no forms, no testimonials.",
+     "order": 3
+    }
+   ]
+  },
+  {
+   "name": "Eyespire Optometrist",
+   "url": "https://eyespire.com.au/",
+   "city_country": "Rockdale, NSW, Australia",
+   "platform_guess": "WordPress (Wolf Web Co.)",
+   "quality": "average",
+   "pages_checked": [
+    "https://eyespire.com.au/",
+    "https://eyespire.com.au/about-us/",
+    "https://eyespire.com.au/eye-tests/"
+   ],
+   "sections": [
+    {
+     "page": "home",
+     "label": "Header",
+     "purpose": "logo, phone, nav",
+     "elements": [
+      "logo",
+      "phone",
+      "text link"
+     ],
+     "items": null,
+     "notes": "Nav groups: Eyewear, Eye Care, Eye Tests, Eye Conditions, About, Contact.",
+     "order": 1
+    },
+    {
+     "page": "home",
+     "label": "Optometrist Rockdale (hero)",
+     "purpose": "hero",
+     "elements": [
+      "headline",
+      "subheadline",
+      "paragraph(s)",
+      "primary button",
+      "phone",
+      "background image"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 2
+    },
+    {
+     "page": "home",
+     "label": "Your Local Rockdale Optometrists",
+     "purpose": "practice intro",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "single image",
+      "primary button",
+      "phone"
+     ],
+     "items": null,
+     "notes": "Operating since 1978.",
+     "order": 3
+    },
+    {
+     "page": "home",
+     "label": "Health fund banner",
+     "purpose": "accepted funds",
+     "elements": [
+      "headline",
+      "logo strip"
+     ],
+     "items": {
+      "count": 6,
+      "shape": "logo"
+     },
+     "notes": "Medibank, HBF, BUPA, AHM, Australian Unity, HCF. No Medicare/bulk-billing mention.",
+     "order": 4
+    },
+    {
+     "page": "home",
+     "label": "Eye Care Services",
+     "purpose": "service cards",
+     "elements": [
+      "headline",
+      "repeated items",
+      "single image",
+      "text link"
+     ],
+     "items": {
+      "count": 6,
+      "shape": "image + title + link"
+     },
+     "notes": "",
+     "order": 5
+    },
+    {
+     "page": "home",
+     "label": "Why Choose Eyespire",
+     "purpose": "3 feature blocks",
+     "elements": [
+      "headline",
+      "repeated items",
+      "icons",
+      "primary button",
+      "phone"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "icon + title + text"
+     },
+     "notes": "",
+     "order": 6
+    },
+    {
+     "page": "home",
+     "label": "Brands we stock",
+     "purpose": "brand logos",
+     "elements": [
+      "logo strip"
+     ],
+     "items": {
+      "count": 6,
+      "shape": "logo"
+     },
+     "notes": "",
+     "order": 7
+    },
+    {
+     "page": "home",
+     "label": "Specialised Treatment for All Eye Conditions",
+     "purpose": "condition cards",
+     "elements": [
+      "headline",
+      "repeated items",
+      "single image",
+      "primary button"
+     ],
+     "items": {
+      "count": 6,
+      "shape": "title + link"
+     },
+     "notes": "",
+     "order": 8
+    },
+    {
+     "page": "home",
+     "label": "Where to find us",
+     "purpose": "location description",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "primary button"
+     ],
+     "items": null,
+     "notes": "Landmarks, parking note. No embedded map.",
+     "order": 9
+    },
+    {
+     "page": "home",
+     "label": "BOOK AN APPOINTMENT TODAY",
+     "purpose": "closing CTA",
+     "elements": [
+      "headline",
+      "primary button",
+      "phone",
+      "single image"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 10
+    },
+    {
+     "page": "home",
+     "label": "Footer",
+     "purpose": "contact, hours, 3 link lists, legal",
+     "elements": [
+      "logo",
+      "address",
+      "phone",
+      "email",
+      "opening hours",
+      "social links",
+      "text link",
+      "legal links"
+     ],
+     "items": null,
+     "notes": "Link lists: Services (6), Eye Conditions (12), Important Links. Terms, Privacy, Disclaimer. Copyright 2024. Mon-Fri 9-5.",
+     "order": 11
+    },
+    {
+     "page": "about",
+     "label": "Hero banner",
+     "purpose": "about hero",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "primary button",
+      "phone"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 1
+    },
+    {
+     "page": "about",
+     "label": "Your Independent Family Optometrist",
+     "purpose": "practice story",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "single image",
+      "primary button"
+     ],
+     "items": null,
+     "notes": "Heading has a typo.",
+     "order": 2
+    },
+    {
+     "page": "about",
+     "label": "Health fund acceptance",
+     "purpose": "funds banner",
+     "elements": [
+      "logo strip"
+     ],
+     "items": {
+      "count": 6,
+      "shape": "logo"
+     },
+     "notes": "",
+     "order": 3
+    },
+    {
+     "page": "about",
+     "label": "Meet the Team",
+     "purpose": "staff profiles",
+     "elements": [
+      "headline",
+      "repeated items",
+      "single image",
+      "paragraph(s)",
+      "text link"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "photo + name + credentials/role + bio + booking link"
+     },
+     "notes": "Credentials such as B.VisSci M.Optom. One profile has no bio.",
+     "order": 4
+    },
+    {
+     "page": "about",
+     "label": "Brands we stock",
+     "purpose": "brand logos",
+     "elements": [
+      "logo strip"
+     ],
+     "items": {
+      "count": 6,
+      "shape": "logo"
+     },
+     "notes": "",
+     "order": 5
+    },
+    {
+     "page": "about",
+     "label": "Book an appointment today",
+     "purpose": "closing CTA",
+     "elements": [
+      "headline",
+      "primary button",
+      "phone",
+      "single image"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 6
+    },
+    {
+     "page": "eye tests",
+     "label": "Affordable Eye Tests in Rockdale",
+     "purpose": "hero",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "primary button",
+      "phone",
+      "single image"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 1
+    },
+    {
+     "page": "eye tests",
+     "label": "Why are eye tests important?",
+     "purpose": "article text",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "primary button"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 2
+    },
+    {
+     "page": "eye tests",
+     "label": "Health fund notice",
+     "purpose": "funds",
+     "elements": [
+      "logo strip"
+     ],
+     "items": {
+      "count": 6,
+      "shape": "logo"
+     },
+     "notes": "",
+     "order": 3
+    },
+    {
+     "page": "eye tests",
+     "label": "Different Types of Eye Tests",
+     "purpose": "list of test types",
+     "elements": [
+      "repeated items",
+      "single image"
+     ],
+     "items": {
+      "count": 8,
+      "shape": "title + description"
+     },
+     "notes": "One item duplicated. No prices on page.",
+     "order": 4
+    },
+    {
+     "page": "eye tests",
+     "label": "How Often Should You Get an Eye Exam?",
+     "purpose": "age guideline bullets",
+     "elements": [
+      "repeated items",
+      "primary button"
+     ],
+     "items": {
+      "count": 5,
+      "shape": "age group + frequency"
+     },
+     "notes": "",
+     "order": 5
+    },
+    {
+     "page": "eye tests",
+     "label": "Brands and Book today",
+     "purpose": "logos and CTA",
+     "elements": [
+      "logo strip",
+      "primary button",
+      "phone",
+      "single image"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 6
+    }
+   ]
+  },
+  {
+   "name": "Rixis Dermatology",
+   "url": "https://rixisdermatology.com/",
+   "city_country": "Columbus and Dublin, Ohio, USA (2 locations)",
+   "platform_guess": "Custom or site-builder (cart icon suggests Squarespace-like or Weebly-style commerce); patient portal via Sadio",
+   "quality": "average",
+   "pages_checked": [
+    "https://rixisdermatology.com/",
+    "https://rixisdermatology.com/meet-our-providers",
+    "https://rixisdermatology.com/our-treatment-services"
+   ],
+   "sections": [
+    {
+     "page": "home",
+     "label": "Top announcement bar",
+     "purpose": "office hours and payment notices",
+     "elements": [
+      "announcement bar",
+      "text link"
+     ],
+     "items": null,
+     "notes": "Credit card on file required for self-pay visits. Seasonal hours notice for Clime Rd office. Cart icon.",
+     "order": 1
+    },
+    {
+     "page": "home",
+     "label": "Header",
+     "purpose": "logo and large mega-nav",
+     "elements": [
+      "logo",
+      "text link",
+      "primary button"
+     ],
+     "items": null,
+     "notes": "6 top groups with about 30 links (About, Patient Resources, Education, Publications, Contact).",
+     "order": 2
+    },
+    {
+     "page": "home",
+     "label": "Rixis Dermatology (hero)",
+     "purpose": "hero with doctor photo",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "single image",
+      "primary button"
+     ],
+     "items": null,
+     "notes": "States accepting new patients.",
+     "order": 3
+    },
+    {
+     "page": "home",
+     "label": "Have Concerns About Your Skin?",
+     "purpose": "dual CTA",
+     "elements": [
+      "headline",
+      "single image",
+      "primary button",
+      "secondary button"
+     ],
+     "items": null,
+     "notes": "Links to a skin spot self-checker tool.",
+     "order": 4
+    },
+    {
+     "page": "home",
+     "label": "Your Path to Healthy Skin Starts Here",
+     "purpose": "intro",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "single image",
+      "primary button"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 5
+    },
+    {
+     "page": "home",
+     "label": "Dermatology services",
+     "purpose": "3 cards with bullet lists",
+     "elements": [
+      "repeated items",
+      "single image",
+      "text link"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "image + heading + 6 linked bullet items"
+     },
+     "notes": "General, Skin cancer, Surgical dermatology.",
+     "order": 6
+    },
+    {
+     "page": "home",
+     "label": "Insurance statement",
+     "purpose": "plans accepted text",
+     "elements": [
+      "paragraph(s)",
+      "text link"
+     ],
+     "items": null,
+     "notes": "Commercial insurers, local hospital systems, Medicare, Tricare; explicitly no Medicaid.",
+     "order": 7
+    },
+    {
+     "page": "home",
+     "label": "Benefits You Can See and Feel",
+     "purpose": "3 benefit cards",
+     "elements": [
+      "repeated items",
+      "single image"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "image + title + text"
+     },
+     "notes": "",
+     "order": 8
+    },
+    {
+     "page": "home",
+     "label": "Your Path To Healthier Skin",
+     "purpose": "3 steps with buttons",
+     "elements": [
+      "repeated items",
+      "primary button"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "step + text + button"
+     },
+     "notes": "Step 2 links to external patient portal.",
+     "order": 9
+    },
+    {
+     "page": "home",
+     "label": "Patient Reviews",
+     "purpose": "heading only",
+     "elements": [
+      "headline"
+     ],
+     "items": null,
+     "notes": "No review content rendered.",
+     "order": 10
+    },
+    {
+     "page": "home",
+     "label": "Why Choose Rixis Dermatology",
+     "purpose": "two bullet lists",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "repeated items",
+      "single image",
+      "primary button"
+     ],
+     "items": {
+      "count": 9,
+      "shape": "bullet"
+     },
+     "notes": "",
+     "order": 11
+    },
+    {
+     "page": "home",
+     "label": "Meet Dr. Stephanie Fabbro",
+     "purpose": "provider bio",
+     "elements": [
+      "headline",
+      "single image",
+      "paragraph(s)"
+     ],
+     "items": {
+      "count": 1,
+      "shape": "photo + bio"
+     },
+     "notes": "Board certified, FAAD, Castle Connolly mention in text.",
+     "order": 12
+    },
+    {
+     "page": "home",
+     "label": "Meet Thomas Cieslewicz, PA-C",
+     "purpose": "provider bio",
+     "elements": [
+      "headline",
+      "single image",
+      "paragraph(s)",
+      "text link"
+     ],
+     "items": {
+      "count": 1,
+      "shape": "photo + bio"
+     },
+     "notes": "",
+     "order": 13
+    },
+    {
+     "page": "home",
+     "label": "Mailing list",
+     "purpose": "newsletter sign-up",
+     "elements": [
+      "headline",
+      "newsletter form"
+     ],
+     "items": null,
+     "notes": "Button links to separate page.",
+     "order": 14
+    },
+    {
+     "page": "home",
+     "label": "Information for Patients",
+     "purpose": "resource links",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "text link"
+     ],
+     "items": {
+      "count": 5,
+      "shape": "link"
+     },
+     "notes": "",
+     "order": 15
+    },
+    {
+     "page": "home",
+     "label": "Community & Education",
+     "purpose": "resident training",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "single image",
+      "logo strip",
+      "primary button"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 16
+    },
+    {
+     "page": "home",
+     "label": "Footer",
+     "purpose": "quick links, contact, 2 locations, social, legal",
+     "elements": [
+      "text link",
+      "phone",
+      "address",
+      "social links",
+      "legal links"
+     ],
+     "items": {
+      "count": 2,
+      "shape": "location name + address"
+     },
+     "notes": "Two addresses sharing one phone/fax. Hours only on a separate page. Terms, Privacy Notice, Sitemap.",
+     "order": 17
+    },
+    {
+     "page": "team",
+     "label": "Meet Our Dermatology Providers",
+     "purpose": "provider page",
+     "elements": [
+      "headline",
+      "paragraph(s)"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 1
+    },
+    {
+     "page": "team",
+     "label": "Provider profiles",
+     "purpose": "bios",
+     "elements": [
+      "repeated items",
+      "single image",
+      "paragraph(s)",
+      "primary button"
+     ],
+     "items": {
+      "count": 2,
+      "shape": "photo + name + credentials + specialty line + 4-5 paragraph bio + button"
+     },
+     "notes": "Long bios cover training, publications, memberships, personal interests.",
+     "order": 2
+    },
+    {
+     "page": "team",
+     "label": "Closing CTA",
+     "purpose": "button",
+     "elements": [
+      "primary button",
+      "single image"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 3
+    },
+    {
+     "page": "services",
+     "label": "Our Treatment Services",
+     "purpose": "tabs and search",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "contact form"
+     ],
+     "items": null,
+     "notes": "Conditions/Procedures tabs and a search box that filters.",
+     "order": 1
+    },
+    {
+     "page": "services",
+     "label": "Conditions We Treat",
+     "purpose": "link list",
+     "elements": [
+      "repeated items",
+      "text link"
+     ],
+     "items": {
+      "count": 25,
+      "shape": "condition name link"
+     },
+     "notes": "",
+     "order": 2
+    },
+    {
+     "page": "services",
+     "label": "Procedures We Offer",
+     "purpose": "link list with descriptions",
+     "elements": [
+      "repeated items",
+      "text link"
+     ],
+     "items": {
+      "count": 13,
+      "shape": "procedure name link + short description"
+     },
+     "notes": "Mix of medical and cosmetic procedures; no prices or insurance details here.",
+     "order": 3
+    },
+    {
+     "page": "services",
+     "label": "Don't see what you need?",
+     "purpose": "fallback CTA",
+     "elements": [
+      "paragraph(s)",
+      "primary button",
+      "phone"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 4
+    },
+    {
+     "page": "services",
+     "label": "Disclaimer",
+     "purpose": "results vary / not medical advice",
+     "elements": [
+      "paragraph(s)"
+     ],
+     "items": null,
+     "notes": "Medical disclaimer.",
+     "order": 5
+    },
+    {
+     "page": "services",
+     "label": "Closing CTA",
+     "purpose": "button",
+     "elements": [
+      "single image",
+      "primary button"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 6
+    }
+   ]
+  }
+ ],
+ "replaced": [
+  {
+   "url": "https://www.yorkshiredentalsuite.co.uk/",
+   "why": "9-clinic dental group, not independent"
+  },
+  {
+   "url": "https://www.cairnhillphysio.co.nz/",
+   "why": "fetch failed: self signed certificate"
+  }
+ ]
+}

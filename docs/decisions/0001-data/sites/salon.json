@@ -1,0 +1,2270 @@
+{
+ "kind": "salon",
+ "collected": "2026-11-14",
+ "sites": [
+  {
+   "name": "North Laine Hair Company",
+   "url": "https://www.northlainehairco.co.uk/",
+   "city_country": "Brighton, UK",
+   "platform_guess": "WordPress (WooCommerce shop), built by agency Indigo Tree; Phorest booking",
+   "quality": "average",
+   "pages_checked": [
+    "https://www.northlainehairco.co.uk/",
+    "https://www.northlainehairco.co.uk/prices/",
+    "https://www.northlainehairco.co.uk/meet-the-team/"
+   ],
+   "sections": [
+    {
+     "page": "home",
+     "order": 1,
+     "label": "Promo bar",
+     "purpose": "announce first-order shop discount",
+     "elements": [
+      "announcement bar",
+      "text link"
+     ],
+     "items": null,
+     "notes": "dismissible with close icon; code NEWOFFER25"
+    },
+    {
+     "page": "home",
+     "order": 2,
+     "label": "Header / navigation",
+     "purpose": "site nav with shop and booking",
+     "elements": [
+      "logo",
+      "text link",
+      "primary button",
+      "secondary button",
+      "icons"
+     ],
+     "items": {
+      "count": 9,
+      "shape": "top-level nav link; Team has 5 dropdown links, Advice 4, Shop 19 (brands + categories)"
+     },
+     "notes": "deep dropdowns (mega-menu style); 'Shop Now' and 'Book Now' (Phorest) buttons; cart icon; strip with free delivery/returns/click&collect"
+    },
+    {
+     "page": "home",
+     "order": 3,
+     "label": "Experts in Balayage & Colour",
+     "purpose": "hero",
+     "elements": [
+      "background image",
+      "headline",
+      "primary button",
+      "phone"
+     ],
+     "items": null,
+     "notes": "Book Appointment opens Phorest; phone number as link"
+    },
+    {
+     "page": "home",
+     "order": 4,
+     "label": "Salon intro",
+     "purpose": "long description of salon",
+     "elements": [
+      "headline",
+      "paragraph(s)"
+     ],
+     "items": null,
+     "notes": "about six paragraphs, text only, long H2 headline"
+    },
+    {
+     "page": "home",
+     "order": 5,
+     "label": "Find us on Instagram",
+     "purpose": "social link + brand logos",
+     "elements": [
+      "headline",
+      "text link",
+      "logo strip",
+      "image gallery"
+     ],
+     "items": {
+      "count": 4,
+      "shape": "brand logo image"
+     },
+     "notes": "feed images were blank placeholders"
+    },
+    {
+     "page": "home",
+     "order": 6,
+     "label": "We only use the finest professional hair care products",
+     "purpose": "product brands",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "primary button",
+      "secondary button"
+     ],
+     "items": null,
+     "notes": "11 brand names listed in text"
+    },
+    {
+     "page": "home",
+     "order": 7,
+     "label": "Popular Products",
+     "purpose": "shop product carousel",
+     "elements": [
+      "headline",
+      "repeated items",
+      "price",
+      "primary button",
+      "text link"
+     ],
+     "items": {
+      "count": 4,
+      "shape": "product image + name + price or price range + quantity stepper + add to basket / select options; one has sale badge and was/now price"
+     },
+     "notes": "WooCommerce product carousel with filters control; vouchers sold as product at £0"
+    },
+    {
+     "page": "home",
+     "order": 8,
+     "label": "Get in Touch",
+     "purpose": "contact summary",
+     "elements": [
+      "headline",
+      "phone",
+      "email",
+      "address",
+      "primary button"
+     ],
+     "items": null,
+     "notes": "Book button -> Phorest"
+    },
+    {
+     "page": "home",
+     "order": 9,
+     "label": "We're Highly Recommended",
+     "purpose": "testimonials",
+     "elements": [
+      "headline",
+      "repeated items",
+      "quote/testimonial",
+      "secondary button"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "quote text + reviewer name"
+     },
+     "notes": "View all link"
+    },
+    {
+     "page": "home",
+     "order": 10,
+     "label": "Quick-link tiles",
+     "purpose": "navigation cards to sub pages",
+     "elements": [
+      "repeated items",
+      "single image",
+      "text link"
+     ],
+     "items": {
+      "count": 4,
+      "shape": "image + title + short text + link (Promotions, Hair Guides, Portfolio, Team)"
+     },
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 11,
+     "label": "Footer",
+     "purpose": "contact, hours, legal",
+     "elements": [
+      "logo",
+      "phone",
+      "email",
+      "social links",
+      "address",
+      "text link",
+      "opening hours",
+      "legal links"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "legal link"
+     },
+     "notes": "social: YouTube, Instagram, Facebook; opening hours by weekday; 'View on Google Maps' link, no embedded map; agency credit"
+    },
+    {
+     "page": "home",
+     "order": 12,
+     "label": "Cookie banner and basket drawer",
+     "purpose": "overlays",
+     "elements": [
+      "announcement bar",
+      "third-party embed"
+     ],
+     "items": null,
+     "notes": "GDPR cookie consent with settings panel and toggles; slide-out empty basket"
+    },
+    {
+     "page": "prices",
+     "order": 1,
+     "label": "Header / navigation + breadcrumb banner",
+     "purpose": "site nav and page title",
+     "elements": [
+      "logo",
+      "text link",
+      "primary button",
+      "background image",
+      "headline"
+     ],
+     "items": null,
+     "notes": "same header as home; breadcrumb 'Home > Prices'"
+    },
+    {
+     "page": "prices",
+     "order": 2,
+     "label": "Introduction",
+     "purpose": "explains pricing basis",
+     "elements": [
+      "paragraph(s)"
+     ],
+     "items": null,
+     "notes": "prices reflect stylist experience"
+    },
+    {
+     "page": "prices",
+     "order": 3,
+     "label": "Cutting & Styling",
+     "purpose": "price grid by stylist level",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "price",
+      "repeated items"
+     ],
+     "items": {
+      "count": 6,
+      "shape": "service name + price in each of 6 stylist-level columns (Graduate stylist up to Salon Director/Curly Specialist)"
+     },
+     "notes": "price MATRIX service x stylist level; dashes where not offered; a price range for graduate level; 2 tables"
+    },
+    {
+     "page": "prices",
+     "order": 4,
+     "label": "K18 and Olaplex",
+     "purpose": "treatment add-ons description",
+     "elements": [
+      "headline",
+      "paragraph(s)"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "prices",
+     "order": 5,
+     "label": "Colour",
+     "purpose": "colour price grid",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "price",
+      "repeated items"
+     ],
+     "items": {
+      "count": 14,
+      "shape": "service name + price per stylist-level column; 'from' prices, hourly prices"
+     },
+     "notes": "two tables of 3 levels each; 'from', '/hour', dashes; deposit note (£50 refundable)"
+    },
+    {
+     "page": "prices",
+     "order": 6,
+     "label": "Treatments (Deluxe Services)",
+     "purpose": "describe treatments",
+     "elements": [
+      "headline",
+      "paragraph(s)"
+     ],
+     "items": null,
+     "notes": "text only, no prices"
+    },
+    {
+     "page": "prices",
+     "order": 7,
+     "label": "Special Occasion and Wedding Hair",
+     "purpose": "hourly rates by location",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "price",
+      "repeated items"
+     ],
+     "items": {
+      "count": 5,
+      "shape": "stylist tier + price per location (in salon / weekday on location / weekend on location)"
+     },
+     "notes": "matrix prices by tier and location"
+    },
+    {
+     "page": "prices",
+     "order": 8,
+     "label": "Prices additional info",
+     "purpose": "policies and discounts",
+     "elements": [
+      "headline",
+      "paragraph(s)"
+     ],
+     "items": {
+      "count": 6,
+      "shape": "subsection with heading + text (appointments, peaceful appointments, deposits, consultations/allergy tests, NHS/Blue Light and student discounts, models)"
+     },
+     "notes": "long policy text; late cancellation, deposit, discount rules"
+    },
+    {
+     "page": "prices",
+     "order": 9,
+     "label": "Footer",
+     "purpose": "contact and legal",
+     "elements": [
+      "address",
+      "opening hours",
+      "social links",
+      "legal links"
+     ],
+     "items": null,
+     "notes": "same as home footer"
+    },
+    {
+     "page": "team",
+     "order": 1,
+     "label": "Hero + intro",
+     "purpose": "page title and intro",
+     "elements": [
+      "background image",
+      "headline",
+      "paragraph(s)"
+     ],
+     "items": null,
+     "notes": "two H2 intro questions"
+    },
+    {
+     "page": "team",
+     "order": 2,
+     "label": "Style Team",
+     "purpose": "list of stylists",
+     "elements": [
+      "headline",
+      "repeated items",
+      "single image",
+      "paragraph(s)",
+      "price",
+      "quote/testimonial"
+     ],
+     "items": {
+      "count": 11,
+      "shape": "photo + name (+ Freelance tag) + job title + cut-and-finish price and standby price + bio paragraphs + 'Specialist in' line + optional quote"
+     },
+     "notes": "per-person prices differ by level; some placeholder photos; availability/maternity notes inside bios"
+    },
+    {
+     "page": "team",
+     "order": 3,
+     "label": "Front of House Team",
+     "purpose": "reception staff",
+     "elements": [
+      "headline",
+      "repeated items",
+      "single image",
+      "paragraph(s)"
+     ],
+     "items": {
+      "count": 2,
+      "shape": "photo + name + title + bio"
+     },
+     "notes": ""
+    },
+    {
+     "page": "team",
+     "order": 4,
+     "label": "Closing quote",
+     "purpose": "owner testimonial",
+     "elements": [
+      "quote/testimonial"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "team",
+     "order": 5,
+     "label": "Contact and location block",
+     "purpose": "contact",
+     "elements": [
+      "phone",
+      "email",
+      "social links",
+      "address",
+      "text link",
+      "opening hours"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "team",
+     "order": 6,
+     "label": "Footer",
+     "purpose": "legal and credit",
+     "elements": [
+      "legal links",
+      "text link"
+     ],
+     "items": null,
+     "notes": ""
+    }
+   ]
+  },
+  {
+   "name": "Vantage Barbers",
+   "url": "https://vantagebarbers.com.au/",
+   "city_country": "Melbourne, Australia",
+   "platform_guess": "Wix; Fresha booking link",
+   "quality": "basic",
+   "pages_checked": [
+    "https://vantagebarbers.com.au/"
+   ],
+   "sections": [
+    {
+     "page": "home",
+     "order": 1,
+     "label": "Header / navigation",
+     "purpose": "nav",
+     "elements": [
+      "logo",
+      "text link",
+      "social links"
+     ],
+     "items": {
+      "count": 6,
+      "shape": "nav link (Home, Vision, Services, Find Us, Instagram icon, More)"
+     },
+     "notes": "all nav items point to same one-page URL (anchor-style)"
+    },
+    {
+     "page": "home",
+     "order": 2,
+     "label": "A BETTER LOOK",
+     "purpose": "hero",
+     "elements": [
+      "headline",
+      "primary button",
+      "single image",
+      "background image"
+     ],
+     "items": null,
+     "notes": "several loose images (logo art, portrait); Book Now -> Fresha"
+    },
+    {
+     "page": "home",
+     "order": 3,
+     "label": "Our Vision",
+     "purpose": "about the shop",
+     "elements": [
+      "headline",
+      "paragraph(s)"
+     ],
+     "items": null,
+     "notes": "four paragraphs; heading appears after text in extracted order"
+    },
+    {
+     "page": "home",
+     "order": 4,
+     "label": "Services",
+     "purpose": "price list",
+     "elements": [
+      "single image",
+      "headline",
+      "repeated items",
+      "price"
+     ],
+     "items": {
+      "count": 6,
+      "shape": "service name + price or price range, e.g. 'Standard Cut $50-60'"
+     },
+     "notes": "price ranges because price varies by barber; promo note 'free beer with every cut'; text-only list"
+    },
+    {
+     "page": "home",
+     "order": 5,
+     "label": "Locate us / Contact us",
+     "purpose": "address and contact",
+     "elements": [
+      "headline",
+      "address",
+      "phone",
+      "email",
+      "single image"
+     ],
+     "items": null,
+     "notes": "no map embed"
+    },
+    {
+     "page": "home",
+     "order": 6,
+     "label": "Instagram",
+     "purpose": "social",
+     "elements": [
+      "headline",
+      "text link",
+      "social links"
+     ],
+     "items": null,
+     "notes": "social icons are Wix defaults pointing to Wix's own pages (broken/wrong links)"
+    },
+    {
+     "page": "home",
+     "order": 7,
+     "label": "Footer",
+     "purpose": "copyright",
+     "elements": [
+      "paragraph(s)"
+     ],
+     "items": null,
+     "notes": "'(c) Vantage Barbers est. 2021' only; no hours anywhere"
+    }
+   ]
+  },
+  {
+   "name": "Roy Hair Design",
+   "url": "https://royhairdesign.co.nz",
+   "city_country": "One Tree Hill, Auckland, New Zealand",
+   "platform_guess": "WordPress (wp-content paths); on-page booking request form",
+   "quality": "basic",
+   "pages_checked": [
+    "https://royhairdesign.co.nz"
+   ],
+   "sections": [
+    {
+     "page": "home",
+     "order": 1,
+     "label": "Header",
+     "purpose": "contact and nav",
+     "elements": [
+      "logo",
+      "text link",
+      "phone",
+      "email",
+      "address"
+     ],
+     "items": {
+      "count": 6,
+      "shape": "nav link (Home, Pricelist, Hours, Contact, Gallery, Booking)"
+     },
+     "notes": "nav links are anchors on one long page; nav duplicated below logo"
+    },
+    {
+     "page": "home",
+     "order": 2,
+     "label": "You Hair, My Full Attention.",
+     "purpose": "hero",
+     "elements": [
+      "headline",
+      "subheadline",
+      "primary button",
+      "secondary button"
+     ],
+     "items": null,
+     "notes": "buttons are anchors to booking and reviews"
+    },
+    {
+     "page": "home",
+     "order": 3,
+     "label": "About",
+     "purpose": "owner intro",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "logo strip"
+     ],
+     "items": null,
+     "notes": "three text blocks; 'Products we use' with one Matrix logo"
+    },
+    {
+     "page": "home",
+     "order": 4,
+     "label": "Pricelist",
+     "purpose": "price list",
+     "elements": [
+      "headline",
+      "text link",
+      "repeated items",
+      "price"
+     ],
+     "items": {
+      "count": 24,
+      "shape": "service name + price line (often by hair length short/medium/long) + short note; 3 categories: Colouring & Treatment 10, Cuts 12, Styling & Perms 2"
+     },
+     "notes": "prices by hair length and by customer type (pensioner, student, boy, girl, men, ladies); footnotes for surcharges ('from $25') and Super Gold Card discount; category anchor sub-nav"
+    },
+    {
+     "page": "home",
+     "order": 5,
+     "label": "Hours",
+     "purpose": "opening hours",
+     "elements": [
+      "headline",
+      "opening hours"
+     ],
+     "items": {
+      "count": 7,
+      "shape": "day + hours"
+     },
+     "notes": "Thursday late opening; public holidays row"
+    },
+    {
+     "page": "home",
+     "order": 6,
+     "label": "Gallery",
+     "purpose": "photo preview",
+     "elements": [
+      "headline",
+      "image gallery",
+      "secondary button"
+     ],
+     "items": {
+      "count": 4,
+      "shape": "image tile"
+     },
+     "notes": "links to separate gallery page"
+    },
+    {
+     "page": "home",
+     "order": 7,
+     "label": "Customer Reviews",
+     "purpose": "testimonials",
+     "elements": [
+      "headline",
+      "repeated items",
+      "quote/testimonial"
+     ],
+     "items": {
+      "count": 15,
+      "shape": "quote + reviewer name"
+     },
+     "notes": "long list of 15, no star ratings; one has 'Positive:' tag list"
+    },
+    {
+     "page": "home",
+     "order": 8,
+     "label": "Bookings",
+     "purpose": "booking request form",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "contact form"
+     ],
+     "items": null,
+     "notes": "form with date, time (hour/min/AM-PM), name, phone, message; owner confirms later; reCAPTCHA"
+    },
+    {
+     "page": "home",
+     "order": 9,
+     "label": "Pre-footer contact block",
+     "purpose": "contact",
+     "elements": [
+      "address",
+      "phone",
+      "email"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 10,
+     "label": "Brand images",
+     "purpose": "product brand posters",
+     "elements": [
+      "single image"
+     ],
+     "items": {
+      "count": 2,
+      "shape": "brand image"
+     },
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 11,
+     "label": "Footer",
+     "purpose": "links and credits",
+     "elements": [
+      "logo",
+      "text link",
+      "address",
+      "phone",
+      "email",
+      "legal links"
+     ],
+     "items": {
+      "count": 6,
+      "shape": "quick link"
+     },
+     "notes": "reCAPTCHA notice; designer credits"
+    }
+   ]
+  },
+  {
+   "name": "Throne Traditional Barbershop",
+   "url": "https://thronepdx.com/",
+   "city_country": "Portland, Oregon, USA",
+   "platform_guess": "Squarespace (squarespace.com preview host seen); Fresha booking links",
+   "quality": "polished",
+   "pages_checked": [
+    "https://throne-traditional-barbershop.squarespace.com"
+   ],
+   "sections": [
+    {
+     "page": "home",
+     "order": 1,
+     "label": "Header / navigation",
+     "purpose": "nav",
+     "elements": [
+      "logo",
+      "text link"
+     ],
+     "items": {
+      "count": 9,
+      "shape": "nav link (Home, Locations, About, Team, News, Services, Hours & Info, Main, Gift Cards)"
+     },
+     "notes": "nav shown twice (top bar and sticky); anchors to sections; 3 locations"
+    },
+    {
+     "page": "home",
+     "order": 2,
+     "label": "LIVE LIKE A KING",
+     "purpose": "hero",
+     "elements": [
+      "headline",
+      "subheadline",
+      "primary button",
+      "secondary button"
+     ],
+     "items": null,
+     "notes": "Locations & Booking button; Gift Cards -> Fresha"
+    },
+    {
+     "page": "home",
+     "order": 3,
+     "label": "Portland Barber Shop Locations",
+     "purpose": "booking cards per location",
+     "elements": [
+      "headline",
+      "subheadline",
+      "repeated items",
+      "primary button",
+      "address",
+      "phone",
+      "opening hours"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "location name + Book Appointment (Fresha) + address + phone + hours"
+     },
+     "notes": "multi-location; each location also has its own page"
+    },
+    {
+     "page": "home",
+     "order": 4,
+     "label": "Featured announcement",
+     "purpose": "new location promo",
+     "elements": [
+      "headline",
+      "primary button",
+      "address",
+      "phone",
+      "opening hours"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 5,
+     "label": "About",
+     "purpose": "owner story",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "single image",
+      "social links",
+      "text link"
+     ],
+     "items": null,
+     "notes": "photo of owners; Google reviews link, Facebook, Instagram icons"
+    },
+    {
+     "page": "home",
+     "order": 6,
+     "label": "Meet the Throne Fam",
+     "purpose": "team grid",
+     "elements": [
+      "headline",
+      "subheadline",
+      "repeated items",
+      "single image",
+      "text link",
+      "secondary button"
+     ],
+     "items": {
+      "count": 13,
+      "shape": "avatar image + barber name (owner tagged) ; some link to Instagram"
+     },
+     "notes": "recruiting line with call to action"
+    },
+    {
+     "page": "home",
+     "order": 7,
+     "label": "Throne in the News",
+     "purpose": "press mentions",
+     "elements": [
+      "headline",
+      "repeated items",
+      "single image",
+      "text link"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "image + article headline + excerpt + Read More link"
+     },
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 8,
+     "label": "Services & Pricing",
+     "purpose": "price list",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "repeated items",
+      "price"
+     ],
+     "items": {
+      "count": 13,
+      "shape": "service name + price; 4 categories: Cuts 3, Shaves 4, Packages 3, Extras 3"
+     },
+     "notes": "flat prices, no durations; note that prices may change; combo packages"
+    },
+    {
+     "page": "home",
+     "order": 9,
+     "label": "Style tagline + CTA",
+     "purpose": "tagline and book button",
+     "elements": [
+      "paragraph(s)",
+      "primary button"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 10,
+     "label": "The Perfect Gift",
+     "purpose": "gift cards",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "primary button"
+     ],
+     "items": null,
+     "notes": "gift cards $25 to $200 via Fresha"
+    },
+    {
+     "page": "home",
+     "order": 11,
+     "label": "Throne Merch",
+     "purpose": "merch shop and Instagram",
+     "elements": [
+      "headline",
+      "primary button",
+      "image gallery"
+     ],
+     "items": {
+      "count": 4,
+      "shape": "Instagram post image link"
+     },
+     "notes": "merch store on external Logoshop"
+    },
+    {
+     "page": "home",
+     "order": 12,
+     "label": "Barber Locations (repeat)",
+     "purpose": "location list again",
+     "elements": [
+      "headline",
+      "subheadline",
+      "repeated items",
+      "primary button",
+      "address",
+      "phone",
+      "opening hours"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "location card"
+     },
+     "notes": "same content as earlier cards repeated"
+    },
+    {
+     "page": "home",
+     "order": 13,
+     "label": "Policies",
+     "purpose": "booking rules",
+     "elements": [
+      "headline",
+      "paragraph(s)"
+     ],
+     "items": {
+      "count": 5,
+      "shape": "policy statement (booking, walk-ins, payments, late arrival, 24h cancellation)"
+     },
+     "notes": "short policy list"
+    },
+    {
+     "page": "home",
+     "order": 14,
+     "label": "Footer",
+     "purpose": "contact and links",
+     "elements": [
+      "social links",
+      "text link",
+      "address",
+      "phone",
+      "email",
+      "paragraph(s)"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "location link"
+     },
+     "notes": "address differs from cards; Cart link; copyright 2014-2025"
+    }
+   ]
+  },
+  {
+   "name": "Cool Kind Nails",
+   "url": "https://coolkindnails.com/",
+   "city_country": "Winnipeg, Manitoba, Canada",
+   "platform_guess": "Shopify storefront; Mangomint booking",
+   "quality": "average",
+   "pages_checked": [
+    "https://coolkindnails.com/",
+    "https://coolkindnails.com/pages/about-us",
+    "https://coolkindnails.com/pages/frequently-asked-questions"
+   ],
+   "sections": [
+    {
+     "page": "home",
+     "order": 1,
+     "label": "Announcement banners",
+     "purpose": "promos",
+     "elements": [
+      "announcement bar",
+      "text link"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "banner text + link (booking or Instagram)"
+     },
+     "notes": "rotating banners with emoji"
+    },
+    {
+     "page": "home",
+     "order": 2,
+     "label": "Header / navigation",
+     "purpose": "nav",
+     "elements": [
+      "logo",
+      "text link",
+      "icons"
+     ],
+     "items": {
+      "count": 4,
+      "shape": "nav link (Book Now, About, FAQs, Contact)"
+     },
+     "notes": "also login, search, cart icons (Shopify)"
+    },
+    {
+     "page": "home",
+     "order": 3,
+     "label": "the nail care experience you've been waiting for.",
+     "purpose": "hero",
+     "elements": [
+      "background image",
+      "headline",
+      "primary button"
+     ],
+     "items": null,
+     "notes": "Book -> Mangomint"
+    },
+    {
+     "page": "home",
+     "order": 4,
+     "label": "Meet the Team",
+     "purpose": "team",
+     "elements": [
+      "headline",
+      "repeated items",
+      "single image",
+      "text link",
+      "secondary button"
+     ],
+     "items": {
+      "count": 6,
+      "shape": "animated GIF portrait + name (+owner tag) + Instagram link"
+     },
+     "notes": "animated portraits"
+    },
+    {
+     "page": "home",
+     "order": 5,
+     "label": "Brand introduction",
+     "purpose": "tagline and description",
+     "elements": [
+      "subheadline",
+      "paragraph(s)"
+     ],
+     "items": null,
+     "notes": "bold tagline then paragraph"
+    },
+    {
+     "page": "home",
+     "order": 6,
+     "label": "Image carousel",
+     "purpose": "nail art photos",
+     "elements": [
+      "image gallery"
+     ],
+     "items": {
+      "count": 6,
+      "shape": "image"
+     },
+     "notes": "carousel with counter"
+    },
+    {
+     "page": "home",
+     "order": 7,
+     "label": "Words from our community",
+     "purpose": "testimonials",
+     "elements": [
+      "headline",
+      "repeated items",
+      "quote/testimonial"
+     ],
+     "items": {
+      "count": 5,
+      "shape": "quote + reviewer name"
+     },
+     "notes": "carousel with counter"
+    },
+    {
+     "page": "home",
+     "order": 8,
+     "label": "Let's Stay Connected",
+     "purpose": "newsletter",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "newsletter form"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 9,
+     "label": "Footer",
+     "purpose": "legal",
+     "elements": [
+      "paragraph(s)",
+      "legal links"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "policy link"
+     },
+     "notes": "Powered by Shopify; no address, hours or phone on home"
+    },
+    {
+     "page": "about",
+     "order": 1,
+     "label": "Team profiles",
+     "purpose": "bios",
+     "elements": [
+      "repeated items",
+      "single image",
+      "paragraph(s)",
+      "text link"
+     ],
+     "items": {
+      "count": 6,
+      "shape": "photo + name + pronouns + bio paragraph + link to their work"
+     },
+     "notes": "no visible heading; no prices anywhere"
+    },
+    {
+     "page": "about",
+     "order": 2,
+     "label": "Newsletter + footer",
+     "purpose": "newsletter and legal",
+     "elements": [
+      "newsletter form",
+      "legal links"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "faq",
+     "order": 1,
+     "label": "Choosing a Service",
+     "purpose": "FAQ group",
+     "elements": [
+      "headline",
+      "repeated items",
+      "text link"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "question + answer, with links to services"
+     },
+     "notes": "Q&A as text (no accordion seen)"
+    },
+    {
+     "page": "faq",
+     "order": 2,
+     "label": "Nail Art + Pricing",
+     "purpose": "FAQ group on pricing",
+     "elements": [
+      "headline",
+      "repeated items",
+      "paragraph(s)"
+     ],
+     "items": {
+      "count": 4,
+      "shape": "question + answer; one answer has 5-item bullet list"
+     },
+     "notes": "prices are not shown; pricing explained by time-based levels"
+    },
+    {
+     "page": "faq",
+     "order": 3,
+     "label": "Appointments",
+     "purpose": "FAQ group",
+     "elements": [
+      "headline",
+      "repeated items",
+      "text link"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "question + answer"
+     },
+     "notes": "walk-in and duration info"
+    },
+    {
+     "page": "faq",
+     "order": 4,
+     "label": "Newsletter + footer",
+     "purpose": "signup and legal",
+     "elements": [
+      "newsletter form",
+      "legal links"
+     ],
+     "items": null,
+     "notes": ""
+    }
+   ]
+  },
+  {
+   "name": "Q Nails",
+   "url": "https://qnailsyeg.com/",
+   "city_country": "Edmonton, Alberta, Canada",
+   "platform_guess": "WordPress; Belle Booking widget links; agency built (Belle Biz Marketing)",
+   "quality": "average",
+   "pages_checked": [
+    "https://qnailsyeg.com/",
+    "https://qnailsyeg.com/services/"
+   ],
+   "sections": [
+    {
+     "page": "home",
+     "order": 1,
+     "label": "Header",
+     "purpose": "contact, nav, booking",
+     "elements": [
+      "phone",
+      "address",
+      "opening hours",
+      "social links",
+      "logo",
+      "text link",
+      "primary button"
+     ],
+     "items": {
+      "count": 5,
+      "shape": "nav link (About, Services, Gallery, Promotions, Contact)"
+     },
+     "notes": "'Open 7 days, walk-ins welcome' line; Book Now -> bellebooking.com"
+    },
+    {
+     "page": "home",
+     "order": 2,
+     "label": "Beautiful Nails on Calgary Trail",
+     "purpose": "hero",
+     "elements": [
+      "eyebrow/kicker",
+      "headline",
+      "paragraph(s)",
+      "primary button",
+      "secondary button",
+      "statistic/number"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "number + label (8+ years, 50+ services, 5,000+ clients)"
+     },
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 3,
+     "label": "Welcome to Q Nails",
+     "purpose": "about",
+     "elements": [
+      "single image",
+      "headline",
+      "subheadline",
+      "paragraph(s)",
+      "primary button"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 4,
+     "label": "Fresh From Our Studio",
+     "purpose": "gallery preview",
+     "elements": [
+      "eyebrow/kicker",
+      "headline",
+      "image gallery",
+      "text link"
+     ],
+     "items": {
+      "count": 6,
+      "shape": "image tile"
+     },
+     "notes": "lightbox"
+    },
+    {
+     "page": "home",
+     "order": 5,
+     "label": "Our Signature Services",
+     "purpose": "service highlights",
+     "elements": [
+      "eyebrow/kicker",
+      "headline",
+      "repeated items",
+      "single image",
+      "price",
+      "text link"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "image + title + 'from' price + link to anchor on services page"
+     },
+     "notes": "'Signature' badge"
+    },
+    {
+     "page": "home",
+     "order": 6,
+     "label": "What Our Clients Say",
+     "purpose": "testimonials",
+     "elements": [
+      "eyebrow/kicker",
+      "headline",
+      "star rating",
+      "repeated items",
+      "quote/testimonial"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "quote + reviewer + service tag + 'Google Review' label"
+     },
+     "notes": "4.8 stars from 641 Google reviews link"
+    },
+    {
+     "page": "home",
+     "order": 7,
+     "label": "Your Neighbourhood Nail Salon",
+     "purpose": "local SEO text",
+     "elements": [
+      "eyebrow/kicker",
+      "headline",
+      "paragraph(s)",
+      "repeated items"
+     ],
+     "items": {
+      "count": 12,
+      "shape": "area-served name"
+     },
+     "notes": "list of neighbourhoods"
+    },
+    {
+     "page": "home",
+     "order": 8,
+     "label": "Ready for Your Best Nails Yet?",
+     "purpose": "final CTA",
+     "elements": [
+      "headline",
+      "primary button",
+      "secondary button",
+      "phone"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 9,
+     "label": "Footer",
+     "purpose": "links and info",
+     "elements": [
+      "logo",
+      "paragraph(s)",
+      "social links",
+      "text link",
+      "address",
+      "phone",
+      "opening hours"
+     ],
+     "items": {
+      "count": 2,
+      "shape": "link columns: Explore 5, Services 4"
+     },
+     "notes": "hours by day group; designer credit"
+    },
+    {
+     "page": "home",
+     "order": 10,
+     "label": "Sticky bottom bar and lightbox",
+     "purpose": "mobile quick actions",
+     "elements": [
+      "primary button",
+      "phone"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "Call, Directions, Book"
+     },
+     "notes": "floating UI"
+    },
+    {
+     "page": "services",
+     "order": 1,
+     "label": "Page hero",
+     "purpose": "title",
+     "elements": [
+      "eyebrow/kicker",
+      "headline"
+     ],
+     "items": null,
+     "notes": "breadcrumb"
+    },
+    {
+     "page": "services",
+     "order": 2,
+     "label": "Intro",
+     "purpose": "menu note",
+     "elements": [
+      "paragraph(s)"
+     ],
+     "items": null,
+     "notes": "prices subject to change"
+    },
+    {
+     "page": "services",
+     "order": 3,
+     "label": "Category tabs",
+     "purpose": "filter menu",
+     "elements": [
+      "text link"
+     ],
+     "items": {
+      "count": 5,
+      "shape": "tab (All, Pedicure & Manicure, Gel & Acrylic, Waxing, Kids)"
+     },
+     "notes": "tabs/filters"
+    },
+    {
+     "page": "services",
+     "order": 4,
+     "label": "Pedicure & Manicure",
+     "purpose": "price list",
+     "elements": [
+      "headline",
+      "single image",
+      "repeated items",
+      "price"
+     ],
+     "items": {
+      "count": 10,
+      "shape": "service name + price + optional 'Popular' badge"
+     },
+     "notes": "no durations or descriptions"
+    },
+    {
+     "page": "services",
+     "order": 5,
+     "label": "Gel & Acrylic Nails",
+     "purpose": "price list",
+     "elements": [
+      "headline",
+      "single image",
+      "repeated items",
+      "price"
+     ],
+     "items": {
+      "count": 12,
+      "shape": "service name + price"
+     },
+     "notes": "'& up' in name to mean starting price"
+    },
+    {
+     "page": "services",
+     "order": 6,
+     "label": "Waxing",
+     "purpose": "price list",
+     "elements": [
+      "headline",
+      "single image",
+      "repeated items",
+      "price"
+     ],
+     "items": {
+      "count": 13,
+      "shape": "service name + price"
+     },
+     "notes": "'& up' pricing"
+    },
+    {
+     "page": "services",
+     "order": 7,
+     "label": "Kids Service",
+     "purpose": "price list",
+     "elements": [
+      "headline",
+      "single image",
+      "repeated items",
+      "price"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "service name + price"
+     },
+     "notes": ""
+    },
+    {
+     "page": "services",
+     "order": 8,
+     "label": "Book Appointment CTA",
+     "purpose": "book",
+     "elements": [
+      "primary button"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "services",
+     "order": 9,
+     "label": "Good to Know",
+     "purpose": "FAQ",
+     "elements": [
+      "headline",
+      "repeated items"
+     ],
+     "items": {
+      "count": 7,
+      "shape": "expandable question + answer"
+     },
+     "notes": "accordion"
+    },
+    {
+     "page": "services",
+     "order": 10,
+     "label": "Found Your Service?",
+     "purpose": "closing CTA",
+     "elements": [
+      "headline",
+      "primary button",
+      "phone"
+     ],
+     "items": null,
+     "notes": ""
+    }
+   ]
+  },
+  {
+   "name": "Bellissimo Hair & Beauty (Galway and Limerick)",
+   "url": "https://bellissimo.ie/",
+   "city_country": "Galway and Limerick, Ireland",
+   "platform_guess": "WordPress built by salonguru.net; Phorest booking and shop",
+   "quality": "average",
+   "pages_checked": [
+    "https://bellissimo.ie/",
+    "https://bellissimo.ie/beauty-prices-limerick/"
+   ],
+   "sections": [
+    {
+     "page": "home",
+     "order": 1,
+     "label": "Top utility bar",
+     "purpose": "two salons' contact",
+     "elements": [
+      "phone",
+      "email",
+      "logo",
+      "text link",
+      "social links"
+     ],
+     "items": {
+      "count": 2,
+      "shape": "salon: logo + phone + email + 'go to salon' link"
+     },
+     "notes": "site is two salons in one"
+    },
+    {
+     "page": "home",
+     "order": 2,
+     "label": "Primary navigation",
+     "purpose": "nav per salon",
+     "elements": [
+      "text link",
+      "primary button",
+      "icons"
+     ],
+     "items": {
+      "count": 2,
+      "shape": "nav set, one per salon (Galway ~10 top items with dropdowns; Limerick ~12)"
+     },
+     "notes": "very large dropdown menus; cart widget; Book Online -> Phorest; separate hair and beauty price pages"
+    },
+    {
+     "page": "home",
+     "order": 3,
+     "label": "Galway hero",
+     "purpose": "hero with carousel",
+     "elements": [
+      "headline",
+      "primary button",
+      "image gallery"
+     ],
+     "items": {
+      "count": 5,
+      "shape": "carousel photo"
+     },
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 4,
+     "label": "Galway intro",
+     "purpose": "about",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "primary button",
+      "secondary button"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 5,
+     "label": "Galway service cards",
+     "purpose": "service category entry points",
+     "elements": [
+      "repeated items",
+      "single image",
+      "headline",
+      "paragraph(s)",
+      "text link",
+      "newsletter form"
+     ],
+     "items": {
+      "count": 9,
+      "shape": "image + title + paragraph + link"
+     },
+     "notes": "some cards are shop or voucher links"
+    },
+    {
+     "page": "home",
+     "order": 6,
+     "label": "Sustainability",
+     "purpose": "claims about solar energy",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "statistic/number"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 7,
+     "label": "Product shop banner",
+     "purpose": "online shop link",
+     "elements": [
+      "headline",
+      "primary button"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 8,
+     "label": "Galway client reviews",
+     "purpose": "testimonials widget",
+     "elements": [
+      "headline",
+      "quote/testimonial"
+     ],
+     "items": null,
+     "notes": "widget appeared empty"
+    },
+    {
+     "page": "home",
+     "order": 9,
+     "label": "Limerick hero",
+     "purpose": "hero",
+     "elements": [
+      "headline",
+      "primary button",
+      "secondary button",
+      "single image"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 10,
+     "label": "Limerick intro",
+     "purpose": "about",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "primary button",
+      "secondary button"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 11,
+     "label": "Limerick service cards",
+     "purpose": "entry points",
+     "elements": [
+      "repeated items",
+      "single image",
+      "headline",
+      "paragraph(s)",
+      "text link"
+     ],
+     "items": {
+      "count": 9,
+      "shape": "image + title + paragraph + link"
+     },
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 12,
+     "label": "Limerick reviews",
+     "purpose": "testimonials",
+     "elements": [
+      "headline",
+      "star rating",
+      "repeated items",
+      "quote/testimonial"
+     ],
+     "items": {
+      "count": 20,
+      "shape": "avatar + name + short text"
+     },
+     "notes": "summary '365 reviews, average 5.00'"
+    },
+    {
+     "page": "home",
+     "order": 13,
+     "label": "Instagram feed",
+     "purpose": "social feed",
+     "elements": [
+      "headline",
+      "third-party embed",
+      "secondary button"
+     ],
+     "items": null,
+     "notes": "plugin error message visible"
+    },
+    {
+     "page": "home",
+     "order": 14,
+     "label": "Footer",
+     "purpose": "two locations",
+     "elements": [
+      "address",
+      "phone",
+      "email",
+      "social links",
+      "text link"
+     ],
+     "items": {
+      "count": 2,
+      "shape": "salon block"
+     },
+     "notes": "website credit; sitemap"
+    },
+    {
+     "page": "home",
+     "order": 15,
+     "label": "Gateway bar",
+     "purpose": "switch between salons",
+     "elements": [
+      "logo",
+      "text link",
+      "phone",
+      "email"
+     ],
+     "items": {
+      "count": 2,
+      "shape": "salon"
+     },
+     "notes": ""
+    },
+    {
+     "page": "beauty-prices",
+     "order": 1,
+     "label": "Page title",
+     "purpose": "Beauty Prices - Limerick",
+     "elements": [
+      "headline"
+     ],
+     "items": null,
+     "notes": "same dual headers as home"
+    },
+    {
+     "page": "beauty-prices",
+     "order": 2,
+     "label": "Price list",
+     "purpose": "114 beauty services",
+     "elements": [
+      "headline",
+      "repeated items",
+      "price"
+     ],
+     "items": {
+      "count": 114,
+      "shape": "service name + single price; 8 categories (Nails, Make Up, Lashes & Brows, Facials & Peels, Massages, Waxing, Laser, Tanning); some with subgroups by brand (Dermalogica 13, Matis 12) or area (For the Hands/Feet/Nail Creations; Face/Body)"
+     },
+     "notes": "nails have two price columns (standard vs Senior Therapist); no durations or descriptions; patch-test note; add-ons as separate items; very long page"
+    },
+    {
+     "page": "beauty-prices",
+     "order": 3,
+     "label": "Parking banner",
+     "purpose": "free parking notice",
+     "elements": [
+      "paragraph(s)"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "beauty-prices",
+     "order": 4,
+     "label": "Footer",
+     "purpose": "both salons",
+     "elements": [
+      "address",
+      "phone",
+      "email",
+      "social links",
+      "text link"
+     ],
+     "items": null,
+     "notes": ""
+    }
+   ]
+  },
+  {
+   "name": "Fix Salon",
+   "url": "https://www.fixsalonseattle.com/",
+   "city_country": "Seattle, Washington, USA",
+   "platform_guess": "Squarespace; Phorest booking; Mya quiz; Affirm",
+   "quality": "polished",
+   "pages_checked": [
+    "https://www.fixsalonseattle.com/",
+    "https://www.fixsalonseattle.com/services",
+    "https://www.fixsalonseattle.com/our-stylists-folder"
+   ],
+   "sections": [
+    {
+     "page": "home",
+     "order": 1,
+     "label": "Utility bar and announcement",
+     "purpose": "promo for stylist match quiz",
+     "elements": [
+      "announcement bar",
+      "icons",
+      "text link"
+     ],
+     "items": null,
+     "notes": "cart icon and app link"
+    },
+    {
+     "page": "home",
+     "order": 2,
+     "label": "Primary navigation",
+     "purpose": "nav",
+     "elements": [
+      "logo",
+      "text link"
+     ],
+     "items": {
+      "count": 5,
+      "shape": "top nav link (Promotions, Services with 5 dropdown links, About Us, Our Team, Gallery)"
+     },
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 3,
+     "label": "Seattle's home for lived-in colors...",
+     "purpose": "hero",
+     "elements": [
+      "single image",
+      "headline",
+      "subheadline"
+     ],
+     "items": null,
+     "notes": "no button in hero"
+    },
+    {
+     "page": "home",
+     "order": 4,
+     "label": "Let's create beautiful hair together.",
+     "purpose": "intro",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "primary button"
+     ],
+     "items": null,
+     "notes": "Book Now -> Phorest"
+    },
+    {
+     "page": "home",
+     "order": 5,
+     "label": "Get To Know Your Stylist",
+     "purpose": "image tiles",
+     "elements": [
+      "image gallery",
+      "text link"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "image"
+     },
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 6,
+     "label": "Quiz and promotion blocks",
+     "purpose": "stylist match survey and monthly special",
+     "elements": [
+      "text link",
+      "single image",
+      "primary button"
+     ],
+     "items": {
+      "count": 2,
+      "shape": "survey button"
+     },
+     "notes": "links to third-party quiz app"
+    },
+    {
+     "page": "home",
+     "order": 7,
+     "label": "Our Services",
+     "purpose": "service group summary",
+     "elements": [
+      "single image",
+      "headline",
+      "repeated items",
+      "text link",
+      "primary button"
+     ],
+     "items": {
+      "count": 4,
+      "shape": "service group name + short text (Haircuts, Hair Color, Hairstyling, Consultations)"
+     },
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 8,
+     "label": "Special Offers and Bundled Experiences",
+     "purpose": "promo cards",
+     "elements": [
+      "repeated items",
+      "single image",
+      "price",
+      "primary button"
+     ],
+     "items": {
+      "count": 6,
+      "shape": "image + offer name + 'starting at' price + Book Now"
+     },
+     "notes": "some links mismatch cards"
+    },
+    {
+     "page": "home",
+     "order": 9,
+     "label": "Financing",
+     "purpose": "payment plan",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "logo strip",
+      "secondary button"
+     ],
+     "items": null,
+     "notes": "Affirm"
+    },
+    {
+     "page": "home",
+     "order": 10,
+     "label": "Latest Blogs",
+     "purpose": "posts",
+     "elements": [
+      "headline",
+      "repeated items",
+      "single image",
+      "text link"
+     ],
+     "items": {
+      "count": 4,
+      "shape": "thumbnail + date + title + read more"
+     },
+     "notes": "blog used for offers"
+    },
+    {
+     "page": "home",
+     "order": 11,
+     "label": "Footer",
+     "purpose": "links",
+     "elements": [
+      "headline",
+      "text link"
+     ],
+     "items": {
+      "count": 7,
+      "shape": "link (blog, book, contact, hiring, cancellation policy, promise, team resource)"
+     },
+     "notes": "no address or hours seen in footer; cancellation policy on separate page"
+    },
+    {
+     "page": "services",
+     "order": 1,
+     "label": "Header / navigation",
+     "purpose": "nav and banner",
+     "elements": [
+      "logo",
+      "text link",
+      "announcement bar"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "services",
+     "order": 2,
+     "label": "Hair Services intro",
+     "purpose": "pricing rules and age requirement",
+     "elements": [
+      "paragraph(s)"
+     ],
+     "items": null,
+     "notes": "level system explained: New Talent, Levels 1-4, Master"
+    },
+    {
+     "page": "services",
+     "order": 3,
+     "label": "Haircuts",
+     "purpose": "price list",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "repeated items",
+      "price"
+     ],
+     "items": {
+      "count": 8,
+      "shape": "service name + duration + description + price"
+     },
+     "notes": "ranges such as $79-149; open-ended '+'"
+    },
+    {
+     "page": "services",
+     "order": 4,
+     "label": "Hair Styling",
+     "purpose": "price list",
+     "elements": [
+      "headline",
+      "repeated items",
+      "price"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "name + duration + description + price"
+     },
+     "notes": ""
+    },
+    {
+     "page": "services",
+     "order": 5,
+     "label": "Color Foundations",
+     "purpose": "price list",
+     "elements": [
+      "headline",
+      "repeated items",
+      "price"
+     ],
+     "items": {
+      "count": 2,
+      "shape": "name + duration + description + price"
+     },
+     "notes": ""
+    },
+    {
+     "page": "services",
+     "order": 6,
+     "label": "Natural Dimensional Color",
+     "purpose": "price list",
+     "elements": [
+      "headline",
+      "single image",
+      "repeated items",
+      "price"
+     ],
+     "items": {
+      "count": 5,
+      "shape": "name + duration + description + price"
+     },
+     "notes": "price varies by length and density"
+    },
+    {
+     "page": "services",
+     "order": 7,
+     "label": "Consultations",
+     "purpose": "free consult and test strand",
+     "elements": [
+      "headline",
+      "paragraph(s)"
+     ],
+     "items": null,
+     "notes": "$35 non-refundable test strand fee"
+    },
+    {
+     "page": "services",
+     "order": 8,
+     "label": "Custom Color and Correctives",
+     "purpose": "hourly services",
+     "elements": [
+      "headline",
+      "repeated items",
+      "price"
+     ],
+     "items": {
+      "count": 4,
+      "shape": "name + description + hourly price"
+     },
+     "notes": "nested list, per-hour price, 50% deposit"
+    },
+    {
+     "page": "services",
+     "order": 9,
+     "label": "Vivid Color",
+     "purpose": "price list",
+     "elements": [
+      "headline",
+      "repeated items",
+      "price"
+     ],
+     "items": {
+      "count": 4,
+      "shape": "name + description + price"
+     },
+     "notes": "nested list"
+    },
+    {
+     "page": "services",
+     "order": 10,
+     "label": "Ready for an Upgrade?",
+     "purpose": "add-ons",
+     "elements": [
+      "headline",
+      "repeated items",
+      "price"
+     ],
+     "items": {
+      "count": 7,
+      "shape": "name + price, some per 15 or 60 min or two variants"
+     },
+     "notes": "price shapes: '$19 | $58'"
+    },
+    {
+     "page": "services",
+     "order": 11,
+     "label": "Secret Menu",
+     "purpose": "existing clients only",
+     "elements": [
+      "headline",
+      "repeated items",
+      "price"
+     ],
+     "items": {
+      "count": 4,
+      "shape": "name + price"
+     },
+     "notes": "cannot be booked online"
+    },
+    {
+     "page": "services",
+     "order": 12,
+     "label": "Footer",
+     "purpose": "links",
+     "elements": [
+      "text link"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "team",
+     "order": 1,
+     "label": "Team introduction",
+     "purpose": "explains stylist levels",
+     "elements": [
+      "paragraph(s)"
+     ],
+     "items": null,
+     "notes": "Level Stylist and Master Stylist"
+    },
+    {
+     "page": "team",
+     "order": 2,
+     "label": "Find your perfect stylist match",
+     "purpose": "survey CTA",
+     "elements": [
+      "headline",
+      "primary button"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "team",
+     "order": 3,
+     "label": "Stylist profiles",
+     "purpose": "team",
+     "elements": [
+      "repeated items",
+      "single image",
+      "headline",
+      "paragraph(s)",
+      "price",
+      "text link",
+      "social links"
+     ],
+     "items": {
+      "count": 9,
+      "shape": "photo(s) + name + level + pronouns + 1-3 paragraph bio + specialties list + 'from' prices for haircut / color / dimensional color + booking link"
+     },
+     "notes": "price by stylist level; no filters"
+    },
+    {
+     "page": "team",
+     "order": 4,
+     "label": "Staff profile",
+     "purpose": "admin staff",
+     "elements": [
+      "single image",
+      "paragraph(s)"
+     ],
+     "items": {
+      "count": 1,
+      "shape": "photo + name + role + bio"
+     },
+     "notes": ""
+    },
+    {
+     "page": "team",
+     "order": 5,
+     "label": "Now Hiring",
+     "purpose": "recruiting",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "email"
+     ],
+     "items": null,
+     "notes": "roles, shadowing and application options"
+    },
+    {
+     "page": "team",
+     "order": 6,
+     "label": "Footer",
+     "purpose": "links and contact",
+     "elements": [
+      "email",
+      "social links",
+      "text link"
+     ],
+     "items": {
+      "count": 7,
+      "shape": "footer link"
+     },
+     "notes": ""
+    }
+   ]
+  }
+ ],
+ "replaced": [
+  {
+   "url": "https://www.calisbeautyclinic.ie",
+   "why": "domain does not resolve (fetch failed)"
+  },
+  {
+   "url": "https://www.sammccauley.com",
+   "why": "redirects to mccauley.ie, a pharmacy chain, not an independent salon"
+  }
+ ]
+}

@@ -1,0 +1,147 @@
+1	home	1	header	clean	
+1	home	2	hero	clean	
+1	home	3	text-media	clean	
+1	home	4	team	clean	
+1	home	5	cards	clean	
+1	home	6	cards	clean	
+1	home	7	-	skip	empty section (heading only)
+1	home	8	cta	clean	
+1	home	9	cta	stretch	app store badges
+1	home	10	footer	clean	
+1	home	11	-	none	pop-up offer with a form
+1	classes	12	hero	clean	
+1	classes	13	cards	clean	
+1	classes	14	schedule	clean	
+1	classes	15	footer	clean	
+1	pricing	16	hero	clean	
+1	pricing	17	pricing-plans	clean	
+1	pricing	18	pricing-plans	clean	
+1	pricing	19	pricing-plans	clean	
+1	pricing	20	cards	clean	
+1	pricing	21	footer	clean	
+2	home	1	header	clean	
+2	home	2	hero	clean	
+2	home	3	cards	clean	
+2	home	4	cards	clean	
+2	home	5	testimonials	clean	
+2	home	6	cta	clean	
+2	home	7	faq	clean	
+2	home	8	cards	clean	
+2	home	9	cta	clean	
+2	home	10	footer	clean	
+2	timetable	11	schedule	stretch	filter buttons on the timetable
+2	timetable	12	cta	clean	
+2	pricing	13	text-media	clean	
+2	pricing	14	pricing-plans	clean	
+2	pricing	15	pricing-plans	clean	
+2	pricing	16	cta	clean	
+3	home	1	header	clean	
+3	home	2	header	clean	
+3	home	3	hero	stretch	background video and six buttons in the hero
+3	home	4	products	later	online shop
+3	home	5	text-media	clean	
+3	home	6	text-media	clean	
+3	home	7	cta	clean	
+3	home	8	-	none	social share buttons
+3	home	9	footer	clean	
+3	home	10	cta	clean	
+3	home	11	-	skip	cookie dialog (overlay, not a section)
+3	classes	12	schedule	clean	
+3	pricing	13	pricing-plans	stretch	terms checkbox and two payment routes per plan
+3	pricing	14	products	later	online shop
+3	pricing	15	footer	clean	
+4	home	1	header	clean	
+4	home	2	hero	clean	
+4	home	3	text-media	clean	
+4	home	4	text-media	clean	
+4	home	5	text-media	clean	
+4	home	6	cards	clean	
+4	home	7	testimonials	clean	
+4	home	8	hours-location	clean	
+4	home	9	cta	clean	
+4	home	10	posts	clean	
+4	home	11	footer	clean	
+4	home	12	footer	clean	
+4	pricing	13	pricing-plans	clean	
+4	pricing	14	footer	clean	
+4	timetable	15	embed	later	third-party booking calendar
+4	timetable	16	footer	clean	
+5	home	1	announcement	clean	
+5	home	2	header	stretch	very large menu (18 items)
+5	home	3	hero	clean	
+5	home	4	text-media	clean	
+5	home	5	cards	clean	
+5	home	6	testimonials	clean	
+5	home	7	cards	clean	
+5	home	8	cards	clean	
+5	home	9	cards	clean	
+5	home	10	cards	clean	
+5	home	11	cards	clean	
+5	home	12	hours-location	clean	
+5	home	13	testimonials	clean	
+5	home	14	gallery	clean	
+5	home	15	footer	clean	
+5	timetable	16	page-title	clean	
+5	timetable	17	cards	clean	
+5	timetable	18	text-media	stretch	business facts inside a text section
+5	timetable	19	schedule	clean	
+5	timetable	20	cards	stretch	dated events list
+5	timetable	21	footer	stretch	promo, gallery and named contacts in the footer
+5	pricing	22	hero	clean	
+5	pricing	23	cards	clean	
+5	pricing	24	pricing-plans	clean	
+5	pricing	25	price-list	stretch	price table with several price columns (casual, 5-pack, 10-pack)
+5	pricing	26	cta	clean	
+5	pricing	27	cards	clean	
+5	pricing	28	footer	stretch	promo, gallery and named contacts in the footer
+6	home	1	header	clean	
+6	home	2	hero	clean	
+6	home	3	text-media	clean	
+6	home	4	cta	clean	
+6	home	5	cta	clean	
+6	home	6	cards	clean	
+6	home	7	testimonials	clean	
+6	home	8	pricing-plans	clean	
+6	home	9	contact	clean	
+6	home	10	cta	clean	
+6	home	11	footer	clean	
+6	timetable	12	page-title	clean	
+6	timetable	13	embed	later	third-party timetable (Wodify)
+6	timetable	14	footer	clean	
+6	pricing	15	page-title	clean	
+6	pricing	16	pricing-plans	clean	
+6	pricing	17	footer	clean	
+7	home	1	header	stretch	very large menu (11 items, nested)
+7	home	2	cards	clean	
+7	home	3	hero	stretch	quote and booking widget inside the hero
+7	home	4	cards	clean	
+7	home	5	footer	clean	
+7	home	6	footer	clean	
+7	timetable	7	cta	clean	
+7	timetable	8	footer	clean	
+7	pricing	9	header	clean	
+7	pricing	10	pricing-plans	clean	
+7	pricing	11	pricing-plans	clean	
+7	pricing	12	pricing-plans	clean	
+7	pricing	13	pricing-plans	clean	
+7	pricing	14	text-media	clean	
+7	pricing	15	text-media	clean	
+7	pricing	16	cta	clean	
+7	pricing	17	footer	clean	
+8	home	1	announcement	clean	
+8	home	2	header	clean	
+8	home	3	hero	clean	
+8	home	4	price-list	clean	
+8	home	5	embed	later	third-party booking and gift-voucher widget
+8	home	6	cards	clean	
+8	home	7	text-media	clean	
+8	home	8	contact	clean	
+8	home	9	footer	clean	
+8	classes	10	hero	clean	
+8	classes	11	price-list	stretch	prices set for a whole group, not per item
+8	classes	12	price-list	stretch	prices set for a whole group, not per item
+8	classes	13	price-list	clean	
+8	classes	14	price-list	clean	
+8	classes	15	price-list	clean	
+8	classes	16	price-list	clean	
+8	classes	17	contact	clean	

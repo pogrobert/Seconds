@@ -1,0 +1,113 @@
+1	home	1	header	clean	
+1	home	2	hero	stretch	hero slideshow (several images)
+1	home	3	text-media	stretch	3+ links in one section
+1	home	4	text-media	clean	
+1	home	5	text-media	clean	
+1	home	6	footer	clean	
+1	menu	1	header	clean	
+1	menu	2	price-list	clean	
+1	menu	3	price-list	clean	
+1	menu	4	cta	clean	
+1	menu	5	footer	clean	
+1	contact	1	contact	clean	
+1	contact	2	footer	clean	
+2	home	1	header	clean	
+2	home	2	announcement	stretch	business facts inside a text section
+2	home	3	text-media	clean	
+2	home	4	cards	clean	
+2	home	5	text-media	clean	
+2	home	6	cards	clean	
+2	home	7	cta	clean	
+2	home	8	text-media	clean	
+2	home	9	cards	stretch	two sub-lists in one section
+2	home	10	-	skip	empty section (heading only)
+2	home	11	text-media	clean	
+2	home	12	team	clean	
+2	home	13	testimonials	clean	
+2	home	14	cards	clean	
+2	home	15	hours-location	stretch	route-planner input
+2	home	16	hours-location	clean	
+2	home	17	footer	clean	
+2	menu	1	header	clean	
+2	menu	2	price-list	clean	
+2	menu	3	footer	clean	
+3	home	1	header	clean	
+3	home	2	hero	stretch	image-only hero (no headline)
+3	home	3	footer	clean	
+3	menu	1	price-list	clean	
+3	menu	2	footer	clean	
+3	reservations	1	hours-location	clean	
+3	reservations	3	footer	clean	
+4	home	1	header	clean	
+4	home	2	-	skip	content not readable
+4	home	3	hours-location	clean	
+4	home	4	cta	clean	
+4	home	5	footer	clean	
+4	about	1	text-media	stretch	business facts inside a text section
+4	contact	1	hours-location	clean	
+4	contact	2	footer	clean	
+5	home	1	header	clean	
+5	home	2	hero	stretch	hero slideshow (several slides)
+5	home	3	hours-location	clean	
+5	home	4	text-media	clean	
+5	home	5	text-media	stretch	list of items inside a text section
+5	home	6	text-media	clean	
+5	home	7	logos	clean	
+5	home	8	gallery	clean	
+5	home	9	testimonials	clean	
+5	home	10	cta	clean	
+5	home	11	hours-location	clean	
+5	home	12	hours-location	clean	
+5	home	13	contact	clean	
+5	home	14	contact	clean	
+5	home	15	footer	clean	
+5	menu	1	page-title	clean	
+5	menu	2	price-list	clean	
+5	menu	3	footer	clean	
+5	about	1	text-media	clean	
+5	about	2	cards	clean	
+5	about	3	contact	clean	
+6	home	1	announcement	clean	
+6	home	2	header	clean	
+6	home	3	hero	clean	
+6	home	4	text-media	clean	
+6	home	5	text-media	clean	
+6	home	6	text-media	stretch	logo strip inside a text section
+6	home	7	products	later	online shop
+6	home	8	products	later	online shop
+6	home	9	products	later	online shop
+6	home	10	products	later	online shop
+6	home	11	cta	clean	
+6	home	12	footer	clean	
+6	menu	1	gallery	clean	
+6	menu	2	price-list	clean	
+6	about	1	gallery	clean	
+6	about	2	text-media	clean	
+7	home	1	header	clean	
+7	home	2	text-media	clean	
+7	home	3	gallery	clean	
+7	home	4	cta	clean	
+7	home	5	footer	clean	
+7	home	6	footer	clean	
+7	home	7	footer	clean	
+7	home	8	footer	clean	
+7	menu	1	price-list	clean	
+7	menu	2	price-list	clean	
+7	menu	3	footer	clean	
+7	contact	1	contact	clean	
+7	contact	2	footer	clean	
+8	home	1	header	clean	
+8	home	2	cards	clean	
+8	home	3	gallery	clean	
+8	home	4	contact	clean	
+8	home	5	cta	clean	
+8	home	6	text-media	clean	
+8	home	7	hours-location	clean	
+8	menu	1	price-list	stretch	item choices with extra charges (modifiers)
+8	menu	2	price-list	clean	
+8	menu	3	price-list	clean	
+8	menu	4	footer	clean	
+8	about	1	gallery	clean	
+8	about	2	text-media	clean	
+8	about	3	cards	clean	
+8	about	4	footer	clean	

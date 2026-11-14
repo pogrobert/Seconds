@@ -1,0 +1,2312 @@
+{
+ "kind": "fitness",
+ "collected": "2026-11-14",
+ "sites": [
+  {
+   "name": "Chapter 2 Fitness",
+   "url": "https://chapter2fitness.ie/",
+   "city_country": "Sandyford, Dublin, Ireland",
+   "platform_guess": "WordPress (page-builder look, Stripe checkout links)",
+   "quality": "polished",
+   "pages_checked": [
+    "https://chapter2fitness.ie/",
+    "https://www.chapter2fitness.ie/classes-timetable/",
+    "https://www.chapter2fitness.ie/membership/"
+   ],
+   "sections": [
+    {
+     "page": "home",
+     "order": 1,
+     "label": "Header / navigation",
+     "purpose": "brand and 4-link menu with trial CTA",
+     "elements": [
+      "logo",
+      "text link",
+      "primary button",
+      "Stripe payment link"
+     ],
+     "items": null,
+     "notes": "Menu markup appears twice (desktop+mobile). Trial offer is a paid EUR10 button in the header."
+    },
+    {
+     "page": "home",
+     "order": 2,
+     "label": "Functional Strength, High-Intensity Conditioning & HYROX Training",
+     "purpose": "hero with trial offer",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "primary button"
+     ],
+     "items": null,
+     "notes": "Button label carries a price ('Book Trial Class - EUR10')."
+    },
+    {
+     "page": "home",
+     "order": 3,
+     "label": "We're more than just a gym",
+     "purpose": "short about statement",
+     "elements": [
+      "headline",
+      "paragraph(s)"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 4,
+     "label": "Meet your head coach",
+     "purpose": "coach bio",
+     "elements": [
+      "eyebrow/kicker",
+      "headline",
+      "paragraph(s)",
+      "single image"
+     ],
+     "items": null,
+     "notes": "One named coach with two bio paragraphs; decorative frames."
+    },
+    {
+     "page": "home",
+     "order": 5,
+     "label": "Classes for Every Level of Fitness",
+     "purpose": "class types by level",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "repeated items",
+      "single image"
+     ],
+     "items": {
+      "count": 5,
+      "shape": "image + class name + short description (LIFT, Strength, Strength & Metcon, Conditioning, Barbell Club)"
+     },
+     "notes": "Classes are progression levels, not a simple list; some cards lack images."
+    },
+    {
+     "page": "home",
+     "order": 6,
+     "label": "Start training in 3 simple steps",
+     "purpose": "how to get started",
+     "elements": [
+      "headline",
+      "subheadline",
+      "repeated items",
+      "icons",
+      "primary button"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "number + icon + step title"
+     },
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 7,
+     "label": "What Our Customers Say",
+     "purpose": "testimonials",
+     "elements": [
+      "headline"
+     ],
+     "items": null,
+     "notes": "Heading present but no testimonial text captured (likely widget/dynamic)."
+    },
+    {
+     "page": "home",
+     "order": 8,
+     "label": "Ready to Start the Next Chapter...",
+     "purpose": "closing CTA",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "primary button"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 9,
+     "label": "Download our App",
+     "purpose": "app store links",
+     "elements": [
+      "third-party embed",
+      "single image"
+     ],
+     "items": {
+      "count": 2,
+      "shape": "store badge (Apple, Google Play)"
+     },
+     "notes": "Own member app."
+    },
+    {
+     "page": "home",
+     "order": 10,
+     "label": "Footer",
+     "purpose": "contact and links",
+     "elements": [
+      "logo",
+      "social links",
+      "text link",
+      "phone",
+      "email",
+      "address",
+      "legal links"
+     ],
+     "items": null,
+     "notes": "Quick links 4, 'Free parking at gym' note. Copyright line."
+    },
+    {
+     "page": "home",
+     "order": 11,
+     "label": "New member deal popup",
+     "purpose": "lead capture offer",
+     "elements": [
+      "headline",
+      "newsletter form",
+      "primary button"
+     ],
+     "items": null,
+     "notes": "3 class credits for EUR29, name+email form; appears as overlay."
+    },
+    {
+     "page": "classes",
+     "order": 12,
+     "label": "Classes & Timetable (intro)",
+     "purpose": "page intro + trial CTA",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "primary button"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "classes",
+     "order": 13,
+     "label": "C2F Classes",
+     "purpose": "describe 5 class types",
+     "elements": [
+      "paragraph(s)",
+      "repeated items",
+      "single image"
+     ],
+     "items": {
+      "count": 5,
+      "shape": "image + name + description (one has keyword list)"
+     },
+     "notes": "Class descriptions are inconsistent in shape (one card has no image, one has bullets)."
+    },
+    {
+     "page": "classes",
+     "order": 14,
+     "label": "Timetable",
+     "purpose": "weekly class times",
+     "elements": [
+      "timetable/schedule",
+      "single image",
+      "primary button"
+     ],
+     "items": null,
+     "notes": "Timetable is a PNG image, not an embed or HTML table; times not readable as text."
+    },
+    {
+     "page": "classes",
+     "order": 15,
+     "label": "Testimonials / CTA / App / Footer",
+     "purpose": "repeat of home closing blocks",
+     "elements": [
+      "headline",
+      "primary button",
+      "single image",
+      "text link"
+     ],
+     "items": null,
+     "notes": "Same blocks as home."
+    },
+    {
+     "page": "pricing",
+     "order": 16,
+     "label": "Memberships & Private Training (intro)",
+     "purpose": "page intro",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "primary button"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "pricing",
+     "order": 17,
+     "label": "Monthly Membership",
+     "purpose": "recurring plans",
+     "elements": [
+      "pricing plans",
+      "price",
+      "repeated items",
+      "primary button"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "plan name + price per month + classes allowance + 5 bullets + buy button; one tagged Popular (Pro 180, Athlete 140, Base 120)"
+     },
+     "notes": "Note about 30 days written notice for cancellation."
+    },
+    {
+     "page": "pricing",
+     "order": 18,
+     "label": "Flexible Class Credit Packs",
+     "purpose": "class packs with expiry",
+     "elements": [
+      "pricing plans",
+      "price",
+      "repeated items",
+      "primary button"
+     ],
+     "items": {
+      "count": 5,
+      "shape": "pack name + price + expiry weeks + tagline + 3 bullets + buy button (1,3,5,10,15)"
+     },
+     "notes": "Class packs have expiry (4-18 weeks); cards show 'per month' label on one-off packs (template mismatch)."
+    },
+    {
+     "page": "pricing",
+     "order": 19,
+     "label": "Private Training Packs",
+     "purpose": "PT session bundles",
+     "elements": [
+      "pricing plans",
+      "price",
+      "repeated items",
+      "primary button"
+     ],
+     "items": {
+      "count": 4,
+      "shape": "pack name + price + buy button (1,5,10,20 sessions)"
+     },
+     "notes": ""
+    },
+    {
+     "page": "pricing",
+     "order": 20,
+     "label": "Why choose private training?",
+     "purpose": "benefit list",
+     "elements": [
+      "headline",
+      "repeated items",
+      "primary button"
+     ],
+     "items": {
+      "count": 6,
+      "shape": "bullet benefit"
+     },
+     "notes": ""
+    },
+    {
+     "page": "pricing",
+     "order": 21,
+     "label": "Testimonials / CTA / App / Footer",
+     "purpose": "repeat of home closing blocks",
+     "elements": [
+      "headline",
+      "primary button"
+     ],
+     "items": null,
+     "notes": ""
+    }
+   ]
+  },
+  {
+   "name": "Yemaso BJJ",
+   "url": "https://www.yemasobjj.com/",
+   "city_country": "Sacramento, California, USA",
+   "platform_guess": "WordPress (Genesis theme)",
+   "quality": "polished",
+   "pages_checked": [
+    "https://www.yemasobjj.com/",
+    "https://www.yemasobjj.com/about/schedule/",
+    "https://www.yemasobjj.com/about/membership/"
+   ],
+   "sections": [
+    {
+     "page": "home",
+     "order": 1,
+     "label": "Header",
+     "purpose": "brand, tagline, nav",
+     "elements": [
+      "logo",
+      "text link",
+      "phone",
+      "primary button"
+     ],
+     "items": null,
+     "notes": "'Call Now' button in nav; dropdowns for Programs and About (includes Schedule, Membership Fees, Location as anchors)."
+    },
+    {
+     "page": "home",
+     "order": 2,
+     "label": "Your Protection Starts With Your First Grip",
+     "purpose": "hero",
+     "elements": [
+      "headline",
+      "subheadline",
+      "primary button",
+      "secondary button",
+      "background image"
+     ],
+     "items": null,
+     "notes": "'Book a Trial' and 'Learn More'."
+    },
+    {
+     "page": "home",
+     "order": 3,
+     "label": "Where Proven Self Defense And Championship Coaching Meet",
+     "purpose": "value proposition",
+     "elements": [
+      "eyebrow/kicker",
+      "headline",
+      "repeated items",
+      "icons"
+     ],
+     "items": {
+      "count": 4,
+      "shape": "feature title + blurb"
+     },
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 4,
+     "label": "choose your program",
+     "purpose": "program selector",
+     "elements": [
+      "headline",
+      "repeated items",
+      "single image"
+     ],
+     "items": {
+      "count": 4,
+      "shape": "image + linked program title (women's, kids, beginner, adults)"
+     },
+     "notes": "Programs are audience segments."
+    },
+    {
+     "page": "home",
+     "order": 5,
+     "label": "What Our Students Say",
+     "purpose": "testimonials",
+     "elements": [
+      "headline",
+      "subheadline",
+      "quote/testimonial",
+      "star rating",
+      "single image",
+      "text link"
+     ],
+     "items": {
+      "count": 7,
+      "shape": "photo + name + 5-star graphic + quote + Yelp link"
+     },
+     "notes": "Links out to Yelp; 'Read More Reviews' button."
+    },
+    {
+     "page": "home",
+     "order": 6,
+     "label": "start your trial this week",
+     "purpose": "trial CTA band",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "primary button"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 7,
+     "label": "Still have questions?",
+     "purpose": "FAQ",
+     "elements": [
+      "headline",
+      "repeated items",
+      "text link",
+      "primary button"
+     ],
+     "items": {
+      "count": 5,
+      "shape": "question + answer text (accordion not confirmed)"
+     },
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 8,
+     "label": "Benefits of Membership",
+     "purpose": "benefits grid",
+     "elements": [
+      "headline",
+      "subheadline",
+      "repeated items"
+     ],
+     "items": {
+      "count": 6,
+      "shape": "benefit title + blurb"
+     },
+     "notes": "Home anchors #front-page-4/5/6 are nav targets for fees, location, schedule but fees/schedule not shown on home."
+    },
+    {
+     "page": "home",
+     "order": 9,
+     "label": "Start Training in Sacramento Today",
+     "purpose": "footer CTA",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "primary button",
+      "phone"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 10,
+     "label": "Footer links",
+     "purpose": "footer",
+     "elements": [
+      "social links",
+      "text link",
+      "legal links"
+     ],
+     "items": null,
+     "notes": "Social: Facebook, Instagram, Twitter, YouTube. Credit to web agency."
+    },
+    {
+     "page": "timetable",
+     "order": 11,
+     "label": "Schedule",
+     "purpose": "weekly class schedule",
+     "elements": [
+      "headline",
+      "text link",
+      "timetable/schedule"
+     ],
+     "items": {
+      "count": 14,
+      "shape": "class name + time range, grouped by weekday (approx 13 classes Mon-Sat)"
+     },
+     "notes": "Filter links (All, Beginner, Advanced, NoGi, Kids...) with a weekly grid; plugin-style calendar; empty state 'No events available' for one filter. Unknown whether grid is embed or table."
+    },
+    {
+     "page": "timetable",
+     "order": 12,
+     "label": "Footer CTA",
+     "purpose": "trial CTA",
+     "elements": [
+      "headline",
+      "primary button",
+      "phone",
+      "social links"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "pricing",
+     "order": 13,
+     "label": "Membership Fees (policy intro)",
+     "purpose": "pricing philosophy",
+     "elements": [
+      "headline",
+      "paragraph(s)"
+     ],
+     "items": null,
+     "notes": "Four paragraphs: transparency, anti-contract warning, first responder/military discount, no belt fees."
+    },
+    {
+     "page": "pricing",
+     "order": 14,
+     "label": "Adult Membership Options",
+     "purpose": "adult plan + drop-in",
+     "elements": [
+      "pricing plans",
+      "price",
+      "primary button"
+     ],
+     "items": {
+      "count": 1,
+      "shape": "plan label + price per month + inclusions + Contact Us button; plus drop-in $20 line"
+     },
+     "notes": "Only one adult plan ($150/mo, 12-month contract); drop-in fee as a text line."
+    },
+    {
+     "page": "pricing",
+     "order": 15,
+     "label": "Kids Membership Options",
+     "purpose": "kids plan",
+     "elements": [
+      "pricing plans",
+      "price",
+      "primary button"
+     ],
+     "items": {
+      "count": 1,
+      "shape": "label (ages 6-15) + price per month + inclusions + button"
+     },
+     "notes": "Pricing buttons say 'Contact Us' rather than buy."
+    },
+    {
+     "page": "pricing",
+     "order": 16,
+     "label": "Footer CTA",
+     "purpose": "trial CTA",
+     "elements": [
+      "headline",
+      "primary button",
+      "phone"
+     ],
+     "items": null,
+     "notes": ""
+    }
+   ]
+  },
+  {
+   "name": "The Ring Boxing Club",
+   "url": "https://theringboxingclub.com/",
+   "city_country": "London (Bermondsey), UK",
+   "platform_guess": "WordPress + WooCommerce",
+   "quality": "basic",
+   "pages_checked": [
+    "https://theringboxingclub.com/",
+    "https://theringboxingclub.com/class-schedule/",
+    "https://theringboxingclub.com/membership/"
+   ],
+   "sections": [
+    {
+     "page": "home",
+     "order": 1,
+     "label": "Top utility bar",
+     "purpose": "address, email, cart, login",
+     "elements": [
+      "address",
+      "email",
+      "text link",
+      "social links"
+     ],
+     "items": null,
+     "notes": "Mini-cart (0 items, GBP0) shown in header; 'Personal Training Clients' login link."
+    },
+    {
+     "page": "home",
+     "order": 2,
+     "label": "Header and main navigation",
+     "purpose": "brand + big dropdown nav",
+     "elements": [
+      "logo",
+      "text link"
+     ],
+     "items": {
+      "count": 8,
+      "shape": "top-level menu item with dropdown (up to 8 sub-items)"
+     },
+     "notes": "Deep nested menu (~16 sub-items) duplicated for mobile; sister-business links."
+    },
+    {
+     "page": "home",
+     "order": 3,
+     "label": "The Ring Boxing Club. We Train Professional Boxers and Professional People",
+     "purpose": "hero",
+     "elements": [
+      "headline",
+      "subheadline",
+      "video",
+      "secondary button",
+      "primary button",
+      "repeated items"
+     ],
+     "items": {
+      "count": 6,
+      "shape": "button: Classes, Membership, Personal Training, Book a Trial, Venue Hire, Meet the Team"
+     },
+     "notes": "Text blocks 'Unlimited Classes', 'Unlimited Access', 'Over 80 Years of Experience'; hero content duplicated for mobile."
+    },
+    {
+     "page": "home",
+     "order": 4,
+     "label": "Book An Introduction Trial Session",
+     "purpose": "sell trial as a shop product",
+     "elements": [
+      "price",
+      "single image",
+      "primary button"
+     ],
+     "items": {
+      "count": 1,
+      "shape": "product: title + price GBP75 + description + Add to basket"
+     },
+     "notes": "WooCommerce product card embedded in page; placeholder images."
+    },
+    {
+     "page": "home",
+     "order": 5,
+     "label": "Boxing Classes for Fitness",
+     "purpose": "class summary",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "text link"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 6,
+     "label": "Boxing Personal Training",
+     "purpose": "PT summary",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "text link"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 7,
+     "label": "Pay As You Go CTA",
+     "purpose": "button to external PAYG site",
+     "elements": [
+      "primary button"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 8,
+     "label": "Share this page",
+     "purpose": "social share row",
+     "elements": [
+      "social links"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 9,
+     "label": "Footer",
+     "purpose": "address, partner and sister sites, legal",
+     "elements": [
+      "logo",
+      "address",
+      "social links",
+      "text link",
+      "legal links"
+     ],
+     "items": {
+      "count": 9,
+      "shape": "link to sister business"
+     },
+     "notes": "Legal: terms, refund, privacy, cookie (4)."
+    },
+    {
+     "page": "home",
+     "order": 10,
+     "label": "Stay Connected!",
+     "purpose": "newsletter",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "newsletter form"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 11,
+     "label": "Manage Consent",
+     "purpose": "cookie dialog",
+     "elements": [
+      "legal links",
+      "primary button"
+     ],
+     "items": null,
+     "notes": "Template placeholders ({title},{vendor_count}) unrendered."
+    },
+    {
+     "page": "classes",
+     "order": 12,
+     "label": "Class Schedule",
+     "purpose": "weekly schedule as text",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "primary button",
+      "timetable/schedule"
+     ],
+     "items": {
+      "count": 22,
+      "shape": "day heading + 'start - end : class name (audience)' lines"
+     },
+     "notes": "Plain text lines grouped by day; members-only virtual classes mixed with public; not an embed."
+    },
+    {
+     "page": "pricing",
+     "order": 13,
+     "label": "Membership means Unlimited Classes and Unlimited Access",
+     "purpose": "plan cards with contracts",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "pricing plans",
+      "price",
+      "checkbox",
+      "primary button"
+     ],
+     "items": {
+      "count": 4,
+      "shape": "plan name + monthly DD price + contract minimum + up-front saving via PayPal + T&Cs checkbox (1yr 99, 6mo 130, 3mo 170, 1mo 199)"
+     },
+     "notes": "Price drops with longer contract; two payment routes (direct debit vs PayPal up-front); checkbox on each card."
+    },
+    {
+     "page": "pricing",
+     "order": 14,
+     "label": "Still not sure",
+     "purpose": "trial product",
+     "elements": [
+      "price",
+      "primary button"
+     ],
+     "items": {
+      "count": 1,
+      "shape": "trial product GBP75 + add to basket"
+     },
+     "notes": ""
+    },
+    {
+     "page": "pricing",
+     "order": 15,
+     "label": "Footer + newsletter + cookie",
+     "purpose": "repeat of home",
+     "elements": [
+      "legal links",
+      "newsletter form"
+     ],
+     "items": null,
+     "notes": ""
+    }
+   ]
+  },
+  {
+   "name": "Debbie Wyer Pilates",
+   "url": "https://debbiewyerpilates.com/",
+   "city_country": "Sonning Common, Oxfordshire, UK",
+   "platform_guess": "V-Healthy (practice-management site builder)",
+   "quality": "basic",
+   "pages_checked": [
+    "https://debbiewyerpilates.com/",
+    "https://debbiewyerpilates.com/pricing",
+    "https://debbiewyerpilates.com/classes/timetable"
+   ],
+   "sections": [
+    {
+     "page": "home",
+     "order": 1,
+     "label": "Header",
+     "purpose": "logo and nav with login",
+     "elements": [
+      "logo",
+      "text link"
+     ],
+     "items": null,
+     "notes": "Nav includes Login/Register for clients; About and Class Finder are dropdown-only parents."
+    },
+    {
+     "page": "home",
+     "order": 2,
+     "label": "Debbie Wyer Pilates",
+     "purpose": "hero",
+     "elements": [
+      "headline",
+      "subheadline",
+      "paragraph(s)",
+      "primary button"
+     ],
+     "items": null,
+     "notes": "Tagline: Understand your body. Move with confidence."
+    },
+    {
+     "page": "home",
+     "order": 3,
+     "label": "Finally understand why your aches and injuries keep coming back",
+     "purpose": "offer pitch",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "secondary button",
+      "single image"
+     ],
+     "items": null,
+     "notes": "Button goes to a Calendly page; placeholder alt text on images."
+    },
+    {
+     "page": "home",
+     "order": 4,
+     "label": "Helping you keep doing the things you love",
+     "purpose": "about the approach",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "single image"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 5,
+     "label": "Why work with me?",
+     "purpose": "credentials",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "secondary button"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 6,
+     "label": "Ways to work with me",
+     "purpose": "services list",
+     "elements": [
+      "headline",
+      "repeated items",
+      "secondary button"
+     ],
+     "items": {
+      "count": 5,
+      "shape": "bullet service"
+     },
+     "notes": "Mix of group classes, MELT, online courses, workshops."
+    },
+    {
+     "page": "home",
+     "order": 7,
+     "label": "Client Testimonials",
+     "purpose": "testimonials",
+     "elements": [
+      "headline",
+      "quote/testimonial",
+      "secondary button"
+     ],
+     "items": {
+      "count": 2,
+      "shape": "quote + first name + area"
+     },
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 8,
+     "label": "Pilates and The MELT Method in Sonning Common",
+     "purpose": "studio location + CTA",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "primary button",
+      "single image",
+      "text link"
+     ],
+     "items": null,
+     "notes": "Location in text; no map; booking is a free-chat Calendly link."
+    },
+    {
+     "page": "home",
+     "order": 9,
+     "label": "Stay Connected",
+     "purpose": "newsletter",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "primary button"
+     ],
+     "items": null,
+     "notes": "Button goes to Mailchimp page rather than inline form."
+    },
+    {
+     "page": "home",
+     "order": 10,
+     "label": "Latest Blog Posts",
+     "purpose": "recent blog",
+     "elements": [
+      "headline",
+      "repeated items"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "linked title + date"
+     },
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 11,
+     "label": "Useful Links",
+     "purpose": "footer link list",
+     "elements": [
+      "headline",
+      "text link"
+     ],
+     "items": {
+      "count": 8,
+      "shape": "text link"
+     },
+     "notes": "Duplicate 'Classes' links."
+    },
+    {
+     "page": "home",
+     "order": 12,
+     "label": "Footer",
+     "purpose": "copyright and legal",
+     "elements": [
+      "logo",
+      "legal links"
+     ],
+     "items": null,
+     "notes": "Powered by V-Healthy."
+    },
+    {
+     "page": "pricing",
+     "order": 13,
+     "label": "Pricing / Subscriptions",
+     "purpose": "monthly subscription tiers",
+     "elements": [
+      "headline",
+      "pricing plans",
+      "price",
+      "primary button"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "tier name + price per month + classes per week + description + Subscribe Now + terms note (Solo 45, Duo 80, Trio 92)"
+     },
+     "notes": "Monthly price based on 46 weeks spread over 12 months; subscribe button goes to platform checkout."
+    },
+    {
+     "page": "pricing",
+     "order": 14,
+     "label": "Logo and tagline / Blog / Links / Footer",
+     "purpose": "shared bottom blocks",
+     "elements": [
+      "logo",
+      "paragraph(s)",
+      "repeated items",
+      "text link"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "timetable",
+     "order": 15,
+     "label": "Schedule (Class Finder)",
+     "purpose": "platform calendar",
+     "elements": [
+      "headline",
+      "timetable/schedule",
+      "text link"
+     ],
+     "items": null,
+     "notes": "Calendar from platform with week strip; showed empty state 'no dates for upcoming classes'. Timetable is an app widget with login."
+    },
+    {
+     "page": "timetable",
+     "order": 16,
+     "label": "Logo / tagline / Blog / Links / Footer",
+     "purpose": "shared bottom blocks",
+     "elements": [
+      "logo",
+      "paragraph(s)",
+      "repeated items",
+      "text link"
+     ],
+     "items": null,
+     "notes": ""
+    }
+   ]
+  },
+  {
+   "name": "Adult Ballet Centre",
+   "url": "https://adult-ballet-tfg8.squarespace.com/",
+   "city_country": "Cheltenham, Melbourne, Australia",
+   "platform_guess": "Squarespace (served on a squarespace.com address; custom domain not confirmed)",
+   "quality": "average",
+   "pages_checked": [
+    "https://adult-ballet-tfg8.squarespace.com/",
+    "https://adult-ballet-tfg8.squarespace.com/adult-ballet-timetable",
+    "https://adult-ballet-tfg8.squarespace.com/memberships"
+   ],
+   "sections": [
+    {
+     "page": "home",
+     "order": 1,
+     "label": "Announcement bar",
+     "purpose": "phone call offer",
+     "elements": [
+      "announcement bar"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 2,
+     "label": "Header and navigation",
+     "purpose": "logo, 18-item menu",
+     "elements": [
+      "logo",
+      "text link",
+      "social links"
+     ],
+     "items": {
+      "count": 18,
+      "shape": "menu link; 'Class details' dropdown has 12 sub-links"
+     },
+     "notes": "Very large nav for a small site."
+    },
+    {
+     "page": "home",
+     "order": 3,
+     "label": "Adult Ballet Classes in Melbourne",
+     "purpose": "hero",
+     "elements": [
+      "headline",
+      "subheadline",
+      "primary button",
+      "secondary button"
+     ],
+     "items": null,
+     "notes": "Trial registration goes to Jotform; booking to /booking (ClubWorx)."
+    },
+    {
+     "page": "home",
+     "order": 4,
+     "label": "A Studio Built for Adults - Not Adapted for Them",
+     "purpose": "positioning statement",
+     "elements": [
+      "headline",
+      "paragraph(s)"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 5,
+     "label": "Adult Ballet Classes - From Beginner to Advanced",
+     "purpose": "audience types",
+     "elements": [
+      "headline",
+      "repeated items",
+      "primary button"
+     ],
+     "items": {
+      "count": 4,
+      "shape": "audience type + short description"
+     },
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 6,
+     "label": "What Our Dancers Say",
+     "purpose": "testimonials",
+     "elements": [
+      "headline",
+      "quote/testimonial"
+     ],
+     "items": {
+      "count": 9,
+      "shape": "quote + attribution"
+     },
+     "notes": "Set repeated 3 times in captured markup (carousel artefact)."
+    },
+    {
+     "page": "home",
+     "order": 7,
+     "label": "Welcome to the Adult Ballet Centre",
+     "purpose": "intro and features",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "repeated items"
+     ],
+     "items": {
+      "count": 4,
+      "shape": "feature title + text"
+     },
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 8,
+     "label": "Your Adult Ballet Training Pathway",
+     "purpose": "level progression Steady/Strengthen/Soar",
+     "elements": [
+      "headline",
+      "repeated items",
+      "primary button"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "stage name + list of levels/programs (2, 6, 6 entries)"
+     },
+     "notes": "Progression ladder is domain-specific; same program listed in two stages."
+    },
+    {
+     "page": "home",
+     "order": 9,
+     "label": "Specialised Programs",
+     "purpose": "list of specialty classes",
+     "elements": [
+      "headline",
+      "repeated items"
+     ],
+     "items": {
+      "count": 8,
+      "shape": "program name"
+     },
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 10,
+     "label": "More Than a Ballet Class",
+     "purpose": "benefits",
+     "elements": [
+      "headline",
+      "repeated items"
+     ],
+     "items": {
+      "count": 7,
+      "shape": "benefit label"
+     },
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 11,
+     "label": "Explore More",
+     "purpose": "links to sister sites",
+     "elements": [
+      "headline",
+      "repeated items",
+      "text link"
+     ],
+     "items": {
+      "count": 2,
+      "shape": "link card to external product"
+     },
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 12,
+     "label": "Arnold Street Studios",
+     "purpose": "address",
+     "elements": [
+      "headline",
+      "address",
+      "text link"
+     ],
+     "items": null,
+     "notes": "Google Maps link, no embedded map."
+    },
+    {
+     "page": "home",
+     "order": 13,
+     "label": "Testimonial with photo",
+     "purpose": "single feature quote",
+     "elements": [
+      "single image",
+      "quote/testimonial"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 14,
+     "label": "Image feature",
+     "purpose": "pull quote image and Instagram",
+     "elements": [
+      "single image",
+      "text link"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 15,
+     "label": "Footer",
+     "purpose": "copyright, ABN, social",
+     "elements": [
+      "social links",
+      "legal links"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "timetable",
+     "order": 16,
+     "label": "Adult Ballet Timetable Melbourne",
+     "purpose": "timetable page intro",
+     "elements": [
+      "headline",
+      "subheadline",
+      "paragraph(s)"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "timetable",
+     "order": 17,
+     "label": "Why Train With Us?",
+     "purpose": "reasons",
+     "elements": [
+      "headline",
+      "repeated items"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "bold title + paragraph"
+     },
+     "notes": ""
+    },
+    {
+     "page": "timetable",
+     "order": 18,
+     "label": "Private coaching and studio details",
+     "purpose": "coaching + address",
+     "elements": [
+      "paragraph(s)",
+      "address",
+      "text link",
+      "single image"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "timetable",
+     "order": 19,
+     "label": "Timetable",
+     "purpose": "term timetable as image and Google Sheet",
+     "elements": [
+      "timetable/schedule",
+      "single image",
+      "text link",
+      "primary button"
+     ],
+     "items": null,
+     "notes": "Timetable is an image plus link to Google Sheet; times not available as page text; graphic links to booking."
+    },
+    {
+     "page": "timetable",
+     "order": 20,
+     "label": "Important happenings and dates for 2026",
+     "purpose": "term dates and events",
+     "elements": [
+      "headline",
+      "repeated items"
+     ],
+     "items": {
+      "count": 10,
+      "shape": "month or event heading + description + optional link"
+     },
+     "notes": "Dated event list written as headings and text."
+    },
+    {
+     "page": "timetable",
+     "order": 21,
+     "label": "AICD promotion / About / Contacts / ClubWorx app / Gallery / Footer",
+     "purpose": "mixed bottom blocks",
+     "elements": [
+      "single image",
+      "paragraph(s)",
+      "email",
+      "phone",
+      "image gallery",
+      "social links"
+     ],
+     "items": {
+      "count": 8,
+      "shape": "gallery tile image + caption"
+     },
+     "notes": "Contacts: 2 named people with role."
+    },
+    {
+     "page": "pricing",
+     "order": 22,
+     "label": "Fees & Memberships hero",
+     "purpose": "pricing intro",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "primary button",
+      "secondary button"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "pricing",
+     "order": 23,
+     "label": "Choose Your Training Rhythm",
+     "purpose": "frequency-to-product guide",
+     "elements": [
+      "headline",
+      "repeated items"
+     ],
+     "items": {
+      "count": 5,
+      "shape": "frequency + arrow + product"
+     },
+     "notes": "Recommendation list inconsistent with cards (naming)."
+    },
+    {
+     "page": "pricing",
+     "order": 24,
+     "label": "Membership and pass cards",
+     "purpose": "memberships and class packs",
+     "elements": [
+      "pricing plans",
+      "price",
+      "repeated items",
+      "primary button"
+     ],
+     "items": {
+      "count": 6,
+      "shape": "title + price + bullet details + note + CTA (10 pass 349, membership 349/mo, unlimited 497/mo, 20 pass 670, 5 pass 179, general class 42.20)"
+     },
+     "notes": "Mix of class packs with validity weeks, monthly membership with minimum 4 months and 30 days notice, unlimited tier; 'Most Popular' tag; some CTAs are email links."
+    },
+    {
+     "page": "pricing",
+     "order": 25,
+     "label": "Add-ons and specialty classes",
+     "purpose": "specialty class prices",
+     "elements": [
+      "repeated items",
+      "price"
+     ],
+     "items": {
+      "count": 5,
+      "shape": "name + casual / 5-pack / 10-pack prices + conditions"
+     },
+     "notes": "Several price tiers per item; eligibility requires assessment."
+    },
+    {
+     "page": "pricing",
+     "order": 26,
+     "label": "Not Sure Where to Begin?",
+     "purpose": "trial CTA",
+     "elements": [
+      "paragraph(s)",
+      "primary button"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "pricing",
+     "order": 27,
+     "label": "Beyond Weekly Training",
+     "purpose": "extras",
+     "elements": [
+      "repeated items",
+      "single image"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "bullet"
+     },
+     "notes": ""
+    },
+    {
+     "page": "pricing",
+     "order": 28,
+     "label": "About / Contacts / ClubWorx / Gallery / Footer",
+     "purpose": "repeat of bottom blocks",
+     "elements": [
+      "paragraph(s)",
+      "email",
+      "image gallery",
+      "social links"
+     ],
+     "items": null,
+     "notes": ""
+    }
+   ]
+  },
+  {
+   "name": "CrossFit Limitless",
+   "url": "https://www.crossfitlimitless.ie/",
+   "city_country": "Galway, Ireland",
+   "platform_guess": "Wodify Sites (site builder by gym software vendor)",
+   "quality": "average",
+   "pages_checked": [
+    "https://www.crossfitlimitless.ie/",
+    "https://www.crossfitlimitless.ie/timetable",
+    "https://www.crossfitlimitless.ie/memberships"
+   ],
+   "sections": [
+    {
+     "page": "home",
+     "order": 1,
+     "label": "Header and navigation",
+     "purpose": "brand, menu, social",
+     "elements": [
+      "logo",
+      "text link",
+      "social links"
+     ],
+     "items": {
+      "count": 7,
+      "shape": "menu link; Programs dropdown with 4"
+     },
+     "notes": "Quick 'Visiting? Drop In' link. Mobile menu differs from desktop (labels, items)."
+    },
+    {
+     "page": "home",
+     "order": 2,
+     "label": "CrossFit Limitless - The Home of CrossFit in Galway City",
+     "purpose": "hero",
+     "elements": [
+      "headline",
+      "subheadline",
+      "paragraph(s)",
+      "primary button"
+     ],
+     "items": null,
+     "notes": "'Book a Free Trial' goes to Wodify."
+    },
+    {
+     "page": "home",
+     "order": 3,
+     "label": "New to CrossFit?",
+     "purpose": "beginner offer",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "repeated items",
+      "secondary button"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "bullet (2 weeks unlimited, coach assessment, EUR49)"
+     },
+     "notes": "On-ramp program with price."
+    },
+    {
+     "page": "home",
+     "order": 4,
+     "label": "Done CrossFit before?",
+     "purpose": "experienced CTA",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "primary button",
+      "secondary button"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 5,
+     "label": "Training for an Upcoming HYROX Race?",
+     "purpose": "HYROX promo",
+     "elements": [
+      "headline",
+      "background image",
+      "primary button",
+      "secondary button"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 6,
+     "label": "Our Programs",
+     "purpose": "program cards",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "repeated items",
+      "secondary button"
+     ],
+     "items": {
+      "count": 4,
+      "shape": "program name + text + button (CrossFit, HYROX, On-Ramp, Flexibility)"
+     },
+     "notes": "Link targets mismatched; placeholder 'Button' labels."
+    },
+    {
+     "page": "home",
+     "order": 7,
+     "label": "Member Testimonials",
+     "purpose": "testimonials",
+     "elements": [
+      "headline",
+      "quote/testimonial",
+      "primary button"
+     ],
+     "items": {
+      "count": 4,
+      "shape": "quote + name"
+     },
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 8,
+     "label": "Membership Plans",
+     "purpose": "plans",
+     "elements": [
+      "headline",
+      "pricing plans",
+      "price",
+      "primary button"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "plan name + price + billing + description + button (Limitless 135/mo, On-Ramp 49 for 2 weeks, 10-class punchcard 150)"
+     },
+     "notes": "Mix of recurring plan, intro offer, class pack."
+    },
+    {
+     "page": "home",
+     "order": 9,
+     "label": "Contact Us",
+     "purpose": "contact details and form",
+     "elements": [
+      "headline",
+      "phone",
+      "email",
+      "address",
+      "opening hours",
+      "contact form"
+     ],
+     "items": null,
+     "notes": "Form uses reCAPTCHA; no map."
+    },
+    {
+     "page": "home",
+     "order": 10,
+     "label": "Reach New Limits",
+     "purpose": "closing CTA",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "primary button",
+      "single image"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 11,
+     "label": "Footer",
+     "purpose": "quick links, hours, legal",
+     "elements": [
+      "social links",
+      "text link",
+      "opening hours",
+      "phone",
+      "address",
+      "legal links"
+     ],
+     "items": null,
+     "notes": "Powered by Wodify logo and sharing iframe label."
+    },
+    {
+     "page": "timetable",
+     "order": 12,
+     "label": "Timetable (title)",
+     "purpose": "page intro",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "primary button"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "timetable",
+     "order": 13,
+     "label": "Timetable embed",
+     "purpose": "class schedule",
+     "elements": [
+      "timetable/schedule",
+      "booking widget (Wodify)",
+      "third-party embed"
+     ],
+     "items": null,
+     "notes": "Schedule is a Wodify iframe; no times in page content."
+    },
+    {
+     "page": "timetable",
+     "order": 14,
+     "label": "Reach New Limits / Footer",
+     "purpose": "closing CTA and footer",
+     "elements": [
+      "headline",
+      "primary button",
+      "opening hours",
+      "legal links"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "pricing",
+     "order": 15,
+     "label": "Memberships (title)",
+     "purpose": "page intro",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "primary button"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "pricing",
+     "order": 16,
+     "label": "Membership Plans",
+     "purpose": "plans",
+     "elements": [
+      "pricing plans",
+      "price",
+      "primary button"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "plan name + price + billing + description + button"
+     },
+     "notes": "Punchcard card gives one price for 10-pack, HYROX-only variant described in text."
+    },
+    {
+     "page": "pricing",
+     "order": 17,
+     "label": "Reach New Limits / Footer",
+     "purpose": "closing CTA and footer",
+     "elements": [
+      "headline",
+      "primary button",
+      "opening hours"
+     ],
+     "items": null,
+     "notes": ""
+    }
+   ]
+  },
+  {
+   "name": "The Yoga Studio of Calgary",
+   "url": "https://www.theyogastudiocalgary.com/",
+   "city_country": "Calgary, Alberta, Canada",
+   "platform_guess": "Custom/template site tied to Mindbody (booking, login, video on demand)",
+   "quality": "average",
+   "pages_checked": [
+    "https://www.theyogastudiocalgary.com/",
+    "https://www.theyogastudiocalgary.com/drop-in-schedule",
+    "https://www.theyogastudiocalgary.com/purchase-passes"
+   ],
+   "sections": [
+    {
+     "page": "home",
+     "order": 1,
+     "label": "Main navigation",
+     "purpose": "11-item menu with nested",
+     "elements": [
+      "text link",
+      "logo",
+      "social links"
+     ],
+     "items": {
+      "count": 11,
+      "shape": "menu item; Registered classes has 9 sub-items; Drop-in has 3"
+     },
+     "notes": "Menu includes Mindbody login for video on demand; heavy nested menu."
+    },
+    {
+     "page": "home",
+     "order": 2,
+     "label": "Category cards",
+     "purpose": "three entry points",
+     "elements": [
+      "repeated items",
+      "icons",
+      "primary button"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "icon + heading + button (Registered Classes, Workshops, Drop-In & Online)"
+     },
+     "notes": "Button labels read just 'Button'."
+    },
+    {
+     "page": "home",
+     "order": 3,
+     "label": "THE YOGA STUDIO OF CALGARY",
+     "purpose": "intro/hero text",
+     "elements": [
+      "headline",
+      "subheadline",
+      "paragraph(s)",
+      "quote/testimonial",
+      "primary button",
+      "secondary button",
+      "booking widget (Mindbody)"
+     ],
+     "items": null,
+     "notes": "Intro block repeated twice in markup; quote from B.K.S. Iyengar."
+    },
+    {
+     "page": "home",
+     "order": 4,
+     "label": "Join Our Community",
+     "purpose": "offerings list",
+     "elements": [
+      "headline",
+      "repeated items",
+      "single image",
+      "primary button"
+     ],
+     "items": {
+      "count": 8,
+      "shape": "offering bullet"
+     },
+     "notes": "Includes registered 8-week courses, drop-in, live stream, video on demand."
+    },
+    {
+     "page": "home",
+     "order": 5,
+     "label": "Footer contact and social",
+     "purpose": "address, phone, newsletter, badges",
+     "elements": [
+      "address",
+      "phone",
+      "social links",
+      "text link",
+      "newsletter form"
+     ],
+     "items": null,
+     "notes": "Mindbody Visionary Award and Best of Calgary badges."
+    },
+    {
+     "page": "home",
+     "order": 6,
+     "label": "Footer legal",
+     "purpose": "copyright and policies",
+     "elements": [
+      "legal links"
+     ],
+     "items": {
+      "count": 4,
+      "shape": "policy link"
+     },
+     "notes": "No prices or schedule on home."
+    },
+    {
+     "page": "timetable",
+     "order": 7,
+     "label": "Class Schedule & Register",
+     "purpose": "entry to Mindbody schedule",
+     "elements": [
+      "headline",
+      "primary button",
+      "phone",
+      "secondary button"
+     ],
+     "items": null,
+     "notes": "Schedule is Mindbody weekly schedule opened via button; no timetable on the page itself."
+    },
+    {
+     "page": "timetable",
+     "order": 8,
+     "label": "Category cards / Follow us / badges / footer",
+     "purpose": "repeat of site shell",
+     "elements": [
+      "repeated items",
+      "social links",
+      "newsletter form",
+      "legal links"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "icon + heading + button"
+     },
+     "notes": ""
+    },
+    {
+     "page": "pricing",
+     "order": 9,
+     "label": "Purchase & Pricing - header",
+     "purpose": "menu",
+     "elements": [
+      "text link"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "pricing",
+     "order": 10,
+     "label": "2026 Stocking Stuffer Sale",
+     "purpose": "seasonal promo pass",
+     "elements": [
+      "price",
+      "primary button"
+     ],
+     "items": {
+      "count": 1,
+      "shape": "pass name + price + limit + validity"
+     },
+     "notes": "Time-limited promo with fine print."
+    },
+    {
+     "page": "pricing",
+     "order": 11,
+     "label": "Auto-Pay Monthly Unlimited Membership",
+     "purpose": "membership",
+     "elements": [
+      "pricing plans",
+      "price",
+      "primary button"
+     ],
+     "items": {
+      "count": 1,
+      "shape": "name + monthly price + inclusions + perk + Buy Now"
+     },
+     "notes": "12-month contract with hold and cancellation policy below."
+    },
+    {
+     "page": "pricing",
+     "order": 12,
+     "label": "Unlimited Drop-In Passes",
+     "purpose": "time-limited unlimited passes",
+     "elements": [
+      "pricing plans",
+      "price"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "duration + price + inclusions (1,3,6 months)"
+     },
+     "notes": ""
+    },
+    {
+     "page": "pricing",
+     "order": 13,
+     "label": "Drop-In Passes",
+     "purpose": "class packs and intro pass",
+     "elements": [
+      "pricing plans",
+      "price",
+      "primary button"
+     ],
+     "items": {
+      "count": 6,
+      "shape": "name + price + per-class cost + validity (1,10,20 class, live-only 10, VOD month, new-student 3 week)"
+     },
+     "notes": "Taxes shown as '+ GST'; new-student only offer included."
+    },
+    {
+     "page": "pricing",
+     "order": 14,
+     "label": "General pass notes",
+     "purpose": "discounts and fine print",
+     "elements": [
+      "paragraph(s)"
+     ],
+     "items": {
+      "count": 6,
+      "shape": "bullet"
+     },
+     "notes": "Student/senior discount, corporate, non-refundable."
+    },
+    {
+     "page": "pricing",
+     "order": 15,
+     "label": "Registered Yoga Classes & Workshop Policy / Auto-Pay Membership Policy",
+     "purpose": "policies",
+     "elements": [
+      "paragraph(s)"
+     ],
+     "items": {
+      "count": 7,
+      "shape": "bullet policy"
+     },
+     "notes": "Long policy text on cancellations and contracts."
+    },
+    {
+     "page": "pricing",
+     "order": 16,
+     "label": "Private Sessions & Gift Certificates",
+     "purpose": "contact-for-price",
+     "elements": [
+      "paragraph(s)",
+      "primary button",
+      "email"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "pricing",
+     "order": 17,
+     "label": "Follow us / footer",
+     "purpose": "newsletter, badges, legal",
+     "elements": [
+      "social links",
+      "newsletter form",
+      "legal links"
+     ],
+     "items": null,
+     "notes": ""
+    }
+   ]
+  },
+  {
+   "name": "arc Wellness Studios",
+   "url": "https://arcwellness.nz/",
+   "city_country": "Kelburn and Hataitai, Wellington, New Zealand",
+   "platform_guess": "Squarespace",
+   "quality": "average",
+   "pages_checked": [
+    "https://arcwellness.nz/",
+    "https://arcwellness.nz/pilates-wellington"
+   ],
+   "sections": [
+    {
+     "page": "home",
+     "order": 1,
+     "label": "Top banner",
+     "purpose": "what the studios offer",
+     "elements": [
+      "announcement bar",
+      "text link"
+     ],
+     "items": null,
+     "notes": "Cart icon (shows 0)."
+    },
+    {
+     "page": "home",
+     "order": 2,
+     "label": "Main navigation",
+     "purpose": "logo, menus, Book Now",
+     "elements": [
+      "logo",
+      "text link",
+      "social links",
+      "primary button"
+     ],
+     "items": {
+      "count": 2,
+      "shape": "folder menu (Therapies 13 links, About us 5 links)"
+     },
+     "notes": "Menu repeated for desktop/mobile; duplicate URLs for contact."
+    },
+    {
+     "page": "home",
+     "order": 3,
+     "label": "Physiotherapy + Pilates Wellington - Kelburn + Hataitai",
+     "purpose": "hero",
+     "elements": [
+      "eyebrow/kicker",
+      "headline",
+      "paragraph(s)",
+      "primary button",
+      "secondary button",
+      "phone"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 4,
+     "label": "Our Wellington Services",
+     "purpose": "service cards with prices",
+     "elements": [
+      "headline",
+      "repeated items",
+      "single image",
+      "price",
+      "text link"
+     ],
+     "items": {
+      "count": 8,
+      "shape": "image + service name + description + price line + Learn more"
+     },
+     "notes": "Physio and health services sit alongside pilates; ACC-subsidised vs private price shown."
+    },
+    {
+     "page": "home",
+     "order": 5,
+     "label": "Booking and gift",
+     "purpose": "book or buy voucher",
+     "elements": [
+      "primary button",
+      "secondary button",
+      "third-party embed"
+     ],
+     "items": null,
+     "notes": "Gift voucher sold through Mindbody."
+    },
+    {
+     "page": "home",
+     "order": 6,
+     "label": "What to expect",
+     "purpose": "expectation points",
+     "elements": [
+      "repeated items"
+     ],
+     "items": {
+      "count": 4,
+      "shape": "title + short text"
+     },
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 7,
+     "label": "What makes us different",
+     "purpose": "differentiator",
+     "elements": [
+      "headline",
+      "paragraph(s)"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "home",
+     "order": 8,
+     "label": "Get in touch",
+     "purpose": "contact",
+     "elements": [
+      "headline",
+      "phone",
+      "social links",
+      "primary button"
+     ],
+     "items": null,
+     "notes": "Two studio sub-headings without addresses or map."
+    },
+    {
+     "page": "home",
+     "order": 9,
+     "label": "Footer",
+     "purpose": "service links and terms",
+     "elements": [
+      "text link",
+      "legal links"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "classes",
+     "order": 10,
+     "label": "Reformer Pilates, Studio Pilates, Strength and Yoga (hero)",
+     "purpose": "pilates hub hero",
+     "elements": [
+      "headline",
+      "subheadline",
+      "primary button",
+      "phone",
+      "single image"
+     ],
+     "items": null,
+     "notes": ""
+    },
+    {
+     "page": "classes",
+     "order": 11,
+     "label": "Reformer Pilates - Kelburn",
+     "purpose": "class types and prices",
+     "elements": [
+      "repeated items",
+      "single image",
+      "price",
+      "primary button",
+      "text link"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "class name + one-line description (Essential, Dynamic, Pregnancy)"
+     },
+     "notes": "Prices shown as ranges ($180-615.50 concessions, weekly membership $29.80-77); max 6 per class."
+    },
+    {
+     "page": "classes",
+     "order": 12,
+     "label": "Studio Pilates - Kelburn + Hataitai",
+     "purpose": "apparatus pilates private/duo/small group",
+     "elements": [
+      "repeated items",
+      "single image",
+      "price",
+      "primary button"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "format name + description (private, duo, small group max 4)"
+     },
+     "notes": "Taster, starter package, concessions and weekly membership price lines."
+    },
+    {
+     "page": "classes",
+     "order": 13,
+     "label": "EDS/Hypermobility Studio Pilates",
+     "purpose": "specialised pilates",
+     "elements": [
+      "repeated items",
+      "single image",
+      "price",
+      "primary button"
+     ],
+     "items": {
+      "count": 2,
+      "shape": "format + description"
+     },
+     "notes": "Separate price list for specialised teaching."
+    },
+    {
+     "page": "classes",
+     "order": 14,
+     "label": "Mat Pilates & Yoga - Kelburn",
+     "purpose": "mat classes",
+     "elements": [
+      "repeated items",
+      "single image",
+      "price",
+      "primary button"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "class name + description (Mat, Integrative Yoga, Postnatal Mat)"
+     },
+     "notes": ""
+    },
+    {
+     "page": "classes",
+     "order": 15,
+     "label": "Specialty Classes - Kelburn",
+     "purpose": "youth and bone health",
+     "elements": [
+      "repeated items",
+      "price",
+      "text link"
+     ],
+     "items": {
+      "count": 2,
+      "shape": "class name + price lines"
+     },
+     "notes": ""
+    },
+    {
+     "page": "classes",
+     "order": 16,
+     "label": "Group Strength Training",
+     "purpose": "strength",
+     "elements": [
+      "paragraph(s)",
+      "single image",
+      "price",
+      "text link"
+     ],
+     "items": {
+      "count": 2,
+      "shape": "price line"
+     },
+     "notes": "Timetable is separate page and booking pages (no embed here)."
+    },
+    {
+     "page": "classes",
+     "order": 17,
+     "label": "Get in touch / footer",
+     "purpose": "contact",
+     "elements": [
+      "phone",
+      "social links",
+      "primary button"
+     ],
+     "items": null,
+     "notes": ""
+    }
+   ]
+  }
+ ],
+ "replaced": [
+  {
+   "url": "https://www.thealignmentstudio.com.au/",
+   "why": "Loads, but is a physiotherapy clinic with clinical pilates as a side service, not a fitness studio"
+  },
+  {
+   "url": "https://www.crowns-gym.co.uk/",
+   "why": "Domain did not resolve (guessed URL)"
+  },
+  {
+   "url": "https://mandalayoga.ie/",
+   "why": "HTTP 403 on fetch"
+  },
+  {
+   "url": "https://www.889yoga.com/",
+   "why": "Loads, but is an affiliate gear-review blog, not a studio"
+  },
+  {
+   "url": "https://www.hyphacrossfit.co.nz/",
+   "why": "Domain did not resolve (guessed URL)"
+  },
+  {
+   "url": "https://www.setuyoga.com/",
+   "why": "Loads but studio is in India, outside requested countries"
+  },
+  {
+   "url": "https://mulayoga.ca/",
+   "why": "Fetch returned empty page (JS-rendered)"
+  },
+  {
+   "url": "https://www.studiothryv.com.au/",
+   "why": "Domain did not resolve (guessed URL)"
+  },
+  {
+   "url": "https://ashtanga-yoga-victoria.com/",
+   "why": "HTTP 403 on fetch"
+  }
+ ]
+}

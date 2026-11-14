@@ -1,0 +1,165 @@
+1	home	1	header	clean	
+1	home	2	hero	clean	
+1	home	3	text-media	clean	
+1	home	4	cards	clean	
+1	home	5	contact	clean	
+1	home	6	cta	clean	
+1	home	7	hours-location	clean	
+1	home	8	hours-location	clean	
+1	home	9	footer	clean	
+1	team	1	page-title	clean	
+1	team	2	team	clean	
+1	team	3	team	clean	
+1	team	4	hours-location	clean	
+1	fees	1	page-title	clean	
+1	fees	2	price-list	stretch	price table with several price columns (plans)
+1	fees	3	price-list	clean	
+1	fees	4	footer	clean	
+1	treatment	1	text-media	clean	
+1	treatment	2	gallery	clean	
+1	treatment	3	gallery	stretch	before-and-after photo pairs
+1	treatment	4	-	skip	empty section (heading only)
+1	treatment	5	cards	clean	
+1	treatment	6	contact	clean	
+2	home	1	header	clean	
+2	home	2	hero	clean	
+2	home	3	text-media	clean	
+2	home	4	text-media	clean	
+2	home	5	cards	clean	
+2	home	6	text-media	clean	
+2	home	7	cards	clean	
+2	home	8	testimonials	clean	
+2	home	9	cta	clean	
+2	home	10	footer	stretch	contact form inside the footer
+2	services	1	hero	clean	
+2	services	2	cards	clean	
+2	services	3	cards	clean	
+2	services	4	cards	clean	
+2	services	5	faq	clean	
+2	services	6	cta	clean	
+2	about	1	text-media	stretch	jump links to sections on the page
+2	about	2	text-media	clean	
+2	about	3	cards	clean	
+2	about	4	team	clean	
+2	about	5	testimonials	clean	
+2	about	6	contact	clean	
+3	home	1	header	clean	
+3	home	2	hero	clean	
+3	home	3	text-media	clean	
+3	home	4	text-media	clean	
+3	home	5	team	clean	
+3	home	6	testimonials	clean	
+3	home	7	embed	later	third-party booking widget
+3	home	8	footer	clean	
+3	team	1	page-title	clean	
+3	team	2	gallery	stretch	video gallery
+3	team	3	team	clean	
+3	team	4	-	skip	empty section (heading only)
+3	locations	1	hours-location	clean	
+4	home	1	header	stretch	badge in the header
+4	home	2	header	stretch	site search
+4	home	3	announcement	clean	
+4	home	4	hero	stretch	hero slideshow (several slides)
+4	home	5	text-media	clean	
+4	home	6	cards	clean	
+4	home	7	text-media	clean	
+4	home	8	team	clean	
+4	home	9	cards	clean	
+4	home	10	cards	stretch	logo strip inside cards
+4	home	11	hours-location	clean	
+4	home	12	faq	clean	
+4	home	13	cta	clean	
+4	home	14	footer	clean	
+4	team	1	team	clean	
+4	team	2	cta	clean	
+4	new-patients	1	text-media	clean	
+4	new-patients	2	text-media	clean	
+4	new-patients	3	cards	clean	
+4	new-patients	4	faq	clean	
+4	new-patients	5	cta	clean	
+4	new-patients	6	-	none	sidebar beside the page content
+5	home	1	header	clean	
+5	home	2	hero	stretch	trust badges and rating inside the hero
+5	home	3	cards	clean	
+5	home	4	cards	clean	
+5	home	5	cards	clean	
+5	home	6	embed	later	third-party reviews widget
+5	home	7	cards	clean	
+5	home	8	contact	clean	
+5	home	9	hours-location	clean	
+5	home	10	cta	clean	
+5	home	11	footer	clean	
+5	about	1	hero	clean	
+5	about	2	text-media	stretch	logo strip inside a text section
+5	about	3	cards	clean	
+5	about	4	text-media	clean	
+5	about	5	team	clean	
+5	about	6	logos	clean	
+5	about	7	cta	clean	
+5	conditions	1	hero	stretch	jump links to sections on the page
+5	conditions	2	cards	stretch	very long grouped list (64 items)
+5	conditions	3	embed	later	third-party reviews widget
+5	conditions	4	cta	clean	
+5	conditions	5	text-media	clean	
+6	about	1	header	clean	
+6	about	2	text-media	clean	
+6	about	3	team	clean	
+6	about	4	team	clean	
+6	about	5	price-list	clean	
+6	about	6	team	clean	
+6	about	7	contact	clean	
+6	about	8	hours-location	clean	
+6	about	9	logos	clean	
+6	about	10	footer	clean	
+6	services	1	cards	clean	
+6	services	2	cta	clean	
+6	services	3	contact	clean	
+7	home	1	header	clean	
+7	home	2	hero	clean	
+7	home	3	text-media	clean	
+7	home	4	logos	clean	
+7	home	5	cards	clean	
+7	home	6	cards	clean	
+7	home	7	logos	clean	
+7	home	8	cards	clean	
+7	home	9	hours-location	clean	
+7	home	10	cta	clean	
+7	home	11	footer	clean	
+7	about	1	hero	clean	
+7	about	2	text-media	clean	
+7	about	3	logos	clean	
+7	about	4	team	clean	
+7	about	5	logos	clean	
+7	about	6	cta	clean	
+7	eye-tests	1	hero	clean	
+7	eye-tests	2	text-media	clean	
+7	eye-tests	3	logos	clean	
+7	eye-tests	4	cards	clean	
+7	eye-tests	5	cards	clean	
+7	eye-tests	6	cta	stretch	logo strip inside a CTA
+8	home	1	announcement	stretch	several announcements
+8	home	2	header	stretch	mega-menu (deep dropdowns, about 30 links)
+8	home	3	hero	clean	
+8	home	4	cta	clean	
+8	home	5	text-media	clean	
+8	home	6	cards	clean	
+8	home	7	text-media	clean	
+8	home	8	cards	clean	
+8	home	9	cards	clean	
+8	home	10	-	skip	empty section (heading only)
+8	home	11	text-media	clean	
+8	home	12	team	clean	
+8	home	13	team	clean	
+8	home	14	cta	clean	
+8	home	15	cards	clean	
+8	home	16	text-media	stretch	logo strip inside a text section
+8	home	17	footer	clean	
+8	team	1	page-title	clean	
+8	team	2	team	clean	
+8	team	3	cta	clean	
+8	services	1	-	none	search box that filters a list
+8	services	2	cards	clean	
+8	services	3	cards	clean	
+8	services	4	cta	clean	
+8	services	5	text-media	clean	
+8	services	6	cta	clean	

@@ -1,0 +1,2293 @@
+{
+ "kind": "trades",
+ "collected": "2026-11-14",
+ "sites": [
+  {
+   "name": "T. Simpson Roofing",
+   "url": "https://www.tsimpsonroofing.ca/",
+   "city_country": "Barrie & Newmarket, Ontario, Canada",
+   "platform_guess": "WordPress (guess; Trustindex widget, Elementor-style blocks)",
+   "quality": "polished",
+   "pages_checked": [
+    "https://www.tsimpsonroofing.ca/",
+    "https://www.tsimpsonroofing.ca/roof-replacement/",
+    "https://www.tsimpsonroofing.ca/service-area/"
+   ],
+   "sections": [
+    {
+     "page": "home",
+     "label": "Header / navigation",
+     "purpose": "site navigation and quick contact",
+     "elements": [
+      "logo",
+      "click-to-call phone (2 numbers, one per office)",
+      "text link (nav with 3-level dropdowns)",
+      "primary button (Contact Us)"
+     ],
+     "items": {
+      "count": 8,
+      "shape": "top-level nav items: About Us, Roofing, Exterior Services, Service Area, Blog, Location + Contact button; dropdowns nest to 3 levels"
+     },
+     "notes": "Two phone numbers (Newmarket and Barrie) in header.",
+     "order": 1
+    },
+    {
+     "page": "home",
+     "label": "T. Simpson Roofing = The Right Choice for Your Home",
+     "purpose": "hero with since-1992 claim",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "text link (city pages)",
+      "primary button (Request a Quote)"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 2
+    },
+    {
+     "page": "home",
+     "label": "Everything Your Roof Needs, Done Right the First Time",
+     "purpose": "roofing services overview",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "repeated items",
+      "single image",
+      "primary button (Explore All Roofing Services)"
+     ],
+     "items": {
+      "count": 4,
+      "shape": "heading + short paragraph (Roof Replacement, Repair, Inspection, Insurance Claims)"
+     },
+     "notes": "",
+     "order": 3
+    },
+    {
+     "page": "home",
+     "label": "Get in Touch with Us Today!",
+     "purpose": "mid-page call to action",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "text link"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 4
+    },
+    {
+     "page": "home",
+     "label": "Why T. Simpson Roofing Is the Right Choice",
+     "purpose": "reasons to choose",
+     "elements": [
+      "headline",
+      "repeated items"
+     ],
+     "items": {
+      "count": 8,
+      "shape": "card with paired title (e.g. Expertise / Craftsmanship) + one-line description"
+     },
+     "notes": "Paired two-word headings per card.",
+     "order": 5
+    },
+    {
+     "page": "home",
+     "label": "About Us",
+     "purpose": "short company story and Master Elite claim",
+     "elements": [
+      "paragraph(s)",
+      "statistic/number (established 1992, top 2% of contractors)",
+      "primary button (Get To Know Us)"
+     ],
+     "items": null,
+     "notes": "Family-owned claim; GAF Master Elite status.",
+     "order": 6
+    },
+    {
+     "page": "home",
+     "label": "We're So Much More Than a Roofing Company",
+     "purpose": "other exterior services",
+     "elements": [
+      "headline",
+      "repeated items",
+      "image",
+      "text link (Learn More)"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "image card + title + Learn More link (Siding, Eavestroughs & Gutters, Windows & Doors)"
+     },
+     "notes": "",
+     "order": 7
+    },
+    {
+     "page": "home",
+     "label": "T. Simpson + Financeit = Easy Financing",
+     "purpose": "financing offer",
+     "elements": [
+      "headline",
+      "logo (Financeit)",
+      "paragraph(s)",
+      "repeated items",
+      "primary button (Apply Now, external)"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "numbered step: Apply, Make your Purchase, Pay It Off"
+     },
+     "notes": "Third-party financing partner with external application link.",
+     "order": 8
+    },
+    {
+     "page": "home",
+     "label": "Testimonials",
+     "purpose": "social proof",
+     "elements": [
+      "review widget (Trustindex, Google reviews)",
+      "star rating",
+      "quote/testimonial"
+     ],
+     "items": {
+      "count": 10,
+      "shape": "Google icon + avatar + reviewer name + 5 stars + review text"
+     },
+     "notes": "Widget loaded from third party; verification note from Trustindex.",
+     "order": 9
+    },
+    {
+     "page": "home",
+     "label": "Expert Roofing Services Across Simcoe County & the GTA",
+     "purpose": "service areas",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "service-area list",
+      "primary button (View Our Full Service Area)"
+     ],
+     "items": {
+      "count": 13,
+      "shape": "bullet: town name (incl. 'Surrounding Communities')"
+     },
+     "notes": "Dedicated service-area page exists.",
+     "order": 10
+    },
+    {
+     "page": "home",
+     "label": "Certifications You Can Trust",
+     "purpose": "certification/brand logos",
+     "elements": [
+      "headline",
+      "logo strip (Vinyl Siding Institute, WSIB, Velux, Kaycan, Homestar, BBB, GAF, Alu-rex)"
+     ],
+     "items": {
+      "count": 8,
+      "shape": "logo image"
+     },
+     "notes": "No licence numbers shown.",
+     "order": 11
+    },
+    {
+     "page": "home",
+     "label": "FAQs",
+     "purpose": "answer common questions",
+     "elements": [
+      "headline",
+      "repeated items"
+     ],
+     "items": {
+      "count": 10,
+      "shape": "question + answer paragraph (accordion likely)"
+     },
+     "notes": "Answers include 50-year warranty, 25-year labour, WSIB, no subcontractors.",
+     "order": 12
+    },
+    {
+     "page": "home",
+     "label": "Contact Us: Your Home Deserves the Best",
+     "purpose": "closing invitation",
+     "elements": [
+      "headline",
+      "paragraph(s)"
+     ],
+     "items": null,
+     "notes": "No contact form on home page; form lives on /contact-us/.",
+     "order": 13
+    },
+    {
+     "page": "home",
+     "label": "Footer",
+     "purpose": "contact, legal, hours",
+     "elements": [
+      "logo",
+      "text link (nav)",
+      "address (2 offices)",
+      "phone (2)",
+      "opening hours",
+      "social links (Facebook, Instagram; hrefs '#')",
+      "legal links (Privacy Policy, Sitemap)"
+     ],
+     "items": {
+      "count": 2,
+      "shape": "office block: address + phone"
+     },
+     "notes": "Two office addresses; hours Mon-Fri 9-5.",
+     "order": 14
+    },
+    {
+     "page": "services",
+     "label": "Roof Replacement: intro hero",
+     "purpose": "service page intro",
+     "elements": [
+      "headline",
+      "subheadline",
+      "paragraph(s)",
+      "primary button (Request a Free Quote)"
+     ],
+     "items": null,
+     "notes": "Service pages are long SEO-style pages.",
+     "order": 1
+    },
+    {
+     "page": "services",
+     "label": "How to determine if it's time for a roof replacement?",
+     "purpose": "educational content",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "repeated items"
+     ],
+     "items": {
+      "count": 5,
+      "shape": "H4 + short paragraph"
+     },
+     "notes": "",
+     "order": 2
+    },
+    {
+     "page": "services",
+     "label": "Not sure? Call Us!",
+     "purpose": "call to action",
+     "elements": [
+      "paragraph(s)",
+      "primary button (Book an Inspection)",
+      "click-to-call phone"
+     ],
+     "items": null,
+     "notes": "One phone link has a different number than header (possible typo 905-803 vs 905-830).",
+     "order": 3
+    },
+    {
+     "page": "services",
+     "label": "Our roof replacement process",
+     "purpose": "process steps",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "repeated items"
+     ],
+     "items": {
+      "count": 8,
+      "shape": "numbered step: H4 + 1-2 sentences"
+     },
+     "notes": "",
+     "order": 4
+    },
+    {
+     "page": "services",
+     "label": "Why T. Simpson is the homeowner's choice",
+     "purpose": "reasons to choose",
+     "elements": [
+      "headline",
+      "repeated items",
+      "text link"
+     ],
+     "items": {
+      "count": 4,
+      "shape": "H3 + short paragraph (Master Elite, warranties, 30+ years, financing)"
+     },
+     "notes": "",
+     "order": 5
+    },
+    {
+     "page": "services",
+     "label": "Roof Replacement FAQs",
+     "purpose": "FAQ",
+     "elements": [
+      "headline",
+      "repeated items"
+     ],
+     "items": {
+      "count": 6,
+      "shape": "question + short answer"
+     },
+     "notes": "",
+     "order": 6
+    },
+    {
+     "page": "services",
+     "label": "What Our Customers Are Saying",
+     "purpose": "testimonials",
+     "elements": [
+      "quote/testimonial",
+      "text link (Read More)"
+     ],
+     "items": {
+      "count": 7,
+      "shape": "reviewer name + review text + Read More link"
+     },
+     "notes": "Reviews vary widely in length.",
+     "order": 7
+    },
+    {
+     "page": "services",
+     "label": "Ready to Join Them?",
+     "purpose": "call to action",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "primary button"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 8
+    },
+    {
+     "page": "services",
+     "label": "Serving Barrie, Newmarket & All of Central Ontario",
+     "purpose": "service areas",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "service-area list (grouped by region)",
+      "primary button (See Where We Work)"
+     ],
+     "items": {
+      "count": 12,
+      "shape": "town name under two region headings"
+     },
+     "notes": "",
+     "order": 9
+    },
+    {
+     "page": "services",
+     "label": "Certifications + Results",
+     "purpose": "certification logos",
+     "elements": [
+      "headline",
+      "logo strip"
+     ],
+     "items": {
+      "count": 8,
+      "shape": "logo"
+     },
+     "notes": "Same 8 logos as home.",
+     "order": 10
+    },
+    {
+     "page": "services",
+     "label": "Explore Related Services",
+     "purpose": "cross-links",
+     "elements": [
+      "headline",
+      "repeated items",
+      "image",
+      "text link"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "image + title + short description + link"
+     },
+     "notes": "",
+     "order": 11
+    },
+    {
+     "page": "services",
+     "label": "Get a Free Roof Replacement Quote",
+     "purpose": "closing CTA",
+     "elements": [
+      "headline",
+      "paragraph(s)"
+     ],
+     "items": null,
+     "notes": "No button.",
+     "order": 12
+    },
+    {
+     "page": "areas",
+     "label": "Our Service Area Across Barrie, Newmarket & Central Ontario",
+     "purpose": "area page intro",
+     "elements": [
+      "headline",
+      "subheadline",
+      "paragraph(s)",
+      "primary button"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 1
+    },
+    {
+     "page": "areas",
+     "label": "Where We Work",
+     "purpose": "town lists by region",
+     "elements": [
+      "headline",
+      "service-area list (grouped by region)",
+      "paragraph(s)"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "region heading + list of communities + short paragraph (Simcoe County 8, York Region 7, GTA North 3)"
+     },
+     "notes": "Duplicate town (Bradford) across regions.",
+     "order": 2
+    },
+    {
+     "page": "areas",
+     "label": "Don't See Your Town?",
+     "purpose": "fallback invitation",
+     "elements": [
+      "paragraph(s)",
+      "primary button",
+      "secondary button (Call Us Today)"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 3
+    },
+    {
+     "page": "areas",
+     "label": "Why Local Matters When It Comes to Your Roof",
+     "purpose": "long local SEO content",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "single image (several)",
+      "repeated items"
+     ],
+     "items": {
+      "count": 5,
+      "shape": "H3 + paragraph + image (Freeze-Thaw, Snow Loads, Ice Dams, Wind, Year-Round)"
+     },
+     "notes": "Very long SEO text; some images' alt text mismatched.",
+     "order": 4
+    },
+    {
+     "page": "areas",
+     "label": "A Full Suite of Exterior Services",
+     "purpose": "cross-links to services",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "repeated items",
+      "text link (Learn More)"
+     ],
+     "items": {
+      "count": 6,
+      "shape": "heading + short description + Learn More"
+     },
+     "notes": "",
+     "order": 5
+    },
+    {
+     "page": "areas",
+     "label": "Two Locations. One Standard of Quality.",
+     "purpose": "office details",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "repeated items",
+      "address",
+      "phone"
+     ],
+     "items": {
+      "count": 2,
+      "shape": "office name + service area + street address + phone"
+     },
+     "notes": "",
+     "order": 6
+    },
+    {
+     "page": "areas",
+     "label": "Trusted by Homeowners Across Central Ontario",
+     "purpose": "testimonial wall",
+     "elements": [
+      "quote/testimonial",
+      "text link (Read More)"
+     ],
+     "items": {
+      "count": 16,
+      "shape": "name + TOWN in caps + review body + Read More"
+     },
+     "notes": "Long list of reviews on one page; one duplicate review.",
+     "order": 7
+    },
+    {
+     "page": "areas",
+     "label": "Whatever You Need, We've Got Central Ontario Covered",
+     "purpose": "closing paragraph",
+     "elements": [
+      "headline",
+      "paragraph(s)"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 8
+    }
+   ]
+  },
+  {
+   "name": "Clash Plumbing & Heating Ltd",
+   "url": "https://clashheating.ie/",
+   "city_country": "Tralee, Co. Kerry, Ireland",
+   "platform_guess": "WordPress (guess; footer credit to local agency, upload paths /2021/05/)",
+   "quality": "basic",
+   "pages_checked": [
+    "https://clashheating.ie",
+    "https://clashheating.ie/services/",
+    "https://clashheating.ie/our-work/"
+   ],
+   "sections": [
+    {
+     "page": "home",
+     "label": "Header / navigation",
+     "purpose": "brand, contact and nav",
+     "elements": [
+      "skip link",
+      "address",
+      "click-to-call phone",
+      "email",
+      "social links (Facebook, Twitter, LinkedIn)",
+      "logo",
+      "primary button (CALL US TODAY NOW!)",
+      "text link (6-item nav)"
+     ],
+     "items": {
+      "count": 6,
+      "shape": "nav: Home, About, Services, Heat Pumps, Our Work, Contact"
+     },
+     "notes": "",
+     "order": 1
+    },
+    {
+     "page": "home",
+     "label": "Welcome to CLASH PLUMBING AND HEATING",
+     "purpose": "hero / intro",
+     "elements": [
+      "headline",
+      "subheadline (tagline)",
+      "statistic/number (Over 50 years)",
+      "paragraph(s)",
+      "contact/quote form (Name, Email, Phone, Get a Free Quote)"
+     ],
+     "items": null,
+     "notes": "Same quote form appears twice.",
+     "order": 2
+    },
+    {
+     "page": "home",
+     "label": "Want to upgrade your central heating?",
+     "purpose": "heating upgrade intro",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "single image"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 3
+    },
+    {
+     "page": "home",
+     "label": "Our Services intro",
+     "purpose": "green/solar specialism intro",
+     "elements": [
+      "eyebrow/kicker",
+      "paragraph(s)",
+      "primary button (View our services)",
+      "single image"
+     ],
+     "items": null,
+     "notes": "Claims over 25 years in solar.",
+     "order": 4
+    },
+    {
+     "page": "home",
+     "label": "Service grid",
+     "purpose": "list of services",
+     "elements": [
+      "icons",
+      "repeated items"
+     ],
+     "items": {
+      "count": 8,
+      "shape": "icon + service label (Heat Pump Installations, Exhaust Air heat pumps, Underfloor heating, Solar Energy, Bathroom Refurbishments, Air Conditioning, General Issues, HRVU)"
+     },
+     "notes": "",
+     "order": 5
+    },
+    {
+     "page": "home",
+     "label": "Quality Services",
+     "purpose": "credentials",
+     "elements": [
+      "repeated items",
+      "single image"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "short label (SEAI Registered Installers, VAT Registered, Fully Insured)"
+     },
+     "notes": "No licence/registration numbers.",
+     "order": 6
+    },
+    {
+     "page": "home",
+     "label": "Why Choose Us",
+     "purpose": "reasons to choose",
+     "elements": [
+      "icons",
+      "repeated items",
+      "emergency/24-7 notice"
+     ],
+     "items": {
+      "count": 6,
+      "shape": "icon + short label"
+     },
+     "notes": "",
+     "order": 7
+    },
+    {
+     "page": "home",
+     "label": "Partner logos",
+     "purpose": "brand/trade-body logos",
+     "elements": [
+      "logo strip (Danfoss, OFTEC, RGI)"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "logo"
+     },
+     "notes": "No reviews or testimonials, no service-area list anywhere on page.",
+     "order": 8
+    },
+    {
+     "page": "home",
+     "label": "Footer",
+     "purpose": "contact, legal",
+     "elements": [
+      "address",
+      "phone (2)",
+      "email",
+      "social links",
+      "text link (nav)",
+      "legal text (copyright 2021)",
+      "text link (website designer credit)"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 9
+    },
+    {
+     "page": "services",
+     "label": "Services intro",
+     "purpose": "page intro",
+     "elements": [
+      "headline",
+      "subheadline",
+      "paragraph(s)"
+     ],
+     "items": null,
+     "notes": "Tagline emphasises solar but page covers plumbing and heating.",
+     "order": 1
+    },
+    {
+     "page": "services",
+     "label": "Service sections (9 headings)",
+     "purpose": "detailed services",
+     "elements": [
+      "headline",
+      "bullet list",
+      "paragraph(s)"
+     ],
+     "items": {
+      "count": 9,
+      "shape": "heading + 1-4 bullets or one paragraph (Heat Pumps, Exhaust Air, Underfloor, Central Heating, Solar, Bathrooms, Air Con, General Issues, HRVU)"
+     },
+     "notes": "Mostly bulleted; Underfloor heading has no body; no images or prices.",
+     "order": 2
+    },
+    {
+     "page": "services",
+     "label": "Contact block",
+     "purpose": "contact details",
+     "elements": [
+      "address",
+      "phone (2)",
+      "email"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 3
+    },
+    {
+     "page": "projects",
+     "label": "Our Work",
+     "purpose": "project gallery",
+     "elements": [
+      "headline",
+      "subheadline",
+      "paragraph(s)",
+      "image gallery"
+     ],
+     "items": {
+      "count": 12,
+      "shape": "image-only link, no caption"
+     },
+     "notes": "No captions, locations or details; family-run second generation claim.",
+     "order": 1
+    }
+   ]
+  },
+  {
+   "name": "SEQ Sparky",
+   "url": "https://seqsparky.com.au/",
+   "city_country": "Mount Gravatt East, Brisbane, Australia",
+   "platform_guess": "WordPress (guess)",
+   "quality": "polished",
+   "pages_checked": [
+    "https://seqsparky.com.au/",
+    "https://seqsparky.com.au/electrical/residential-electrician-brisbane/",
+    "https://seqsparky.com.au/contact/"
+   ],
+   "sections": [
+    {
+     "page": "home",
+     "label": "Header / navigation",
+     "purpose": "nav and quick CTAs",
+     "elements": [
+      "logo",
+      "text link (Services and Company dropdowns)",
+      "primary button (Get a Quote)",
+      "click-to-call phone (Call Anthony)"
+     ],
+     "items": {
+      "count": 2,
+      "shape": "dropdowns: Services (3), Company (3)"
+     },
+     "notes": "Sticky/mobile nav duplicate.",
+     "order": 1
+    },
+    {
+     "page": "home",
+     "label": "Electrician Brisbane Southside, Owner-Operated.",
+     "purpose": "hero with credentials",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "text link (suburb)",
+      "primary button (Call Now)",
+      "secondary button (Get a Fixed Quote)",
+      "licence/registration number",
+      "logo strip (credential badges)"
+     ],
+     "items": {
+      "count": 6,
+      "shape": "badge: licence #90899, electrician licence, ARCtick, CEC, Hazardous Areas, $20M public liability"
+     },
+     "notes": "Licence number prominent in hero.",
+     "order": 2
+    },
+    {
+     "page": "home",
+     "label": "What We Do",
+     "purpose": "services",
+     "elements": [
+      "headline",
+      "repeated items",
+      "text link (View)",
+      "click-to-call phone"
+     ],
+     "items": {
+      "count": 5,
+      "shape": "title + description + View link (Residential, Commercial, Industrial, Emergency 24/7, Strata)"
+     },
+     "notes": "",
+     "order": 3
+    },
+    {
+     "page": "home",
+     "label": "What Brisbane Locals Call About",
+     "purpose": "common faults as services",
+     "elements": [
+      "headline",
+      "repeated items",
+      "text link"
+     ],
+     "items": {
+      "count": 8,
+      "shape": "tag (e.g. Same-day fix) + problem heading + description + 'Get this fixed' link"
+     },
+     "notes": "Problem-led cards.",
+     "order": 4
+    },
+    {
+     "page": "home",
+     "label": "The Difference",
+     "purpose": "reasons to choose",
+     "elements": [
+      "headline",
+      "repeated items",
+      "single image (owner portrait)",
+      "text link (quote CTA)"
+     ],
+     "items": {
+      "count": 6,
+      "shape": "reason heading + description"
+     },
+     "notes": "",
+     "order": 5
+    },
+    {
+     "page": "home",
+     "label": "Meet Your Electrician",
+     "purpose": "owner bio",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "single image",
+      "repeated items",
+      "primary button (Call Anthony Direct)",
+      "secondary button (Read our 5 star reviews)"
+     ],
+     "items": {
+      "count": 4,
+      "shape": "credential badge (Tier-1 background, licence #90899, $20M insurance, 20+ years)"
+     },
+     "notes": "Owner-operator story as selling point.",
+     "order": 6
+    },
+    {
+     "page": "home",
+     "label": "The SEQ Sparky Promise",
+     "purpose": "guarantees",
+     "elements": [
+      "headline",
+      "repeated items",
+      "text link"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "promise statement"
+     },
+     "notes": "",
+     "order": 7
+    },
+    {
+     "page": "home",
+     "label": "Rated by Brisbane Locals",
+     "purpose": "reviews",
+     "elements": [
+      "headline",
+      "star rating"
+     ],
+     "items": null,
+     "notes": "Heading only; no review text in extract (probably JS widget).",
+     "order": 8
+    },
+    {
+     "page": "home",
+     "label": "How It Works",
+     "purpose": "process",
+     "elements": [
+      "headline",
+      "repeated items",
+      "click-to-call phone",
+      "text/SMS link"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "numbered step"
+     },
+     "notes": "",
+     "order": 9
+    },
+    {
+     "page": "home",
+     "label": "Service area",
+     "purpose": "suburb list",
+     "elements": [
+      "headline",
+      "service-area list"
+     ],
+     "items": {
+      "count": 20,
+      "shape": "suburb link to dedicated page"
+     },
+     "notes": "20 suburb pages.",
+     "order": 10
+    },
+    {
+     "page": "home",
+     "label": "Common Questions",
+     "purpose": "FAQ",
+     "elements": [
+      "headline",
+      "repeated items"
+     ],
+     "items": {
+      "count": 12,
+      "shape": "question + answer"
+     },
+     "notes": "Includes price info (call-out from $220).",
+     "order": 11
+    },
+    {
+     "page": "home",
+     "label": "Ready When You Are",
+     "purpose": "final CTA",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "click-to-call phone",
+      "text/SMS link",
+      "licence/registration number"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 12
+    },
+    {
+     "page": "home",
+     "label": "Footer (twice)",
+     "purpose": "contact, licence, SEO links",
+     "elements": [
+      "logo",
+      "address",
+      "phone",
+      "email",
+      "licence/registration number (#90899, ABN)",
+      "service-area list",
+      "text link (nav columns)",
+      "social links (Google, Facebook, Instagram)",
+      "legal links",
+      "paragraph(s) (long SEO link paragraph)"
+     ],
+     "items": null,
+     "notes": "Second footer block repeats details and a long SEO paragraph linking every suburb and service page.",
+     "order": 13
+    },
+    {
+     "page": "services",
+     "label": "Residential Electrician: hero",
+     "purpose": "service page hero",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "primary button",
+      "secondary button",
+      "click-to-call phone",
+      "licence/registration number"
+     ],
+     "items": {
+      "count": 9,
+      "shape": "bullets: 3 trust + 6 credential"
+     },
+     "notes": "",
+     "order": 1
+    },
+    {
+     "page": "services",
+     "label": "From Anthony",
+     "purpose": "owner quote",
+     "elements": [
+      "quote/testimonial"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 2
+    },
+    {
+     "page": "services",
+     "label": "Built for Brisbane locals",
+     "purpose": "audience fit",
+     "elements": [
+      "headline",
+      "repeated items"
+     ],
+     "items": {
+      "count": 4,
+      "shape": "H3 + one line"
+     },
+     "notes": "",
+     "order": 3
+    },
+    {
+     "page": "services",
+     "label": "Service catalogue",
+     "purpose": "list of residential services",
+     "elements": [
+      "headline",
+      "repeated items",
+      "text link (Learn more)"
+     ],
+     "items": {
+      "count": 10,
+      "shape": "title + description + link, in 3 categories"
+     },
+     "notes": "Grouped under category labels.",
+     "order": 4
+    },
+    {
+     "page": "services",
+     "label": "Common home electrical problems",
+     "purpose": "problem list",
+     "elements": [
+      "headline",
+      "repeated items",
+      "click-to-call phone"
+     ],
+     "items": {
+      "count": 6,
+      "shape": "symptom heading + description + Fix this link"
+     },
+     "notes": "",
+     "order": 5
+    },
+    {
+     "page": "services",
+     "label": "Promises",
+     "purpose": "guarantees",
+     "elements": [
+      "headline",
+      "paragraph(s)"
+     ],
+     "items": {
+      "count": 5,
+      "shape": "plain statements"
+     },
+     "notes": "",
+     "order": 6
+    },
+    {
+     "page": "services",
+     "label": "How Anthony works on your home",
+     "purpose": "process",
+     "elements": [
+      "headline",
+      "repeated items"
+     ],
+     "items": {
+      "count": 4,
+      "shape": "step heading + text"
+     },
+     "notes": "",
+     "order": 7
+    },
+    {
+     "page": "services",
+     "label": "What a Residential Electrician Brisbane costs",
+     "purpose": "pricing",
+     "elements": [
+      "headline",
+      "price",
+      "repeated items"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "tier: price label + scope + 4 bullets (Call Out from $220, Standard from $350 'Most common', Major Work: Quoted)"
+     },
+     "notes": "Published pricing tiers; copy says 'four steps' but shows three tiers.",
+     "order": 8
+    },
+    {
+     "page": "services",
+     "label": "Recent jobs",
+     "purpose": "project examples",
+     "elements": [
+      "image gallery",
+      "repeated items"
+     ],
+     "items": {
+      "count": 6,
+      "shape": "image + H3 'Type \u00b7 Suburb' + one line"
+     },
+     "notes": "",
+     "order": 9
+    },
+    {
+     "page": "services",
+     "label": "Booking CTA",
+     "purpose": "CTA",
+     "elements": [
+      "primary button",
+      "secondary button"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 10
+    },
+    {
+     "page": "services",
+     "label": "Reviews",
+     "purpose": "reviews",
+     "elements": [
+      "headline",
+      "text link (View all Google reviews)"
+     ],
+     "items": null,
+     "notes": "Heading and link only.",
+     "order": 11
+    },
+    {
+     "page": "services",
+     "label": "Differentiators",
+     "purpose": "reasons to choose",
+     "elements": [
+      "headline",
+      "repeated items"
+     ],
+     "items": {
+      "count": 6,
+      "shape": "H3 + one line"
+     },
+     "notes": "",
+     "order": 12
+    },
+    {
+     "page": "services",
+     "label": "Service area",
+     "purpose": "suburbs",
+     "elements": [
+      "headline",
+      "service-area list"
+     ],
+     "items": {
+      "count": 20,
+      "shape": "suburb link"
+     },
+     "notes": "",
+     "order": 13
+    },
+    {
+     "page": "services",
+     "label": "FAQ",
+     "purpose": "FAQ",
+     "elements": [
+      "headline",
+      "repeated items"
+     ],
+     "items": {
+      "count": 12,
+      "shape": "H3 question + paragraph"
+     },
+     "notes": "",
+     "order": 14
+    },
+    {
+     "page": "services",
+     "label": "Final CTA",
+     "purpose": "CTA",
+     "elements": [
+      "headline",
+      "primary button",
+      "secondary button"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 15
+    },
+    {
+     "page": "services",
+     "label": "Long-form SEO content",
+     "purpose": "SEO text",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "text link"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "paragraph"
+     },
+     "notes": "Very long SEO text at page bottom.",
+     "order": 16
+    },
+    {
+     "page": "contact",
+     "label": "Talk to Anthony directly",
+     "purpose": "contact intro",
+     "elements": [
+      "headline",
+      "click-to-call phone",
+      "text/SMS link",
+      "single image"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 1
+    },
+    {
+     "page": "contact",
+     "label": "Anthony picks up.",
+     "purpose": "contact details",
+     "elements": [
+      "phone",
+      "email",
+      "hours",
+      "service-area list (text)"
+     ],
+     "items": {
+      "count": 5,
+      "shape": "detail block: phone, text, email, service area, hours"
+     },
+     "notes": "Emergency after-hours service mentioned.",
+     "order": 2
+    },
+    {
+     "page": "contact",
+     "label": "Prefer to write it down?",
+     "purpose": "quote form",
+     "elements": [
+      "contact/quote form (name, phone required, email, suburb, free-text)",
+      "primary button (Send to Anthony)"
+     ],
+     "items": {
+      "count": 5,
+      "shape": "form field"
+     },
+     "notes": "Short single-step form.",
+     "order": 3
+    },
+    {
+     "page": "contact",
+     "label": "Got an electrical job?",
+     "purpose": "final CTA",
+     "elements": [
+      "paragraph(s)",
+      "click-to-call phone",
+      "text/SMS link"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 4
+    }
+   ]
+  },
+  {
+   "name": "L & J Sharpline Painters",
+   "url": "https://www.sharplinepainters.co.nz/",
+   "city_country": "Tauranga, New Zealand",
+   "platform_guess": "custom/CMS built by local agency (Designshore credit)",
+   "quality": "average",
+   "pages_checked": [
+    "https://www.sharplinepainters.co.nz/",
+    "https://www.sharplinepainters.co.nz/services",
+    "https://www.sharplinepainters.co.nz/contact"
+   ],
+   "sections": [
+    {
+     "page": "home",
+     "label": "Header / navigation",
+     "purpose": "nav and CTA",
+     "elements": [
+      "logo",
+      "text link (5-item nav)",
+      "primary button (Get A Quote, tel link)"
+     ],
+     "items": {
+      "count": 5,
+      "shape": "nav: Home, About Us, Services, Blog, Contact Us"
+     },
+     "notes": "Quote button is a phone link.",
+     "order": 1
+    },
+    {
+     "page": "home",
+     "label": "Hero slider",
+     "purpose": "hero",
+     "elements": [
+      "background image",
+      "headline",
+      "subheadline",
+      "paragraph(s)",
+      "primary button",
+      "secondary button"
+     ],
+     "items": {
+      "count": 2,
+      "shape": "slide: heading + tagline/sub + text + 2 buttons"
+     },
+     "notes": "Two-slide carousel.",
+     "order": 2
+    },
+    {
+     "page": "home",
+     "label": "Main heading and intro images",
+     "purpose": "H1 + imagery",
+     "elements": [
+      "headline",
+      "single image (2)"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 3
+    },
+    {
+     "page": "home",
+     "label": "about us",
+     "purpose": "company intro",
+     "elements": [
+      "statistic/number (20+ years, 100% positive feedback)",
+      "paragraph(s)",
+      "bullet list",
+      "text link"
+     ],
+     "items": {
+      "count": 2,
+      "shape": "stat: number + label"
+     },
+     "notes": "Duplicate bullet content.",
+     "order": 4
+    },
+    {
+     "page": "home",
+     "label": "our services",
+     "purpose": "service cards",
+     "elements": [
+      "headline",
+      "subheadline",
+      "paragraph(s)",
+      "repeated items",
+      "primary button"
+     ],
+     "items": {
+      "count": 6,
+      "shape": "image + heading + one-line description (Residential, Commercial, New Builds, Spray, Level 5, High-Rise)"
+     },
+     "notes": "",
+     "order": 5
+    },
+    {
+     "page": "home",
+     "label": "Let's Bring Your Vision to Life",
+     "purpose": "CTA band",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "primary button"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 6
+    },
+    {
+     "page": "home",
+     "label": "why choose us",
+     "purpose": "reasons",
+     "elements": [
+      "headline",
+      "subheadline",
+      "paragraph(s)",
+      "icons",
+      "repeated items",
+      "image gallery (4-photo strip)"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "icon + heading + one line"
+     },
+     "notes": "",
+     "order": 7
+    },
+    {
+     "page": "home",
+     "label": "Trusted Local Painters in Tauranga",
+     "purpose": "local SEO text",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "background image"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "paragraph"
+     },
+     "notes": "",
+     "order": 8
+    },
+    {
+     "page": "home",
+     "label": "Footer",
+     "purpose": "contact, links",
+     "elements": [
+      "social links (2, empty hrefs)",
+      "text link (4 service links)",
+      "click-to-call phone",
+      "email",
+      "legal text (copyright)",
+      "text link (agency credit)"
+     ],
+     "items": null,
+     "notes": "No address, hours or licence numbers.",
+     "order": 9
+    },
+    {
+     "page": "services",
+     "label": "Our Services",
+     "purpose": "list nav",
+     "elements": [
+      "bullet list (anchor links)",
+      "single image"
+     ],
+     "items": {
+      "count": 7,
+      "shape": "link"
+     },
+     "notes": "",
+     "order": 1
+    },
+    {
+     "page": "services",
+     "label": "Service blocks",
+     "purpose": "detailed services",
+     "elements": [
+      "headline",
+      "single image",
+      "paragraph(s)"
+     ],
+     "items": {
+      "count": 7,
+      "shape": "image + heading + 2-3 paragraphs (Commercial, Residential, New Builds, Repaints, Spray, Level 5, High Access)"
+     },
+     "notes": "Same pattern each time.",
+     "order": 2
+    },
+    {
+     "page": "services",
+     "label": "Let's Bring Your Vision to Life",
+     "purpose": "CTA",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "primary button"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 3
+    },
+    {
+     "page": "contact",
+     "label": "Contact Us",
+     "purpose": "contact page",
+     "elements": [
+      "headline",
+      "single image",
+      "contact/quote form (fields not visible in extract)",
+      "primary button (submit)",
+      "click-to-call phone",
+      "email"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "contact block: form, phone, email"
+     },
+     "notes": "No map or address.",
+     "order": 1
+    }
+   ]
+  },
+  {
+   "name": "The Painting Guru",
+   "url": "http://thepaintingguru.co.nz/",
+   "city_country": "Gate Pa, Tauranga, New Zealand",
+   "platform_guess": "WordPress (guess; Imunify bot-check link)",
+   "quality": "basic",
+   "pages_checked": [
+    "http://thepaintingguru.co.nz/",
+    "https://thepaintingguru.co.nz/contact-us (404)"
+   ],
+   "sections": [
+    {
+     "page": "home",
+     "label": "Header",
+     "purpose": "contact and quote",
+     "elements": [
+      "address (location text)",
+      "click-to-call phone",
+      "social links (Facebook)",
+      "primary button (Request Quote)",
+      "logo",
+      "text link (menu, label with no text)"
+     ],
+     "items": null,
+     "notes": "Menu has a single item with no visible text; Request Quote links to /contact-us which returned 404 on fetch.",
+     "order": 1
+    },
+    {
+     "page": "home",
+     "label": "Intro / Hero banner",
+     "purpose": "brand intro",
+     "elements": [
+      "logo",
+      "headline (Welcome to The Painting Guru)",
+      "subheadline (get your painting sorted!)",
+      "paragraph(s) (service list)",
+      "click-to-call phone"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 2
+    },
+    {
+     "page": "home",
+     "label": "About us",
+     "purpose": "owner story",
+     "elements": [
+      "headline",
+      "paragraph(s)"
+     ],
+     "items": null,
+     "notes": "Founded 2023 by named owner.",
+     "order": 3
+    },
+    {
+     "page": "home",
+     "label": "Services",
+     "purpose": "three services",
+     "elements": [
+      "repeated items"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "number 01-03 + title + short description (Painting, Spray Painting, Protective Coatings)"
+     },
+     "notes": "No section heading.",
+     "order": 4
+    },
+    {
+     "page": "home",
+     "label": "CALL OUR FRIENDLY TEAM FOR A QUOTE TODAY",
+     "purpose": "CTA band",
+     "elements": [
+      "headline",
+      "click-to-call phone",
+      "emergency/24-7 notice ('call 24/7')"
+     ],
+     "items": null,
+     "notes": "24/7 claim conflicts with listed hours.",
+     "order": 5
+    },
+    {
+     "page": "home",
+     "label": "Residential & Commercial",
+     "purpose": "extras list",
+     "elements": [
+      "eyebrow/kicker",
+      "headline",
+      "paragraph(s)"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 6
+    },
+    {
+     "page": "home",
+     "label": "why choose our painters?",
+     "purpose": "reasons",
+     "elements": [
+      "headline",
+      "repeated items",
+      "single image (some)"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "title + description (High Quality, Quick & Efficient, Free Quotes)"
+     },
+     "notes": "Uneven imagery.",
+     "order": 7
+    },
+    {
+     "page": "home",
+     "label": "Contact details",
+     "purpose": "address, hours",
+     "elements": [
+      "address (suburb only)",
+      "phone",
+      "opening hours"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 8
+    },
+    {
+     "page": "home",
+     "label": "Get Your Free QUOTE",
+     "purpose": "quote invitation",
+     "elements": [
+      "headline",
+      "paragraph(s)"
+     ],
+     "items": null,
+     "notes": "No form fields in extract.",
+     "order": 9
+    },
+    {
+     "page": "home",
+     "label": "Footer",
+     "purpose": "copyright",
+     "elements": [
+      "legal text (copyright 2023)"
+     ],
+     "items": null,
+     "notes": "Almost empty footer.",
+     "order": 10
+    }
+   ]
+  },
+  {
+   "name": "Late Night Locksmith",
+   "url": "https://latenightlocksmithharrisonburg.carrd.co/",
+   "city_country": "Harrisonburg, Virginia, USA",
+   "platform_guess": "Carrd (one-page builder)",
+   "quality": "basic",
+   "pages_checked": [
+    "https://latenightlocksmithharrisonburg.carrd.co/"
+   ],
+   "sections": [
+    {
+     "page": "home",
+     "label": "Late Night Locksmith (hero/intro)",
+     "purpose": "identity and core services",
+     "elements": [
+      "single image (hero)",
+      "headline",
+      "paragraph(s)",
+      "bullet list",
+      "phone",
+      "email"
+     ],
+     "items": {
+      "count": 6,
+      "shape": "bullet: service (lockouts, lost key, on-site key duplication, chip keys, commercial, residential)"
+     },
+     "notes": "Single-page site, no navigation.",
+     "order": 1
+    },
+    {
+     "page": "home",
+     "label": "Service Area",
+     "purpose": "where they work",
+     "elements": [
+      "single image",
+      "headline",
+      "paragraph(s)",
+      "service-area list (17 towns in one paragraph)",
+      "phone",
+      "email"
+     ],
+     "items": {
+      "count": 17,
+      "shape": "town name inside one paragraph"
+     },
+     "notes": "Area list is a run-on paragraph.",
+     "order": 2
+    },
+    {
+     "page": "home",
+     "label": "The Services",
+     "purpose": "detail of services",
+     "elements": [
+      "headline",
+      "repeated items"
+     ],
+     "items": {
+      "count": 4,
+      "shape": "subheading + description (Damage Free Lockouts, Car Keys, Commercial Service, Safe Penetration)"
+     },
+     "notes": "Car makes list of about 20 inside paragraph; footnotes.",
+     "order": 3
+    },
+    {
+     "page": "home",
+     "label": "Visual break",
+     "purpose": "decorative images",
+     "elements": [
+      "single image (2)"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 4
+    },
+    {
+     "page": "home",
+     "label": "The Locksmiths",
+     "purpose": "owner bio and timeline",
+     "elements": [
+      "headline",
+      "paragraph(s)"
+     ],
+     "items": null,
+     "notes": "Mentions DCJS certification and compliance agent (state licensing) in prose.",
+     "order": 5
+    },
+    {
+     "page": "home",
+     "label": "Footer",
+     "purpose": "warranty and contact",
+     "elements": [
+      "social links (Facebook, Email)",
+      "legal text (copyright '(c) Untitled')",
+      "paragraph(s) (90-day guarantee)",
+      "text link (Made with Carrd)"
+     ],
+     "items": null,
+     "notes": "Placeholder copyright text 'Untitled'.",
+     "order": 6
+    }
+   ]
+  },
+  {
+   "name": "Turpin Landscape Design Build",
+   "url": "https://turpinlandscapedesign.com/",
+   "city_country": "West Chester / Coatesville, Pennsylvania, USA",
+   "platform_guess": "WordPress (Genesis theme)",
+   "quality": "polished",
+   "pages_checked": [
+    "https://turpinlandscapedesign.com/ (inner pages /service-area/ and /gallery/ returned 403)"
+   ],
+   "sections": [
+    {
+     "page": "home",
+     "label": "Header / navigation",
+     "purpose": "utility bar, brand, mega-menu",
+     "elements": [
+      "text link (Now Hiring, Contact)",
+      "click-to-call phone",
+      "logo",
+      "text (tagline)",
+      "primary button (Request A Quote)",
+      "text link (6 top-level items, 38 sub-links)"
+     ],
+     "items": {
+      "count": 6,
+      "shape": "Ponds & Water Features, Swimming Pools, Landscaping, Gallery, Pricing, About with dropdowns"
+     },
+     "notes": "Very deep menu.",
+     "order": 1
+    },
+    {
+     "page": "home",
+     "label": "Setting the Standard for Outdoor Living",
+     "purpose": "hero",
+     "elements": [
+      "headline",
+      "primary button (Contact Us!)",
+      "image gallery (5 images)"
+     ],
+     "items": null,
+     "notes": "Hero markup duplicated.",
+     "order": 2
+    },
+    {
+     "page": "home",
+     "label": "Brandywine Valley Water Garden Weekend Tour",
+     "purpose": "event announcement",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "text link (Read More)"
+     ],
+     "items": null,
+     "notes": "Dated event announcement.",
+     "order": 3
+    },
+    {
+     "page": "home",
+     "label": "Rely on Your Local Outdoor Living Specialists",
+     "purpose": "intro",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "video (2 Play Video)",
+      "text link",
+      "primary button"
+     ],
+     "items": null,
+     "notes": "Long text, 4+ paragraphs.",
+     "order": 4
+    },
+    {
+     "page": "home",
+     "label": "Creating Natural & Custom Spaces",
+     "purpose": "differentiators",
+     "elements": [
+      "headline",
+      "repeated items",
+      "single image (pairs)",
+      "text link"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "H2 + 1-2 paragraphs + image pair (Clear Communication, Local Expertise, Craftsmanship Promise)"
+     },
+     "notes": "",
+     "order": 5
+    },
+    {
+     "page": "home",
+     "label": "Happy Clients with Unique Outdoor Spaces",
+     "purpose": "project showcase",
+     "elements": [
+      "headline",
+      "image gallery (5)",
+      "subheadline",
+      "primary button (View Our Work)"
+     ],
+     "items": {
+      "count": 5,
+      "shape": "image with location alt text"
+     },
+     "notes": "Titled testimonials but contains images only.",
+     "order": 6
+    },
+    {
+     "page": "home",
+     "label": "Comprehensive Services For Your Outdoor Space",
+     "purpose": "services",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "repeated items",
+      "text link (Learn More)"
+     ],
+     "items": {
+      "count": 9,
+      "shape": "H3 + short description + Learn More"
+     },
+     "notes": "",
+     "order": 7
+    },
+    {
+     "page": "home",
+     "label": "A Proven Process",
+     "purpose": "process",
+     "elements": [
+      "headline",
+      "image",
+      "repeated items (accordion/tabs)"
+     ],
+     "items": {
+      "count": 7,
+      "shape": "step heading + paragraph (Get In Touch to Final Walkthrough)"
+     },
+     "notes": "Mentions $1,500-5,000 design fee in step 4.",
+     "order": 8
+    },
+    {
+     "page": "home",
+     "label": "Pool Companies Near West Chester, PA",
+     "purpose": "service areas",
+     "elements": [
+      "headline",
+      "service-area list",
+      "primary button",
+      "map (image)",
+      "single image"
+     ],
+     "items": {
+      "count": 21,
+      "shape": "town link under /town-pa/"
+     },
+     "notes": "Includes Delaware towns.",
+     "order": 9
+    },
+    {
+     "page": "home",
+     "label": "Grow Your Career",
+     "purpose": "recruiting",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "primary button (Apply Today!)"
+     ],
+     "items": null,
+     "notes": "Careers CTA on home.",
+     "order": 10
+    },
+    {
+     "page": "home",
+     "label": "Get Started on Your Landscaping Project Today",
+     "purpose": "final CTA",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "primary button"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 11
+    },
+    {
+     "page": "home",
+     "label": "Footer",
+     "purpose": "links, contact",
+     "elements": [
+      "text link (2 nav columns)",
+      "address",
+      "click-to-call phone",
+      "email",
+      "primary button (Request A Quote)",
+      "legal text (copyright)",
+      "social links (Facebook, Instagram, YouTube)"
+     ],
+     "items": null,
+     "notes": "Financing partner (Lyon Financial) linked from menu. Staff size not confirmed; may be above 30 (hiring, pool division).",
+     "order": 12
+    }
+   ]
+  },
+  {
+   "name": "Gas Safe Bristol Ltd",
+   "url": "https://www.gassafe-bristol.com/",
+   "city_country": "Bristol, England, UK",
+   "platform_guess": "WordPress (guess; Trustindex, consent tool)",
+   "quality": "average",
+   "pages_checked": [
+    "https://www.gassafe-bristol.com/",
+    "https://www.gassafe-bristol.com/services/ (fetch returned a home-like page)",
+    "https://www.gassafe-bristol.com/contact/"
+   ],
+   "sections": [
+    {
+     "page": "home",
+     "label": "Header / navigation",
+     "purpose": "nav and quote CTA",
+     "elements": [
+      "logo",
+      "logo (tag image)",
+      "click-to-call phone",
+      "primary button (Instant Boiler Quote)",
+      "text link (6 top-level, ~20 sub-links)"
+     ],
+     "items": {
+      "count": 6,
+      "shape": "Plumbing and Heating (8), Renewable (3), Electrical (3), Ventilation, About Us (7), Contact"
+     },
+     "notes": "Menu repeated about four times in markup.",
+     "order": 1
+    },
+    {
+     "page": "home",
+     "label": "Hero",
+     "purpose": "trust bar and offer",
+     "elements": [
+      "badge (0% finance, Family-Run, 5-Star Google, Trustindex)",
+      "headline",
+      "paragraph(s)",
+      "primary button (Instant Boiler Quote)"
+     ],
+     "items": null,
+     "notes": "Typos in published copy ('Accreditated', 'Get and Instant').",
+     "order": 2
+    },
+    {
+     "page": "home",
+     "label": "A Greener Home Starts with the Right Team",
+     "purpose": "renewables teaser",
+     "elements": [
+      "headline",
+      "repeated items",
+      "primary button"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "label (Solar, Heat Pumps, Air Conditioning)"
+     },
+     "notes": "",
+     "order": 3
+    },
+    {
+     "page": "home",
+     "label": "Leading Plumbing, Heating... Contractors",
+     "purpose": "services grid",
+     "elements": [
+      "headline",
+      "repeated items",
+      "paragraph(s)",
+      "text link (More Info)",
+      "primary button",
+      "secondary button"
+     ],
+     "items": {
+      "count": 6,
+      "shape": "heading + short description + More Info (incl. Cover Plans from GBP17/month)"
+     },
+     "notes": "",
+     "order": 4
+    },
+    {
+     "page": "home",
+     "label": "Save up to GBP580 Per Year",
+     "purpose": "instant quote promo",
+     "elements": [
+      "headline",
+      "subheadline",
+      "repeated items",
+      "primary button"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "numbered step"
+     },
+     "notes": "Instant online boiler quote flow.",
+     "order": 5
+    },
+    {
+     "page": "home",
+     "label": "Why Choose Gas Safe Bristol",
+     "purpose": "reasons",
+     "elements": [
+      "bullet list",
+      "single image (finance)",
+      "text link"
+     ],
+     "items": {
+      "count": 4,
+      "shape": "bullet: 20+ yrs, 3000+ installs, 5-star Google, 0% finance"
+     },
+     "notes": "",
+     "order": 6
+    },
+    {
+     "page": "home",
+     "label": "Accreditations and partners",
+     "purpose": "logo strip",
+     "elements": [
+      "logo strip (Gas Safe, Vaillant, NICEIC, CHAS, Ideal, Glow-worm, Worcester Bosch, RECC, REFCOM, Trustmark)"
+     ],
+     "items": {
+      "count": 10,
+      "shape": "logo"
+     },
+     "notes": "",
+     "order": 7
+    },
+    {
+     "page": "home",
+     "label": "Get in Touch",
+     "purpose": "contact",
+     "elements": [
+      "headline",
+      "phone",
+      "email",
+      "contact/quote form (name, phone, email, service dropdown 13 options, notes)"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 8
+    },
+    {
+     "page": "home",
+     "label": "Customer reviews",
+     "purpose": "testimonials",
+     "elements": [
+      "quote/testimonial",
+      "review widget (Trustindex)"
+     ],
+     "items": {
+      "count": 8,
+      "shape": "review text + reviewer first name"
+     },
+     "notes": "Two have positive-tag lines.",
+     "order": 9
+    },
+    {
+     "page": "home",
+     "label": "About Us",
+     "purpose": "company story",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "quote/testimonial (Our Promise)",
+      "statistic/number (10,000 boilers, 1,000 heat pumps)",
+      "primary button",
+      "secondary button"
+     ],
+     "items": null,
+     "notes": "Inconsistent figures (15/20 years).",
+     "order": 10
+    },
+    {
+     "page": "home",
+     "label": "Other Ways We Can Help",
+     "purpose": "FAQ and fault codes",
+     "elements": [
+      "text link",
+      "repeated items (FAQ)",
+      "primary button (Find Your Fault Code)",
+      "single image"
+     ],
+     "items": {
+      "count": 4,
+      "shape": "FAQ question + answer"
+     },
+     "notes": "Blog and boiler fault code guides.",
+     "order": 11
+    },
+    {
+     "page": "home",
+     "label": "Request a Call Back",
+     "purpose": "short form",
+     "elements": [
+      "contact/quote form (name, phone, service dropdown)"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 12
+    },
+    {
+     "page": "home",
+     "label": "Contact block",
+     "purpose": "address",
+     "elements": [
+      "address",
+      "phone"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 13
+    },
+    {
+     "page": "home",
+     "label": "Footer",
+     "purpose": "services, legal, registration",
+     "elements": [
+      "text link (13 services)",
+      "text link (useful links)",
+      "logo strip (accreditation badges)",
+      "legal links (Cookie, Privacy)",
+      "social links (Facebook, YouTube, Instagram)",
+      "licence/registration number (company no, Gas Safe 201369, REFCOM)",
+      "address"
+     ],
+     "items": null,
+     "notes": "Registration numbers in footer; cookie consent banner with unrendered placeholders.",
+     "order": 14
+    },
+    {
+     "page": "services",
+     "label": "Service tile grid",
+     "purpose": "list all services",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "repeated items",
+      "text link (More Info)"
+     ],
+     "items": {
+      "count": 14,
+      "shape": "heading + 1-2 sentences + More Info link"
+     },
+     "notes": "All 14 links point to the same URL in extract.",
+     "order": 1
+    },
+    {
+     "page": "services",
+     "label": "Company overview and call-back form",
+     "purpose": "support content",
+     "elements": [
+      "paragraph(s)",
+      "primary button",
+      "contact/quote form"
+     ],
+     "items": null,
+     "notes": "Page looks like a home-style rollup of the same content.",
+     "order": 2
+    },
+    {
+     "page": "contact",
+     "label": "We're Here to Help",
+     "purpose": "contact intro",
+     "elements": [
+      "headline",
+      "paragraph(s)",
+      "text link"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 1
+    },
+    {
+     "page": "contact",
+     "label": "How to Get in Touch",
+     "purpose": "contact details",
+     "elements": [
+      "address",
+      "opening hours",
+      "phone",
+      "email"
+     ],
+     "items": {
+      "count": 4,
+      "shape": "detail block"
+     },
+     "notes": "Opening hours Mon-Fri 8:30-5, Sat 9-2.",
+     "order": 2
+    },
+    {
+     "page": "contact",
+     "label": "Contact Form",
+     "purpose": "enquiry form",
+     "elements": [
+      "contact/quote form (name, phone, email, service dropdown 13, additional info)"
+     ],
+     "items": {
+      "count": 5,
+      "shape": "form field"
+     },
+     "notes": "",
+     "order": 3
+    },
+    {
+     "page": "contact",
+     "label": "Request a Call Back Form",
+     "purpose": "callback form",
+     "elements": [
+      "contact/quote form"
+     ],
+     "items": {
+      "count": 3,
+      "shape": "form field"
+     },
+     "notes": "Typo in dropdown ('Reapirs').",
+     "order": 4
+    },
+    {
+     "page": "contact",
+     "label": "Contact details and legal block",
+     "purpose": "registration info",
+     "elements": [
+      "address",
+      "phone",
+      "licence/registration number"
+     ],
+     "items": null,
+     "notes": "",
+     "order": 5
+    }
+   ]
+  }
+ ],
+ "replaced": [
+  {
+   "url": "https://goblueox.com/",
+   "why": "Blue Ox Heating & Air has 8 offices and sister brands, so it is a regional multi-brand firm, not a small independent."
+  },
+  {
+   "url": "https://staticelectrics.com.au",
+   "why": "Fetched fine, but 2441 reviews, two offices and a careers page suggest more than 30 staff. Not used."
+  }
+ ]
+}
