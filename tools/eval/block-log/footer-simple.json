@@ -1,0 +1,20 @@
+{
+  "block": "footer/simple",
+  "started": "2026-11-14T09:18:54Z",
+  "finished": "2026-11-14T09:20:41Z",
+  "testRuns": 5,
+  "failedRuns": 1,
+  "failures": [
+    {
+      "check": "classes",
+      "what": "a comparison string inside cx() (p.align === 'center') was read as a class name 'center' that produces no CSS"
+    }
+  ],
+  "wanted": [
+    "The class check reads cx(...) only up to the first ')', so a parenthesised condition inside cx hides every class after it from both the check and the browser stylesheet without failing; it passed once that way before I spotted and fixed it",
+    "The browser check should skip .sr-only elements, or the kit's Hours should offer a visible caption; this block draws its own hours table from the kit's hoursRows with a visible 'Opening hours' caption",
+    "Section rendered as <footer> (a contentinfo landmark)",
+    "Localised UI strings for fixed labels ('Opening hours', the 'Footer' nav label)"
+  ],
+  "notes": "Reused the facts and hours approach from footer/columns, so the only failure was the class check. The inline variant shows top-level nav links only; children are dropped, which its describe says."
+}

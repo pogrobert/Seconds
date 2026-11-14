@@ -1,0 +1,21 @@
+{
+  "block": "price-list/menu",
+  "started": "2026-11-14T09:14:04Z",
+  "finished": "2026-11-14T09:20:00Z",
+  "testRuns": 4,
+  "failedRuns": 1,
+  "failures": [
+    {
+      "check": "browser-overflow",
+      "what": "table caption used the kit's sr-only pattern (as in the kit's Hours); the gate reads a 1px sr-only box as overflowing and clipped text. Fixed by making the caption visible: the section header or the group heading sits inside the caption."
+    }
+  ],
+  "wanted": [
+    "The browser gate flags any sr-only element with text as overflowing; the kit's own Hours caption would fail the same way. The gate should skip visually hidden elements.",
+    "The gate's stylesheet only picks up classes written literally, so Heading's type-h2/type-display and Text's type-lead are missing in the browser check: headlines and subheads render at body size there.",
+    "A kit duration formatter (210 minutes as '3 h 30 min'); blocks use Intl unit 'minute' for now.",
+    "Localised UI words: table headers 'Service', 'Item' and 'Price' are English on every site, including the Arabic test case.",
+    "Heading can only make an h2 at h2 style; a price list placed first on a page cannot take h1 without display size."
+  ],
+  "notes": "Table variant is one real table that stacks on phones (container query below @md) with a visible level label per price, and becomes a table with a sticky name column inside a scroll area from @md. Separate tables per group, so column widths can differ slightly between groups on wide screens."
+}

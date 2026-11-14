@@ -1,0 +1,17 @@
+{
+  "block": "text-media/split",
+  "started": "2026-11-14T09:14:06Z",
+  "finished": "2026-11-14T09:15:52Z",
+  "testRuns": 3,
+  "failedRuns": 1,
+  "failures": [
+    {
+      "check": "render",
+      "what": "browser run could not start: the gate's stylesheet step reads component.tsx in every block folder, and my second folder (text-media-editorial) existed but was still empty"
+    }
+  ],
+  "wanted": [
+    "Heading has no way to give the h2 look at level 1, so a text-media block that opens a page (no hero or page title) starts at h2"
+  ],
+  "notes": "Image order comes from DOM order inside a two-column grid, so start and end flip by themselves in right-to-left text. No caps needed: the 1,500-character body and 70-character headline fit a half-width column at all three widths."
+}

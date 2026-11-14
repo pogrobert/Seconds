@@ -1,0 +1,24 @@
+{
+  "block": "header/classic",
+  "started": "2026-11-14T09:14:04Z",
+  "finished": "2026-11-14T09:19:06Z",
+  "testRuns": 6,
+  "failedRuns": 2,
+  "failures": [
+    {
+      "check": "render",
+      "what": "browser suite did not start: stylesheet() read src/blocks/cards-list/component.tsx, a folder another agent had created but not filled yet (my own header-utility folder was also still empty)"
+    },
+    {
+      "check": "render",
+      "what": "same again on the immediate retry; passed once the empty folders had components"
+    }
+  ],
+  "wanted": [
+    "Section cannot render a <header> element (banner landmark); a header block is a labelled <section>.",
+    "Section has no density or padding option: bars override py-section with py-sm, which only wins because Tailwind sorts py-sm after py-section (py-md or py-lg would lose).",
+    "NavMenu has no alignment option: in the centred stacked variant the wide-screen link list stays start-aligned when it wraps to several lines.",
+    "The browser check fails for every agent while any block folder lacks component.tsx."
+  ],
+  "notes": "Both failed runs were caused by half-created folders in the shared checkout, not by this block; it passed first time when the suite could start. First pass was 09:17:29Z; after a screenshot review I tightened the phone layout (logo, Menu and button on one row; wrapped buttons align to the end) and re-ran both checks, so finished is the second pass."
+}

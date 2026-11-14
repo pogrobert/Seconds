@@ -1,0 +1,15 @@
+{
+  "block": "hours-location/split",
+  "started": "2026-11-14T09:18:36Z",
+  "finished": "2026-11-14T09:20:05Z",
+  "testRuns": 2,
+  "failedRuns": 0,
+  "failures": [],
+  "wanted": [
+    "A way for two blocks of one section type to share helpers. Blocks may import only the kit and their own files, so the hours table, special hours, address-with-note and contact row are copied from hours-location-panel.",
+    "The kit's Hours has a screen-reader-only caption that the browser gate reports as clipped, so this block uses its own table from hoursRows with a visible caption (same as hours-location-panel).",
+    "An inline (one-line) form of the kit's Address for compact layouts; the compact variant shows the multi-line Address beside the contacts.",
+    "Localised fixed labels: 'Opening hours', 'Special hours', 'Book online' here and 'Closed' and 'Open in Maps' in the kit are English on right-to-left and other-language sites."
+  ],
+  "notes": "Both checks passed on the first run, helped by reusing the panel's tested pieces. The compact variant lists open days only (closed days are implied), leaves out the full table and access notes, and keeps one button; with-text drops to a single narrow column when there is no headline, body or button."
+}

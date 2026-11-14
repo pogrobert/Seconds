@@ -1,0 +1,28 @@
+{
+  "block": "footer/columns",
+  "started": "2026-11-14T09:14:04Z",
+  "finished": "2026-11-14T09:18:54Z",
+  "testRuns": 6,
+  "failedRuns": 3,
+  "failures": [
+    {
+      "check": "browser-overflow",
+      "what": "harness, not this block: the browser test crashed building the stylesheet because other agents' block folders (cards-list etc.) existed without component.tsx yet"
+    },
+    {
+      "check": "browser-overflow",
+      "what": "the kit's Hours table has an sr-only caption, which the browser check reports as text wider than its box and clipped (longest, at-caps, rtl, typical)"
+    },
+    {
+      "check": "browser-overflow",
+      "what": "same sr-only caption failure, rerun to list every problem"
+    }
+  ],
+  "wanted": [
+    "The browser check should skip .sr-only elements, or the kit's Hours should offer a visible caption; until then this block draws its own hours table from the kit's hoursRows with a visible 'Opening hours' caption",
+    "Section rendered as <footer> (a contentinfo landmark); today a footer block is a plain <section>",
+    "A footer link-list primitive in the kit (labelled column of links with tap-size targets), so footer and header blocks share one markup",
+    "Localised UI strings for fixed labels ('Newsletter', 'Opening hours', 'Footer' nav label, and the kit's own 'Sign up', 'Open in Maps', 'Closed')"
+  ],
+  "notes": "Passed on the first contract run; all browser failures came from the shared harness or the kit's sr-only caption, not from layout. The browser test reads every block folder, so empty folders from parallel agents (including my own pre-made footer-simple folder, which I removed) break it for everyone."
+}

@@ -1,0 +1,13 @@
+{
+  "block": "cards/list",
+  "started": "2026-11-14T09:19:40Z",
+  "finished": "2026-11-14T09:20:26Z",
+  "testRuns": 3,
+  "failedRuns": 0,
+  "failures": [],
+  "wanted": [
+    "RichText takes no text style, so a dense list cannot use type-small for item text",
+    "Kit: a heading whose level follows the section (h2/h3/h4 under group headings); written locally"
+  ],
+  "notes": "Group headings appear when items have groups, in order of first appearance. A type error (a strong element passed as string children) was caught by reading before tsc ran, so it is not counted as a failed run."
+}

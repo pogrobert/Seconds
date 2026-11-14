@@ -1,0 +1,12 @@
+{
+  "block": "cta/band",
+  "started": "2026-11-14T09:14:04Z",
+  "finished": "2026-11-14T09:15:09Z",
+  "testRuns": 2,
+  "failedRuns": 0,
+  "failures": [],
+  "wanted": [
+    "A section-headline style for Heading that follows ctx.headingLevel: with style h2 the band always renders an h2, so a page that opens with this band has no h1."
+  ],
+  "notes": "Both checks passed on the first run; no caps needed because the longest text wraps cleanly at 360 px. Split falls back to the centred layout if media is missing, and Actions renders nothing when there is no button, so a headline-only band stays clean."
+}
