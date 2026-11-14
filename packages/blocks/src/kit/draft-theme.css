@@ -37,6 +37,7 @@
   --type-display-leading: 1.05;
   --type-display-tracking: -0.02em;
   --type-display-weight: 600;
+  --type-jumbo-size: clamp(3.5rem, 1.4rem + 8.5cqi, 9.5rem);
   --type-h2-family: system-ui, sans-serif;
   --type-h2-size: clamp(1.75rem, 1.4rem + 1.6cqi, 2.5rem);
   --type-h2-leading: 1.15;

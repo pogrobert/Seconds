@@ -149,6 +149,15 @@
   font-weight: var(--type-display-weight);
   text-transform: var(--type-display-case, none);
 }
+/* Jumbo: the editorial size, larger than display. One short line of type that is the design. */
+@utility type-jumbo {
+  font-family: var(--type-display-family);
+  font-size: var(--type-jumbo-size, calc(var(--type-display-size) * 1.6));
+  line-height: var(--type-jumbo-leading, 0.92);
+  letter-spacing: var(--type-display-tracking);
+  font-weight: var(--type-display-weight);
+  text-transform: var(--type-display-case, none);
+}
 @utility type-h2 {
   font-family: var(--type-h2-family);
   font-size: var(--type-h2-size);
@@ -259,4 +268,33 @@
 /* An even shade over the whole photo, for text in the middle of it. */
 @utility scrim-even {
   background: color-mix(in oklab, var(--role-bg) 62%, transparent);
+}
+
+/* Dark shades for text over photos, in the inverse surface's own background colour. */
+@utility shade-bottom {
+  background: linear-gradient(
+    to top,
+    color-mix(in oklab, var(--p-inverse-bg) 88%, transparent) 0%,
+    color-mix(in oklab, var(--p-inverse-bg) 60%, transparent) 50%,
+    color-mix(in oklab, var(--p-inverse-bg) 10%, transparent) 100%
+  );
+}
+@utility shade-start {
+  background: linear-gradient(
+    to right,
+    color-mix(in oklab, var(--p-inverse-bg) 88%, transparent) 0%,
+    color-mix(in oklab, var(--p-inverse-bg) 55%, transparent) 55%,
+    color-mix(in oklab, var(--p-inverse-bg) 5%, transparent) 100%
+  );
+  [dir="rtl"] & {
+    background: linear-gradient(
+      to left,
+      color-mix(in oklab, var(--p-inverse-bg) 88%, transparent) 0%,
+      color-mix(in oklab, var(--p-inverse-bg) 55%, transparent) 55%,
+      color-mix(in oklab, var(--p-inverse-bg) 5%, transparent) 100%
+    );
+  }
+}
+@utility shade-even {
+  background: color-mix(in oklab, var(--p-inverse-bg) 62%, transparent);
 }

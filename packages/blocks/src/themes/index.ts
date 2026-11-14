@@ -110,6 +110,8 @@ export type Family = {
     label: TypeRole
     button: TypeRole
   }
+  /** The jumbo size: larger than display, for editorial type. */
+  jumbo: string
   sizes: { lead: string; body: string; small: string }
   space: { section: string; scale: number }
   corners: { control: string; card: string; media: string }
@@ -172,6 +174,7 @@ export const FAMILIES: Record<FamilyId, Family> = {
         case: 'uppercase',
       },
     },
+    jumbo: 'clamp(4rem, 0.5rem + 13cqi, 13rem)',
     sizes: { lead: 'clamp(1.0625rem, 1rem + 0.4cqi, 1.25rem)', body: '1rem', small: '0.875rem' },
     space: { section: 'clamp(3.5rem, 2rem + 6cqi, 6.5rem)', scale: 1 },
     corners: { control: '0', card: '0', media: '0' },
@@ -234,6 +237,7 @@ export const FAMILIES: Record<FamilyId, Family> = {
         case: 'uppercase',
       },
     },
+    jumbo: 'clamp(3rem, 1.4rem + 6.5cqi, 7.5rem)',
     sizes: { lead: 'clamp(1.0625rem, 1rem + 0.3cqi, 1.1875rem)', body: '1rem', small: '0.875rem' },
     space: { section: 'clamp(4.5rem, 2.5rem + 8cqi, 9rem)', scale: 1.15 },
     corners: { control: '0', card: '0', media: '0' },
@@ -296,6 +300,7 @@ export const FAMILIES: Record<FamilyId, Family> = {
         case: 'uppercase',
       },
     },
+    jumbo: 'clamp(3.25rem, 1.2rem + 8cqi, 8.5rem)',
     sizes: { lead: 'clamp(1.0625rem, 1rem + 0.35cqi, 1.25rem)', body: '1rem', small: '0.875rem' },
     space: { section: 'clamp(3.5rem, 2rem + 5cqi, 6rem)', scale: 1 },
     corners: { control: '0', card: '0', media: '0' },
@@ -344,6 +349,7 @@ export const FAMILIES: Record<FamilyId, Family> = {
       label: { family: sans('Geist'), size: '0.8125rem', leading: 1.3, tracking: '0', weight: 500 },
       button: { family: sans('Geist'), size: '1rem', leading: 1.2, tracking: '0', weight: 500 },
     },
+    jumbo: 'clamp(3.5rem, 1.4rem + 8.5cqi, 9.5rem)',
     sizes: { lead: 'clamp(1.0625rem, 1rem + 0.4cqi, 1.25rem)', body: '1rem', small: '0.875rem' },
     space: { section: 'clamp(3.5rem, 2rem + 6cqi, 6.5rem)', scale: 1.05 },
     corners: { control: '999px', card: '1.5rem', media: '1.25rem' },
@@ -409,6 +415,7 @@ export const FAMILIES: Record<FamilyId, Family> = {
         case: 'uppercase',
       },
     },
+    jumbo: 'clamp(4.5rem, 0.5rem + 15cqi, 15rem)',
     sizes: { lead: 'clamp(1.0625rem, 1rem + 0.4cqi, 1.25rem)', body: '1rem', small: '0.875rem' },
     space: { section: 'clamp(4rem, 2.2rem + 7cqi, 7.5rem)', scale: 1.1 },
     corners: { control: '999px', card: '1rem', media: '0.75rem' },
@@ -463,6 +470,7 @@ export function theme(id: FamilyId, brand: string) {
   ${role('h3', f.type.h3)}
   ${role('eyebrow', f.type.label)}
   ${role('button', f.type.button)}
+  --type-jumbo-size: ${f.jumbo};
   --type-body-family: ${f.type.body};
   --type-body-weight: ${f.type.bodyWeight};
   --type-body-size: ${f.sizes.body};

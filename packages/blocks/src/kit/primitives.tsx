@@ -41,7 +41,8 @@ export function Container(p: {
 
 export function Heading(p: {
   ctx: RenderCtx
-  style: 'display' | 'h2' | 'h3'
+  /** jumbo: the editorial size, larger than display, for one short line of type that is the design. */
+  style: 'jumbo' | 'display' | 'h2' | 'h3'
   slot: string
   className?: string
   children: ReactNode
@@ -49,7 +50,14 @@ export function Heading(p: {
   // A section's heading is the page's h1 when its block opens the page, whatever its visual size.
   const level = p.style === 'h3' ? 3 : p.ctx.headingLevel
   const Tag = `h${level}` as 'h1' | 'h2' | 'h3'
-  const style = p.style === 'display' ? 'type-display' : p.style === 'h2' ? 'type-h2' : 'type-h3'
+  const style =
+    p.style === 'jumbo'
+      ? 'type-jumbo'
+      : p.style === 'display'
+        ? 'type-display'
+        : p.style === 'h2'
+          ? 'type-h2'
+          : 'type-h3'
   return (
     <Tag data-slot={p.slot} className={cx(style, 'max-w-full text-balance', p.className)}>
       {p.children}
@@ -198,6 +206,25 @@ export function RichText(p: {
   return (
     <div data-slot={p.slot} className={cx('prose-flow type-body', p.className)}>
       {out}
+    </div>
+  )
+}
+
+/**
+ * Text set over a photo. The area switches to the inverse surface (light text, its own button
+ * colours) and sits on a dark shade drawn from the theme, so it stays readable on any photo.
+ * Place <PhotoShade> over the photo and <OnPhoto> around the text, in the same stacking context.
+ */
+export function PhotoShade(p: { from?: 'bottom' | 'start' | 'even'; className?: string }) {
+  const shade =
+    p.from === 'even' ? 'shade-even' : p.from === 'start' ? 'shade-start' : 'shade-bottom'
+  return <div aria-hidden="true" className={cx('pointer-events-none', shade, p.className)} />
+}
+
+export function OnPhoto(p: { className?: string; children: ReactNode }) {
+  return (
+    <div data-surface="inverse" className={cx('text-fg', p.className)}>
+      {p.children}
     </div>
   )
 }

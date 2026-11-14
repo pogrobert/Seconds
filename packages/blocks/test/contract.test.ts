@@ -76,6 +76,7 @@ describe('library', () => {
     const { siteCss } = await import('../src/build.ts')
     const css = await siteCss(['hero/standard'])
     const missing = [
+      'type-jumbo',
       'type-display',
       'type-h2',
       'type-h3',
