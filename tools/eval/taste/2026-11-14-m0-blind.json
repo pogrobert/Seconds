@@ -1,0 +1,2932 @@
+{
+  "date": "2026-11-14",
+  "test": "M0 blind rating, run 'live'",
+  "rater": "Robert",
+  "page": "https://claude.ai/artifact/78QGdzPNntwTKEWhNDseXa",
+  "note": "Arm a = decision model (TypeSafe jev-1.14.0), b = code defaults, c = random answers to the same questions. 'winner' is the arm Robert preferred, or 'same'.",
+  "pairs": [
+    {
+      "n": 1,
+      "brief": "clinic-1",
+      "other": "c",
+      "choice": "same",
+      "winner": "same",
+      "at": "2026-11-14T20:21:09.269Z",
+      "a": {
+        "style": {
+          "family": "soft@1",
+          "axes": {
+            "type": "outfit",
+            "palette": "tint",
+            "frame": "inset",
+            "photo": "natural"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/classic#stacked (base)",
+          "hero/photo#portrait (base)",
+          "cards/feature#numbers (base)",
+          "price-list/classic#menu-board (base)",
+          "text-media/feature#columns (base)",
+          "hours-location/week#statement (base)",
+          "cta/feature#jumbo (brand)",
+          "footer/simple#centered (muted)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "soft@1",
+          "axes": {
+            "type": "fraunces",
+            "palette": "tint",
+            "frame": "inset",
+            "photo": "tint"
+          },
+          "mode": "dark"
+        },
+        "blocks": [
+          "header/utility#minimal (inverse)",
+          "hero/photo#triptych (base)",
+          "cards/grid#bordered (brand)",
+          "price-list/classic#menu-board (base)",
+          "hours-location/week#statement (brand)",
+          "cta/feature#jumbo (inverse)",
+          "footer/simple#centered (brand)"
+        ]
+      }
+    },
+    {
+      "n": 2,
+      "brief": "restaurant-4",
+      "other": "b",
+      "choice": "right",
+      "winner": "a",
+      "at": "2026-11-14T20:21:19.265Z",
+      "a": {
+        "style": {
+          "family": "poster@1",
+          "axes": {
+            "type": "anton",
+            "palette": "tint",
+            "frame": "bleed",
+            "photo": "natural"
+          },
+          "mode": "dark"
+        },
+        "blocks": [
+          "header/classic#stacked (base)",
+          "hero/overlay#bottom (base)",
+          "text-media/feature#overlap (base)",
+          "price-list/menu#list (base)",
+          "hours-location/panel#single (base)",
+          "cta/feature#photo-banner (brand)",
+          "footer/simple#inline (muted)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "poster@1",
+          "axes": {},
+          "mode": "light"
+        },
+        "blocks": [
+          "header/classic#inline (base)",
+          "hero/overlay#bottom (base)",
+          "text-media/split#image-end (base)",
+          "price-list/menu#list (muted)",
+          "hours-location/panel#single (base)",
+          "cta/band#centered (brand)",
+          "footer/simple#centered (muted)"
+        ]
+      }
+    },
+    {
+      "n": 3,
+      "brief": "trades-6",
+      "other": "b",
+      "choice": "left",
+      "winner": "b",
+      "at": "2026-11-14T20:21:30.728Z",
+      "a": {
+        "style": {
+          "family": "quiet@1",
+          "axes": {
+            "type": "cormorant",
+            "palette": "paper",
+            "frame": "inset",
+            "photo": "natural"
+          },
+          "mode": "dark"
+        },
+        "blocks": [
+          "header/classic#stacked (base)",
+          "hero/photo#cover (base)",
+          "text-media/editorial#gallery (base)",
+          "cards/grid#images (muted)",
+          "cards/steps#rows (base)",
+          "cta/feature#photo-banner (inverse)",
+          "hours-location/panel#single (inverse)",
+          "footer/simple#centered (inverse)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "poster@1",
+          "axes": {},
+          "mode": "light"
+        },
+        "blocks": [
+          "header/utility#bar (base)",
+          "hero/overlay#bottom (base)",
+          "cards/grid#bordered (base)",
+          "cards/steps#numbered (muted)",
+          "text-media/split#text-only (base)",
+          "cta/band#centered (brand)",
+          "hours-location/split#compact (base)",
+          "footer/simple#inline (muted)"
+        ]
+      }
+    },
+    {
+      "n": 4,
+      "brief": "fitness-2",
+      "other": "c",
+      "choice": "left",
+      "winner": "a",
+      "at": "2026-11-14T20:21:44.290Z",
+      "a": {
+        "style": {
+          "family": "poster@1",
+          "axes": {
+            "type": "oswald",
+            "palette": "paper",
+            "frame": "bleed",
+            "photo": "natural"
+          },
+          "mode": "dark"
+        },
+        "blocks": [
+          "header/utility#bar (inverse)",
+          "hero/editorial#card (base)",
+          "cards/grid#images (brand)",
+          "price-list/menu#table (base)",
+          "text-media/split#image-start (brand)",
+          "cta/feature#photo-banner (inverse)",
+          "hours-location/split#compact (brand)",
+          "footer/simple#inline (inverse)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "quiet@1",
+          "axes": {
+            "type": "newsreader",
+            "palette": "stone",
+            "frame": "inset",
+            "photo": "natural"
+          },
+          "mode": "dark"
+        },
+        "blocks": [
+          "header/utility#minimal (base)",
+          "hero/photo#cover (base)",
+          "cards/steps#rows (base)",
+          "price-list/cards#featured (base)",
+          "text-media/editorial#gallery (base)",
+          "cta/signup#inline (brand)",
+          "hours-location/panel#single (base)",
+          "footer/simple#inline (muted)"
+        ]
+      }
+    },
+    {
+      "n": 5,
+      "brief": "salon-4",
+      "other": "b",
+      "choice": "right",
+      "winner": "a",
+      "at": "2026-11-14T20:21:53.196Z",
+      "a": {
+        "style": {
+          "family": "poster@1",
+          "axes": {
+            "type": "anton",
+            "palette": "paper",
+            "frame": "bleed",
+            "photo": "tint"
+          },
+          "mode": "dark"
+        },
+        "blocks": [
+          "header/utility#bar (inverse)",
+          "hero/editorial#card (base)",
+          "cards/grid#images (brand)",
+          "price-list/menu#table (base)",
+          "text-media/feature#overlap (brand)",
+          "hours-location/panel#single (base)",
+          "cta/feature#photo-banner (inverse)",
+          "footer/simple#inline (brand)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "quiet@1",
+          "axes": {},
+          "mode": "light"
+        },
+        "blocks": [
+          "header/classic#inline (base)",
+          "hero/editorial#framed (base)",
+          "cards/grid#plain (base)",
+          "price-list/menu#table (muted)",
+          "text-media/editorial#heading-aside (base)",
+          "hours-location/split#with-text (base)",
+          "cta/band#centered (brand)",
+          "footer/simple#inline (muted)"
+        ]
+      }
+    },
+    {
+      "n": 6,
+      "brief": "clinic-5",
+      "other": "c",
+      "choice": "left",
+      "winner": "c",
+      "at": "2026-11-14T20:22:01.557Z",
+      "a": {
+        "style": {
+          "family": "soft@1",
+          "axes": {
+            "type": "outfit",
+            "palette": "tint",
+            "frame": "inset",
+            "photo": "tint"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/utility#minimal (base)",
+          "hero/photo#portrait (base)",
+          "cards/feature#numbers (base)",
+          "price-list/classic#menu-board (base)",
+          "text-media/feature#columns (base)",
+          "hours-location/week#statement (base)",
+          "cta/feature#jumbo (brand)",
+          "footer/simple#centered (muted)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "quiet@1",
+          "axes": {
+            "type": "cormorant",
+            "palette": "stone",
+            "frame": "inset",
+            "photo": "natural"
+          },
+          "mode": "dark"
+        },
+        "blocks": [
+          "header/classic#inline (base)",
+          "hero/overlay#bottom (base)",
+          "price-list/menu#list (base)",
+          "cards/grid#images (muted)",
+          "hours-location/panel#single (inverse)",
+          "cta/feature#photo-banner (inverse)",
+          "footer/columns#columns (inverse)"
+        ]
+      }
+    },
+    {
+      "n": 7,
+      "brief": "fitness-5",
+      "other": "b",
+      "choice": "left",
+      "winner": "a",
+      "at": "2026-11-14T20:22:09.832Z",
+      "a": {
+        "style": {
+          "family": "soft@1",
+          "axes": {
+            "type": "geist",
+            "palette": "white",
+            "frame": "inset",
+            "photo": "natural"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/classic#stacked (base)",
+          "hero/photo#half (base)",
+          "cards/feature#tiles (base)",
+          "price-list/menu#table (base)",
+          "text-media/split#image-start (base)",
+          "cta/signup#inline (brand)",
+          "hours-location/split#with-text (base)",
+          "footer/columns#columns (muted)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "soft@1",
+          "axes": {},
+          "mode": "light"
+        },
+        "blocks": [
+          "header/classic#inline (base)",
+          "hero/editorial#framed (base)",
+          "cards/grid#plain (base)",
+          "price-list/cards#groups (muted)",
+          "text-media/split#image-start (base)",
+          "cta/signup#inline (brand)",
+          "hours-location/panel#single (base)",
+          "footer/columns#columns (muted)"
+        ]
+      }
+    },
+    {
+      "n": 8,
+      "brief": "salon-1",
+      "other": "c",
+      "choice": "same",
+      "winner": "same",
+      "at": "2026-11-14T20:22:21.469Z",
+      "a": {
+        "style": {
+          "family": "quiet@1",
+          "axes": {
+            "type": "cormorant",
+            "palette": "stone",
+            "frame": "inset",
+            "photo": "natural"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/classic#stacked (base)",
+          "hero/photo#portrait (base)",
+          "cards/grid#plain (base)",
+          "price-list/classic#menu-board (base)",
+          "text-media/feature#columns (base)",
+          "hours-location/week#statement (base)",
+          "cta/band#centered (brand)",
+          "footer/simple#centered (muted)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "poster@1",
+          "axes": {
+            "type": "shoulders",
+            "palette": "paper",
+            "frame": "bleed",
+            "photo": "natural"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/utility#minimal (base)",
+          "hero/editorial#framed (base)",
+          "price-list/classic#leaders (base)",
+          "text-media/feature#columns (muted)",
+          "hours-location/panel#single (inverse)",
+          "cta/feature#photo-banner (inverse)",
+          "footer/simple#inline (inverse)"
+        ]
+      }
+    },
+    {
+      "n": 9,
+      "brief": "salon-3",
+      "other": "b",
+      "choice": "left",
+      "winner": "a",
+      "at": "2026-11-14T20:22:28.371Z",
+      "a": {
+        "style": {
+          "family": "quiet@1",
+          "axes": {
+            "type": "cormorant",
+            "palette": "paper",
+            "frame": "bleed",
+            "photo": "tint"
+          },
+          "mode": "dark"
+        },
+        "blocks": [
+          "header/classic#stacked (base)",
+          "hero/photo#cover (base)",
+          "cards/grid#images (base)",
+          "price-list/classic#menu-board (muted)",
+          "text-media/editorial#gallery (base)",
+          "hours-location/panel#single (inverse)",
+          "cta/feature#photo-banner (inverse)",
+          "footer/simple#centered (inverse)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "quiet@1",
+          "axes": {},
+          "mode": "light"
+        },
+        "blocks": [
+          "header/classic#inline (base)",
+          "hero/editorial#framed (base)",
+          "cards/grid#plain (base)",
+          "price-list/menu#table (muted)",
+          "text-media/editorial#heading-aside (base)",
+          "hours-location/split#with-text (base)",
+          "cta/band#centered (brand)",
+          "footer/simple#inline (muted)"
+        ]
+      }
+    },
+    {
+      "n": 10,
+      "brief": "clinic-2",
+      "other": "b",
+      "choice": "right",
+      "winner": "b",
+      "at": "2026-11-14T20:22:38.854Z",
+      "a": {
+        "style": {
+          "family": "quiet@1",
+          "axes": {
+            "type": "instrument",
+            "palette": "stone",
+            "frame": "bleed",
+            "photo": "tint"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/utility#minimal (base)",
+          "hero/photo#portrait (base)",
+          "cards/grid#images (base)",
+          "price-list/cards#featured (muted)",
+          "text-media/split#image-start (base)",
+          "hours-location/panel#single (inverse)",
+          "cta/band#split (inverse)",
+          "footer/wordmark#wordmark (inverse)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "soft@1",
+          "axes": {},
+          "mode": "light"
+        },
+        "blocks": [
+          "header/utility#bar (base)",
+          "hero/editorial#card (base)",
+          "cards/grid#bordered (base)",
+          "price-list/menu#list (muted)",
+          "text-media/split#image-start (base)",
+          "hours-location/panel#single (base)",
+          "cta/band#centered (brand)",
+          "footer/columns#columns (muted)"
+        ]
+      }
+    },
+    {
+      "n": 11,
+      "brief": "trades-2",
+      "other": "b",
+      "choice": "left",
+      "winner": "b",
+      "at": "2026-11-14T20:22:44.435Z",
+      "a": {
+        "style": {
+          "family": "soft@1",
+          "axes": {
+            "type": "outfit",
+            "palette": "tint",
+            "frame": "inset",
+            "photo": "natural"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/classic#inline (base)",
+          "hero/photo#half (base)",
+          "text-media/split#image-start (base)",
+          "cards/grid#images (base)",
+          "cards/steps#numbered (base)",
+          "cta/band#split (brand)",
+          "hours-location/split#with-text (base)",
+          "footer/columns#columns (muted)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "poster@1",
+          "axes": {},
+          "mode": "light"
+        },
+        "blocks": [
+          "header/utility#bar (base)",
+          "hero/overlay#bottom (base)",
+          "cards/grid#bordered (base)",
+          "cards/steps#numbered (muted)",
+          "text-media/split#text-only (base)",
+          "cta/band#centered (brand)",
+          "hours-location/split#compact (base)",
+          "footer/simple#inline (muted)"
+        ]
+      }
+    },
+    {
+      "n": 12,
+      "brief": "clinic-4",
+      "other": "c",
+      "choice": "left",
+      "winner": "c",
+      "at": "2026-11-14T20:22:50.327Z",
+      "a": {
+        "style": {
+          "family": "soft@1",
+          "axes": {
+            "type": "fraunces",
+            "palette": "white",
+            "frame": "inset",
+            "photo": "natural"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/classic#stacked (base)",
+          "hero/photo#portrait (base)",
+          "text-media/split#image-start (base)",
+          "cards/feature#numbers (base)",
+          "price-list/menu#list (base)",
+          "hours-location/week#statement (base)",
+          "cta/band#centered (brand)",
+          "footer/simple#centered (muted)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "soft@1",
+          "axes": {
+            "type": "outfit",
+            "palette": "tint",
+            "frame": "bleed",
+            "photo": "natural"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/utility#minimal (base)",
+          "hero/photo#cover (base)",
+          "price-list/classic#menu-board (muted)",
+          "text-media/split#image-start (base)",
+          "hours-location/panel#single (muted)",
+          "cta/band#split (brand)",
+          "footer/columns#columns (inverse)"
+        ]
+      }
+    },
+    {
+      "n": 13,
+      "brief": "restaurant-3",
+      "other": "b",
+      "choice": "right",
+      "winner": "b",
+      "at": "2026-11-14T20:22:55.273Z",
+      "a": {
+        "style": {
+          "family": "soft@1",
+          "axes": {
+            "type": "outfit",
+            "palette": "tint",
+            "frame": "inset",
+            "photo": "natural"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/classic#inline (base)",
+          "hero/photo#half (base)",
+          "text-media/split#image-end (base)",
+          "price-list/menu#list (base)",
+          "hours-location/panel#single (base)",
+          "cta/band#split (brand)",
+          "footer/columns#columns (muted)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "poster@1",
+          "axes": {},
+          "mode": "light"
+        },
+        "blocks": [
+          "header/classic#inline (base)",
+          "hero/overlay#bottom (base)",
+          "text-media/split#image-end (base)",
+          "price-list/menu#list (muted)",
+          "hours-location/panel#single (base)",
+          "cta/band#centered (brand)",
+          "footer/simple#centered (muted)"
+        ]
+      }
+    },
+    {
+      "n": 14,
+      "brief": "restaurant-5",
+      "other": "b",
+      "choice": "left",
+      "winner": "b",
+      "at": "2026-11-14T20:22:58.994Z",
+      "a": {
+        "style": {
+          "family": "soft@1",
+          "axes": {
+            "type": "outfit",
+            "palette": "tint",
+            "frame": "inset",
+            "photo": "natural"
+          },
+          "mode": "dark"
+        },
+        "blocks": [
+          "header/utility#minimal (base)",
+          "hero/photo#portrait (base)",
+          "text-media/split#image-end (base)",
+          "price-list/menu#list (base)",
+          "hours-location/split#with-text (base)",
+          "cta/feature#jumbo (brand)",
+          "footer/columns#columns (muted)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "poster@1",
+          "axes": {},
+          "mode": "light"
+        },
+        "blocks": [
+          "header/classic#inline (base)",
+          "hero/overlay#bottom (base)",
+          "text-media/split#image-end (base)",
+          "price-list/menu#list (muted)",
+          "hours-location/panel#single (base)",
+          "cta/band#centered (brand)",
+          "footer/simple#centered (muted)"
+        ]
+      }
+    },
+    {
+      "n": 15,
+      "brief": "trades-4",
+      "other": "c",
+      "choice": "right",
+      "winner": "c",
+      "at": "2026-11-14T20:23:05.274Z",
+      "a": {
+        "style": {
+          "family": "poster@1",
+          "axes": {
+            "type": "anton",
+            "palette": "paper",
+            "frame": "bleed",
+            "photo": "tint"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/utility#bar (inverse)",
+          "hero/editorial#card (base)",
+          "cards/grid#images (brand)",
+          "cards/steps#numbered (base)",
+          "text-media/split#image-start (brand)",
+          "cta/signup#inline (inverse)",
+          "hours-location/split#compact (brand)",
+          "footer/simple#inline (inverse)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "quiet@1",
+          "axes": {
+            "type": "newsreader",
+            "palette": "stone",
+            "frame": "bleed",
+            "photo": "tint"
+          },
+          "mode": "dark"
+        },
+        "blocks": [
+          "header/utility#bar (base)",
+          "hero/editorial#card (base)",
+          "cards/steps#numbered (base)",
+          "cards/steps#rows (muted)",
+          "cta/feature#split-panel (inverse)",
+          "hours-location/split#compact (inverse)",
+          "footer/simple#inline (inverse)"
+        ]
+      }
+    },
+    {
+      "n": 16,
+      "brief": "trades-1",
+      "other": "b",
+      "choice": "left",
+      "winner": "b",
+      "at": "2026-11-14T20:23:08.190Z",
+      "a": {
+        "style": {
+          "family": "soft@1",
+          "axes": {
+            "type": "outfit",
+            "palette": "white",
+            "frame": "inset",
+            "photo": "natural"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/classic#inline (base)",
+          "hero/photo#half (base)",
+          "text-media/split#image-start (base)",
+          "cards/grid#images (base)",
+          "cards/steps#numbered (base)",
+          "cta/signup#inline (brand)",
+          "hours-location/split#with-text (base)",
+          "footer/columns#columns (muted)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "poster@1",
+          "axes": {},
+          "mode": "light"
+        },
+        "blocks": [
+          "header/utility#bar (base)",
+          "hero/overlay#bottom (base)",
+          "cards/grid#bordered (base)",
+          "cards/steps#numbered (muted)",
+          "text-media/split#text-only (base)",
+          "cta/band#centered (brand)",
+          "hours-location/split#compact (base)",
+          "footer/simple#inline (muted)"
+        ]
+      }
+    },
+    {
+      "n": 17,
+      "brief": "restaurant-6",
+      "other": "c",
+      "choice": "right",
+      "winner": "a",
+      "at": "2026-11-14T20:23:12.310Z",
+      "a": {
+        "style": {
+          "family": "quiet@1",
+          "axes": {
+            "type": "cormorant",
+            "palette": "paper",
+            "frame": "inset",
+            "photo": "mono"
+          },
+          "mode": "dark"
+        },
+        "blocks": [
+          "header/utility#minimal (base)",
+          "hero/photo#portrait (base)",
+          "text-media/split#image-end (base)",
+          "price-list/menu#list (base)",
+          "hours-location/week#statement (base)",
+          "cta/feature#jumbo (brand)",
+          "footer/wordmark#wordmark (muted)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "quiet@1",
+          "axes": {
+            "type": "instrument",
+            "palette": "stone",
+            "frame": "inset",
+            "photo": "tint"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/classic#stacked (base)",
+          "hero/editorial#card (base)",
+          "price-list/cards#groups (muted)",
+          "text-media/feature#quote (base)",
+          "hours-location/panel#single (muted)",
+          "cta/band#centered (brand)",
+          "footer/simple#centered (inverse)"
+        ]
+      }
+    },
+    {
+      "n": 18,
+      "brief": "salon-5",
+      "other": "c",
+      "choice": "right",
+      "winner": "c",
+      "at": "2026-11-14T20:23:16.628Z",
+      "a": {
+        "style": {
+          "family": "soft@1",
+          "axes": {
+            "type": "outfit",
+            "palette": "tint",
+            "frame": "inset",
+            "photo": "natural"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/utility#minimal (base)",
+          "hero/photo#portrait (base)",
+          "cards/grid#plain (base)",
+          "price-list/classic#menu-board (base)",
+          "text-media/feature#columns (base)",
+          "hours-location/week#statement (base)",
+          "cta/feature#jumbo (brand)",
+          "footer/wordmark#wordmark (muted)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "poster@1",
+          "axes": {
+            "type": "oswald",
+            "palette": "paper",
+            "frame": "inset",
+            "photo": "natural"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/utility#bar (base)",
+          "hero/photo#triptych (base)",
+          "price-list/cards#groups (muted)",
+          "cards/feature#accordion (base)",
+          "hours-location/week#strip (muted)",
+          "cta/band#split (brand)",
+          "footer/simple#inline (inverse)"
+        ]
+      }
+    },
+    {
+      "n": 19,
+      "brief": "trades-5",
+      "other": "b",
+      "choice": "right",
+      "winner": "b",
+      "at": "2026-11-14T20:23:21.792Z",
+      "a": {
+        "style": {
+          "family": "poster@1",
+          "axes": {
+            "type": "anton",
+            "palette": "paper",
+            "frame": "bleed",
+            "photo": "natural"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/classic#inline (base)",
+          "hero/photo#half (base)",
+          "cards/feature#tiles (base)",
+          "cards/steps#numbered (base)",
+          "text-media/split#image-start (base)",
+          "cta/signup#inline (brand)",
+          "hours-location/split#compact (base)",
+          "footer/simple#inline (muted)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "poster@1",
+          "axes": {},
+          "mode": "light"
+        },
+        "blocks": [
+          "header/utility#bar (base)",
+          "hero/overlay#bottom (base)",
+          "cards/grid#bordered (base)",
+          "cards/steps#numbered (muted)",
+          "text-media/split#text-only (base)",
+          "cta/band#centered (brand)",
+          "hours-location/split#compact (base)",
+          "footer/simple#inline (muted)"
+        ]
+      }
+    },
+    {
+      "n": 20,
+      "brief": "fitness-4",
+      "other": "c",
+      "choice": "left",
+      "winner": "a",
+      "at": "2026-11-14T20:23:27.294Z",
+      "a": {
+        "style": {
+          "family": "soft@1",
+          "axes": {
+            "type": "outfit",
+            "palette": "tint",
+            "frame": "inset",
+            "photo": "natural"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/utility#minimal (base)",
+          "hero/photo#portrait (base)",
+          "cards/grid#plain (base)",
+          "price-list/menu#list (base)",
+          "text-media/split#image-start (base)",
+          "cta/feature#jumbo (brand)",
+          "hours-location/split#with-text (base)",
+          "footer/columns#columns (muted)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "poster@1",
+          "axes": {
+            "type": "anton",
+            "palette": "tint",
+            "frame": "bleed",
+            "photo": "tint"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/classic#inline (inverse)",
+          "hero/photo#cover (base)",
+          "cards/feature#accordion (brand)",
+          "price-list/classic#menu-board (base)",
+          "text-media/feature#quote (brand)",
+          "cta/band#centered (inverse)",
+          "hours-location/week#statement (brand)",
+          "footer/columns#columns (inverse)"
+        ]
+      }
+    },
+    {
+      "n": 21,
+      "brief": "salon-6",
+      "other": "b",
+      "choice": "left",
+      "winner": "a",
+      "at": "2026-11-14T20:23:31.083Z",
+      "a": {
+        "style": {
+          "family": "quiet@1",
+          "axes": {
+            "type": "newsreader",
+            "palette": "stone",
+            "frame": "bleed",
+            "photo": "mono"
+          },
+          "mode": "dark"
+        },
+        "blocks": [
+          "header/utility#minimal (base)",
+          "hero/photo#portrait (base)",
+          "text-media/split#image-start (base)",
+          "cards/grid#plain (base)",
+          "price-list/menu#list (base)",
+          "hours-location/split#with-text (base)",
+          "cta/signup#inline (brand)",
+          "footer/columns#columns (muted)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "quiet@1",
+          "axes": {},
+          "mode": "light"
+        },
+        "blocks": [
+          "header/classic#inline (base)",
+          "hero/editorial#framed (base)",
+          "cards/grid#plain (base)",
+          "price-list/menu#table (muted)",
+          "text-media/editorial#heading-aside (base)",
+          "hours-location/split#with-text (base)",
+          "cta/band#centered (brand)",
+          "footer/simple#inline (muted)"
+        ]
+      }
+    },
+    {
+      "n": 22,
+      "brief": "salon-2",
+      "other": "c",
+      "choice": "right",
+      "winner": "c",
+      "at": "2026-11-14T20:23:36.603Z",
+      "a": {
+        "style": {
+          "family": "soft@1",
+          "axes": {
+            "type": "outfit",
+            "palette": "white",
+            "frame": "bleed",
+            "photo": "natural"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/utility#minimal (base)",
+          "hero/photo#half (base)",
+          "cards/feature#tiles (base)",
+          "price-list/menu#list (base)",
+          "text-media/split#image-start (base)",
+          "hours-location/split#compact (base)",
+          "cta/feature#jumbo (brand)",
+          "footer/simple#inline (muted)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "soft@1",
+          "axes": {
+            "type": "fraunces",
+            "palette": "white",
+            "frame": "bleed",
+            "photo": "natural"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/classic#inline (base)",
+          "hero/photo#triptych (base)",
+          "price-list/cards#featured (base)",
+          "cards/grid#plain (base)",
+          "text-media/split#image-start (base)",
+          "hours-location/week#strip (base)",
+          "cta/band#split (brand)",
+          "footer/columns#columns (muted)"
+        ]
+      }
+    },
+    {
+      "n": 23,
+      "brief": "fitness-3",
+      "other": "b",
+      "choice": "right",
+      "winner": "a",
+      "at": "2026-11-14T20:23:42.749Z",
+      "a": {
+        "style": {
+          "family": "quiet@1",
+          "axes": {
+            "type": "cormorant",
+            "palette": "paper",
+            "frame": "inset",
+            "photo": "natural"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/classic#stacked (base)",
+          "hero/photo#cover (base)",
+          "cards/grid#plain (base)",
+          "price-list/classic#menu-board (base)",
+          "text-media/feature#columns (base)",
+          "cta/band#centered (brand)",
+          "hours-location/week#statement (base)",
+          "footer/simple#centered (muted)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "soft@1",
+          "axes": {},
+          "mode": "light"
+        },
+        "blocks": [
+          "header/classic#inline (base)",
+          "hero/editorial#framed (base)",
+          "cards/grid#plain (base)",
+          "price-list/cards#groups (muted)",
+          "text-media/split#image-start (base)",
+          "cta/signup#inline (brand)",
+          "hours-location/panel#single (base)",
+          "footer/columns#columns (muted)"
+        ]
+      }
+    },
+    {
+      "n": 24,
+      "brief": "restaurant-2",
+      "other": "b",
+      "choice": "left",
+      "winner": "a",
+      "at": "2026-11-14T20:23:49.273Z",
+      "a": {
+        "style": {
+          "family": "quiet@1",
+          "axes": {
+            "type": "cormorant",
+            "palette": "paper",
+            "frame": "inset",
+            "photo": "natural"
+          },
+          "mode": "dark"
+        },
+        "blocks": [
+          "header/classic#stacked (base)",
+          "hero/photo#portrait (base)",
+          "text-media/feature#columns (base)",
+          "price-list/classic#menu-board (base)",
+          "hours-location/week#statement (base)",
+          "cta/band#centered (brand)",
+          "footer/simple#centered (muted)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "poster@1",
+          "axes": {},
+          "mode": "light"
+        },
+        "blocks": [
+          "header/classic#inline (base)",
+          "hero/overlay#bottom (base)",
+          "text-media/split#image-end (base)",
+          "price-list/menu#list (muted)",
+          "hours-location/panel#single (base)",
+          "cta/band#centered (brand)",
+          "footer/simple#centered (muted)"
+        ]
+      }
+    },
+    {
+      "n": 25,
+      "brief": "clinic-6",
+      "other": "c",
+      "choice": "left",
+      "winner": "c",
+      "at": "2026-11-14T20:23:52.373Z",
+      "a": {
+        "style": {
+          "family": "soft@1",
+          "axes": {
+            "type": "outfit",
+            "palette": "white",
+            "frame": "bleed",
+            "photo": "natural"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/classic#inline (base)",
+          "hero/photo#half (base)",
+          "cards/feature#tiles (base)",
+          "price-list/menu#table (base)",
+          "text-media/split#image-start (base)",
+          "hours-location/split#compact (base)",
+          "cta/signup#inline (brand)",
+          "footer/simple#inline (muted)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "soft@1",
+          "axes": {
+            "type": "geist",
+            "palette": "tint",
+            "frame": "bleed",
+            "photo": "natural"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/classic#inline (inverse)",
+          "hero/photo#portrait (base)",
+          "price-list/cards#groups (brand)",
+          "cards/feature#bento (base)",
+          "text-media/feature#overlap (brand)",
+          "hours-location/week#strip (base)",
+          "cta/band#centered (inverse)",
+          "footer/simple#centered (brand)"
+        ]
+      }
+    },
+    {
+      "n": 26,
+      "brief": "fitness-6",
+      "other": "c",
+      "choice": "right",
+      "winner": "a",
+      "at": "2026-11-14T20:23:57.015Z",
+      "a": {
+        "style": {
+          "family": "quiet@1",
+          "axes": {
+            "type": "instrument",
+            "palette": "stone",
+            "frame": "bleed",
+            "photo": "tint"
+          },
+          "mode": "dark"
+        },
+        "blocks": [
+          "header/classic#stacked (base)",
+          "hero/photo#cover (base)",
+          "text-media/feature#overlap (base)",
+          "cards/grid#images (base)",
+          "price-list/classic#menu-board (base)",
+          "cta/band#centered (brand)",
+          "hours-location/panel#single (base)",
+          "footer/simple#centered (muted)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "soft@1",
+          "axes": {
+            "type": "geist",
+            "palette": "white",
+            "frame": "inset",
+            "photo": "tint"
+          },
+          "mode": "dark"
+        },
+        "blocks": [
+          "header/classic#stacked (base)",
+          "hero/photo#portrait (base)",
+          "cards/feature#bento (muted)",
+          "price-list/cards#featured (base)",
+          "cta/band#split (brand)",
+          "hours-location/split#compact (base)",
+          "footer/simple#centered (inverse)"
+        ]
+      }
+    },
+    {
+      "n": 27,
+      "brief": "trades-3",
+      "other": "b",
+      "choice": "right",
+      "winner": "a",
+      "at": "2026-11-14T20:24:00.019Z",
+      "a": {
+        "style": {
+          "family": "poster@1",
+          "axes": {
+            "type": "anton",
+            "palette": "tint",
+            "frame": "bleed",
+            "photo": "tint"
+          },
+          "mode": "dark"
+        },
+        "blocks": [
+          "header/utility#minimal (base)",
+          "hero/photo#half (base)",
+          "cards/grid#images (base)",
+          "cards/steps#numbered (muted)",
+          "text-media/split#image-start (base)",
+          "cta/band#split (inverse)",
+          "hours-location/split#with-text (inverse)",
+          "footer/columns#columns (inverse)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "poster@1",
+          "axes": {},
+          "mode": "light"
+        },
+        "blocks": [
+          "header/utility#bar (base)",
+          "hero/overlay#bottom (base)",
+          "cards/grid#bordered (base)",
+          "cards/steps#numbered (muted)",
+          "text-media/split#text-only (base)",
+          "cta/band#centered (brand)",
+          "hours-location/split#compact (base)",
+          "footer/simple#inline (muted)"
+        ]
+      }
+    },
+    {
+      "n": 28,
+      "brief": "clinic-3",
+      "other": "c",
+      "choice": "right",
+      "winner": "c",
+      "at": "2026-11-14T20:24:07.148Z",
+      "a": {
+        "style": {
+          "family": "soft@1",
+          "axes": {
+            "type": "outfit",
+            "palette": "tint",
+            "frame": "inset",
+            "photo": "natural"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/utility#minimal (base)",
+          "hero/photo#portrait (base)",
+          "cards/grid#images (muted)",
+          "price-list/cards#featured (base)",
+          "text-media/split#image-start (muted)",
+          "hours-location/panel#single (base)",
+          "cta/band#split (brand)",
+          "footer/columns#columns (inverse)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "soft@1",
+          "axes": {
+            "type": "outfit",
+            "palette": "white",
+            "frame": "bleed",
+            "photo": "mono"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/utility#minimal (inverse)",
+          "hero/photo#cover (base)",
+          "cards/grid#bordered (brand)",
+          "price-list/menu#list (base)",
+          "hours-location/panel#single (brand)",
+          "cta/band#centered (inverse)",
+          "footer/simple#centered (brand)"
+        ]
+      }
+    },
+    {
+      "n": 29,
+      "brief": "restaurant-1",
+      "other": "b",
+      "choice": "left",
+      "winner": "a",
+      "at": "2026-11-14T20:24:09.482Z",
+      "a": {
+        "style": {
+          "family": "poster@1",
+          "axes": {
+            "type": "oswald",
+            "palette": "paper",
+            "frame": "bleed",
+            "photo": "natural"
+          },
+          "mode": "dark"
+        },
+        "blocks": [
+          "header/utility#bar (inverse)",
+          "hero/editorial#card (base)",
+          "text-media/feature#overlap (brand)",
+          "price-list/menu#table (base)",
+          "hours-location/split#compact (brand)",
+          "cta/feature#photo-banner (inverse)",
+          "footer/simple#inline (brand)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "poster@1",
+          "axes": {},
+          "mode": "light"
+        },
+        "blocks": [
+          "header/classic#inline (base)",
+          "hero/overlay#bottom (base)",
+          "text-media/split#image-end (base)",
+          "price-list/menu#list (muted)",
+          "hours-location/panel#single (base)",
+          "cta/band#centered (brand)",
+          "footer/simple#centered (muted)"
+        ]
+      }
+    },
+    {
+      "n": 30,
+      "brief": "fitness-1",
+      "other": "b",
+      "choice": "right",
+      "winner": "a",
+      "at": "2026-11-14T20:24:13.209Z",
+      "a": {
+        "style": {
+          "family": "soft@1",
+          "axes": {
+            "type": "outfit",
+            "palette": "tint",
+            "frame": "inset",
+            "photo": "natural"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/utility#minimal (base)",
+          "hero/photo#portrait (base)",
+          "cards/grid#plain (base)",
+          "price-list/menu#list (base)",
+          "text-media/split#image-start (base)",
+          "cta/feature#jumbo (brand)",
+          "hours-location/split#with-text (base)",
+          "footer/wordmark#wordmark (muted)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "soft@1",
+          "axes": {},
+          "mode": "light"
+        },
+        "blocks": [
+          "header/classic#inline (base)",
+          "hero/editorial#framed (base)",
+          "cards/grid#plain (base)",
+          "price-list/cards#groups (muted)",
+          "text-media/split#image-start (base)",
+          "cta/signup#inline (brand)",
+          "hours-location/panel#single (base)",
+          "footer/columns#columns (muted)"
+        ]
+      }
+    },
+    {
+      "n": 31,
+      "brief": "salon-4",
+      "other": "c",
+      "choice": "right",
+      "winner": "a",
+      "at": "2026-11-14T20:24:16.907Z",
+      "a": {
+        "style": {
+          "family": "poster@1",
+          "axes": {
+            "type": "anton",
+            "palette": "paper",
+            "frame": "bleed",
+            "photo": "tint"
+          },
+          "mode": "dark"
+        },
+        "blocks": [
+          "header/utility#bar (inverse)",
+          "hero/editorial#card (base)",
+          "cards/grid#images (brand)",
+          "price-list/menu#table (base)",
+          "text-media/feature#overlap (brand)",
+          "hours-location/panel#single (base)",
+          "cta/feature#photo-banner (inverse)",
+          "footer/simple#inline (brand)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "soft@1",
+          "axes": {
+            "type": "geist",
+            "palette": "white",
+            "frame": "bleed",
+            "photo": "natural"
+          },
+          "mode": "dark"
+        },
+        "blocks": [
+          "header/classic#inline (inverse)",
+          "hero/overlay#bottom (base)",
+          "cards/feature#accordion (brand)",
+          "price-list/cards#featured (base)",
+          "hours-location/panel#single (brand)",
+          "cta/band#centered (inverse)",
+          "footer/columns#columns (brand)"
+        ]
+      }
+    },
+    {
+      "n": 32,
+      "brief": "salon-6",
+      "other": "c",
+      "choice": "right",
+      "winner": "c",
+      "at": "2026-11-14T20:24:21.208Z",
+      "a": {
+        "style": {
+          "family": "quiet@1",
+          "axes": {
+            "type": "newsreader",
+            "palette": "stone",
+            "frame": "bleed",
+            "photo": "mono"
+          },
+          "mode": "dark"
+        },
+        "blocks": [
+          "header/utility#minimal (base)",
+          "hero/photo#portrait (base)",
+          "text-media/split#image-start (base)",
+          "cards/grid#plain (base)",
+          "price-list/menu#list (base)",
+          "hours-location/split#with-text (base)",
+          "cta/signup#inline (brand)",
+          "footer/columns#columns (muted)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "quiet@1",
+          "axes": {
+            "type": "cormorant",
+            "palette": "paper",
+            "frame": "bleed",
+            "photo": "mono"
+          },
+          "mode": "dark"
+        },
+        "blocks": [
+          "header/classic#stacked (base)",
+          "hero/editorial#card (base)",
+          "price-list/cards#featured (base)",
+          "cards/grid#images (base)",
+          "hours-location/split#with-text (base)",
+          "cta/feature#split-panel (brand)",
+          "footer/simple#centered (muted)"
+        ]
+      }
+    },
+    {
+      "n": 33,
+      "brief": "fitness-5",
+      "other": "c",
+      "choice": "left",
+      "winner": "c",
+      "at": "2026-11-14T20:24:24.548Z",
+      "a": {
+        "style": {
+          "family": "soft@1",
+          "axes": {
+            "type": "geist",
+            "palette": "white",
+            "frame": "inset",
+            "photo": "natural"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/classic#stacked (base)",
+          "hero/photo#half (base)",
+          "cards/feature#tiles (base)",
+          "price-list/menu#table (base)",
+          "text-media/split#image-start (base)",
+          "cta/signup#inline (brand)",
+          "hours-location/split#with-text (base)",
+          "footer/columns#columns (muted)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "poster@1",
+          "axes": {
+            "type": "shoulders",
+            "palette": "tint",
+            "frame": "bleed",
+            "photo": "natural"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/utility#bar (base)",
+          "hero/photo#cover (base)",
+          "text-media/feature#quote (base)",
+          "cards/grid#images (base)",
+          "price-list/classic#leaders (base)",
+          "cta/signup#inline (brand)",
+          "hours-location/panel#single (base)",
+          "footer/simple#centered (muted)"
+        ]
+      }
+    },
+    {
+      "n": 34,
+      "brief": "fitness-4",
+      "other": "b",
+      "choice": "right",
+      "winner": "a",
+      "at": "2026-11-14T20:24:27.082Z",
+      "a": {
+        "style": {
+          "family": "soft@1",
+          "axes": {
+            "type": "outfit",
+            "palette": "tint",
+            "frame": "inset",
+            "photo": "natural"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/utility#minimal (base)",
+          "hero/photo#portrait (base)",
+          "cards/grid#plain (base)",
+          "price-list/menu#list (base)",
+          "text-media/split#image-start (base)",
+          "cta/feature#jumbo (brand)",
+          "hours-location/split#with-text (base)",
+          "footer/columns#columns (muted)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "soft@1",
+          "axes": {},
+          "mode": "light"
+        },
+        "blocks": [
+          "header/classic#inline (base)",
+          "hero/editorial#framed (base)",
+          "cards/grid#plain (base)",
+          "price-list/cards#groups (muted)",
+          "text-media/split#image-start (base)",
+          "cta/signup#inline (brand)",
+          "hours-location/panel#single (base)",
+          "footer/columns#columns (muted)"
+        ]
+      }
+    },
+    {
+      "n": 35,
+      "brief": "restaurant-5",
+      "other": "c",
+      "choice": "left",
+      "winner": "c",
+      "at": "2026-11-14T20:24:32.223Z",
+      "a": {
+        "style": {
+          "family": "soft@1",
+          "axes": {
+            "type": "outfit",
+            "palette": "tint",
+            "frame": "inset",
+            "photo": "natural"
+          },
+          "mode": "dark"
+        },
+        "blocks": [
+          "header/utility#minimal (base)",
+          "hero/photo#portrait (base)",
+          "text-media/split#image-end (base)",
+          "price-list/menu#list (base)",
+          "hours-location/split#with-text (base)",
+          "cta/feature#jumbo (brand)",
+          "footer/columns#columns (muted)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "quiet@1",
+          "axes": {
+            "type": "instrument",
+            "palette": "paper",
+            "frame": "bleed",
+            "photo": "mono"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/classic#inline (base)",
+          "hero/editorial#card (base)",
+          "text-media/split#image-end (muted)",
+          "price-list/cards#featured (base)",
+          "hours-location/split#with-text (muted)",
+          "cta/band#centered (brand)",
+          "footer/simple#centered (inverse)"
+        ]
+      }
+    },
+    {
+      "n": 36,
+      "brief": "fitness-3",
+      "other": "c",
+      "choice": "right",
+      "winner": "a",
+      "at": "2026-11-14T20:24:35.199Z",
+      "a": {
+        "style": {
+          "family": "quiet@1",
+          "axes": {
+            "type": "cormorant",
+            "palette": "paper",
+            "frame": "inset",
+            "photo": "natural"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/classic#stacked (base)",
+          "hero/photo#cover (base)",
+          "cards/grid#plain (base)",
+          "price-list/classic#menu-board (base)",
+          "text-media/feature#columns (base)",
+          "cta/band#centered (brand)",
+          "hours-location/week#statement (base)",
+          "footer/simple#centered (muted)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "poster@1",
+          "axes": {
+            "type": "oswald",
+            "palette": "tint",
+            "frame": "bleed",
+            "photo": "mono"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/classic#inline (inverse)",
+          "hero/editorial#framed (base)",
+          "text-media/editorial#heading-aside (brand)",
+          "cards/steps#numbered (base)",
+          "price-list/cards#featured (brand)",
+          "cta/feature#photo-banner (inverse)",
+          "hours-location/panel#locations (brand)",
+          "footer/simple#centered (inverse)"
+        ]
+      }
+    },
+    {
+      "n": 37,
+      "brief": "clinic-3",
+      "other": "b",
+      "choice": "left",
+      "winner": "a",
+      "at": "2026-11-14T20:24:41.781Z",
+      "a": {
+        "style": {
+          "family": "soft@1",
+          "axes": {
+            "type": "outfit",
+            "palette": "tint",
+            "frame": "inset",
+            "photo": "natural"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/utility#minimal (base)",
+          "hero/photo#portrait (base)",
+          "cards/grid#images (muted)",
+          "price-list/cards#featured (base)",
+          "text-media/split#image-start (muted)",
+          "hours-location/panel#single (base)",
+          "cta/band#split (brand)",
+          "footer/columns#columns (inverse)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "soft@1",
+          "axes": {},
+          "mode": "light"
+        },
+        "blocks": [
+          "header/utility#bar (base)",
+          "hero/editorial#card (base)",
+          "cards/grid#bordered (base)",
+          "price-list/menu#list (muted)",
+          "text-media/split#image-start (base)",
+          "hours-location/panel#single (base)",
+          "cta/band#centered (brand)",
+          "footer/columns#columns (muted)"
+        ]
+      }
+    },
+    {
+      "n": 38,
+      "brief": "fitness-2",
+      "other": "b",
+      "choice": "right",
+      "winner": "a",
+      "at": "2026-11-14T20:24:46.407Z",
+      "a": {
+        "style": {
+          "family": "poster@1",
+          "axes": {
+            "type": "oswald",
+            "palette": "paper",
+            "frame": "bleed",
+            "photo": "natural"
+          },
+          "mode": "dark"
+        },
+        "blocks": [
+          "header/utility#bar (inverse)",
+          "hero/editorial#card (base)",
+          "cards/grid#images (brand)",
+          "price-list/menu#table (base)",
+          "text-media/split#image-start (brand)",
+          "cta/feature#photo-banner (inverse)",
+          "hours-location/split#compact (brand)",
+          "footer/simple#inline (inverse)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "soft@1",
+          "axes": {},
+          "mode": "light"
+        },
+        "blocks": [
+          "header/classic#inline (base)",
+          "hero/editorial#framed (base)",
+          "cards/grid#plain (base)",
+          "price-list/cards#groups (muted)",
+          "text-media/split#image-start (base)",
+          "cta/signup#inline (brand)",
+          "hours-location/panel#single (base)",
+          "footer/columns#columns (muted)"
+        ]
+      }
+    },
+    {
+      "n": 39,
+      "brief": "salon-1",
+      "other": "b",
+      "choice": "same",
+      "winner": "same",
+      "at": "2026-11-14T20:24:51.861Z",
+      "a": {
+        "style": {
+          "family": "quiet@1",
+          "axes": {
+            "type": "cormorant",
+            "palette": "stone",
+            "frame": "inset",
+            "photo": "natural"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/classic#stacked (base)",
+          "hero/photo#portrait (base)",
+          "cards/grid#plain (base)",
+          "price-list/classic#menu-board (base)",
+          "text-media/feature#columns (base)",
+          "hours-location/week#statement (base)",
+          "cta/band#centered (brand)",
+          "footer/simple#centered (muted)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "quiet@1",
+          "axes": {},
+          "mode": "light"
+        },
+        "blocks": [
+          "header/classic#inline (base)",
+          "hero/editorial#framed (base)",
+          "cards/grid#plain (base)",
+          "price-list/menu#table (muted)",
+          "text-media/editorial#heading-aside (base)",
+          "hours-location/split#with-text (base)",
+          "cta/band#centered (brand)",
+          "footer/simple#inline (muted)"
+        ]
+      }
+    },
+    {
+      "n": 40,
+      "brief": "salon-5",
+      "other": "b",
+      "choice": "same",
+      "winner": "same",
+      "at": "2026-11-14T20:24:54.457Z",
+      "a": {
+        "style": {
+          "family": "soft@1",
+          "axes": {
+            "type": "outfit",
+            "palette": "tint",
+            "frame": "inset",
+            "photo": "natural"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/utility#minimal (base)",
+          "hero/photo#portrait (base)",
+          "cards/grid#plain (base)",
+          "price-list/classic#menu-board (base)",
+          "text-media/feature#columns (base)",
+          "hours-location/week#statement (base)",
+          "cta/feature#jumbo (brand)",
+          "footer/wordmark#wordmark (muted)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "quiet@1",
+          "axes": {},
+          "mode": "light"
+        },
+        "blocks": [
+          "header/classic#inline (base)",
+          "hero/editorial#framed (base)",
+          "cards/grid#plain (base)",
+          "price-list/menu#table (muted)",
+          "text-media/editorial#heading-aside (base)",
+          "hours-location/split#with-text (base)",
+          "cta/band#centered (brand)",
+          "footer/simple#inline (muted)"
+        ]
+      }
+    },
+    {
+      "n": 41,
+      "brief": "salon-3",
+      "other": "c",
+      "choice": "right",
+      "winner": "a",
+      "at": "2026-11-14T20:24:56.593Z",
+      "a": {
+        "style": {
+          "family": "quiet@1",
+          "axes": {
+            "type": "cormorant",
+            "palette": "paper",
+            "frame": "bleed",
+            "photo": "tint"
+          },
+          "mode": "dark"
+        },
+        "blocks": [
+          "header/classic#stacked (base)",
+          "hero/photo#cover (base)",
+          "cards/grid#images (base)",
+          "price-list/classic#menu-board (muted)",
+          "text-media/editorial#gallery (base)",
+          "hours-location/panel#single (inverse)",
+          "cta/feature#photo-banner (inverse)",
+          "footer/simple#centered (inverse)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "quiet@1",
+          "axes": {
+            "type": "newsreader",
+            "palette": "paper",
+            "frame": "bleed",
+            "photo": "natural"
+          },
+          "mode": "dark"
+        },
+        "blocks": [
+          "header/classic#inline (base)",
+          "hero/editorial#framed (base)",
+          "cards/grid#plain (base)",
+          "price-list/classic#menu-board (muted)",
+          "hours-location/split#with-text (inverse)",
+          "cta/feature#photo-banner (inverse)",
+          "footer/simple#centered (inverse)"
+        ]
+      }
+    },
+    {
+      "n": 42,
+      "brief": "restaurant-3",
+      "other": "c",
+      "choice": "left",
+      "winner": "a",
+      "at": "2026-11-14T20:24:59.896Z",
+      "a": {
+        "style": {
+          "family": "soft@1",
+          "axes": {
+            "type": "outfit",
+            "palette": "tint",
+            "frame": "inset",
+            "photo": "natural"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/classic#inline (base)",
+          "hero/photo#half (base)",
+          "text-media/split#image-end (base)",
+          "price-list/menu#list (base)",
+          "hours-location/panel#single (base)",
+          "cta/band#split (brand)",
+          "footer/columns#columns (muted)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "soft@1",
+          "axes": {
+            "type": "geist",
+            "palette": "white",
+            "frame": "inset",
+            "photo": "natural"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/classic#stacked (base)",
+          "hero/overlay#bottom (base)",
+          "price-list/classic#leaders (muted)",
+          "text-media/feature#quote (base)",
+          "hours-location/panel#single (muted)",
+          "cta/band#centered (brand)",
+          "footer/simple#centered (inverse)"
+        ]
+      }
+    },
+    {
+      "n": 43,
+      "brief": "trades-5",
+      "other": "c",
+      "choice": "right",
+      "winner": "a",
+      "at": "2026-11-14T20:25:03.224Z",
+      "a": {
+        "style": {
+          "family": "poster@1",
+          "axes": {
+            "type": "anton",
+            "palette": "paper",
+            "frame": "bleed",
+            "photo": "natural"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/classic#inline (base)",
+          "hero/photo#half (base)",
+          "cards/feature#tiles (base)",
+          "cards/steps#numbered (base)",
+          "text-media/split#image-start (base)",
+          "cta/signup#inline (brand)",
+          "hours-location/split#compact (base)",
+          "footer/simple#inline (muted)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "poster@1",
+          "axes": {
+            "type": "anton",
+            "palette": "tint",
+            "frame": "bleed",
+            "photo": "tint"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/utility#bar (base)",
+          "hero/editorial#framed (base)",
+          "cards/feature#numbers (base)",
+          "cta/feature#photo-banner (inverse)",
+          "hours-location/week#strip (inverse)",
+          "footer/wordmark#wordmark (inverse)"
+        ]
+      }
+    },
+    {
+      "n": 44,
+      "brief": "fitness-1",
+      "other": "c",
+      "choice": "same",
+      "winner": "same",
+      "at": "2026-11-14T20:25:05.716Z",
+      "a": {
+        "style": {
+          "family": "soft@1",
+          "axes": {
+            "type": "outfit",
+            "palette": "tint",
+            "frame": "inset",
+            "photo": "natural"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/utility#minimal (base)",
+          "hero/photo#portrait (base)",
+          "cards/grid#plain (base)",
+          "price-list/menu#list (base)",
+          "text-media/split#image-start (base)",
+          "cta/feature#jumbo (brand)",
+          "hours-location/split#with-text (base)",
+          "footer/wordmark#wordmark (muted)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "quiet@1",
+          "axes": {
+            "type": "cormorant",
+            "palette": "stone",
+            "frame": "bleed",
+            "photo": "mono"
+          },
+          "mode": "dark"
+        },
+        "blocks": [
+          "header/classic#inline (inverse)",
+          "hero/photo#half (base)",
+          "cards/feature#bento (brand)",
+          "price-list/cards#groups (base)",
+          "cta/feature#jumbo (inverse)",
+          "hours-location/panel#locations (base)",
+          "footer/simple#centered (inverse)"
+        ]
+      }
+    },
+    {
+      "n": 45,
+      "brief": "trades-2",
+      "other": "c",
+      "choice": "same",
+      "winner": "same",
+      "at": "2026-11-14T20:25:08.670Z",
+      "a": {
+        "style": {
+          "family": "soft@1",
+          "axes": {
+            "type": "outfit",
+            "palette": "tint",
+            "frame": "inset",
+            "photo": "natural"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/classic#inline (base)",
+          "hero/photo#half (base)",
+          "text-media/split#image-start (base)",
+          "cards/grid#images (base)",
+          "cards/steps#numbered (base)",
+          "cta/band#split (brand)",
+          "hours-location/split#with-text (base)",
+          "footer/columns#columns (muted)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "quiet@1",
+          "axes": {
+            "type": "instrument",
+            "palette": "stone",
+            "frame": "inset",
+            "photo": "mono"
+          },
+          "mode": "dark"
+        },
+        "blocks": [
+          "header/utility#bar (base)",
+          "hero/editorial#card (base)",
+          "text-media/editorial#heading-aside (base)",
+          "cta/band#centered (brand)",
+          "hours-location/split#compact (base)",
+          "footer/simple#centered (muted)"
+        ]
+      }
+    },
+    {
+      "n": 46,
+      "brief": "trades-1",
+      "other": "c",
+      "choice": "same",
+      "winner": "same",
+      "at": "2026-11-14T20:25:12.952Z",
+      "a": {
+        "style": {
+          "family": "soft@1",
+          "axes": {
+            "type": "outfit",
+            "palette": "white",
+            "frame": "inset",
+            "photo": "natural"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/classic#inline (base)",
+          "hero/photo#half (base)",
+          "text-media/split#image-start (base)",
+          "cards/grid#images (base)",
+          "cards/steps#numbered (base)",
+          "cta/signup#inline (brand)",
+          "hours-location/split#with-text (base)",
+          "footer/columns#columns (muted)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "quiet@1",
+          "axes": {
+            "type": "newsreader",
+            "palette": "stone",
+            "frame": "inset",
+            "photo": "natural"
+          },
+          "mode": "dark"
+        },
+        "blocks": [
+          "header/utility#bar (inverse)",
+          "hero/photo#triptych (base)",
+          "cards/feature#numbers (brand)",
+          "cta/band#centered (inverse)",
+          "hours-location/panel#single (brand)",
+          "footer/columns#columns (inverse)"
+        ]
+      }
+    },
+    {
+      "n": 47,
+      "brief": "salon-2",
+      "other": "b",
+      "choice": "same",
+      "winner": "same",
+      "at": "2026-11-14T20:25:15.284Z",
+      "a": {
+        "style": {
+          "family": "soft@1",
+          "axes": {
+            "type": "outfit",
+            "palette": "white",
+            "frame": "bleed",
+            "photo": "natural"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/utility#minimal (base)",
+          "hero/photo#half (base)",
+          "cards/feature#tiles (base)",
+          "price-list/menu#list (base)",
+          "text-media/split#image-start (base)",
+          "hours-location/split#compact (base)",
+          "cta/feature#jumbo (brand)",
+          "footer/simple#inline (muted)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "quiet@1",
+          "axes": {},
+          "mode": "light"
+        },
+        "blocks": [
+          "header/classic#inline (base)",
+          "hero/editorial#framed (base)",
+          "cards/grid#plain (base)",
+          "price-list/menu#table (muted)",
+          "text-media/editorial#heading-aside (base)",
+          "hours-location/split#with-text (base)",
+          "cta/band#centered (brand)",
+          "footer/simple#inline (muted)"
+        ]
+      }
+    },
+    {
+      "n": 48,
+      "brief": "trades-6",
+      "other": "c",
+      "choice": "same",
+      "winner": "same",
+      "at": "2026-11-14T20:25:19.749Z",
+      "a": {
+        "style": {
+          "family": "quiet@1",
+          "axes": {
+            "type": "cormorant",
+            "palette": "paper",
+            "frame": "inset",
+            "photo": "natural"
+          },
+          "mode": "dark"
+        },
+        "blocks": [
+          "header/classic#stacked (base)",
+          "hero/photo#cover (base)",
+          "text-media/editorial#gallery (base)",
+          "cards/grid#images (muted)",
+          "cards/steps#rows (base)",
+          "cta/feature#photo-banner (inverse)",
+          "hours-location/panel#single (inverse)",
+          "footer/simple#centered (inverse)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "quiet@1",
+          "axes": {
+            "type": "newsreader",
+            "palette": "stone",
+            "frame": "bleed",
+            "photo": "tint"
+          },
+          "mode": "dark"
+        },
+        "blocks": [
+          "header/classic#stacked (base)",
+          "hero/photo#half (base)",
+          "cards/grid#images (muted)",
+          "cta/band#centered (brand)",
+          "hours-location/split#compact (muted)",
+          "footer/simple#centered (inverse)"
+        ]
+      }
+    },
+    {
+      "n": 49,
+      "brief": "clinic-5",
+      "other": "b",
+      "choice": "right",
+      "winner": "b",
+      "at": "2026-11-14T20:25:24.596Z",
+      "a": {
+        "style": {
+          "family": "soft@1",
+          "axes": {
+            "type": "outfit",
+            "palette": "tint",
+            "frame": "inset",
+            "photo": "tint"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/utility#minimal (base)",
+          "hero/photo#portrait (base)",
+          "cards/feature#numbers (base)",
+          "price-list/classic#menu-board (base)",
+          "text-media/feature#columns (base)",
+          "hours-location/week#statement (base)",
+          "cta/feature#jumbo (brand)",
+          "footer/simple#centered (muted)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "soft@1",
+          "axes": {},
+          "mode": "light"
+        },
+        "blocks": [
+          "header/utility#bar (base)",
+          "hero/editorial#card (base)",
+          "cards/grid#bordered (base)",
+          "price-list/menu#list (muted)",
+          "text-media/split#image-start (base)",
+          "hours-location/panel#single (base)",
+          "cta/band#centered (brand)",
+          "footer/columns#columns (muted)"
+        ]
+      }
+    },
+    {
+      "n": 50,
+      "brief": "restaurant-6",
+      "other": "b",
+      "choice": "right",
+      "winner": "b",
+      "at": "2026-11-14T20:25:27.267Z",
+      "a": {
+        "style": {
+          "family": "quiet@1",
+          "axes": {
+            "type": "cormorant",
+            "palette": "paper",
+            "frame": "inset",
+            "photo": "mono"
+          },
+          "mode": "dark"
+        },
+        "blocks": [
+          "header/utility#minimal (base)",
+          "hero/photo#portrait (base)",
+          "text-media/split#image-end (base)",
+          "price-list/menu#list (base)",
+          "hours-location/week#statement (base)",
+          "cta/feature#jumbo (brand)",
+          "footer/wordmark#wordmark (muted)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "poster@1",
+          "axes": {},
+          "mode": "light"
+        },
+        "blocks": [
+          "header/classic#inline (base)",
+          "hero/overlay#bottom (base)",
+          "text-media/split#image-end (base)",
+          "price-list/menu#list (muted)",
+          "hours-location/panel#single (base)",
+          "cta/band#centered (brand)",
+          "footer/simple#centered (muted)"
+        ]
+      }
+    },
+    {
+      "n": 51,
+      "brief": "trades-3",
+      "other": "c",
+      "choice": "left",
+      "winner": "c",
+      "at": "2026-11-14T20:25:29.563Z",
+      "a": {
+        "style": {
+          "family": "poster@1",
+          "axes": {
+            "type": "anton",
+            "palette": "tint",
+            "frame": "bleed",
+            "photo": "tint"
+          },
+          "mode": "dark"
+        },
+        "blocks": [
+          "header/utility#minimal (base)",
+          "hero/photo#half (base)",
+          "cards/grid#images (base)",
+          "cards/steps#numbered (muted)",
+          "text-media/split#image-start (base)",
+          "cta/band#split (inverse)",
+          "hours-location/split#with-text (inverse)",
+          "footer/columns#columns (inverse)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "poster@1",
+          "axes": {
+            "type": "anton",
+            "palette": "tint",
+            "frame": "inset",
+            "photo": "mono"
+          },
+          "mode": "dark"
+        },
+        "blocks": [
+          "header/utility#minimal (base)",
+          "hero/overlay#bottom (base)",
+          "text-media/editorial#gallery (muted)",
+          "cta/band#split (brand)",
+          "hours-location/week#statement (muted)",
+          "footer/columns#columns (inverse)"
+        ]
+      }
+    },
+    {
+      "n": 52,
+      "brief": "restaurant-1",
+      "other": "c",
+      "choice": "right",
+      "winner": "a",
+      "at": "2026-11-14T20:25:32.394Z",
+      "a": {
+        "style": {
+          "family": "poster@1",
+          "axes": {
+            "type": "oswald",
+            "palette": "paper",
+            "frame": "bleed",
+            "photo": "natural"
+          },
+          "mode": "dark"
+        },
+        "blocks": [
+          "header/utility#bar (inverse)",
+          "hero/editorial#card (base)",
+          "text-media/feature#overlap (brand)",
+          "price-list/menu#table (base)",
+          "hours-location/split#compact (brand)",
+          "cta/feature#photo-banner (inverse)",
+          "footer/simple#inline (brand)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "quiet@1",
+          "axes": {
+            "type": "newsreader",
+            "palette": "paper",
+            "frame": "inset",
+            "photo": "tint"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/utility#minimal (base)",
+          "hero/overlay#bottom (base)",
+          "price-list/menu#list (muted)",
+          "text-media/editorial#gallery (base)",
+          "hours-location/panel#single (muted)",
+          "cta/band#split (brand)",
+          "footer/simple#centered (inverse)"
+        ]
+      }
+    },
+    {
+      "n": 53,
+      "brief": "clinic-2",
+      "other": "c",
+      "choice": "right",
+      "winner": "c",
+      "at": "2026-11-14T20:25:39.824Z",
+      "a": {
+        "style": {
+          "family": "quiet@1",
+          "axes": {
+            "type": "instrument",
+            "palette": "stone",
+            "frame": "bleed",
+            "photo": "tint"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/utility#minimal (base)",
+          "hero/photo#portrait (base)",
+          "cards/grid#images (base)",
+          "price-list/cards#featured (muted)",
+          "text-media/split#image-start (base)",
+          "hours-location/panel#single (inverse)",
+          "cta/band#split (inverse)",
+          "footer/wordmark#wordmark (inverse)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "poster@1",
+          "axes": {
+            "type": "oswald",
+            "palette": "paper",
+            "frame": "bleed",
+            "photo": "natural"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/classic#inline (base)",
+          "hero/photo#triptych (base)",
+          "cards/feature#numbers (base)",
+          "price-list/classic#menu-board (base)",
+          "hours-location/panel#single (base)",
+          "cta/band#centered (brand)",
+          "footer/columns#columns (muted)"
+        ]
+      }
+    },
+    {
+      "n": 54,
+      "brief": "fitness-6",
+      "other": "b",
+      "choice": "left",
+      "winner": "a",
+      "at": "2026-11-14T20:25:43.279Z",
+      "a": {
+        "style": {
+          "family": "quiet@1",
+          "axes": {
+            "type": "instrument",
+            "palette": "stone",
+            "frame": "bleed",
+            "photo": "tint"
+          },
+          "mode": "dark"
+        },
+        "blocks": [
+          "header/classic#stacked (base)",
+          "hero/photo#cover (base)",
+          "text-media/feature#overlap (base)",
+          "cards/grid#images (base)",
+          "price-list/classic#menu-board (base)",
+          "cta/band#centered (brand)",
+          "hours-location/panel#single (base)",
+          "footer/simple#centered (muted)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "soft@1",
+          "axes": {},
+          "mode": "light"
+        },
+        "blocks": [
+          "header/classic#inline (base)",
+          "hero/editorial#framed (base)",
+          "cards/grid#plain (base)",
+          "price-list/cards#groups (muted)",
+          "text-media/split#image-start (base)",
+          "cta/signup#inline (brand)",
+          "hours-location/panel#single (base)",
+          "footer/columns#columns (muted)"
+        ]
+      }
+    },
+    {
+      "n": 55,
+      "brief": "restaurant-2",
+      "other": "c",
+      "choice": "right",
+      "winner": "a",
+      "at": "2026-11-14T20:25:45.987Z",
+      "a": {
+        "style": {
+          "family": "quiet@1",
+          "axes": {
+            "type": "cormorant",
+            "palette": "paper",
+            "frame": "inset",
+            "photo": "natural"
+          },
+          "mode": "dark"
+        },
+        "blocks": [
+          "header/classic#stacked (base)",
+          "hero/photo#portrait (base)",
+          "text-media/feature#columns (base)",
+          "price-list/classic#menu-board (base)",
+          "hours-location/week#statement (base)",
+          "cta/band#centered (brand)",
+          "footer/simple#centered (muted)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "poster@1",
+          "axes": {
+            "type": "anton",
+            "palette": "tint",
+            "frame": "bleed",
+            "photo": "tint"
+          },
+          "mode": "dark"
+        },
+        "blocks": [
+          "header/classic#stacked (base)",
+          "hero/editorial#framed (base)",
+          "price-list/classic#menu-board (base)",
+          "text-media/split#image-end (base)",
+          "hours-location/panel#locations (base)",
+          "cta/feature#split-panel (brand)",
+          "footer/wordmark#signup (muted)"
+        ]
+      }
+    },
+    {
+      "n": 56,
+      "brief": "restaurant-4",
+      "other": "c",
+      "choice": "left",
+      "winner": "a",
+      "at": "2026-11-14T20:25:49.044Z",
+      "a": {
+        "style": {
+          "family": "poster@1",
+          "axes": {
+            "type": "anton",
+            "palette": "tint",
+            "frame": "bleed",
+            "photo": "natural"
+          },
+          "mode": "dark"
+        },
+        "blocks": [
+          "header/classic#stacked (base)",
+          "hero/overlay#bottom (base)",
+          "text-media/feature#overlap (base)",
+          "price-list/menu#list (base)",
+          "hours-location/panel#single (base)",
+          "cta/feature#photo-banner (brand)",
+          "footer/simple#inline (muted)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "quiet@1",
+          "axes": {
+            "type": "newsreader",
+            "palette": "stone",
+            "frame": "bleed",
+            "photo": "tint"
+          },
+          "mode": "dark"
+        },
+        "blocks": [
+          "header/utility#minimal (base)",
+          "hero/overlay#bottom (base)",
+          "price-list/cards#featured (muted)",
+          "text-media/editorial#heading-aside (base)",
+          "hours-location/panel#locations (muted)",
+          "cta/feature#photo-banner (brand)",
+          "footer/simple#centered (inverse)"
+        ]
+      }
+    },
+    {
+      "n": 57,
+      "brief": "clinic-1",
+      "other": "b",
+      "choice": "right",
+      "winner": "b",
+      "at": "2026-11-14T20:25:51.586Z",
+      "a": {
+        "style": {
+          "family": "soft@1",
+          "axes": {
+            "type": "outfit",
+            "palette": "tint",
+            "frame": "inset",
+            "photo": "natural"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/classic#stacked (base)",
+          "hero/photo#portrait (base)",
+          "cards/feature#numbers (base)",
+          "price-list/classic#menu-board (base)",
+          "text-media/feature#columns (base)",
+          "hours-location/week#statement (base)",
+          "cta/feature#jumbo (brand)",
+          "footer/simple#centered (muted)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "soft@1",
+          "axes": {},
+          "mode": "light"
+        },
+        "blocks": [
+          "header/utility#bar (base)",
+          "hero/editorial#card (base)",
+          "cards/grid#bordered (base)",
+          "price-list/menu#list (muted)",
+          "text-media/split#image-start (base)",
+          "hours-location/panel#single (base)",
+          "cta/band#centered (brand)",
+          "footer/columns#columns (muted)"
+        ]
+      }
+    },
+    {
+      "n": 58,
+      "brief": "trades-4",
+      "other": "b",
+      "choice": "left",
+      "winner": "b",
+      "at": "2026-11-14T20:25:54.190Z",
+      "a": {
+        "style": {
+          "family": "poster@1",
+          "axes": {
+            "type": "anton",
+            "palette": "paper",
+            "frame": "bleed",
+            "photo": "tint"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/utility#bar (inverse)",
+          "hero/editorial#card (base)",
+          "cards/grid#images (brand)",
+          "cards/steps#numbered (base)",
+          "text-media/split#image-start (brand)",
+          "cta/signup#inline (inverse)",
+          "hours-location/split#compact (brand)",
+          "footer/simple#inline (inverse)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "poster@1",
+          "axes": {},
+          "mode": "light"
+        },
+        "blocks": [
+          "header/utility#bar (base)",
+          "hero/overlay#bottom (base)",
+          "cards/grid#bordered (base)",
+          "cards/steps#numbered (muted)",
+          "text-media/split#text-only (base)",
+          "cta/band#centered (brand)",
+          "hours-location/split#compact (base)",
+          "footer/simple#inline (muted)"
+        ]
+      }
+    },
+    {
+      "n": 59,
+      "brief": "clinic-4",
+      "other": "b",
+      "choice": "same",
+      "winner": "same",
+      "at": "2026-11-14T20:25:58.957Z",
+      "a": {
+        "style": {
+          "family": "soft@1",
+          "axes": {
+            "type": "fraunces",
+            "palette": "white",
+            "frame": "inset",
+            "photo": "natural"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/classic#stacked (base)",
+          "hero/photo#portrait (base)",
+          "text-media/split#image-start (base)",
+          "cards/feature#numbers (base)",
+          "price-list/menu#list (base)",
+          "hours-location/week#statement (base)",
+          "cta/band#centered (brand)",
+          "footer/simple#centered (muted)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "soft@1",
+          "axes": {},
+          "mode": "light"
+        },
+        "blocks": [
+          "header/utility#bar (base)",
+          "hero/editorial#card (base)",
+          "cards/grid#bordered (base)",
+          "price-list/menu#list (muted)",
+          "text-media/split#image-start (base)",
+          "hours-location/panel#single (base)",
+          "cta/band#centered (brand)",
+          "footer/columns#columns (muted)"
+        ]
+      }
+    },
+    {
+      "n": 60,
+      "brief": "clinic-6",
+      "other": "b",
+      "choice": "left",
+      "winner": "b",
+      "at": "2026-11-14T20:26:01.094Z",
+      "a": {
+        "style": {
+          "family": "soft@1",
+          "axes": {
+            "type": "outfit",
+            "palette": "white",
+            "frame": "bleed",
+            "photo": "natural"
+          },
+          "mode": "light"
+        },
+        "blocks": [
+          "header/classic#inline (base)",
+          "hero/photo#half (base)",
+          "cards/feature#tiles (base)",
+          "price-list/menu#table (base)",
+          "text-media/split#image-start (base)",
+          "hours-location/split#compact (base)",
+          "cta/signup#inline (brand)",
+          "footer/simple#inline (muted)"
+        ]
+      },
+      "other_site": {
+        "style": {
+          "family": "soft@1",
+          "axes": {},
+          "mode": "light"
+        },
+        "blocks": [
+          "header/utility#bar (base)",
+          "hero/editorial#card (base)",
+          "cards/grid#bordered (base)",
+          "price-list/menu#list (muted)",
+          "text-media/split#image-start (base)",
+          "hours-location/panel#single (base)",
+          "cta/band#centered (brand)",
+          "footer/columns#columns (muted)"
+        ]
+      }
+    }
+  ]
+}
