@@ -59,7 +59,7 @@ The agents' minutes are rough. Some wrote both of their blocks before logging th
 
 | Found by agents | Count | Done |
 |---|---|---|
-| The browser check's stylesheet missed classes picked in conditions, so headings were tested at body size | 3 agents | Fixed: the stylesheet now takes every string in the code. All 17 blocks re-passed |
+| The browser check's stylesheet missed classes picked in conditions, so headings were tested at body size | 3 agents | Fixed in two steps. The first fix, reading every quoted string, still failed: an apostrophe in a comment shifted the quote pairs. It was caught by looking at a rendered sample site, not by a test. The scanner now reads every class-like word, and a new test fails if any text style is missing. All 17 blocks re-passed with real heading sizes |
 | The class check stopped at the first `)` inside `cx(…)`, hiding later classes | 1 | Fixed: brackets are balanced |
 | The browser check counted screen-reader-only text as clipped | 4 | Fixed: visually hidden elements are skipped |
 | One agent's empty folder broke everyone's browser run | 5 | Fixed: folders without a component are skipped |
