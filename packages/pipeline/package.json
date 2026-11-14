@@ -1,0 +1,16 @@
+{
+  "name": "@repo/pipeline",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@repo/spec": "workspace:*",
+    "@repo/blocks": "workspace:*"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "@repo/blocks",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./manifest": "./src/manifest/index.ts",
+    "./components": "./src/components/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@repo/spec": "workspace:*",
+    "react": "catalog:"
+  },
+  "devDependencies": {
+    "@types/react": "catalog:"
+  }
+}

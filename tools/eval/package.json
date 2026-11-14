@@ -1,0 +1,21 @@
+{
+  "name": "@repo/eval",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests",
+    "eval": "node src/index.ts"
+  },
+  "dependencies": {
+    "@repo/spec": "workspace:*",
+    "@repo/pipeline": "workspace:*",
+    "@repo/render": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:"
+  }
+}
