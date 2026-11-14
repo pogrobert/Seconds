@@ -25,7 +25,7 @@ The sheets are produced by `pnpm --filter @repo/eval sheet` into `tools/eval/out
 
 ## The plan, biggest effect first
 
-1. **Imagery: decided on 2026-11-14, licensed stock photos from Pexels.**
+1. **Imagery: decided on 2026-11-14, licensed stock photos.** Pexels was chosen first, but it has paused new API keys, so the fetcher uses **Pixabay**: free account, photos up to 1,280 px wide through the API, licence allows use, storage and modification without attribution, API forbids permanent hotlinking and mass downloads. The Pexels notes below still apply if its keys reopen.
    - Pexels' licence allows downloading, storing, resizing and use on websites, including templates that are sold. Attribution is not required by the licence; its API terms ask for a Pexels link and photographer credit when possible, so every photo keeps its credit.
    - Unsplash is out: its API terms require hotlinked image URLs on every use. Pixabay forbids permanent hotlinking and mass downloads.
    - Pexels' terms forbid "bulk, large-scale or systematic copying" without permission: ask Pexels in writing before the 30 briefs need hundreds of photos, or before the product offers stock photos.

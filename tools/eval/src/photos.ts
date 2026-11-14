@@ -1,12 +1,13 @@
-// Picks and downloads licensed stock photos from Pexels for the sample businesses (decided 2026-11-14).
+// Picks and downloads licensed stock photos from Pixabay for the sample businesses.
+// Pexels was chosen first (2026-11-14) but has paused new API keys, so Pixabay is used instead.
 // Run from tools/eval:  pnpm photos            (fills slots that have no photo yet)
 //                       pnpm photos --refresh  (picks every slot again)
-// Needs PEXELS_API_KEY in the project's .env file (never in code or chat).
+// Needs PIXABAY_API_KEY in the project's .env file (never in code or chat).
 //
-// Pexels' licence allows storing and resizing; its API terms ask for a Pexels link and photographer
-// credit, which manifest.json keeps. Its terms forbid bulk copying without permission, so this takes a
-// few hand-written queries per business, not hundreds of photos. Files go to photos/ (gitignored);
-// the manifest (ids and credits) is committed so anyone with a key gets the same photos.
+// Pixabay's licence allows using, copying and modifying photos commercially without attribution; its
+// API terms forbid permanent hotlinking (download to your own server) and systematic mass downloads.
+// So this takes a few hand-written queries per business, and every photo keeps its credit anyway.
+// Files go to photos/ (gitignored); the manifest (ids and credits) is committed.
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { KINDS, type Kind } from './businesses.ts'
 
@@ -53,6 +54,7 @@ export const QUERIES: Record<Kind, Record<Slot, string>> = {
 }
 
 export type Photo = {
+  provider: 'pixabay' | 'pexels'
   id: string
   page: string
   photographer: string
@@ -72,23 +74,23 @@ const manifestUrl = new URL('manifest.json', dir)
 export const readManifest = (): Manifest =>
   existsSync(manifestUrl) ? (JSON.parse(readFileSync(manifestUrl, 'utf8')) as Manifest) : {}
 
-type PexelsPhoto = {
+type PixabayHit = {
   id: number
-  url: string
-  photographer: string
-  photographer_url?: string
-  alt?: string
-  avg_color?: string
-  width: number
-  height: number
-  src: { original: string }
+  pageURL: string
+  user: string
+  user_id: number
+  tags: string
+  imageWidth: number
+  imageHeight: number
+  /** Up to 1,280 px wide: the largest size every API account gets. */
+  largeImageURL: string
 }
 
 async function main() {
-  const key = process.env.PEXELS_API_KEY
+  const key = process.env.PIXABAY_API_KEY
   if (!key) {
     console.error(
-      'PEXELS_API_KEY is not set. Add it to the .env file at the project root, then run again.',
+      'PIXABAY_API_KEY is not set. Add it to the .env file at the project root, then run again.',
     )
     process.exit(1)
   }
@@ -100,50 +102,50 @@ async function main() {
   let requests = 0
   for (const kind of KINDS) {
     for (const slot of SLOTS) {
-      if (
-        !refresh &&
-        manifest[kind]?.[slot] &&
-        existsSync(new URL(manifest[kind]?.[slot]?.file ?? '', dir))
-      )
-        continue
+      const have = manifest[kind]?.[slot]
+      if (!refresh && have && existsSync(new URL(have.file, dir))) continue
       const q = new URLSearchParams({
-        query: QUERIES[kind][slot],
-        orientation: 'landscape',
-        per_page: '15',
+        key,
+        q: QUERIES[kind][slot],
+        image_type: 'photo',
+        orientation: 'horizontal',
+        safesearch: 'true',
+        min_width: '1280',
+        per_page: '20',
       })
-      const res = await fetch(`https://api.pexels.com/v1/search?${q}`, {
-        headers: { Authorization: key },
-      })
+      const res = await fetch(`https://pixabay.com/api/?${q}`)
       requests++
-      if (!res.ok) throw new Error(`Pexels search failed: ${res.status} ${res.statusText}`)
-      const body = (await res.json()) as { photos: PexelsPhoto[] }
-      const pick = body.photos.find((p) => !used.has(String(p.id)) && p.width >= 1600)
+      if (!res.ok) throw new Error(`Pixabay search failed: ${res.status} ${res.statusText}`)
+      const body = (await res.json()) as { hits: PixabayHit[] }
+      const pick = body.hits.find((h) => !used.has(String(h.id)))
       if (!pick) {
-        console.warn(`No photo found for ${kind}/${slot}`)
+        console.warn(`No photo found for ${kind}/${slot} ("${QUERIES[kind][slot]}")`)
         continue
       }
       used.add(String(pick.id))
-      // A web-sized copy: 1600 px wide, compressed by Pexels' own image service.
-      const img = await fetch(`${pick.src.original}?auto=compress&cs=tinysrgb&w=1600`)
+      const img = await fetch(pick.largeImageURL)
       if (!img.ok) throw new Error(`Download failed for ${pick.id}: ${img.status}`)
       const file = `${kind}/${slot}-${pick.id}.jpg`
       mkdirSync(new URL(`${kind}/`, dir), { recursive: true })
       writeFileSync(new URL(file, dir), Buffer.from(await img.arrayBuffer()))
+      const width = Math.min(1280, pick.imageWidth)
       manifest[kind] = {
         ...manifest[kind],
         [slot]: {
+          provider: 'pixabay',
           id: String(pick.id),
-          page: pick.url,
-          photographer: pick.photographer,
-          ...(pick.photographer_url ? { photographerUrl: pick.photographer_url } : {}),
-          alt: pick.alt?.trim() || QUERIES[kind][slot],
-          ...(pick.avg_color ? { avgColor: pick.avg_color } : {}),
-          width: 1600,
-          height: Math.round((1600 * pick.height) / pick.width),
+          page: pick.pageURL,
+          photographer: pick.user,
+          photographerUrl: `https://pixabay.com/users/${encodeURIComponent(pick.user)}-${pick.user_id}/`,
+          alt: QUERIES[kind][slot],
+          width,
+          height: Math.round((width * pick.imageHeight) / pick.imageWidth),
           file,
         },
       }
-      console.log(`${kind}/${slot}: ${pick.id} by ${pick.photographer}`)
+      console.log(`${kind}/${slot}: ${pick.id} by ${pick.user}`)
+      // Stay far below the limit of 100 requests a minute.
+      await new Promise((r) => setTimeout(r, 700))
     }
   }
   mkdirSync(dir, { recursive: true })

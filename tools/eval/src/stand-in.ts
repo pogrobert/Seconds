@@ -26,7 +26,7 @@ export function sampleAssets(s: SampleBusiness): Asset[] {
         type: 'image',
         source: {
           type: 'stock',
-          provider: 'pexels',
+          provider: p.provider,
           id: p.id,
           page: p.page,
           photographer: p.photographer,
