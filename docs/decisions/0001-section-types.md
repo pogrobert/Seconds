@@ -1,6 +1,6 @@
 # 0001: Content fields and section types (draft)
 
-**Status:** draft, waiting for Robert's review. No block may be written until this list is approved, because every block depends on it.
+**Status:** draft. The seven open questions were settled by research on 2026-11-14 (see "Answers"). Waiting for Robert's approval of the list. No block may be written before that, because every block depends on it.
 **Date:** 2026-11-14.
 **What this is:** M0's paper step. 40 real small-business sites were cut into sections, and every section was mapped onto a draft list of section types built from one shared list of content fields.
 
@@ -9,9 +9,10 @@
 - **85% of the sections map cleanly** onto the draft list: 599 of 701 counted sections *(measured in this sample)*. If third-party widgets and online shops are left out, because they are planned as later features, the figure is **88%** (599 of 681).
 - The share is almost the same for every kind of business, 84% to 86%. Single sites range from 58% to 100%, with a median of 88%.
 - **Only 5 sections (0.7%) had no section type at all.** Each of them is a site-level feature, not a section: a sticky phone bar, a pop-up, a sidebar, share buttons, a search filter.
-- **The biggest pressure point is the one the review predicted (`07-review.md`, B1).** 36 sections pack something extra into a section, such as a strip of logos inside an "about us" text, statistics inside a hero, or badges and a licence number in a hero. That is the road to a `hero` with 30 optional fields. Question 1 below asks how to handle it.
+- **The biggest pressure point is the one the review predicted (`07-review.md`, B1).** 36 sections pack something extra into a section, such as a strip of logos inside an "about us" text, statistics inside a hero, or badges and a licence number in a hero. That is the road to a `hero` with 30 optional fields. "Answers" below settles it: the extra becomes its own neighbouring section.
 - **Prices are the second gap.** 11 sections need more than one price per item: price tables with a column per stylist level, dental fees per payment plan, and prices per team member.
 - **The draft has 21 section types built from 16 fields,** plus two types reserved for later (third-party embeds and a shop). The 8 most used types cover 72% of all sections (506 of 701) and are proposed for M0.
+- **After research settled the open questions, 95% of sections fit** (665 of 701): 622 map to one type, 33 become two neighbouring sections, and 13 link out to an outside service instead of embedding it. See "Answers". This is the same sample and the same single mapper.
 
 Every count on this page is **measured**: it was counted in this sample of 40 sites. The percentages describe this sample only. They are not an estimate for small-business sites in general (see "Limits" at the end).
 
@@ -93,7 +94,7 @@ Grouped by cause. "Sections" is how many sections had that problem; "Kinds" is i
 
 - One `price-list` type covers a restaurant menu, a salon price list, dental fees and clinic visit prices. In each case it is a list of items with a name, description, price and tags, grouped under headings.
 - Small print such as service charges, allergy notes, "prices may change" or deposit rules always fitted a single `note` field.
-- No site had a section made only of statistics. Statistics always appeared inside another section, which bears on Question 1.
+- None of the 40 ordinary sites had a section made only of statistics; statistics always sat inside another section. Among 20 well-designed sites, 4 gave statistics their own band (see "Answers").
 
 ## The draft content fields
 
@@ -111,7 +112,8 @@ Each field is defined once, with one shape. A section type is a named subset of 
 | `gallery` | list of `{id, image, caption?}` | Several images |
 | `items` | list of `{id, title, body?, eyebrow?, icon?, media?, link?, group?}` | Cards, reasons, steps, policies and FAQs (title is the question, body the answer) |
 | `logos` | list of `{id, image, name, link?}` | Partner, press, insurer and accreditation logos |
-| `stats` | list of `{id, value, label}` | "20+ years", "5,000 clients". In the list, but used by no section type yet: see Question 1 |
+| `stats` | list of `{id, value, label}` | "20+ years", "5,000 clients". Used by the `stats` section type |
+| `proof` | `{text, link?}`, one line | "4.9 ★ · 640 Google reviews". A claim, so it comes from the business record with its source and is never written by the text model |
 | `nav` | list of `{id, label, to, children?}`, one level of children | Menus |
 | `source` | `{collection, pick?, groupBy?, limit?}` | Which collection items a section shows |
 | `facts` | list of keys: `hours`, `address`, `map`, `phone`, `email`, `social`, `locations`, `serviceAreas`, `licence` | Which business facts a section shows. The values come from the business record and are never written by a model |
@@ -125,30 +127,31 @@ Each field is defined once, with one shape. A section type is a named subset of 
 | Collection | Item shape |
 |---|---|
 | Menu item or service | name, description, price, duration, tags (V, GF, "Popular"), image, group |
-| Team member | name, role, credentials or registration number, bio, photo, links, location |
+| Team member | name, role, level (matches a price-list column), credentials or registration number, bio, photo, links, location |
 | Testimonial | quote, name, detail, rating |
 | Plan | name, price, billing period, list of inclusions, highlight, button |
 | Class session | class name, weekday, start, end, level, teacher, location |
 | Post | title, date, summary, image |
 
-**Price** is one shape everywhere: fixed, "from", a range, per unit (hour, month, session) or "on request", plus optional named options such as short / medium / long or standard / student.
+**Price** is one shape everywhere: fixed, "from", a range, per unit (hour, month, session) or "on request", plus optional named options such as short / medium / long or standard / student. **A price list may name up to 4 columns** (for example Stylist / Senior / Director, or Pay as you go / Plan A / Plan B / Plan C). An item then gives one price per column, or one price for all columns. A group of items may carry one shared price.
 
 ## The draft section types
 
-21 types for blocks, plus 2 reserved for later. "Required" fields must be filled; the rest are optional.
+22 types for blocks, plus 2 reserved for later. "Required" fields must be filled; the rest are optional.
 
 | Section type | Required | Optional | Covers |
 |---|---|---|---|
-| `header` | `nav` | `primaryCta`, `facts` | Logo, menu and a button; a top bar with phone and address |
+| `header` | `nav` (up to 6 top-level links, one level of dropdown) | `primaryCta`, `facts` | Logo, menu and a button; a top bar with phone and address |
 | `footer` | | `nav`, `body`, `facts`, `form`, `note` | Link columns, contact, hours, newsletter, legal line |
 | `announcement` | `headline` | `primaryCta` | One-line bar across the top |
-| `hero` | `headline` | `eyebrow`, `subhead`, `primaryCta`, `secondaryCta`, `media` | The opening of a page |
+| `hero` | `headline` | `eyebrow`, `subhead`, `primaryCta`, `secondaryCta`, `media` or `gallery` (2 or 3 images, shown together), `proof` | The opening of a page. Never rotates |
 | `page-title` | `headline` | `eyebrow`, `subhead`, `media` | A plain title banner on an inner page |
 | `text-media` | `body` | `eyebrow`, `headline`, `media` or `gallery`, `primaryCta`, `secondaryCta` | About us, story, intro, teaser, disclaimer, long local text |
 | `cards` | `items` (2 to 30) | `eyebrow`, `headline`, `subhead`, `primaryCta`, `note` | Services overview, reasons to choose us, process steps, values, policies, quick links. Steps and alternating rows are variants |
 | `cta` | `headline` | `subhead`, `primaryCta`, `secondaryCta`, `media`, `form` | A call-to-action band; newsletter sign-up |
 | `gallery` | `gallery` | `headline`, `subhead`, `primaryCta` | Photos, project examples with captions |
-| `logos` | `logos` | `headline` | Partners, press, insurers, accreditations |
+| `logos` | `logos` | `headline` | Partners, press, insurers, accreditations. A compact variant sits tight under the section above it |
+| `stats` | `stats` (2 to 4) | `headline` | "16 years in Leith", "5,000 clients". Same compact variant as `logos` |
 | `faq` | `items` | `headline`, `subhead` | Questions and answers |
 | `testimonials` | `source` (testimonials) | `headline`, `primaryCta` | Reviews and quotes |
 | `price-list` | `source` (menu items or services) | `headline`, `subhead`, `note`, `primaryCta` | Menus, price lists, fee guides; grouped by category |
@@ -181,21 +184,41 @@ M0 needs 8 section types (`docs/technical/README.md`, Build order). By use in th
 
 **Why these.** Together they make a believable one-page site for every kind of business: a header, a hero, an about text, a services or reasons section, a price list, hours and location, a call to action and a footer. They test the two hardest content shapes: plain text slots (hero, text-media, cta) and a section filled from a collection (price-list). The next candidates are `testimonials` (19 sections, all 5 kinds) and `contact` (32 sections, all 5 kinds). Swapping one of them in is cheap.
 
-## Questions for Robert
+## Answers (settled by research, 2026-11-14)
 
-These change the list, so they need an answer before the first block.
+Robert asked for these to be answered by research rather than by him. Three research passes ran on 2026-11-14: how mature builders model sections (Shopify Dawn and Horizon, WordPress Gutenberg, Puck, Builder.io, Payload, Relume); usability and accessibility evidence (NN/g, Baymard, W3C WAI, GOV.UK, web.dev); and a survey of 20 well-designed sites, 4 per kind of business (12 real businesses, 8 templates; `0001-data/design-survey.json`). The options are drawn as mock websites on a private page: https://claude.ai/artifact/Hwtv9D4upSWcinFkzeB2Sd
 
-1. **Extras inside a section (36 sections, all 5 kinds).** Should sections be able to hold small extras such as a logo strip or a few statistics?
-   - (a) Keep every section type pure. A block that wants logos under an about text becomes two sections side by side (`text-media` then `logos`). Simple and strict, but some real designs become two separate bands.
-   - (b) Allow exactly two shared optional fields, `stats` and `logos`, on `hero`, `text-media` and `cta` only. This would make about 16 of the 36 clean. The rest stay split.
-   - (c) Allow extras freely. Not recommended: this is how `hero` ends up with 30 optional fields.
-   - Recommendation: **(b)**, with a hard rule that adding a third shared extra needs your approval.
-2. **More than one price per item (11 sections, 4 kinds).** Should a price list support columns, such as one price per stylist level or one per payment plan? Recommendation: **yes**. A price list may name up to 4 columns, and each item gives one price per column. It goes into the price shape from the first version, because changing that shape later means migrating every saved site.
-3. **Slideshows (8 sections, 4 kinds).** Should heroes rotate? Recommendation: **no rotating slides**. A slideshow becomes one image, or a hero variant that shows several images side by side. This is your design call; it can be shown as options.
-4. **Big menus (6 sections).** Recommendation: up to 8 top-level links with one level of dropdowns. Deeper menus are flattened, and a "mega-menu" is not supported in the first version.
-5. **Third-party widgets (13 sections) and shops (7).** Confirm these stay "later". Note: review widgets showing Google reviews cannot be copied into our storage (Google's terms, checked 2026-11-14), so they could only ever be a live embed.
-6. **Several businesses on one site (1 site, 3 sections).** Confirm this is out of scope. Several *locations* of one business are in scope and are in the business record.
-7. **Names.** Are the section-type names clear to you? They will appear in the builder's chat. For example: `text-media` could be "Text and image", `cards` could be "Cards", `cta` could be "Call to action".
+| # | Question | Decision | Main evidence |
+|---|---|---|---|
+| 1 | Extras inside a section (36 sections) | Logos and statistics are their own sections (`logos`, new `stats`); a compact variant sits tight under the section above, so the two read as one. The hero gets one optional `proof` line with its source. No other extras. | Real well-designed sites keep heroes quiet: among 12 real businesses, 1 hero had a statistic, 1 had press logos, none had a rating or form. 8 of 20 put proof in its own band. NN/g: people skip anything that looks like an ad, and trust outside reviews over the site's own claims. No test compares proof in the hero with proof below it. |
+| 2 | More than one price per item (11) | Yes: up to 4 named columns per price list. On phones each item shows its levels underneath; no level switch. Team members carry a `level`; groups may share one price. | NN/g Mobile tables: a switch that shows one option at a time makes comparison harder; pin the label column. Salon software shows one price per chosen stylist or a "from" price. |
+| 3 | Slideshows (8) | No rotating hero. The hero may show 2 or 3 images together. A swipe strip that the visitor controls is a `gallery` variant lower on the page. | Notre Dame: about 1% of visits clicked the carousel, 84% of clicks on slide 1. Baymard: 46% of homepage carousels have usability problems. WCAG 2.2.2 needs a pause control for motion longer than 5 seconds. |
+| 4 | Menus (12) | Up to 6 top-level links plus one button; one dropdown level, opened by click; visible links on desktop, a labelled "Menu" on phones; no mega-menus. Sections with 5 or more groups get automatic "On this page" links. A sticky Call / Directions / Book bar is an optional site setting for phones, up to 3 actions. | NN/g: dropdowns work for one level; more than two is "highly inadvisable"; visible links are used far more than hidden ones. Median of 6 top-level items on the 20 well-designed sites. No independent study shows sticky call bars raise calls, so we measure it later. |
+| 5 | Third-party widgets (13) and shops (7) | No third-party script loads with a page. Reviews become `testimonials` linking to the source; Instagram becomes photos linking to the profile; booking and timetables are links (an embed opened on click may come later). The shop stays later. | Script time per page: Calendly 4,305 ms, OpenTable 1,442 ms, Instagram 1,429 ms (third-party-web, HTTP Archive). The well-designed sites almost always link out to booking. Google's terms forbid storing its review text. |
+| 6 | Several businesses on one site (3) | Out of scope. Several locations of one business are in. | None of the 20 well-designed sites did it. |
+| 7 | Names | Section ids stay as they are in the spec. The chat shows plain labels: Top banner (`hero`), Text and image, Cards, Action band (`cta`), Prices, Plans, Reviews, Questions, Hours and location, Areas served, Timetable, Logos, Numbers, Photos, Team, News, Contact, Notice bar, Menu bar, Page title, Footer. | Builders use plain names for owners (Shopify: "Image banner", "Image with text", "Collapsible content"); "Hero" and "CTA" are designer jargon. Labels are not stored in sites, so they can change at any time. |
+
+**Why no general "extras" list now.** Shopify, Puck and Payload allow optional inner content through a short typed list with an allow-list and a count limit. That is the right shape if extras are ever needed. Adding such a list later is an additive change (a new optional field), so it needs no migration of saved sites. Until real sites in M0 show a need, sections stay single-purpose.
+
+### Coverage under these answers
+
+Re-scored with `0001-data/rescore.py`, which applies the decisions above to the recorded gaps. These counts are measured in the same sample, by the same single mapper.
+
+| Kind | Sections | Clean | Split | Link-out | Stretch | Out | Later | Fits (clean + split + link-out) |
+|---|---|---|---|---|---|---|---|---|
+| Restaurant or café | 111 | 101 | 4 | 0 | 2 | 0 | 4 | **95%** |
+| Hair and beauty salon | 141 | 127 | 4 | 4 | 2 | 3 | 1 | **96%** |
+| Dental or clinic | 162 | 144 | 7 | 3 | 4 | 3 | 1 | **95%** |
+| Trades | 142 | 123 | 13 | 3 | 2 | 0 | 1 | **98%** |
+| Fitness or yoga | 145 | 127 | 5 | 3 | 5 | 2 | 3 | **93%** |
+| **All** | 701 | 622 | 33 | 13 | 15 | 8 | 10 | **95%** |
+
+- **Split:** the section fits as two neighbouring sections.
+- **Link-out:** the section fits by linking to the outside service instead of embedding it.
+- **What still does not fit:**
+  - 15 stretches: big menus, rotating announcements, a 64-item list, a terms checkbox, a dated events list, before-and-after pairs and a route planner.
+  - 8 out by decision.
+  - 10 later: the shop and video.
 
 ## Limits of this study
 
@@ -257,4 +280,5 @@ These change the list, so they need an answer before the first block.
 
 - `0001-data/sites/<kind>.json`: what each section contains, as recorded by the helpers.
 - `0001-data/map/<kind>.tsv`: one line per section: site number, page, order, section type, verdict and missing piece.
-- `0001-data/tally.py` and `0001-data/groups.py`: recount everything. Run `python3 tally.py .` then `python3 groups.py .` inside `0001-data/`.
+- `0001-data/tally.py`, `0001-data/groups.py` and `0001-data/rescore.py`: recount everything. Inside `0001-data/`, run `python3 tally.py .` first, then `python3 groups.py .` or `python3 rescore.py .`.
+- `0001-data/design-survey.json`: the 20 well-designed sites, one record each.
