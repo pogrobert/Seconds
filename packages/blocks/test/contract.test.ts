@@ -72,6 +72,27 @@ describe('library', () => {
   it.skipIf(!!only)('every section type it covers has a version without an image', () => {
     expect(checkLibrary(loaded.flatMap((l) => (l.m ? [l.m] : [])))).toEqual([])
   })
+  it('the stylesheet for any block holds every text style and width the kit can pick', async () => {
+    const { siteCss } = await import('../src/build.ts')
+    const css = await siteCss(['hero/standard'])
+    const missing = [
+      'type-display',
+      'type-h2',
+      'type-h3',
+      'type-lead',
+      'type-body',
+      'type-small',
+      'type-eyebrow',
+      'type-button',
+      'max-w-prose',
+      'max-w-content',
+      'max-w-wide',
+    ].filter((c) => !new RegExp(`\\.${c}\\s*\\{`).test(css))
+    expect(
+      missing,
+      'the browser check and published pages would draw these at the wrong size',
+    ).toEqual([])
+  })
   it('kit primitives use only kit classes', async () => {
     const exists = await classExists()
     const kit = ['primitives.tsx', 'facts.tsx']

@@ -118,9 +118,7 @@ export function standInContent(s: SampleBusiness, sec: SectionPlan): Record<stri
       return {
         headline: sec.navLabel === 'Contact' ? 'Get in touch' : 'Visit us',
         facts: ['hours', 'address', 'map', 'phone'],
-        ...(sec.variant === 'with-text'
-          ? { body: para(s.business.locations[0]?.note ?? 'Find us here.') }
-          : {}),
+        ...(sec.variant === 'with-text' ? { body: para(t.visit) } : {}),
         primaryCta: { label: 'Get directions', to: { type: 'contact', channel: 'directions' } },
       }
     default:

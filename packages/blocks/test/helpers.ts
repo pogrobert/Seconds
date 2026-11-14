@@ -162,15 +162,4 @@ export function contentAtCaps(
   return out
 }
 
-/**
- * Every word in every string literal of a source file: what Tailwind's own scanner would pick up.
- * Over-inclusive on purpose (non-class words produce no CSS), so no class used in a condition or a
- * variable is ever left out of the stylesheet the browser checks use.
- */
-export function candidatesIn(source: string): string[] {
-  const found = new Set<string>()
-  for (const m of source.matchAll(/'([^'\n]*)'|"([^"\n]*)"|`([^`$]*)`/g))
-    for (const w of (m[1] ?? m[2] ?? m[3] ?? '').split(/\s+/))
-      if (/^[@a-z0-9!-][\w:/.@-]*$/i.test(w)) found.add(w)
-  return [...found]
-}
+export { candidatesIn } from '../src/build.ts'

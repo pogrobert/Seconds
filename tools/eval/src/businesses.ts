@@ -25,6 +25,8 @@ export type SampleBusiness = {
     headline: string
     subhead: string
     about: string
+    /** How to find the place: shown beside the hours. */
+    visit: string
     reasons: { title: string; body: string }[]
     steps?: { title: string; body: string }[]
     cta: { headline: string; subhead: string; label: string }
@@ -128,11 +130,13 @@ export const SAMPLES: Record<Kind, SampleBusiness> = {
     ],
     standIn: {
       tagline: 'Restaurant and bar in Ancoats',
-      headline: 'Cooking from the whole animal and the whole season',
+      headline: 'Whole-animal cooking, whole-season menus',
       subhead:
         'Small plates, a short wine list and a dining room that stays open late on weekends.',
       about:
         'We opened in 2019 in an old mill office on Blossom Street. The menu changes every week with what our farmers and fishers bring in, and nothing goes to waste.',
+      visit:
+        "Five minutes' walk from Piccadilly station, on the corner of Blossom Street and Henry Street.",
       reasons: [
         { title: 'Whole-animal cooking', body: 'One farm, one animal at a time, every part used.' },
         {
@@ -256,6 +260,8 @@ export const SAMPLES: Record<Kind, SampleBusiness> = {
       subhead: 'Lived-in colour and precise cuts from a small team that listens first.',
       about:
         'Northside opened in 2009 with two chairs and one promise: no rushing. Every colour appointment starts with a proper consultation, and you leave knowing how to look after it.',
+      visit:
+        'On Constitution Street, two doors down from the Port of Leith; the 16 and 22 buses stop outside.',
       reasons: [
         { title: 'Unhurried', body: 'Every colour appointment starts with a free consultation.' },
         { title: 'Kind products', body: 'Vegan colour and refills for everything we sell.' },
@@ -350,6 +356,8 @@ export const SAMPLES: Record<Kind, SampleBusiness> = {
       subhead: 'New patients welcome. Same-day appointments for dental pain.',
       about:
         'Dr Aoife Brennan opened Harbourside in 2014. We are a small team of two dentists and two hygienists, and we take the time to explain every option before we start.',
+      visit:
+        'On Marine Road, opposite the ferry terminal; the DART station is a three-minute walk.',
       reasons: [
         { title: 'Nervous patients', body: 'Longer appointments and a stop signal you control.' },
         { title: 'Clear fees', body: 'Every fee is on this site, and we quote before treatment.' },
@@ -400,6 +408,7 @@ export const SAMPLES: Record<Kind, SampleBusiness> = {
         'Rewires, EV chargers, fault finding and safety certificates. Fixed quotes, no surprises.',
       about:
         'Harbour Electrical is a family firm of six electricians, running since 2003. Every job is done by our own team, never subcontracted, and every job is certified.',
+      visit: 'Our yard is on Feeder Road, but we come to you anywhere in Bristol and Bath.',
       reasons: [
         { title: 'Rewires', body: 'Full and partial rewires, with as little mess as possible.' },
         { title: 'EV chargers', body: 'Approved installer for home charge points.' },
@@ -499,6 +508,7 @@ export const SAMPLES: Record<Kind, SampleBusiness> = {
       subhead: 'Reformer classes of six people at most, taught by physio-trained instructors.',
       about:
         'Tidewater opened beside Deptford Creek in 2021. Classes are small on purpose: six reformers, one instructor who knows your name and adjusts every exercise to your body.',
+      visit: 'Beside Deptford Creek, five minutes from Deptford Bridge DLR; bike racks outside.',
       reasons: [
         { title: 'Six people at most', body: 'Every class is small enough for real corrections.' },
         { title: 'Physio-trained', body: 'All instructors trained in clinical Pilates.' },

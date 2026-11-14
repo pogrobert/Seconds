@@ -10,14 +10,13 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const require = createRequire(import.meta.url)
 
 /**
- * Every word in every string literal of a source file, as Tailwind's scanner would collect them.
- * Over-inclusive on purpose: words that are not classes produce no CSS.
+ * Every class-like word in a source file, quotes or not, as Tailwind's own scanner collects them.
+ * Over-inclusive on purpose: words that are not classes produce no CSS. Reading only quoted strings
+ * failed once: an apostrophe in a comment ("the page's") shifted the quote pairs and hid real classes.
  */
 export function candidatesIn(source: string): string[] {
   const found = new Set<string>()
-  for (const m of source.matchAll(/'([^'\n]*)'|"([^"\n]*)"|`([^`$]*)`/g))
-    for (const w of (m[1] ?? m[2] ?? m[3] ?? '').split(/\s+/))
-      if (/^[@a-z0-9!-][\w:/.@-]*$/i.test(w)) found.add(w)
+  for (const w of source.split(/[^\w:/.@!-]+/)) if (/^[@a-z0-9!-][\w:/.@-]*$/i.test(w)) found.add(w)
   return [...found]
 }
 

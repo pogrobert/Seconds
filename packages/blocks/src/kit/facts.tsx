@@ -108,9 +108,76 @@ export function hoursRows(
   return rows
 }
 
-/** "+441315550123" → "+44 131 555 0123": groups for reading; the link keeps the full number. */
-export const formatPhone = (e164: string) =>
-  e164.replace(/^(\+\d{1,3})(\d{3})(\d{3})(\d+)$/, '$1 $2 $3 $4')
+// Country calling codes by length (ITU E.164 zones). One digit: +1, +7. Two digits: the listed ones.
+// Everything else has three. Enough to split the country code off correctly for display.
+const TWO_DIGIT = new Set([
+  '20',
+  '27',
+  '30',
+  '31',
+  '32',
+  '33',
+  '34',
+  '36',
+  '39',
+  '40',
+  '41',
+  '43',
+  '44',
+  '45',
+  '46',
+  '47',
+  '48',
+  '49',
+  '51',
+  '52',
+  '53',
+  '54',
+  '55',
+  '56',
+  '57',
+  '58',
+  '60',
+  '61',
+  '62',
+  '63',
+  '64',
+  '65',
+  '66',
+  '81',
+  '82',
+  '84',
+  '86',
+  '90',
+  '91',
+  '92',
+  '93',
+  '94',
+  '95',
+  '98',
+])
+
+/** "+441315550123" → "+44 131 555 0123". For reading only: the tel: link keeps the full number. */
+export function formatPhone(e164: string): string {
+  const d = e164.replace(/^\+/, '')
+  const cc = /^[17]/.test(d)
+    ? d.slice(0, 1)
+    : TWO_DIGIT.has(d.slice(0, 2))
+      ? d.slice(0, 2)
+      : d.slice(0, 3)
+  const n = d.slice(cc.length)
+  const groups =
+    n.length === 10
+      ? [n.slice(0, 3), n.slice(3, 6), n.slice(6)]
+      : n.length === 9
+        ? [n.slice(0, 2), n.slice(2, 5), n.slice(5)]
+        : n.length === 8
+          ? [n.slice(0, 2), n.slice(2, 5), n.slice(5)]
+          : n.length > 10
+            ? [n.slice(0, 4), n.slice(4, 7), n.slice(7)]
+            : [n]
+  return `+${cc} ${groups.join(' ')}`
+}
 
 /* ------------------------------------------------------------------ components */
 
