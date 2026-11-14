@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync } from 'node:fs'
+import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import AxeBuilder from '@axe-core/playwright'
 import { generate, toSvg } from '@pogrobert/surfaces'
@@ -10,7 +10,7 @@ import { renderToStaticMarkup } from 'react-dom/server'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import type { BlockProps, RenderCtx } from '../../src/kit/index.tsx'
 import { type BlockManifest, eligibility } from '../../src/manifest/contract.ts'
-import { classesIn, contentAtCaps, kitCompiler, root, testCtx } from '../helpers.ts'
+import { candidatesIn, contentAtCaps, kitCompiler, root, testCtx } from '../helpers.ts'
 
 // Real-browser checks (CLAUDE.md, Quality checks): every block, variant and test case, plus the
 // longest text each variant claims to hold, rendered in Chromium at phone, tablet and desktop widths.
@@ -29,12 +29,12 @@ const dirs = readdirSync(join(root, 'src/blocks'), { withFileTypes: true })
 async function stylesheet() {
   const compiler = await kitCompiler()
   const sources = [
-    ...['primitives.tsx', 'facts.tsx'].map((f) => join(root, 'src/kit', f)),
-    ...readdirSync(join(root, 'src/blocks')).map((d) =>
-      join(root, 'src/blocks', d, 'component.tsx'),
-    ),
+    ...['primitives.tsx', 'facts.tsx', 'core.ts'].map((f) => join(root, 'src/kit', f)),
+    ...readdirSync(join(root, 'src/blocks'))
+      .map((d) => join(root, 'src/blocks', d, 'component.tsx'))
+      .filter((f) => existsSync(f)), // another agent's folder may still be empty
   ]
-  const candidates = [...new Set(sources.flatMap((f) => classesIn(readFileSync(f, 'utf8'))))]
+  const candidates = [...new Set(sources.flatMap((f) => candidatesIn(readFileSync(f, 'utf8'))))]
   return compiler.build(candidates) + readFileSync(join(root, 'src/kit/draft-theme.css'), 'utf8')
 }
 
@@ -74,6 +74,14 @@ const measure = () => {
   for (const el of Array.from(document.body.querySelectorAll('*'))) {
     const r = el.getBoundingClientRect()
     if (r.width === 0 && r.height === 0) continue
+    // Visually hidden on purpose (screen-reader text such as sr-only): 1px boxes or clipped away.
+    const vis = getComputedStyle(el)
+    if (
+      (r.width <= 1 && r.height <= 1) ||
+      vis.clipPath === 'inset(50%)' ||
+      (vis.clip !== 'auto' && vis.position === 'absolute')
+    )
+      continue
     if (r.right > vw + 1 || r.left < -1)
       out.push(
         `${name(el)} sticks out of the window (${Math.round(r.left)} to ${Math.round(r.right)})`,

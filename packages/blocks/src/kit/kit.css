@@ -251,3 +251,8 @@
     color-mix(in oklab, var(--role-bg) 15%, transparent) 100%
   );
 }
+
+/* An even shade over the whole photo, for text in the middle of it. */
+@utility scrim-even {
+  background: color-mix(in oklab, var(--role-bg) 62%, transparent);
+}

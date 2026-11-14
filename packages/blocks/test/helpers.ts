@@ -74,8 +74,31 @@ export function classesIn(source: string): string[] {
     for (const c of s.split(/\s+/)) if (c) found.add(c)
   }
   for (const m of source.matchAll(/className="([^"]*)"/g)) add(m[1] ?? '')
-  for (const m of source.matchAll(/cx\(([^)]*)\)/g))
-    for (const s of (m[1] ?? '').matchAll(/'([^']*)'/g)) add(s[1] ?? '')
+  // Everything inside className={…} and cx(…), with brackets balanced, so a condition in brackets
+  // cannot hide the classes after it. Every string inside counts as classes: compare values outside
+  // (const centered = variant === 'centered'), never inside a class expression.
+  const spans = (open: RegExp, openCh: string, closeCh: string) => {
+    for (const m of source.matchAll(open)) {
+      let depth = 1
+      let i = (m.index ?? 0) + m[0].length
+      const from = i
+      let quote: string | null = null
+      for (; i < source.length && depth > 0; i++) {
+        const ch = source[i]
+        if (quote) {
+          if (ch === quote && source[i - 1] !== '\\') quote = null
+          continue
+        }
+        if (ch === "'" || ch === '"' || ch === '`') quote = ch
+        else if (ch === openCh) depth++
+        else if (ch === closeCh) depth--
+      }
+      const body = source.slice(from, i - 1)
+      for (const q of body.matchAll(/'([^']*)'|"([^"]*)"/g)) add(q[1] ?? q[2] ?? '')
+    }
+  }
+  spans(/className=\{/g, '{', '}')
+  spans(/\bcx\(/g, '(', ')')
   return [...found]
 }
 
@@ -137,4 +160,17 @@ export function contentAtCaps(
     }
   }
   return out
+}
+
+/**
+ * Every word in every string literal of a source file: what Tailwind's own scanner would pick up.
+ * Over-inclusive on purpose (non-class words produce no CSS), so no class used in a condition or a
+ * variable is ever left out of the stylesheet the browser checks use.
+ */
+export function candidatesIn(source: string): string[] {
+  const found = new Set<string>()
+  for (const m of source.matchAll(/'([^'\n]*)'|"([^"\n]*)"|`([^`$]*)`/g))
+    for (const w of (m[1] ?? m[2] ?? m[3] ?? '').split(/\s+/))
+      if (/^[@a-z0-9!-][\w:/.@-]*$/i.test(w)) found.add(w)
+  return [...found]
 }

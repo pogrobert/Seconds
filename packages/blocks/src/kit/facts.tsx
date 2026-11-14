@@ -8,6 +8,7 @@ import type {
   SinglePrice,
 } from '@repo/spec'
 import { cx, type RenderCtx } from './core.ts'
+import { strings } from './strings.ts'
 
 // Facts are shown the same way by every block: prices, hours, addresses, contact links, menus, forms.
 // Values come from the business record and collections, never from the text model.
@@ -22,30 +23,20 @@ export const formatMoney = (m: { amount: number; currency: string }, locale: str
     minimumFractionDigits: m.amount % 100 === 0 ? 0 : 2,
   }).format(m.amount / 100)
 
-const UNIT: Record<string, string> = {
-  hour: 'hour',
-  session: 'session',
-  class: 'class',
-  week: 'week',
-  month: 'month',
-  year: 'year',
-  person: 'person',
-  item: 'item',
-}
-
 /** One price as text: "£52", "from £165", "£10–£99", "£29 / month", "Price on request". */
 export function formatSinglePrice(p: SinglePrice, locale: string): string {
+  const t = strings(locale)
   switch (p.type) {
     case 'fixed':
       return formatMoney(p.money, locale)
     case 'from':
-      return `from ${formatMoney(p.money, locale)}`
+      return `${t.from} ${formatMoney(p.money, locale)}`
     case 'range':
       return `${formatMoney(p.min, locale)}–${formatMoney(p.max, locale)}`
     case 'per':
-      return `${formatMoney(p.money, locale)} / ${UNIT[p.unit]}`
+      return `${formatMoney(p.money, locale)} / ${t.per[p.unit]}`
     case 'on-request':
-      return 'Price on request'
+      return t.priceOnRequest
   }
 }
 
@@ -102,7 +93,7 @@ export function hoursRows(
       .filter((h) => h.day === d)
       .sort((a, b) => a.opens.localeCompare(b.opens))
       .map((h) => `${formatTime(h.opens, locale)}–${formatTime(h.closes, locale)}`)
-    byDay.set(d, ranges.length ? ranges.join(', ') : 'Closed')
+    byDay.set(d, ranges.length ? ranges.join(', ') : strings(locale).closed)
   }
   const rows: { days: string; times: string }[] = []
   let start = 1
@@ -111,7 +102,7 @@ export function hoursRows(
     const end = d - 1
     const days =
       start === end ? dayName(start, locale) : `${dayName(start, locale)}–${dayName(end, locale)}`
-    rows.push({ days, times: byDay.get(start) ?? 'Closed' })
+    rows.push({ days, times: byDay.get(start) ?? strings(locale).closed })
     start = d
   }
   return rows
@@ -127,7 +118,9 @@ export function Hours(p: { location: Location; ctx: RenderCtx; slot?: string }) 
   const rows = hoursRows(p.location.hours, p.ctx.locale)
   return (
     <table data-slot={p.slot ?? 'hours'} className="type-body w-full border-collapse">
-      <caption className="sr-only">Opening hours, {p.location.name}</caption>
+      <caption className="sr-only">
+        {strings(p.ctx.locale).openingHours}, {p.location.name}
+      </caption>
       <tbody>
         {rows.map((r) => (
           <tr key={r.days} className="border-b border-border">
@@ -142,39 +135,54 @@ export function Hours(p: { location: Location; ctx: RenderCtx; slot?: string }) 
   )
 }
 
-export function Address(p: { location: Location; slot?: string }) {
+/** Text size for a fact: body by default, small in bars and footers. */
+type Size = 'body' | 'small'
+const sizeClass = (s?: Size) => (s === 'small' ? 'type-small' : 'type-body')
+
+/** An address on several lines, or on one line (`inline`) for bars and compact rows. */
+export function Address(p: { location: Location; slot?: string; inline?: boolean; size?: Size }) {
   const a = p.location.address
   if (!a) return null
+  const last = [a.locality, a.postalCode].filter(Boolean).join(' ')
+  if (p.inline)
+    return (
+      <address data-slot={p.slot ?? 'address'} className={cx('not-italic', sizeClass(p.size))}>
+        {[...a.lines, last].join(', ')}
+      </address>
+    )
   return (
-    <address data-slot={p.slot ?? 'address'} className="type-body not-italic">
+    <address data-slot={p.slot ?? 'address'} className={cx('not-italic', sizeClass(p.size))}>
       {a.lines.map((l) => (
         <span key={l} className="block">
           {l}
         </span>
       ))}
-      <span className="block">{[a.locality, a.postalCode].filter(Boolean).join(' ')}</span>
+      <span className="block">{last}</span>
     </address>
   )
 }
 
-export function PhoneLink(p: { phone: string; slot?: string }) {
+/** Contact links keep a full tap height, so they are easy to hit on a phone. */
+const linkClass = 'inline-flex min-h-tap items-center underline underline-offset-4'
+
+export function PhoneLink(p: { phone: string; slot?: string; size?: Size }) {
   return (
     <a
       data-slot={p.slot ?? 'phone'}
       href={`tel:${p.phone}`}
-      className="type-body underline underline-offset-4"
+      className={cx(linkClass, sizeClass(p.size))}
     >
       {formatPhone(p.phone)}
     </a>
   )
 }
 
-export function EmailLink(p: { email: string; slot?: string }) {
+export function EmailLink(p: { email: string; slot?: string; size?: Size }) {
   return (
     <a
       data-slot={p.slot ?? 'email'}
       href={`mailto:${p.email}`}
-      className="type-body underline underline-offset-4"
+      className={cx(linkClass, sizeClass(p.size))}
     >
       {p.email}
     </a>
@@ -182,7 +190,7 @@ export function EmailLink(p: { email: string; slot?: string }) {
 }
 
 /** A map is a link, not an embed: no third-party script loads with the page (decision 0001, answer 5). */
-export function MapLink(p: { location: Location; slot?: string }) {
+export function MapLink(p: { ctx: RenderCtx; location: Location; slot?: string; size?: Size }) {
   const g = p.location.geo
   const a = p.location.address
   const query = g
@@ -195,9 +203,9 @@ export function MapLink(p: { location: Location; slot?: string }) {
     <a
       data-slot={p.slot ?? 'map'}
       href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`}
-      className="type-body underline underline-offset-4"
+      className={cx(linkClass, sizeClass(p.size))}
     >
-      Open in Maps
+      {strings(p.ctx.locale).openInMaps}
     </a>
   )
 }
@@ -297,7 +305,7 @@ export function NavMenu(p: { ctx: RenderCtx; nav: NavItem[]; className?: string 
           className="btn type-button min-h-tap rounded-control px-md"
           data-button="outline"
         >
-          Menu
+          {strings(p.ctx.locale).menu}
         </button>
         <div id={menuId} popover="auto" className="menu-popover">
           {list(true)}
@@ -319,7 +327,7 @@ export function NewsletterForm(p: { ctx: RenderCtx; form: FormRef; label?: strin
     >
       <div className="flex min-w-0 grow flex-col gap-2xs">
         <label htmlFor={fieldId} className="type-small">
-          {p.label ?? 'Email address'}
+          {p.label ?? strings(p.ctx.locale).emailAddress}
         </label>
         <input
           id={fieldId}
@@ -335,7 +343,7 @@ export function NewsletterForm(p: { ctx: RenderCtx; form: FormRef; label?: strin
         data-button={p.ctx.button}
         className="btn type-button min-h-tap rounded-control px-md"
       >
-        Sign up
+        {strings(p.ctx.locale).signUp}
       </button>
     </form>
   )

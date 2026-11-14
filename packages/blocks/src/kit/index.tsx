@@ -2,3 +2,4 @@
 export * from './core.ts'
 export * from './facts.tsx'
 export * from './primitives.tsx'
+export * from './strings.ts'

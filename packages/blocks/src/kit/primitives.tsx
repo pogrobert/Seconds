@@ -5,21 +5,27 @@ import { cx, type RenderCtx } from './core.ts'
 export function Section(p: {
   ctx: RenderCtx
   label?: string
+  /** The element: a page section, or the site's header or footer. */
+  as?: 'section' | 'header' | 'footer'
+  /** Vertical space: a full section, a compact bar (headers, notices) or none. */
+  space?: 'section' | 'compact' | 'none'
   className?: string
   children: ReactNode
 }) {
+  const Tag = p.as ?? 'section'
+  const space = p.space === 'compact' ? 'py-sm' : p.space === 'none' ? 'py-0' : 'py-section'
   return (
-    <section
+    <Tag
       data-block-id={p.ctx.id}
       data-section={p.ctx.section}
       data-block-type={p.ctx.type}
       data-variant={p.ctx.variant}
       data-surface={p.ctx.surface}
       aria-label={p.label}
-      className={cx('bg-bg text-fg py-section px-gutter', p.className)}
+      className={cx('bg-bg text-fg px-gutter', space, p.className)}
     >
       {p.children}
-    </section>
+    </Tag>
   )
 }
 
@@ -40,7 +46,8 @@ export function Heading(p: {
   className?: string
   children: ReactNode
 }) {
-  const level = p.style === 'h3' ? 3 : p.style === 'display' ? p.ctx.headingLevel : 2
+  // A section's heading is the page's h1 when its block opens the page, whatever its visual size.
+  const level = p.style === 'h3' ? 3 : p.ctx.headingLevel
   const Tag = `h${level}` as 'h1' | 'h2' | 'h3'
   const style = p.style === 'display' ? 'type-display' : p.style === 'h2' ? 'type-h2' : 'type-h3'
   return (

@@ -6,7 +6,8 @@
     "./manifest": "./src/manifest/index.ts",
     "./components": "./src/components/index.ts",
     "./kit.css": "./src/kit/kit.css",
-    "./draft-theme.css": "./src/kit/draft-theme.css"
+    "./draft-theme.css": "./src/kit/draft-theme.css",
+    "./build": "./src/build.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

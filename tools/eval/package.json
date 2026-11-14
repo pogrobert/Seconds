@@ -8,14 +8,19 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "test": "vitest run --passWithNoTests",
-    "eval": "node src/index.ts"
+    "eval": "node src/index.ts",
+    "samples": "vitest run --config vitest.tasks.config.ts",
+    "block-log": "node src/block-log.ts"
   },
   "dependencies": {
     "@repo/spec": "workspace:*",
     "@repo/pipeline": "workspace:*",
-    "@repo/render": "workspace:*"
+    "@repo/render": "workspace:*",
+    "@repo/blocks": "workspace:*"
   },
   "devDependencies": {
-    "@types/node": "catalog:"
+    "@types/node": "catalog:",
+    "@pogrobert/surfaces": "catalog:",
+    "react": "catalog:"
   }
 }

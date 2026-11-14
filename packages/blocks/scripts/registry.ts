@@ -38,9 +38,11 @@ export * from '../kit/index.tsx'
 const byFolder = [${dirs.map(ident).join(', ')}]
 
 // biome-ignore lint/suspicious/noExplicitAny: keyed by block type; each component checks its own section's content
-export const components: Record<string, ComponentType<BlockProps<any>>> = Object.fromEntries(
+type AnyBlock = ComponentType<BlockProps<any>>
+
+export const components: Record<string, AnyBlock> = Object.fromEntries(
   manifests.map((m, i) => [m.type, byFolder[i]]),
-) as Record<string, ComponentType<BlockProps<any>>>
+) as Record<string, AnyBlock>
 `,
 )
 console.log(`registry: ${dirs.length} blocks`)

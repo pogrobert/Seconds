@@ -135,6 +135,7 @@ const services = (n: 'shortest' | 'typical' | 'longest' | 'rtl'): CollectionValu
         name: 'Restyle cut and finish',
         duration: 60,
         group: 'Cutting',
+        image: img(21, 'A short textured bob'),
         price: {
           type: 'columns',
           byColumn: {
@@ -168,6 +169,7 @@ const services = (n: 'shortest' | 'typical' | 'longest' | 'rtl'): CollectionValu
         id: id('i', 104),
         name: 'Full head balayage',
         description: 'Includes toner, Olaplex and a cut. Skin test 48 hours before.',
+        image: img(20, 'Soft copper balayage'),
         duration: 210,
         group: 'Colour',
         price: { type: 'from', money: gbp(165) },
@@ -255,6 +257,7 @@ export const fixtures: { [S in M0Section]: Fixtures<S> } = {
       content: {
         nav: nav(['Prices', 'Team', 'Gallery', 'Visit']),
         primaryCta: { label: 'Book', to: booking },
+        facts: ['phone', 'address'],
       },
       context: ctx('typical'),
     },
@@ -274,6 +277,7 @@ export const fixtures: { [S in M0Section]: Fixtures<S> } = {
       content: {
         nav: nav(['الأسعار', 'الفريق', 'المعرض', 'زورونا']),
         primaryCta: { label: 'احجز', to: booking },
+        facts: ['phone', 'address'],
       },
       context: ctx('rtl'),
     },
@@ -409,7 +413,14 @@ export const fixtures: { [S in M0Section]: Fixtures<S> } = {
       context: ctx('longest'),
     },
     rtl: {
-      content: { headline: 'قصتنا', body: para(AR), media: img(4, 'الصالون') },
+      content: {
+        headline: 'قصتنا',
+        body: para(AR),
+        gallery: [
+          { id: id('i', 1), image: img(4, 'الصالون'), caption: 'كرسي بجانب النافذة' },
+          { id: id('i', 2), image: img(5, 'المنتجات'), caption: 'منتجات نباتية' },
+        ],
+      },
       context: ctx('rtl'),
     },
   },
@@ -497,6 +508,7 @@ export const fixtures: { [S in M0Section]: Fixtures<S> } = {
         subhead: 'Book a free consultation and we will plan it together.',
         primaryCta: { label: 'Book now', to: booking },
         secondaryCta: { label: 'Call the salon', to: { type: 'contact', channel: 'phone' } },
+        form: { form: id('f', 1), kind: 'newsletter' },
       },
       context: ctx('typical'),
     },
@@ -515,7 +527,11 @@ export const fixtures: { [S in M0Section]: Fixtures<S> } = {
       context: ctx('longest'),
     },
     rtl: {
-      content: { headline: 'مستعدة للتغيير؟', primaryCta: { label: 'احجزي الآن', to: booking } },
+      content: {
+        headline: 'مستعدة للتغيير؟',
+        primaryCta: { label: 'احجزي الآن', to: booking },
+        form: { form: id('f', 1), kind: 'newsletter' },
+      },
       context: ctx('rtl'),
     },
   },

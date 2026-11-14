@@ -158,7 +158,10 @@ export function checkManifest(m: BlockManifest): string[] {
     for (const [k, allowed] of Object.entries(SIGNATURE))
       if (!(allowed as readonly string[]).includes(v.signature[k as keyof Signature]))
         p.push(`${at}: signature.${k} must be one of ${allowed.join(', ')}`)
-    const showsMedia = v.uses.some((f) => f === 'media' || f === 'gallery')
+    // Images can also come from inside items: a card's photo, a menu item's photo, a logo.
+    const showsMedia = v.uses.some((f) =>
+      ['media', 'gallery', 'items', 'logos', 'source'].includes(f),
+    )
     if (
       v.signature.media === 'none' &&
       (v.requires ?? []).some((f) => f === 'media' || f === 'gallery')

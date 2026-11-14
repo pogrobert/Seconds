@@ -191,6 +191,9 @@ importers:
         specifier: 'catalog:'
         version: 19.3.1(react@19.3.1)
     devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 26.6.6
       '@types/react':
         specifier: 'catalog:'
         version: 19.3.0
@@ -210,6 +213,9 @@ importers:
 
   tools/eval:
     dependencies:
+      '@repo/blocks':
+        specifier: workspace:*
+        version: link:../../packages/blocks
       '@repo/pipeline':
         specifier: workspace:*
         version: link:../../packages/pipeline
@@ -220,9 +226,15 @@ importers:
         specifier: workspace:*
         version: link:../../packages/spec
     devDependencies:
+      '@pogrobert/surfaces':
+        specifier: 'catalog:'
+        version: 0.1.3(react@19.3.1)
       '@types/node':
         specifier: 'catalog:'
         version: 26.6.6
+      react:
+        specifier: 'catalog:'
+        version: 19.3.1
 
 packages:
 
