@@ -1,0 +1,612 @@
+[
+  {
+    "url": "https://minamishima.com.au/",
+    "name": "Minamishima",
+    "kind": "restaurant",
+    "country": "AU",
+    "style": "dark moody luxurious",
+    "why": "Near-black textured page where one overhead plate shot and tiny spaced type do all the work, with a vertical Japanese seal for accent.",
+    "source": "httpster.net (Food & Drink)",
+    "id": "minamishima"
+  },
+  {
+    "url": "https://dimesnyc.com/",
+    "name": "Dimes",
+    "kind": "restaurant",
+    "country": "US",
+    "style": "editorial photo grid",
+    "why": "Opens on a split grid of candid film-style photos above a salmon block of monospace nav tiles, so it reads like a zine rather than a restaurant template.",
+    "source": "own knowledge, checked live",
+    "id": "dimes"
+  },
+  {
+    "url": "https://hartbageri.com/",
+    "name": "Hart Bageri",
+    "kind": "bakery",
+    "country": "DK",
+    "style": "minimal craft video",
+    "why": "Full-bleed close-up video of dough being worked, a heavy condensed wordmark and tiny uppercase nav; very restrained.",
+    "source": "own knowledge, checked live",
+    "id": "hart-bageri"
+  },
+  {
+    "url": "https://unionboulangerie.com/en/",
+    "name": "Union Boulangerie",
+    "kind": "bakery",
+    "country": "FR",
+    "style": "bold colour-block video",
+    "why": "Full-screen pastry video with a giant hand-drawn wordmark and flat electric-blue and orange nav blocks; loud but still about the food.",
+    "source": "minimal.gallery and siteinspire.com",
+    "id": "union-boulangerie"
+  },
+  {
+    "url": "https://www.ledivenyc.com/",
+    "name": "Le Dive",
+    "kind": "bar",
+    "country": "US",
+    "style": "retro French tabac",
+    "why": "A red diamond tabac sign on warm paper texture with a serif tagline; one strong period idea, nothing else on the page.",
+    "source": "own knowledge, checked live",
+    "id": "le-dive"
+  },
+  {
+    "url": "https://gimlet.melbourne/",
+    "name": "Gimlet",
+    "kind": "bar",
+    "country": "AU",
+    "style": "engraved retro luxe",
+    "why": "Cream card with a striped border, script wordmark and a fine-line drawing of the building; feels like a printed menu or invitation.",
+    "source": "own knowledge, checked live",
+    "id": "gimlet"
+  },
+  {
+    "url": "https://www.bonniesbrooklyn.com/",
+    "name": "Bonnie's",
+    "kind": "restaurant",
+    "country": "US",
+    "style": "playful pink retro",
+    "why": "Bubblegum-pink page, a retro outlined wordmark with Chinese characters, and gritty flash photos of staff merch; playful and personal.",
+    "source": "own knowledge, checked live",
+    "id": "bonnie-s"
+  },
+  {
+    "url": "https://www.doubledimanche.fr/",
+    "name": "Double Dimanche",
+    "kind": "restaurant",
+    "country": "FR",
+    "style": "bold poster type",
+    "why": "Huge black grotesque words above and below one small framed photo of the lake; poster layout with lots of empty space.",
+    "source": "siteinspire.com (Food & Drink)",
+    "id": "double-dimanche"
+  },
+  {
+    "url": "https://www.dashburger.ie/",
+    "name": "Dash Burger",
+    "kind": "restaurant",
+    "country": "IE",
+    "style": "loud pink poster",
+    "why": "Flash-lit photo of someone mid-bite cut off by a giant wordmark rising from a flat pink band; brash in a way that fits a smash-burger joint.",
+    "source": "siteinspire.com (Food & Drink)",
+    "id": "dash-burger"
+  },
+  {
+    "url": "https://therechabite.com.au/",
+    "name": "The Rechabite",
+    "kind": "bar",
+    "country": "AU",
+    "style": "playful illustrated type",
+    "why": "Black page with chunky display type in which illustrated characters and objects replace letters; a strong one-off identity for a multi-level venue.",
+    "source": "awwwards.com (Food & Drink)",
+    "id": "the-rechabite"
+  },
+  {
+    "url": "https://chambresdamis.be/en",
+    "name": "Chambres d'Amis",
+    "kind": "restaurant",
+    "country": "BE",
+    "style": "editorial serif luxe",
+    "why": "Oversized high-contrast serif split across the corners of a collage of food and light-and-shadow photos, like a magazine spread.",
+    "source": "siteinspire.com (Food & Drink)",
+    "id": "chambres-d-amis"
+  },
+  {
+    "url": "https://www.tacaloa.com/",
+    "name": "Tacaloa",
+    "kind": "restaurant",
+    "country": "CO",
+    "style": "psychedelic gradient retro",
+    "why": "A teal-to-yellow sunset gradient behind a pill-shaped video window and a faded serif headline; unusual colour and shape choices.",
+    "source": "siteinspire.com (Food & Drink)",
+    "id": "tacaloa"
+  },
+  {
+    "url": "https://afianco.ie/",
+    "name": "A Fianco",
+    "kind": "bar",
+    "country": "IE",
+    "style": "quirky minimal typographic",
+    "why": "White page with a stacked serif text menu, one short statement and a single black fig silhouette; very little on the page, but distinctive.",
+    "source": "siteinspire.com (Food & Drink)",
+    "id": "a-fianco"
+  },
+  {
+    "url": "https://www.personsofinterestbklyn.com/",
+    "name": "Persons of Interest",
+    "kind": "barber",
+    "country": "US",
+    "style": "vintage postcard retro",
+    "why": "A faded 1970s-postcard coastal photo with a tall condensed retro wordmark over it; looks nothing like a typical barbershop site.",
+    "source": "own knowledge, checked live",
+    "id": "persons-of-interest"
+  },
+  {
+    "url": "https://freshcut-barbershop.com/",
+    "name": "FreshCut Barbershop",
+    "kind": "barber",
+    "country": "FR",
+    "style": "high-contrast bold type",
+    "why": "Split photo and red panel with a massive white condensed serif wordmark cutting across both; strong poster energy.",
+    "source": "awwwards.com; designrush.com",
+    "id": "freshcut-barbershop"
+  },
+  {
+    "url": "https://www.ninezeroonesalon.com/",
+    "name": "Nine Zero One",
+    "kind": "salon",
+    "country": "US",
+    "style": "warm retro interior",
+    "why": "Photo of a terracotta-plastered salon with a neon hummingbird, set with wide-tracked small caps; carries the salon's mood rather than stock beauty shots.",
+    "source": "own knowledge, checked live",
+    "id": "nine-zero-one"
+  },
+  {
+    "url": "https://chillhouse.com/",
+    "name": "Chillhouse",
+    "kind": "beauty",
+    "country": "US",
+    "style": "loud playful maximalist",
+    "why": "Campaign video hero with chunky multicolour patterned lettering; the page is very loud. The homepage now leans toward its nail-product shop.",
+    "source": "own knowledge, checked live",
+    "id": "chillhouse"
+  },
+  {
+    "url": "https://bathhouse.com/",
+    "name": "Bathhouse",
+    "kind": "spa",
+    "country": "US",
+    "style": "dark moody monospace",
+    "why": "Low-lit teal pool photo with a monospace headline that switches to italic serif on one word; calm and slightly industrial.",
+    "source": "own knowledge, checked live",
+    "id": "bathhouse"
+  },
+  {
+    "url": "https://www.loylyhelsinki.fi/",
+    "name": "Löyly",
+    "kind": "spa",
+    "country": "FI",
+    "style": "Nordic architectural photo",
+    "why": "Full-bleed aerial shot of the timber sauna terraces over the sea, a light spaced wordmark and an italic press quote.",
+    "source": "own knowledge, checked live",
+    "id": "lyly"
+  },
+  {
+    "url": "https://atera.spa/",
+    "name": "Atera",
+    "kind": "spa",
+    "country": "GB",
+    "style": "warm quiet luxury",
+    "why": "Full-screen footage of an ochre-walled thermal pool with only a small serif wordmark centred over it.",
+    "source": "siteinspire.com (Health & Fitness)",
+    "id": "atera"
+  },
+  {
+    "url": "https://www.odysseeclinic.com.au/",
+    "name": "Odyssée",
+    "kind": "beauty",
+    "country": "AU",
+    "style": "soft minimal editorial",
+    "why": "Close-up skin portrait across the full screen, with the wordmark, a one-line promise and the nav set very small on a single line.",
+    "source": "siteinspire.com",
+    "id": "odysse"
+  },
+  {
+    "url": "https://omp.dentist/",
+    "name": "One Manor Place",
+    "kind": "dentist",
+    "country": "IE",
+    "style": "editorial serif warm",
+    "why": "A huge deep-green serif name, a monospace body and a warm portrait; reads like a magazine cover, not a dental practice.",
+    "source": "siteinspire.com (Health & Fitness)",
+    "id": "one-manor-place"
+  },
+  {
+    "url": "https://www.studiodental.com/",
+    "name": "Studio Dental",
+    "kind": "dentist",
+    "country": "US",
+    "style": "architectural warm minimal",
+    "why": "Full-bleed photo of the timber-slatted interior with a motion-blurred figure and a small serif wordmark; it sells the space and mood.",
+    "source": "own knowledge, checked live",
+    "id": "studio-dental"
+  },
+  {
+    "url": "https://www.grandstreetdental.com/",
+    "name": "Grand Street Dental",
+    "kind": "dentist",
+    "country": "US",
+    "style": "playful geometric",
+    "why": "Bauhaus-style half-circles in pink, orange and cobalt behind a bold serif 'Dentistry Redesigned'; cheerful without looking childish.",
+    "source": "comradeweb.com roundup",
+    "id": "grand-street-dental"
+  },
+  {
+    "url": "https://integratedpodiatry.com.au/",
+    "name": "Integrated Podiatry Clinic",
+    "kind": "clinic",
+    "country": "AU",
+    "style": "quiet serif photographic",
+    "why": "Soft grey full-bleed photo of feet with a large light serif line and vertical side wordmark; calm and confident.",
+    "source": "siteinspire.com, httpster.net, minimal.gallery",
+    "id": "integrated-podiatry-clinic"
+  },
+  {
+    "url": "https://universalpractice.com.au/",
+    "name": "Universal Practice",
+    "kind": "physio",
+    "country": "AU",
+    "style": "stark typographic minimal",
+    "why": "Black-and-white layout with vertical serif words at the edges and a boxed split hero; strict grid, almost no images.",
+    "source": "httpster.net and siteinspire.com",
+    "id": "universal-practice"
+  },
+  {
+    "url": "https://themindroom.com.au/",
+    "name": "The Mind Room",
+    "kind": "wellness",
+    "country": "AU",
+    "style": "bright playful collage",
+    "why": "Mint, mustard and orange panels with brushy illustration and a tag cloud of topics; warm and approachable for a psychology practice.",
+    "source": "httpster.net (Health)",
+    "id": "the-mind-room"
+  },
+  {
+    "url": "https://hx.clinic/en/",
+    "name": "HX Clinic",
+    "kind": "clinic",
+    "country": "CZ",
+    "style": "dark monochrome editorial",
+    "why": "Black-and-white silhouette photo, a thin-line monogram and a light serif headline in two weights; looks like a fashion brand.",
+    "source": "minimal.gallery (Healthcare)",
+    "id": "hx-clinic"
+  },
+  {
+    "url": "https://elenaborisova.life/",
+    "name": "Elena Borisova",
+    "kind": "wellness",
+    "country": "–",
+    "style": "hand-drawn illustrative type",
+    "why": "A clinical psychologist's site with a large ink-brush bird drawing over jumbled oversized letters; personal and artful.",
+    "source": "siteinspire.com and minimal.gallery",
+    "id": "elena-borisova"
+  },
+  {
+    "url": "https://www.yinovacenter.com/",
+    "name": "Yinova",
+    "kind": "wellness",
+    "country": "US",
+    "style": "dark luxe apothecary",
+    "why": "Moody video of an amber apothecary bottle under a refined high-contrast serif wordmark and headline.",
+    "source": "own knowledge, checked live",
+    "id": "yinova"
+  },
+  {
+    "url": "https://www.skyting.com/",
+    "name": "Sky Ting Yoga",
+    "kind": "yoga",
+    "country": "US",
+    "style": "quiet editorial, playful accents",
+    "why": "A spaced-out wordmark and calm studio photography, with tilted sticker-style elements that add wit without noise.",
+    "source": "siteinspire.com (Health & Fitness category)",
+    "id": "sky-ting-yoga"
+  },
+  {
+    "url": "https://coreatelierpilates.com/",
+    "name": "Core Atelier",
+    "kind": "pilates",
+    "country": "SG",
+    "style": "luxurious, serif, warm photo",
+    "why": "A large lowercase serif headline with italic emphasis over full-bleed interior photography. It reads like a boutique hotel, not a gym.",
+    "source": "awwwards.com Honorable Mention (Mar 2026)",
+    "id": "core-atelier"
+  },
+  {
+    "url": "https://coachedbyclub.be/",
+    "name": "COACHEDBY Club",
+    "kind": "gym",
+    "country": "BE",
+    "style": "bold, giant condensed type",
+    "why": "An edge-to-edge wordmark sits behind a team photo, with condensed all-caps headlines. It is a confident, poster-like personal-training brand.",
+    "source": "awwwards.com Honorable Mention (Oct 2025)",
+    "id": "coachedby-club"
+  },
+  {
+    "url": "https://www.skulptfitness.nl/",
+    "name": "Skulpt Fitness",
+    "kind": "gym",
+    "country": "NL",
+    "style": "loud, condensed, acid lime",
+    "why": "Huge black condensed headline on off-white with a single acid-lime accent. A small-town gym with a streetwear-grade identity.",
+    "source": "awwwards.com Honorable Mention (Sep 2022)",
+    "id": "skulpt-fitness"
+  },
+  {
+    "url": "https://www.shinbu.be/",
+    "name": "Shinbu Aikido Club",
+    "kind": "fitness",
+    "country": "BE",
+    "style": "playful, colour tiles, risograph",
+    "why": "Floating pink and blue tiles with a kanji seal on a saturated blue field. A tiny dojo with a genuinely graphic, print-like site.",
+    "source": "httpster.net (Sport)",
+    "id": "shinbu-aikido-club"
+  },
+  {
+    "url": "https://www.studiolocomotion.com/",
+    "name": "Locomotion",
+    "kind": "gym",
+    "country": "CA",
+    "style": "monochrome, minimal, black",
+    "why": "Strict black-and-white system, heavy wordmark and big card grid for class types. Disciplined and calm.",
+    "source": "htmlburger.com roundup",
+    "id": "locomotion"
+  },
+  {
+    "url": "https://www.ostbloc.de/",
+    "name": "Ostbloc",
+    "kind": "climbing",
+    "country": "DE",
+    "style": "gritty, punk, retro poster",
+    "why": "A Berlin bouldering hall leaning into a red-star Eastern Bloc identity, with risograph-style event posters. Raw and distinctive.",
+    "source": "own pick, verified",
+    "id": "ostbloc"
+  },
+  {
+    "url": "https://www.sollertennisclub.com/",
+    "name": "Sóller Tennis Club",
+    "kind": "fitness",
+    "country": "ES",
+    "style": "earthy, Mediterranean, editorial",
+    "why": "Terracotta and olive colour fields and slow, story-led copy turn a local tennis and padel club into a lifestyle place.",
+    "source": "siteinspire.com (Sports category)",
+    "id": "sller-tennis-club"
+  },
+  {
+    "url": "https://www.bxrlondon.com/",
+    "name": "BXR",
+    "kind": "gym",
+    "country": "GB",
+    "style": "dark, moody, luxury",
+    "why": "Low-lit cinematic interior footage, a tiny wordmark and a near-black palette give a boxing gym a members'-club feel.",
+    "source": "own pick, verified",
+    "id": "bxr"
+  },
+  {
+    "url": "https://radianthotyoga.com/",
+    "name": "Radiant Hot Yoga",
+    "kind": "yoga",
+    "country": "US",
+    "style": "warm, terracotta, script + serif",
+    "why": "An all-terracotta palette with a hand-script tagline and chunky serif carries the 'hot' idea through the whole page.",
+    "source": "awwwards.com (nominee listing)",
+    "id": "radiant-hot-yoga"
+  },
+  {
+    "url": "https://www.barrbuild.co.uk/",
+    "name": "Barr Build",
+    "kind": "builder",
+    "country": "GB",
+    "style": "quiet, photographic, light serif",
+    "why": "A thin wordmark set over a meadow-and-timber-house photo. It sells craft through restraint and landscape.",
+    "source": "siteinspire.com and httpster.net",
+    "id": "barr-build"
+  },
+  {
+    "url": "https://bakstadconstruction.com/",
+    "name": "Bakstad Construction",
+    "kind": "builder",
+    "country": "US",
+    "style": "minimal, architectural, grid",
+    "why": "A small Pacific Northwest builder presented with an architecture-studio level of typographic restraint.",
+    "source": "siteinspire.com and httpster.net",
+    "id": "bakstad-construction"
+  },
+  {
+    "url": "https://www.havenconstructions.com.au/",
+    "name": "Haven Constructions",
+    "kind": "builder",
+    "country": "AU",
+    "style": "luxury, deep blue, motion",
+    "why": "A custom home builder with a saturated navy brand world and gallery-led storytelling.",
+    "source": "awwwards.com Honorable Mention (Jun 2026)",
+    "id": "haven-constructions"
+  },
+  {
+    "url": "https://www.thomasmaybespoke.co.uk/",
+    "name": "Thomas May Bespoke",
+    "kind": "carpenter",
+    "country": "GB",
+    "style": "dark, luxurious, classic serif",
+    "why": "Charcoal vignette, small spaced serif caps and a vertical side menu. Joinery presented like a fashion house.",
+    "source": "awwwards.com Honorable Mention (Apr 2018)",
+    "id": "thomas-may-bespoke"
+  },
+  {
+    "url": "https://format.furniture/",
+    "name": "Format",
+    "kind": "maker",
+    "country": "NL",
+    "style": "minimal white, neon accent",
+    "why": "A sparse white canvas with a lowercase wordmark and one neon-lime call-to-action tile.",
+    "source": "awwwards.com Honorable Mention (Jul 2022)",
+    "id": "format"
+  },
+  {
+    "url": "https://www.sebastiancox.co.uk/",
+    "name": "Sebastian Cox",
+    "kind": "maker",
+    "country": "GB",
+    "style": "dark, serif, rust red",
+    "why": "Opens on three huge rust-coloured serif words (Buy, Commission, Collaborate) on near-black. Typographic and assured.",
+    "source": "own pick, verified",
+    "id": "sebastian-cox"
+  },
+  {
+    "url": "https://www.stykka.com/",
+    "name": "Stykka",
+    "kind": "maker",
+    "country": "DK",
+    "style": "Scandinavian, photographic, calm",
+    "why": "Full-bleed photography of plywood kitchens in real homes, with tiny UI type letting the material speak.",
+    "source": "httpster.net",
+    "id": "stykka"
+  },
+  {
+    "url": "https://peststopboys.co.uk/",
+    "name": "Pest Stop Boys",
+    "kind": "trades",
+    "country": "GB",
+    "style": "bold, electric blue, stacked type",
+    "why": "A pest-control firm with a huge stacked wordmark on electric blue. It shows that a trade site can be loud and fun.",
+    "source": "httpster.net (Service)",
+    "id": "pest-stop-boys"
+  },
+  {
+    "url": "https://www.hayswoodworking.com/",
+    "name": "Hays Woodworking",
+    "kind": "carpenter",
+    "country": "CA",
+    "style": "retro, oxblood, ornamental",
+    "why": "A deep oxblood field, hairline grid and an ornamental monogram give a millwork shop a crafted, heritage feel.",
+    "source": "awwwards.com Honorable Mention (Jun 2025)",
+    "id": "hays-woodworking"
+  },
+  {
+    "url": "https://acaciadesign.com.au/",
+    "name": "Acacia Landscaping + Design",
+    "kind": "landscaper",
+    "country": "AU",
+    "style": "dark, moody, spaced caps",
+    "why": "Dusk garden photography with widely tracked caps. Atmospheric rather than brochure-like.",
+    "source": "awwwards.com Honorable Mention (Jun 2023)",
+    "id": "acacia-landscaping-design"
+  },
+  {
+    "url": "https://www.fieldstudiesflora.com/",
+    "name": "Field Studies Flora",
+    "kind": "florist",
+    "country": "US",
+    "style": "archival, editorial, analog photo",
+    "why": "Opens on a grainy photo of a pinned specimen board. It is curatorial and museum-like, not 'pretty flowers'.",
+    "source": "siteinspire.com and minimal.gallery",
+    "id": "field-studies-flora"
+  },
+  {
+    "url": "https://saipua.com/",
+    "name": "Saipua",
+    "kind": "florist",
+    "country": "US",
+    "style": "dark, rustic, still-life",
+    "why": "Moody painterly still-life photography with a classic serif wordmark. Farmhouse romanticism done with restraint.",
+    "source": "own pick, verified",
+    "id": "saipua"
+  },
+  {
+    "url": "https://castorfleuriste.com/",
+    "name": "Castor Fleuriste",
+    "kind": "florist",
+    "country": "FR",
+    "style": "minimal, grey, centred serif",
+    "why": "Almost nothing but a centred serif name and corner labels on soft grey. Extreme Parisian restraint.",
+    "source": "siteinspire.com (Florists)",
+    "id": "castor-fleuriste"
+  },
+  {
+    "url": "https://casabosques.net/",
+    "name": "Librería Casa Bosques",
+    "kind": "bookshop",
+    "country": "MX",
+    "style": "editorial, split photo, airy",
+    "why": "Asymmetric split layout of warm shop photography with a small spaced wordmark, like a magazine spread.",
+    "source": "own pick, verified",
+    "id": "librera-casa-bosques"
+  },
+  {
+    "url": "https://doyoureadme.de/",
+    "name": "do you read me?!",
+    "kind": "bookshop",
+    "country": "DE",
+    "style": "monospace, catalogue grid",
+    "why": "A monospace product grid and an ink-blot logo make a Berlin magazine shop feel like a well-kept index.",
+    "source": "own pick, verified",
+    "id": "do-you-read-me"
+  },
+  {
+    "url": "https://www.terrenohotel.com/en/",
+    "name": "Terreno Barrio Hotel",
+    "kind": "hotel",
+    "country": "ES",
+    "style": "retro script, warm, neighbourhood",
+    "why": "An oversized oxblood retro script logo over sunny street photography. Characterful and local.",
+    "source": "awwwards.com Honorable Mention (Oct 2026)",
+    "id": "terreno-barrio-hotel"
+  },
+  {
+    "url": "https://www.maisonlesgrandschenes.com/",
+    "name": "Maison Les Grands Chênes",
+    "kind": "hotel",
+    "country": "FR",
+    "style": "quiet, typographic, editorial",
+    "why": "A big, airy grotesk title, mono micro-labels and long serif prose. A guesthouse that reads like a book.",
+    "source": "httpster.net",
+    "id": "maison-les-grands-chnes"
+  },
+  {
+    "url": "https://www.marrammontauk.com/",
+    "name": "Marram Montauk",
+    "kind": "hotel",
+    "country": "US",
+    "style": "earthy, textural, luxe",
+    "why": "Opens on an abstract sand-and-earth texture instead of a stock beach shot, with a small serif wordmark and a clay-coloured button.",
+    "source": "httpster.net",
+    "id": "marram-montauk"
+  },
+  {
+    "url": "https://www.lamannabakery.com/",
+    "name": "Lamanna's Bakery",
+    "kind": "bakery",
+    "country": "CA",
+    "style": "loud, retro, orange and yellow",
+    "why": "Wall-to-wall 'HOME OF THE BIG SLICE' in fat yellow display type on orange. Pure neighbourhood bombast.",
+    "source": "httpster.net (Food & Drink)",
+    "id": "lamanna-s-bakery"
+  },
+  {
+    "url": "https://www.myrendezvous.ca/",
+    "name": "Rendezvous Barbers",
+    "kind": "barber",
+    "country": "CA",
+    "style": "warm, editorial serif, orange",
+    "why": "A big serif-with-italics statement on flat orange makes a barbershop feel like a magazine cover.",
+    "source": "awwwards.com Honorable Mention (Jul 2024)",
+    "id": "rendezvous-barbers"
+  },
+  {
+    "url": "https://eraceramics.com/",
+    "name": "Era Ceramics",
+    "kind": "maker",
+    "country": "US",
+    "style": "soft, minimal, oversized type",
+    "why": "Oversized thin lowercase type laid over pale tableware photos, quiet and tactile.",
+    "source": "httpster.net",
+    "id": "era-ceramics"
+  }
+]

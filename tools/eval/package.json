@@ -16,7 +16,8 @@
     "photos": "node --env-file-if-exists=../../.env src/photos.ts",
     "advance": "vitest run --config vitest.tasks.config.ts advance",
     "wall": "vitest run --config vitest.tasks.config.ts wall",
-    "m0": "vitest run --config vitest.tasks.config.ts m0"
+    "m0": "vitest run --config vitest.tasks.config.ts m0",
+    "board": "vitest run --config vitest.tasks.config.ts board"
   },
   "dependencies": {
     "@repo/blocks": "workspace:*",
