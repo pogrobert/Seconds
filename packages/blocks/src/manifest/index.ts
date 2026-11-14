@@ -15,6 +15,7 @@ import headerClassic from '../blocks/header-classic/manifest.ts'
 import headerUtility from '../blocks/header-utility/manifest.ts'
 import heroEditorial from '../blocks/hero-editorial/manifest.ts'
 import heroOverlay from '../blocks/hero-overlay/manifest.ts'
+import heroPhoto from '../blocks/hero-photo/manifest.ts'
 import heroStandard from '../blocks/hero-standard/manifest.ts'
 import hoursLocationPanel from '../blocks/hours-location-panel/manifest.ts'
 import hoursLocationSplit from '../blocks/hours-location-split/manifest.ts'
@@ -44,6 +45,7 @@ export const manifests: readonly BlockManifest[] = [
   headerUtility,
   heroEditorial,
   heroOverlay,
+  heroPhoto,
   heroStandard,
   hoursLocationPanel,
   hoursLocationSplit,

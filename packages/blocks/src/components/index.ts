@@ -15,6 +15,7 @@ import headerClassic from '../blocks/header-classic/component.tsx'
 import headerUtility from '../blocks/header-utility/component.tsx'
 import heroEditorial from '../blocks/hero-editorial/component.tsx'
 import heroOverlay from '../blocks/hero-overlay/component.tsx'
+import heroPhoto from '../blocks/hero-photo/component.tsx'
 import heroStandard from '../blocks/hero-standard/component.tsx'
 import hoursLocationPanel from '../blocks/hours-location-panel/component.tsx'
 import hoursLocationSplit from '../blocks/hours-location-split/component.tsx'
@@ -45,6 +46,7 @@ const byFolder = [
   headerUtility,
   heroEditorial,
   heroOverlay,
+  heroPhoto,
   heroStandard,
   hoursLocationPanel,
   hoursLocationSplit,

@@ -241,15 +241,39 @@ export function RichText(p: {
  * colours) and sits on a dark shade drawn from the theme, so it stays readable on any photo.
  * Place <PhotoShade> over the photo and <OnPhoto> around the text, in the same stacking context.
  */
-export function PhotoShade(p: { from?: 'bottom' | 'start' | 'even'; className?: string }) {
+export function PhotoShade(p: { from?: 'bottom' | 'start' | 'even' | 'ends'; className?: string }) {
   const shade =
-    p.from === 'even' ? 'shade-even' : p.from === 'start' ? 'shade-start' : 'shade-bottom'
-  return <div aria-hidden="true" className={cx('pointer-events-none', shade, p.className)} />
+    p.from === 'even'
+      ? 'shade-even'
+      : p.from === 'start'
+        ? 'shade-start'
+        : p.from === 'ends'
+          ? 'shade-ends'
+          : 'shade-bottom'
+  return (
+    <div aria-hidden="true" className={cx('pointer-events-none relative', shade, p.className)} />
+  )
+}
+
+/**
+ * A box in another surface's colours, such as a brand-coloured half beside a photo. Its text pairs
+ * are the theme's checked pairs for that surface, so contrast holds in every palette.
+ */
+export function Panel(p: {
+  surface: 'base' | 'muted' | 'brand' | 'inverse'
+  className?: string
+  children: ReactNode
+}) {
+  return (
+    <div data-surface={p.surface} className={cx('bg-bg text-fg', p.className)}>
+      {p.children}
+    </div>
+  )
 }
 
 export function OnPhoto(p: { className?: string; children: ReactNode }) {
   return (
-    <div data-surface="inverse" className={cx('text-fg', p.className)}>
+    <div data-surface="inverse" className={cx('relative text-fg', p.className)}>
       {p.children}
     </div>
   )

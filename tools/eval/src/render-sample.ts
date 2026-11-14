@@ -23,17 +23,20 @@ export async function renderSample(
     content?: ContentFor
     /** URL prefix where the page will find photos/ files, relative to the page. */
     photoBase?: string
+    /** The brand colour; the sample business's own when absent. */
+    brand?: string
   } = {},
 ): Promise<{ html: string; spec: SiteSpec; problems: string[]; notes: string[] }> {
   const s = SAMPLES[kind]
   const plan = opts.plan ?? DEFAULT_PLANS[kind]
+  const brand = opts.brand ?? s.palette
   const spec = assemble(
     plan,
     {
       business: s.business,
       collections: s.collections,
       assets: sampleAssets(s),
-      color: s.palette,
+      color: brand,
       locale: 'en-GB',
       dir: 'ltr',
     },
@@ -43,7 +46,7 @@ export async function renderSample(
   if (opts.family) spec.style = { ...spec.style, family: `${opts.family}@1` }
   const v = validateSite(spec)
   const st = resolveStyle(spec.style)
-  const t = opts.draft ? undefined : theme(st.id, s.palette, { axes: st.axes, mode: st.mode })
+  const t = opts.draft ? undefined : theme(st.id, brand, { axes: st.axes, mode: st.mode })
   const types = [...plan.before, ...plan.sections, ...plan.after].map((x) => x.type)
   const css = await siteCss(types, t?.css)
   const art = t?.art ?? 'riso'
@@ -64,9 +67,7 @@ export async function renderSample(
       const w = 1200
       const h = Math.round(w / (o.aspect ?? 1.5))
       const seed = asset.source.type === 'generated' ? asset.source.seed : asset.id
-      const svg = toSvg(
-        generate({ style: art as 'riso', seed, color: s.palette, width: w, height: h }),
-      )
+      const svg = toSvg(generate({ style: art as 'riso', seed, color: brand, width: w, height: h }))
       return {
         src: `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`,
         width: w,

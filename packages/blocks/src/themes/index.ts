@@ -592,8 +592,41 @@ const DENSITY = { regular: 1, airy: 1.2, compact: 0.85 } as const
 const FRAME = ['bleed', 'inset'] as const
 
 /**
+ * How every photo on the site is treated: as taken, black and white, or toned in the brand colour.
+ * One treatment for the whole site, so photos from different sources read as one set.
+ */
+const PHOTO = ['natural', 'mono', 'tint'] as const
+
+/** The brand's hue in degrees and its saturation (0 to 1), from HSL. */
+const hueSat = (hex: string): [number, number] => {
+  const [r, g, b] = toRgb(hex).map((v) => v / 255) as RGB
+  const max = Math.max(r, g, b)
+  const min = Math.min(r, g, b)
+  const d = max - min
+  if (d === 0) return [0, 0]
+  const l = (max + min) / 2
+  const s = d / (1 - Math.abs(2 * l - 1))
+  const h = max === r ? ((g - b) / d) % 6 : max === g ? (b - r) / d + 2 : (r - g) / d + 4
+  return [(h * 60 + 360) % 360, s]
+}
+
+/**
+ * The CSS filter for a photo treatment. `tint` is a soft one-colour photo in the brand's hue: grey,
+ * then half sepia (whose hue is about 38°), turned to the brand's hue. Stronger settings looked neon
+ * (Wall round 3, by eye). A brand with almost no colour (black,
+ * grey) gives a warm sepia instead.
+ */
+export function photoFilter(treatment: string, brand: string): string {
+  if (treatment === 'mono') return 'grayscale(1) contrast(1.06)'
+  if (treatment !== 'tint') return 'none'
+  const [h, s] = hueSat(brand)
+  if (s < 0.15) return 'grayscale(1) sepia(0.55) contrast(1.04)'
+  return `grayscale(1) sepia(0.5) hue-rotate(${Math.round(h - 38)}deg) saturate(0.9) contrast(1.02)`
+}
+
+/**
  * Each family's settings, as closed lists (review 07, S3): `type` (font pairing), `palette`,
- * `corners`, `density` and `frame`. The first value of each list is the default. Light or dark is
+ * `corners`, `density`, `frame` and `photo`. The first value of each list is the default. Light or dark is
  * the site's `mode`, not an axis.
  */
 export function familyAxes(id: FamilyId): Record<AxisName, string[]> {
@@ -604,9 +637,10 @@ export function familyAxes(id: FamilyId): Record<AxisName, string[]> {
     corners: Object.keys(f.corners),
     density: Object.keys(DENSITY),
     frame: [...FRAME],
+    photo: [...PHOTO],
   }
 }
-export const AXIS_NAMES = ['type', 'palette', 'corners', 'density', 'frame'] as const
+export const AXIS_NAMES = ['type', 'palette', 'corners', 'density', 'frame', 'photo'] as const
 export type AxisName = (typeof AXIS_NAMES)[number]
 export type Axes = Partial<Record<AxisName, string>>
 
@@ -694,6 +728,8 @@ export function theme(
 }
 `
       : ''
+  const filter = photoFilter(axes.photo, brand)
+  const photo = filter === 'none' ? '' : `\n[data-site] img.media-cover { filter: ${filter}; }\n`
   const css = `[data-site] {
   color-scheme: ${mode};
   ${pal}
@@ -719,7 +755,7 @@ export function theme(
   --space-columns: clamp(1.5rem, 1rem + 2cqi, 3rem);
   --corner-control: ${c.control}; --corner-card: ${c.card}; --corner-media: ${c.media};
 }
-${frame}`
+${frame}${photo}`
   return {
     css,
     fontsHref: `https://fonts.googleapis.com/css2?${t.fonts}&display=swap`,

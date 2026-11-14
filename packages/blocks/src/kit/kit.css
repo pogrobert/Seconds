@@ -312,6 +312,16 @@
     );
   }
 }
+/* Shade at both ends, clear in the middle: for a name across the top and words at the foot. */
+@utility shade-ends {
+  background: linear-gradient(
+    to bottom,
+    color-mix(in oklab, var(--p-inverse-bg) 70%, transparent) 0%,
+    color-mix(in oklab, var(--p-inverse-bg) 10%, transparent) 30%,
+    color-mix(in oklab, var(--p-inverse-bg) 10%, transparent) 50%,
+    color-mix(in oklab, var(--p-inverse-bg) 88%, transparent) 100%
+  );
+}
 @utility shade-even {
   background: color-mix(in oklab, var(--p-inverse-bg) 62%, transparent);
 }

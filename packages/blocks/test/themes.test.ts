@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest'
-import { checkStyle, contrast, FAMILY_IDS, familyAxes, theme } from '../src/themes/index.ts'
+import {
+  checkStyle,
+  contrast,
+  FAMILY_IDS,
+  familyAxes,
+  photoFilter,
+  theme,
+} from '../src/themes/index.ts'
 
 // Every family must give readable text for any brand colour (WCAG 2.2 AA: 4.5:1 for text).
 const BRANDS = [
@@ -63,6 +70,15 @@ describe('style settings', () => {
     expect(checkStyle({ family: 'quiet@2', axes: {} })).toHaveLength(1)
     expect(checkStyle({ family: 'quiet@1', axes: { type: 'oswald' } })).toHaveLength(1)
     expect(checkStyle({ family: 'poster@1', axes: { glow: 'on' } })).toHaveLength(1)
+  })
+  it('photo treatments: none by default, grey for mono, the brand hue for tint', () => {
+    expect(theme('quiet', '#5b4a7a').css).not.toContain('filter')
+    expect(theme('quiet', '#5b4a7a', { axes: { photo: 'mono' } }).css).toContain('grayscale(1)')
+    for (const id of FAMILY_IDS)
+      expect(theme(id, '#5b4a7a', { axes: { photo: 'tint' } }).css).toMatch(/hue-rotate\(\d+deg\)/)
+    // A colourless brand gives a warm sepia instead of an arbitrary hue.
+    expect(photoFilter('tint', '#111111')).toContain('sepia(0.55)')
+    expect(photoFilter('tint', '#5b4a7a')).toContain('hue-rotate(223deg)')
   })
   it('inset framing adds panel rules; bleed adds none', () => {
     expect(theme('soft', '#5b4a7a', { axes: { frame: 'inset' } }).css).toContain('border-radius')
