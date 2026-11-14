@@ -24,6 +24,7 @@ p { margin: 0; }
 .bar { width: 160px; height: 6px; border-radius: 99px; background: var(--line); overflow: hidden; }
 .bar > i { display: block; height: 100%; background: var(--accent); width: 0; transition: width .2s ease; }
 .nav { display: flex; gap: 8px; flex-wrap: wrap; }
+fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
 button { font: 500 14px/1 var(--f-body); color: var(--fg); background: var(--panel); border: 1px solid var(--line); border-radius: 999px; padding: 9px 14px; cursor: pointer; }
 button:hover { border-color: var(--muted); }
 button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); }
@@ -62,14 +63,14 @@ kbd { font: 12px ui-monospace, Menlo, monospace; border: 1px solid var(--line); 
 
   <div class="top">
     <div class="nav">
-      <button id="prev">Previous</button>
-      <button id="next">Next</button>
-      <button id="nextOpen">Next unrated</button>
+      <button type="button" id="prev">Previous</button>
+      <button type="button" id="next">Next</button>
+      <button type="button" id="nextOpen">Next unrated</button>
     </div>
-    <div class="nav" role="group" aria-label="View">
-      <button data-view="desktop" aria-pressed="true">Desktop</button>
-      <button data-view="phone" aria-pressed="false">Phone</button>
-    </div>
+    <fieldset class="nav" aria-label="View">
+      <button type="button" data-view="desktop" aria-pressed="true">Desktop</button>
+      <button type="button" data-view="phone" aria-pressed="false">Phone</button>
+    </fieldset>
   </div>
 
   <section class="brief" aria-label="Brief">
@@ -80,20 +81,20 @@ kbd { font: 12px ui-monospace, Menlo, monospace; border: 1px solid var(--line); 
 
   <div class="pair">
     <section class="side" aria-label="Left site">
-      <header><h2>Left</h2><a id="openL" target="_blank" rel="noopener">Open full size</a></header>
+      <header><h2>Left</h2><a id="openL" href="sites/" target="_blank" rel="noopener">Open full size</a></header>
       <div class="frame" id="frameL"><iframe title="Left site" id="L"></iframe></div>
     </section>
     <section class="side" aria-label="Right site">
-      <header><h2>Right</h2><a id="openR" target="_blank" rel="noopener">Open full size</a></header>
+      <header><h2>Right</h2><a id="openR" href="sites/" target="_blank" rel="noopener">Open full size</a></header>
       <div class="frame" id="frameR"><iframe title="Right site" id="R"></iframe></div>
     </section>
   </div>
 
-  <div class="choose" role="group" aria-label="Your choice">
-    <button data-choice="left">← Left fits better</button>
-    <button data-choice="same">No preference</button>
-    <button data-choice="right">Right fits better →</button>
-  </div>
+  <fieldset class="choose" aria-label="Your choice">
+    <button type="button" data-choice="left">← Left fits better</button>
+    <button type="button" data-choice="same">No preference</button>
+    <button type="button" data-choice="right">Right fits better →</button>
+  </fieldset>
   <p class="status" id="status" aria-live="polite"></p>
 
   <section class="done" id="done" hidden>
@@ -102,7 +103,7 @@ kbd { font: 12px ui-monospace, Menlo, monospace; border: 1px solid var(--line); 
   <section class="done" id="fallback" hidden>
     <p>This view can't save to the page, so your answers are kept in this browser only. When you finish, copy them and paste them to Claude.</p>
     <textarea id="dump" readonly aria-label="Your answers"></textarea>
-    <div><button id="copy">Copy answers</button></div>
+    <div><button type="button" id="copy">Copy answers</button></div>
   </section>
   <p class="status">Photos from <a href="https://pixabay.com/" style="color:inherit">Pixabay</a> under the Pixabay Content License; each photographer is credited in <a href="photos/manifest.json" style="color:inherit">photos/manifest.json</a>.</p>
 </div>
@@ -126,13 +127,13 @@ function fit(frame, iframe) {
   const w = frame.clientWidth, h = frame.clientHeight
   if (view === 'phone') {
     const s = Math.min(1, h / 780, w / 390)
-    iframe.style.width = '390px'; iframe.style.height = (h / s) + 'px'
-    iframe.style.left = Math.max(0, (w - 390 * s) / 2) + 'px'
+    iframe.style.width = '390px'; iframe.style.height = `${h / s}px`
+    iframe.style.left = `${Math.max(0, (w - 390 * s) / 2)}px`
     iframe.style.transform = `scale(${s})`
   } else {
     const s = w / 1280
     iframe.style.left = '0px'
-    iframe.style.width = '1280px'; iframe.style.height = (h / s) + 'px'
+    iframe.style.width = '1280px'; iframe.style.height = `${h / s}px`
     iframe.style.transform = `scale(${s})`
   }
 }
@@ -142,22 +143,22 @@ function show(i) {
   const p = PAIRS[current]
   $('pairNo').textContent = `Pair ${p.n} of ${PAIRS.length}`
   $('who').innerHTML = ''
-  $('who').append(p.name + ' ', Object.assign(document.createElement('span'), { textContent: '· ' + p.place }))
+  $('who').append(`${p.name} `, Object.assign(document.createElement('span'), { textContent: `· ${p.place}` }))
   $('words').textContent = `“${p.words}”`
   for (const [side, f] of [['L', p.left], ['R', p.right]]) {
     const el = $(side)
-    if (el.getAttribute('src') !== 'sites/' + f) el.setAttribute('src', 'sites/' + f)
-    $('open' + side).href = 'sites/' + f
+    if (el.getAttribute('src') !== `sites/${f}`) el.setAttribute('src', `sites/${f}`)
+    $(`open${side}`).href = `sites/${f}`
   }
   const a = answers[p.id]?.choice
-  document.querySelectorAll('[data-choice]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.choice === a)))
+  for (const b of document.querySelectorAll('[data-choice]')) b.setAttribute('aria-pressed', String(b.dataset.choice === a))
   progress()
   layout()
 }
 function progress() {
   const n = rated()
   $('count').textContent = `${n} of ${PAIRS.length} rated`
-  $('barFill').style.width = (100 * n / PAIRS.length) + '%'
+  $('barFill').style.width = `${100 * n / PAIRS.length}%`
   $('done').hidden = !(n === PAIRS.length && db)
   $('fallback').hidden = !!db
   $('dump').value = JSON.stringify(answers)
@@ -167,10 +168,10 @@ async function choose(choice) {
   answers[p.id] = { choice, n: p.n, at: new Date().toISOString() }
   try { localStorage.setItem(LS, JSON.stringify(answers)) } catch {}
   progress()
-  document.querySelectorAll('[data-choice]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.choice === choice)))
+  for (const b of document.querySelectorAll('[data-choice]')) b.setAttribute('aria-pressed', String(b.dataset.choice === choice))
   if (db) {
     try {
-      await db.doc('ratings/' + p.id).set(answers[p.id])
+      await db.doc(`ratings/${p.id}`).set(answers[p.id])
       $('status').className = 'status'; $('status').textContent = `Saved pair ${p.n}.`
     } catch (e) {
       $('status').className = 'status warn'; $('status').textContent = `Pair ${p.n} is saved in this browser only (${e?.code || 'error'}).`
@@ -182,13 +183,13 @@ async function choose(choice) {
   setTimeout(() => show(next >= 0 ? next : current), 250)
 }
 
-document.querySelectorAll('[data-choice]').forEach((b) => b.addEventListener('click', () => choose(b.dataset.choice)))
-document.querySelectorAll('[data-view]').forEach((b) => b.addEventListener('click', () => {
+for (const b of document.querySelectorAll('[data-choice]')) b.addEventListener('click', () => choose(b.dataset.choice))
+for (const b of document.querySelectorAll('[data-view]')) b.addEventListener('click', () => {
   view = b.dataset.view
-  document.querySelectorAll('[data-view]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)))
+  for (const x of document.querySelectorAll('[data-view]')) x.setAttribute('aria-pressed', String(x === b))
   $('frameL').classList.toggle('phone', view === 'phone'); $('frameR').classList.toggle('phone', view === 'phone')
   layout()
-}))
+})
 $('prev').addEventListener('click', () => show(current - 1))
 $('next').addEventListener('click', () => show(current + 1))
 $('nextOpen').addEventListener('click', () => { const i = firstOpen(current + 1); if (i >= 0) show(i) })
@@ -197,7 +198,7 @@ $('copy').addEventListener('click', async () => {
   catch { $('dump').select() }
 })
 document.addEventListener('keydown', (e) => {
-  if (e.target.closest && e.target.closest('textarea')) return
+  if (e.target.closest?.('textarea')) return
   if (e.key === 'ArrowLeft') choose('left')
   else if (e.key === 'ArrowRight') choose('right')
   else if (e.key === 'ArrowDown') { e.preventDefault(); choose('same') }
@@ -210,12 +211,12 @@ show(Math.max(0, firstOpen(0)))
   if (!db) { progress(); return }
   try {
     const snap = await db.collection('ratings').get()
-    for (const d of snap.docs) { const v = d.data(); if (v && v.choice) answers[d.id] = v }
+    for (const d of snap.docs) { const v = d.data(); if (v?.choice) answers[d.id] = v }
     try { localStorage.setItem(LS, JSON.stringify(answers)) } catch {}
     // Answers made earlier in this browser but never saved to the page: save them now, one by one.
     for (const p of PAIRS) {
       if (answers[p.id] && !snap.docs.some((d) => d.id === p.id)) {
-        try { await db.doc('ratings/' + p.id).set(answers[p.id]) } catch {}
+        try { await db.doc(`ratings/${p.id}`).set(answers[p.id]) } catch {}
       }
     }
   } catch {}
