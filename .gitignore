@@ -1,0 +1,17 @@
+node_modules/
+dist/
+.output/
+.wrangler/
+.tanstack/
+.vinxi/
+.dev.vars
+.env
+.env.*
+!.env.example
+!.dev.vars.example
+*.log
+.DS_Store
+coverage/
+playwright-report/
+test-results/
+tools/eval/out/
