@@ -1,0 +1,8 @@
+# Copy to .dev.vars (gitignored) and fill in. Never commit real keys.
+# Decision model: clef-flash runs through the Cloudflare account (binding added with the pipeline).
+# Optional decision model through TypeSafe (Jev):
+TYPESAFE_API_KEY=
+# Text model (fast LLM), through OpenRouter:
+OPENROUTER_API_KEY=
+# Optional, for comparison runs:
+ANTHROPIC_API_KEY=
