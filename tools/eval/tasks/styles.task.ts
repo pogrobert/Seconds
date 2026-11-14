@@ -51,7 +51,8 @@ for (const family of FAMILY_IDS) {
       try {
         for (const width of [360, 1280]) {
           await page.setViewportSize({ width, height: 900 })
-          await page.setContent(r.html, { waitUntil: 'networkidle' })
+          // Load the written file, not an in-memory copy, so photos resolve as they will for visitors.
+          await page.goto(new URL(`${kind}.html`, dir).href, { waitUntil: 'networkidle' })
           await page.evaluate(() => document.fonts.ready)
           problems.push(...(await page.evaluate(overflow)).map((x) => `${width}px: ${x}`))
           const axe = await new AxeBuilder({ page })

@@ -150,7 +150,7 @@ export function Picture(p: {
       decoding="async"
       data-slot={p.slot}
       style={focal}
-      className={cx('media-cover block rounded-media', p.className)}
+      className={cx('media-cover block min-w-0 max-w-full rounded-media', p.className)}
     />
   )
 }

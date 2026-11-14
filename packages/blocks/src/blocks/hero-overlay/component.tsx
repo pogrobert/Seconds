@@ -18,7 +18,7 @@ export default function HeroOverlay({ content: c, variant, ctx }: BlockProps<'he
   if (!c.media) return null
   return (
     <Section ctx={ctx}>
-      <Container width="wide" className="grid">
+      <Container width="wide" className="grid grid-cols-1">
         <Picture
           ctx={ctx}
           image={c.media}

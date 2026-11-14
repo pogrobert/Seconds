@@ -136,6 +136,17 @@ for (const dir of dirs) {
         fixtures[section].longest.content as Record<string, unknown>,
         fixtures[section].typical.content as Record<string, unknown>,
       )
+      // The typical content with every picture failing to load: a missing photo must never break the layout.
+      {
+        const f = fixtures[section].typical
+        if (eligibility(m, variant, f.content as Record<string, unknown>).ok)
+          cases.push({
+            name: 'broken-images',
+            content: f.content as Record<string, unknown>,
+            rtl: false,
+            context: f.context,
+          })
+      }
       if (capped)
         cases.push({
           name: 'at-caps',
@@ -155,7 +166,7 @@ for (const dir of dirs) {
           const ctx: RenderCtx = {
             ...base,
             image: (img, o) => ({
-              src: artUri(img.asset, o.aspect ?? 1),
+              src: tc.name === 'broken-images' ? 'missing.jpg' : artUri(img.asset, o.aspect ?? 1),
               width: 1200,
               height: Math.round(1200 / (o.aspect ?? 1)),
             }),

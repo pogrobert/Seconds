@@ -20,7 +20,7 @@ export const QUERIES: Record<Kind, Record<Slot, string>> = {
     hero: 'restaurant dining room evening warm light',
     about: 'chef plating food restaurant kitchen',
     cta: 'restaurant table set for dinner',
-    'detail-1': 'small plates sharing food table',
+    'detail-1': 'small plates tapas sharing dinner table',
     'detail-2': 'wine glasses bar counter',
   },
   salon: {
@@ -40,16 +40,16 @@ export const QUERIES: Record<Kind, Record<Slot, string>> = {
   trades: {
     hero: 'electrician working on fuse box',
     about: 'electrician van tools',
-    cta: 'electrician installing light fitting',
+    cta: 'electrician installing ceiling light',
     'detail-1': 'electrical wiring cables close up',
     'detail-2': 'electric car charger home',
   },
   fitness: {
     hero: 'reformer pilates studio',
     about: 'pilates instructor helping client',
-    cta: 'pilates class small group',
+    cta: 'pilates class indoor studio mat',
     'detail-1': 'pilates reformer close up',
-    'detail-2': 'studio lockers towels',
+    'detail-2': 'yoga mats rolled studio floor',
   },
 }
 
@@ -70,6 +70,8 @@ export type Manifest = Partial<Record<Kind, Partial<Record<Slot, Photo>>>>
 
 const dir = new URL('../photos/', import.meta.url)
 const manifestUrl = new URL('manifest.json', dir)
+/** Photos judged wrong by eye: never picked again. Committed with the manifest. */
+const rejectedUrl = new URL('rejected.json', dir)
 
 export const readManifest = (): Manifest =>
   existsSync(manifestUrl) ? (JSON.parse(readFileSync(manifestUrl, 'utf8')) as Manifest) : {}
@@ -96,9 +98,26 @@ async function main() {
   }
   const refresh = process.argv.includes('--refresh')
   const manifest = readManifest()
-  const used = new Set(
-    Object.values(manifest).flatMap((k) => Object.values(k ?? {}).map((p) => p?.id)),
-  )
+  // --redo kind/slot ...: reject the current photo for those slots and pick another.
+  const redo = process.argv.includes('--redo')
+    ? process.argv.filter((a) => /^[a-z]+\/[a-z0-9-]+$/.test(a))
+    : []
+  const rejected: string[] = existsSync(rejectedUrl)
+    ? JSON.parse(readFileSync(rejectedUrl, 'utf8'))
+    : []
+  for (const r of redo) {
+    const [k, sl] = r.split('/') as [Kind, Slot]
+    const cur = manifest[k]?.[sl]
+    if (cur) {
+      rejected.push(cur.id)
+      delete manifest[k]?.[sl]
+    }
+  }
+  writeFileSync(rejectedUrl, `${JSON.stringify([...new Set(rejected)], null, 2)}\n`)
+  const used = new Set([
+    ...Object.values(manifest).flatMap((k) => Object.values(k ?? {}).map((p) => p?.id)),
+    ...rejected,
+  ])
   let requests = 0
   for (const kind of KINDS) {
     for (const slot of SLOTS) {

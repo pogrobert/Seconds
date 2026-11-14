@@ -1,0 +1,287 @@
+{
+  "restaurant": {
+    "hero": {
+      "provider": "pixabay",
+      "id": "5107506",
+      "page": "https://pixabay.com/photos/restaurant-decoration-dining-bar-5107506/",
+      "photographer": "MorNaTang",
+      "photographerUrl": "https://pixabay.com/users/MorNaTang-5325343/",
+      "alt": "restaurant dining room evening warm light",
+      "width": 1280,
+      "height": 960,
+      "file": "restaurant/hero-5107506.jpg"
+    },
+    "about": {
+      "provider": "pixabay",
+      "id": "1284351",
+      "page": "https://pixabay.com/photos/restaurant-cooking-chef-kitchen-1284351/",
+      "photographer": "Pexels",
+      "photographerUrl": "https://pixabay.com/users/Pexels-2286921/",
+      "alt": "chef plating food restaurant kitchen",
+      "width": 1280,
+      "height": 853,
+      "file": "restaurant/about-1284351.jpg"
+    },
+    "cta": {
+      "provider": "pixabay",
+      "id": "449952",
+      "page": "https://pixabay.com/photos/restaurant-table-setting-table-449952/",
+      "photographer": "neshom",
+      "photographerUrl": "https://pixabay.com/users/neshom-447256/",
+      "alt": "restaurant table set for dinner",
+      "width": 1280,
+      "height": 853,
+      "file": "restaurant/cta-449952.jpg"
+    },
+    "detail-2": {
+      "provider": "pixabay",
+      "id": "4896541",
+      "page": "https://pixabay.com/photos/wine-bar-wine-bar-alcohol-4896541/",
+      "photographer": "10302144",
+      "photographerUrl": "https://pixabay.com/users/10302144-10302144/",
+      "alt": "wine glasses bar counter",
+      "width": 1280,
+      "height": 853,
+      "file": "restaurant/detail-2-4896541.jpg"
+    },
+    "detail-1": {
+      "provider": "pixabay",
+      "id": "791110",
+      "page": "https://pixabay.com/photos/christmas-background-table-setting-791110/",
+      "photographer": "kaboompics",
+      "photographerUrl": "https://pixabay.com/users/kaboompics-1013994/",
+      "alt": "small plates tapas sharing dinner table",
+      "width": 1280,
+      "height": 853,
+      "file": "restaurant/detail-1-791110.jpg"
+    }
+  },
+  "salon": {
+    "hero": {
+      "provider": "pixabay",
+      "id": "4043096",
+      "page": "https://pixabay.com/photos/beauty-salon-barber-nail-salon-4043096/",
+      "photographer": "Sunriseforever",
+      "photographerUrl": "https://pixabay.com/users/Sunriseforever-6314823/",
+      "alt": "hair salon interior chairs mirrors",
+      "width": 1280,
+      "height": 1067,
+      "file": "salon/hero-4043096.jpg"
+    },
+    "about": {
+      "provider": "pixabay",
+      "id": "834280",
+      "page": "https://pixabay.com/photos/haircut-hair-cut-beauty-salon-comb-834280/",
+      "photographer": "kaleido-dp",
+      "photographerUrl": "https://pixabay.com/users/kaleido-dp-1176973/",
+      "alt": "hairdresser styling hair client",
+      "width": 1280,
+      "height": 853,
+      "file": "salon/about-834280.jpg"
+    },
+    "cta": {
+      "provider": "pixabay",
+      "id": "7022733",
+      "page": "https://pixabay.com/photos/hairdresser-to-wash-hygiene-7022733/",
+      "photographer": "planet_fox",
+      "photographerUrl": "https://pixabay.com/users/planet_fox-4691618/",
+      "alt": "hair salon wash basin",
+      "width": 1280,
+      "height": 853,
+      "file": "salon/cta-7022733.jpg"
+    },
+    "detail-1": {
+      "provider": "pixabay",
+      "id": "4682949",
+      "page": "https://pixabay.com/photos/hairdresser-maintenance-hair-4682949/",
+      "photographer": "Engin_Akyurt",
+      "photographerUrl": "https://pixabay.com/users/Engin_Akyurt-3656355/",
+      "alt": "hair colour balayage close up",
+      "width": 1280,
+      "height": 853,
+      "file": "salon/detail-1-4682949.jpg"
+    },
+    "detail-2": {
+      "provider": "pixabay",
+      "id": "4769976",
+      "page": "https://pixabay.com/photos/hairdresser-maintenance-hair-woman-4769976/",
+      "photographer": "Engin_Akyurt",
+      "photographerUrl": "https://pixabay.com/users/Engin_Akyurt-3656355/",
+      "alt": "hair styling tools brushes",
+      "width": 1280,
+      "height": 853,
+      "file": "salon/detail-2-4769976.jpg"
+    }
+  },
+  "clinic": {
+    "hero": {
+      "provider": "pixabay",
+      "id": "2586827",
+      "page": "https://pixabay.com/photos/clinic-doctor-chair-cabinet-2586827/",
+      "photographer": "StockSnap",
+      "photographerUrl": "https://pixabay.com/users/StockSnap-894430/",
+      "alt": "modern dental clinic treatment room",
+      "width": 1280,
+      "height": 850,
+      "file": "clinic/hero-2586827.jpg"
+    },
+    "about": {
+      "provider": "pixabay",
+      "id": "428646",
+      "page": "https://pixabay.com/photos/dentist-patient-dental-care-medical-428646/",
+      "photographer": "jarmoluk",
+      "photographerUrl": "https://pixabay.com/users/jarmoluk-143740/",
+      "alt": "dentist talking with patient",
+      "width": 1280,
+      "height": 848,
+      "file": "clinic/about-428646.jpg"
+    },
+    "cta": {
+      "provider": "pixabay",
+      "id": "2093368",
+      "page": "https://pixabay.com/photos/chairs-red-red-chairs-seating-2093368/",
+      "photographer": "ulleo",
+      "photographerUrl": "https://pixabay.com/users/ulleo-1834854/",
+      "alt": "clinic reception waiting area",
+      "width": 1280,
+      "height": 816,
+      "file": "clinic/cta-2093368.jpg"
+    },
+    "detail-1": {
+      "provider": "pixabay",
+      "id": "2458195",
+      "page": "https://pixabay.com/photos/office-medical-dental-furniture-2458195/",
+      "photographer": "fmengi20",
+      "photographerUrl": "https://pixabay.com/users/fmengi20-3581920/",
+      "alt": "dental tools tray clean",
+      "width": 1280,
+      "height": 853,
+      "file": "clinic/detail-1-2458195.jpg"
+    },
+    "detail-2": {
+      "provider": "pixabay",
+      "id": "2530990",
+      "page": "https://pixabay.com/photos/dentist-dental-care-dentistry-teeth-2530990/",
+      "photographer": "drshohmelian",
+      "photographerUrl": "https://pixabay.com/users/drshohmelian-5972920/",
+      "alt": "smiling patient dental check up",
+      "width": 1280,
+      "height": 850,
+      "file": "clinic/detail-2-2530990.jpg"
+    }
+  },
+  "trades": {
+    "hero": {
+      "provider": "pixabay",
+      "id": "1080584",
+      "page": "https://pixabay.com/photos/electric-electricity-building-1080584/",
+      "photographer": "jarmoluk",
+      "photographerUrl": "https://pixabay.com/users/jarmoluk-143740/",
+      "alt": "electrician working on fuse box",
+      "width": 1280,
+      "height": 852,
+      "file": "trades/hero-1080584.jpg"
+    },
+    "about": {
+      "provider": "pixabay",
+      "id": "1080554",
+      "page": "https://pixabay.com/photos/electrician-repair-electricity-1080554/",
+      "photographer": "jarmoluk",
+      "photographerUrl": "https://pixabay.com/users/jarmoluk-143740/",
+      "alt": "electrician van tools",
+      "width": 1280,
+      "height": 852,
+      "file": "trades/about-1080554.jpg"
+    },
+    "detail-1": {
+      "provider": "pixabay",
+      "id": "4393425",
+      "page": "https://pixabay.com/photos/cable-cables-energy-network-web-4393425/",
+      "photographer": "Bru-nO",
+      "photographerUrl": "https://pixabay.com/users/Bru-nO-1161770/",
+      "alt": "electrical wiring cables close up",
+      "width": 1280,
+      "height": 853,
+      "file": "trades/detail-1-4393425.jpg"
+    },
+    "detail-2": {
+      "provider": "pixabay",
+      "id": "1458836",
+      "page": "https://pixabay.com/photos/electric-car-car-electric-vehicle-1458836/",
+      "photographer": "VariousPhotography",
+      "photographerUrl": "https://pixabay.com/users/VariousPhotography-1860391/",
+      "alt": "electric car charger home",
+      "width": 1280,
+      "height": 719,
+      "file": "trades/detail-2-1458836.jpg"
+    },
+    "cta": {
+      "provider": "pixabay",
+      "id": "7827771",
+      "page": "https://pixabay.com/photos/light-power-source-interior-design-7827771/",
+      "photographer": "TranThanhDat",
+      "photographerUrl": "https://pixabay.com/users/TranThanhDat-22137618/",
+      "alt": "electrician installing ceiling light",
+      "width": 1280,
+      "height": 853,
+      "file": "trades/cta-7827771.jpg"
+    }
+  },
+  "fitness": {
+    "hero": {
+      "provider": "pixabay",
+      "id": "1948813",
+      "page": "https://pixabay.com/photos/fitness-healthy-happy-sports-1948813/",
+      "photographer": "UptownFitness",
+      "photographerUrl": "https://pixabay.com/users/UptownFitness-4170203/",
+      "alt": "reformer pilates studio",
+      "width": 1280,
+      "height": 852,
+      "file": "fitness/hero-1948813.jpg"
+    },
+    "about": {
+      "provider": "pixabay",
+      "id": "1840275",
+      "page": "https://pixabay.com/photos/woman-stretch-yoga-pose-yoga-pose-1840275/",
+      "photographer": "Pexels",
+      "photographerUrl": "https://pixabay.com/users/Pexels-2286921/",
+      "alt": "pilates instructor helping client",
+      "width": 1280,
+      "height": 1280,
+      "file": "fitness/about-1840275.jpg"
+    },
+    "detail-1": {
+      "provider": "pixabay",
+      "id": "2557534",
+      "page": "https://pixabay.com/photos/people-woman-girl-yoga-mat-2557534/",
+      "photographer": "StockSnap",
+      "photographerUrl": "https://pixabay.com/users/StockSnap-894430/",
+      "alt": "pilates reformer close up",
+      "width": 1280,
+      "height": 854,
+      "file": "fitness/detail-1-2557534.jpg"
+    },
+    "cta": {
+      "provider": "pixabay",
+      "id": "3772674",
+      "page": "https://pixabay.com/photos/yoga-posture-women-wellness-3772674/",
+      "photographer": "SaraJobling",
+      "photographerUrl": "https://pixabay.com/users/SaraJobling-1384404/",
+      "alt": "pilates class indoor studio mat",
+      "width": 1280,
+      "height": 813,
+      "file": "fitness/cta-3772674.jpg"
+    },
+    "detail-2": {
+      "provider": "pixabay",
+      "id": "3967979",
+      "page": "https://pixabay.com/photos/yoga-exercises-mats-3967979/",
+      "photographer": "bmwalkiewicz",
+      "photographerUrl": "https://pixabay.com/users/bmwalkiewicz-11434611/",
+      "alt": "yoga mats rolled studio floor",
+      "width": 1280,
+      "height": 719,
+      "file": "fitness/detail-2-3967979.jpg"
+    }
+  }
+}
