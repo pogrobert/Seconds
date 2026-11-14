@@ -21,3 +21,19 @@
   - Pixabay's range is limited: the salon and dental photos were the weakest, which is why Signature uses none.
 - **Checks** *(measured)*: all five pass at 1440 and 390 px, with no overflow, nothing sticking out, no covered text and no axe WCAG 2.2 AA violations (`pnpm --filter @repo/eval directions`).
 - **The pages are plain HTML and CSS, with no JavaScript.** They are references, not yet blocks. The winners get broken into blocks under the block contract afterwards.
+
+## Robert's scores (2026-11-15)
+
+| Direction | Score | Note |
+|---|---|---|
+| Landscape | **5** | |
+| Wordmark | **5** | |
+| Signature | **5** | |
+| Atelier | 4 | |
+| Spread | 3 | "kinda weird image placement" |
+
+Three of the five reach the top of the bar, against "fine but not exciting" for everything generated before.
+
+**Spread's fault:** the small second photo floats low and to the right of an otherwise empty white half. On a magazine page that reads as layout; on a website it reads as a mistake.
+
+Stored in `tools/eval/taste/2026-11-15-directions.json`.
