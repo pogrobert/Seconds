@@ -187,7 +187,7 @@ Self-hosting. Text measurement on the server. Machinery against option-order bia
 ## Still open for Robert
 
 1. (Answered: the first milestone is the taste-and-contract test.)
-2. What result would convince you the decision model earns its place? For example: you prefer its site over the plain defaults in two of three blind pairs. Set this before seeing results.
+2. (Answered 2026-11-14: the model must win at least 20 of 30 blind pairs against the code defaults, and also beat random choices.)
 3. Is M1 public, or a demo you show yourself? A demo needs no accounts, bot checks or domains yet.
 4. May two neutral domains be bought before the real name is chosen (one for published sites, one for the preview)? Publishing and the separate-domain preview wait on them.
 5. If a block turns out to have a security problem, may published sites using it be re-rendered without the owner republishing? Your rule says sites stay frozen.
