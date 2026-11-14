@@ -26,7 +26,7 @@ async function hideBanners(page: Page) {
     const words = /cookie|consent|gdpr|privacy|we use|accept all/i
     for (const el of Array.from(document.querySelectorAll<HTMLElement>('body *'))) {
       const s = getComputedStyle(el)
-      if ((s.position === 'fixed' || s.position === 'sticky') && words.test(el.innerText ?? '')) {
+      if ((s.position === 'fixed' || s.position === 'sticky') && words.test(el.textContent ?? '')) {
         const r = el.getBoundingClientRect()
         if (r.height < window.innerHeight * 0.9 || /cookie|consent/i.test(el.id + el.className))
           el.style.setProperty('display', 'none', 'important')
@@ -50,7 +50,7 @@ async function hideBanners(page: Page) {
       const big =
         (s.position === 'fixed' || s.position === 'absolute') &&
         r.width * r.height > 0.08 * innerWidth * innerHeight
-      if ((dialog || big) && ask.test(el.innerText ?? '') && r.height < innerHeight * 1.05)
+      if ((dialog || big) && ask.test(el.textContent ?? '') && r.height < innerHeight * 1.05)
         el.style.setProperty('display', 'none', 'important')
     }
     document.documentElement.style.setProperty('overflow', 'auto', 'important')

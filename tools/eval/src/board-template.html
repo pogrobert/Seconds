@@ -16,7 +16,9 @@
   --bg: #131312; --panel: #1c1c1a; --fg: #ececE6; --muted: #a4a49b; --line: #34342f;
   --accent: #8fc4b2; --accent-fg: #10201b; --love: #ff8a80; --love-soft: #3a1f1d; --good: #8fc4b2; --good-soft: #1e2e29; --no: #a4a49b; --no-soft: #262624; color-scheme: dark }
 body { background: var(--bg); color: var(--fg); font: 15px/1.5 var(--f-body); }
-[hidden] { display: none !important; }
+[hidden] { display: none; }
+.stack { display: grid; gap: 14px; }
+.stack[hidden] { display: none; }
 .wrap { max-width: 1560px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 24px 48px; display: grid; gap: 16px; }
 h1 { font: 600 clamp(24px, 3vw, 34px)/1.1 var(--f-display); margin: 0; letter-spacing: -0.01em; }
 h2 { font: 600 20px/1.2 var(--f-display); margin: 0; }
@@ -70,7 +72,7 @@ kbd { font: 12px ui-monospace, Menlo, monospace; border: 1px solid var(--line); 
     <p class="lede">Real sites by small businesses, picked for their design. Mark the ones that blow your hair back as <strong>Love</strong>, the ones that are good but not exciting as <strong>Good</strong>, and the rest as <strong>Not for me</strong>. A word or two on why helps most: the type, the photos, the colour, the layout, the mood. Open a site to see its whole page and its phone view.</p>
   </header>
 
-  <section id="list" style="display:grid; gap:14px">
+  <section id="list" class="stack">
     <div class="bar">
       <fieldset id="groups" aria-label="Kind of business"><span class="label">Kind</span></fieldset>
       <fieldset aria-label="Show"><span class="label">Show</span>
@@ -83,7 +85,7 @@ kbd { font: 12px ui-monospace, Menlo, monospace; border: 1px solid var(--line); 
     <div class="grid" id="grid"></div>
   </section>
 
-  <section id="view" hidden style="display:grid; gap:14px">
+  <section id="view" class="stack" hidden>
     <div class="bar">
       <a href="#list" style="color:var(--fg)">← All sites</a>
       <fieldset aria-label="Move"><button type="button" id="prev">Previous</button><button type="button" id="next">Next</button></fieldset>
@@ -98,7 +100,7 @@ kbd { font: 12px ui-monospace, Menlo, monospace; border: 1px solid var(--line); 
         <figure><figcaption>Whole page (scroll inside)</figcaption><div class="full"><img id="vFull" alt="" loading="lazy"></div></figure>
       </div>
       <aside class="side" aria-label="This site">
-        <h2 id="vName"></h2>
+        <h2 id="vName">Site</h2>
         <p class="tag" id="vKind"></p>
         <p class="why" id="vWhy"></p>
         <p><a id="vLink" href="https://example.com" target="_blank" rel="noopener">Open the live site</a></p>
@@ -168,7 +170,7 @@ async function save(id, patch) {
   marks[id] = { ...(marks[id] || {}), ...patch, at: new Date().toISOString() }
   try { localStorage.setItem(LS, JSON.stringify(marks)) } catch {}
   if (db) {
-    try { await db.doc('marks/' + id).set(marks[id]); $('status').textContent = 'Saved.' }
+    try { await db.doc(`marks/${id}`).set(marks[id]); $('status').textContent = 'Saved.' }
     catch (e) { $('status').textContent = `Saved in this browser only (${e?.code || 'error'}).` }
   } else $('status').textContent = 'Saved in this browser only.'
 }
