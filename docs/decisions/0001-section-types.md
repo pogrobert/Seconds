@@ -1,6 +1,6 @@
-# 0001: Content fields and section types (draft)
+# 0001: Content fields and section types
 
-**Status:** draft. The seven open questions were settled by research on 2026-11-14 (see "Answers"). Waiting for Robert's approval of the list. No block may be written before that, because every block depends on it.
+**Status:** accepted by Robert on 2026-11-14. The seven open questions were settled by research the same day (see "Answers"). Section types are only ever added to; changing or removing a field needs a spec migration.
 **Date:** 2026-11-14.
 **What this is:** M0's paper step. 40 real small-business sites were cut into sections, and every section was mapped onto a draft list of section types built from one shared list of content fields.
 
@@ -11,7 +11,7 @@
 - **Only 5 sections (0.7%) had no section type at all.** Each of them is a site-level feature, not a section: a sticky phone bar, a pop-up, a sidebar, share buttons, a search filter.
 - **The biggest pressure point is the one the review predicted (`07-review.md`, B1).** 36 sections pack something extra into a section, such as a strip of logos inside an "about us" text, statistics inside a hero, or badges and a licence number in a hero. That is the road to a `hero` with 30 optional fields. "Answers" below settles it: the extra becomes its own neighbouring section.
 - **Prices are the second gap.** 11 sections need more than one price per item: price tables with a column per stylist level, dental fees per payment plan, and prices per team member.
-- **The draft has 21 section types built from 16 fields,** plus two types reserved for later (third-party embeds and a shop). The 8 most used types cover 72% of all sections (506 of 701) and are proposed for M0.
+- **The list has 21 section types built from 18 fields,** plus two types reserved for later (third-party embeds and a shop). (Corrected on 2026-11-14 when the list was written as code: the first draft said 21 types and 16 fields, but had 20 types and 17 fields; `stats` and `proof` were then added.) The 8 most used types cover 72% of all sections (506 of 701) and are proposed for M0.
 - **After research settled the open questions, 95% of sections fit** (665 of 701): 622 map to one type, 33 become two neighbouring sections, and 13 link out to an outside service instead of embedding it. See "Answers". This is the same sample and the same single mapper.
 
 Every count on this page is **measured**: it was counted in this sample of 40 sites. The percentages describe this sample only. They are not an estimate for small-business sites in general (see "Limits" at the end).
@@ -137,7 +137,7 @@ Each field is defined once, with one shape. A section type is a named subset of 
 
 ## The draft section types
 
-22 types for blocks, plus 2 reserved for later. "Required" fields must be filled; the rest are optional.
+21 types for blocks, plus 2 reserved for later. "Required" fields must be filled; the rest are optional.
 
 | Section type | Required | Optional | Covers |
 |---|---|---|---|

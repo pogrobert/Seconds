@@ -9,7 +9,7 @@
   "linter": { "rules": { "preset": "recommended" } },
   "overrides": [
     {
-      "includes": ["packages/spec/**", "packages/pipeline/**", "packages/blocks/src/manifest/**"],
+      "includes": ["packages/spec/src/**", "packages/pipeline/src/**", "packages/blocks/src/manifest/**"],
       "linter": {
         "rules": {
           "style": {

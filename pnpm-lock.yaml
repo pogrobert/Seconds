@@ -173,6 +173,10 @@ importers:
       zod:
         specifier: 'catalog:'
         version: 4.6.7
+    devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 26.6.6
 
   tools/eval:
     dependencies:
