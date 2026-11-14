@@ -233,7 +233,7 @@ export default function FooterSimple({ content: c, variant, ctx }: BlockProps<'f
           )}
         </div>
         {(c.facts || note) && (
-          <div className="flex min-w-0 flex-col items-start gap-md @lg:max-w-md @lg:items-end @lg:text-end">
+          <div className="flex min-w-0 flex-col items-start gap-md @lg:w-full @lg:max-w-prose @lg:items-end @lg:text-end">
             {c.facts && <Facts ctx={ctx} facts={c.facts} centered={false} />}
             {note}
           </div>

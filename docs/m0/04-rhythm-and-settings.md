@@ -94,3 +94,17 @@ He liked 14 of 24: 01, 04, 05, 08, 10, 11, 12, 14, 15, 16, 21, 22, 23, 24. The p
   - Geist 2 of 5, Cormorant 1 of 3, Big Shoulders 1 of 3.
 - The calm rhythm was liked 3 of 7; every other rhythm 3 of 4 or better.
 - Families were even: Poster 5 of 8, Quiet 5 of 8, Soft 4 of 8.
+
+## Round 2 of the Wall (2026-11-14)
+
+What changed after Robert's picks:
+
+- **Code defaults (M0 arm B) use photo-led heroes** for all five kinds of business: `PHOTO_HEROES` in `packages/pipeline/src/defaults.ts`. This makes the defaults a stronger opponent for the decision model, which is fair.
+- **The Wall's round 2** (`pnpm --filter @repo/eval wall`; `ROUND=1` reproduces round 1):
+  - It draws the hero only from `PHOTO_HEROES`, with new seeds, and shows whole-page thumbnails. So Robert's picks judge everything below the hero.
+  - It is published privately at https://claude.ai/artifact/XWPuWYPLHGhoSqohY2gdn2.
+  - All 24 sites pass the browser checks at 360 and 1280 px *(measured)*.
+- **Defect found by eye, fixed:** in `footer/simple#inline` (now 1.0.1), the details column was set one word per line, with a large empty area beside it. It appeared in 7 of 24 sites, and also in round 1's published sites.
+  - Cause: in the wiped Tailwind theme, `max-w-md` resolves to the spacing token md (1.25rem), not a 40rem column width.
+  - A contract rule now forbids `max-w-<spacing size>`.
+  - The browser gate has a new check: text squeezed one word per line. It finds nothing else in the library *(measured)*.

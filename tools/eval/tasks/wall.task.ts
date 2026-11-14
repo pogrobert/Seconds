@@ -5,7 +5,9 @@
 // Every site is checked in Chromium at 360 and 1280 px: page wider than the window, elements
 // sticking out, and axe WCAG 2.2 AA with the real fonts. Problems are listed, not hidden.
 // Output: tools/eval/out/wall/<kind>/site-NN.html, wall.json (what each site chose), problems.json,
+//   site-NN.png and site-NN-full.png (first screen and whole page at 1280 px),
 //   wall.png (a contact sheet of the first screen of every site).
+// ROUND=1 reproduces the first Wall (every hero allowed); the default round 2 uses photo-led heroes.
 // Run: pnpm --filter @repo/eval wall     or    KIND=restaurant SITES=12 pnpm --filter @repo/eval wall
 import { cpSync, existsSync, mkdirSync, writeFileSync } from 'node:fs'
 import AxeBuilder from '@axe-core/playwright'
@@ -14,6 +16,7 @@ import { familyAxes, M0_FAMILIES } from '@repo/blocks/themes'
 import {
   applyRhythm,
   DEFAULT_PLANS,
+  PHOTO_HEROES,
   RHYTHM_NAMES,
   rng,
   type SectionPlan,
@@ -27,9 +30,14 @@ import { standInContent } from '../src/stand-in.ts'
 
 const kind = (process.env.KIND ?? 'salon') as Kind
 const COUNT = Number(process.env.SITES ?? 24)
+/**
+ * Which Wall. Round 1 drew every hero; from round 2 the hero is one of the photo-led heroes Robert
+ * liked (PHOTO_HEROES), so picks judge the rest of the page. Each round has its own seeds.
+ */
+const ROUND = Number(process.env.ROUND ?? 2)
 if (!KINDS.includes(kind)) throw new Error(`KIND must be one of ${KINDS.join(', ')}`)
 
-const out = new URL(`../out/wall/${kind}/`, import.meta.url)
+const out = new URL(`../out/wall/${kind}${ROUND === 1 ? '' : `-${ROUND}`}/`, import.meta.url)
 mkdirSync(out, { recursive: true })
 const photos = new URL(`../photos/${kind}/`, import.meta.url)
 if (existsSync(photos)) cpSync(photos, new URL(`photos/${kind}/`, out), { recursive: true })
@@ -76,7 +84,7 @@ const chosen = new Map<string, Choice & { content: Record<string, unknown> }>()
 
 /** One site of the Wall: its family, settings, mode, rhythm and variants, from a seed. */
 function wallPlan(i: number): { plan: SitePlan; label: Record<string, string> } {
-  const rand = rng(`${kind}-wall-${i}`)
+  const rand = rng(ROUND === 1 ? `${kind}-wall-${i}` : `${kind}-wall${ROUND}-${i}`)
   const pick = <T>(xs: readonly T[]): T => xs[Math.floor(rand() * xs.length)] as T
   const family = M0_FAMILIES[i % M0_FAMILIES.length] as (typeof M0_FAMILIES)[number]
   const lists = familyAxes(family)
@@ -89,6 +97,12 @@ function wallPlan(i: number): { plan: SitePlan; label: Record<string, string> } 
       .filter((m) => m.sectionType === sec.sectionType)
       .flatMap((m) => Object.keys(m.variants).map((variant) => ({ m, variant })))
       .filter(({ m, variant }) => eligibility(m, variant, wallContent(m, variant, sec)).ok)
+      .filter(
+        ({ m, variant }) =>
+          ROUND === 1 ||
+          sec.sectionType !== 'hero' ||
+          (PHOTO_HEROES as readonly string[]).includes(`${m.type}#${variant}`),
+      )
     const o = pick(options)
     const content = wallContent(o.m, o.variant, sec)
     chosen.set(`${i}:${n}`, { type: o.m.type, variant: o.variant, content })
@@ -165,8 +179,13 @@ it(`renders and checks a Wall of ${COUNT} ${kind} sites`, async () => {
         found.push(
           `${width}px: axe ${v.id} (${v.nodes.length}) ${v.nodes[0]?.target.join(' ') ?? ''} ${v.nodes[0]?.failureSummary?.split('\n')[1] ?? ''}`,
         )
-      if (width === 1280)
+      if (width === 1280) {
         await page.screenshot({ path: new URL(s.file.replace('.html', '.png'), out).pathname })
+        await page.screenshot({
+          path: new URL(s.file.replace('.html', '-full.png'), out).pathname,
+          fullPage: true,
+        })
+      }
     }
     if (found.length) problems[s.file] = found
   }

@@ -82,6 +82,20 @@ export const measure = () => {
     if (!hasText || cs.display.startsWith('inline')) continue
     if (el.scrollWidth > el.clientWidth + 1)
       out.push(`${name(el)} text is wider than its box (${el.scrollWidth} > ${el.clientWidth})`)
+    // Squeezed: a run of three or more words broken one word per line, the sign of a column that
+    // shrank to its narrowest (nothing overflows, so the checks above miss it).
+    for (const n of Array.from(el.childNodes)) {
+      const words =
+        n.nodeType === 3 ? (n.textContent ?? '').trim().split(/\s+/).filter(Boolean) : []
+      if (words.length < 3) continue
+      const range = document.createRange()
+      range.selectNodeContents(n)
+      const lines = new Set(Array.from(range.getClientRects()).map((r) => Math.round(r.top))).size
+      if (lines >= words.length)
+        out.push(
+          `${name(el)} is squeezed: "${words.join(' ').slice(0, 40)}" sets one word per line`,
+        )
+    }
     if (['hidden', 'clip'].includes(cs.overflowY) && el.scrollHeight > el.clientHeight + 1)
       out.push(`${name(el)} text is clipped (${el.scrollHeight} > ${el.clientHeight})`)
   }

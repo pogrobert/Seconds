@@ -133,6 +133,11 @@ for (const { dir, m, C, error } of loaded) {
         expect(c, 'arbitrary value').not.toMatch(/\[/)
         expect(c, 'dark: is a palette, not markup').not.toMatch(/(^|:)dark:/)
         expect(c, 'no !important').not.toMatch(/(^!|!$)/)
+        // In the wiped theme, max-w-md and friends resolve to SPACING tokens (max-w-md is 1.25rem),
+        // not container sizes. Content widths are max-w-prose, max-w-content and max-w-wide.
+        expect(c, 'max-w-<space> is a spacing size, not a column width').not.toMatch(
+          /(^|:)max-w-(2xs|xs|sm|md|lg|xl|2xl)$/,
+        )
       }
     })
     it('every class exists in the kit (wiped Tailwind theme)', async () => {

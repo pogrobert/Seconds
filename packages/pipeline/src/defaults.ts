@@ -24,6 +24,18 @@ const style = (family: (typeof M0_FAMILIES)[number]) => ({
   mode: 'light' as const,
 })
 
+/**
+ * Heroes led by a large photo. Robert liked all 9 Wall sites that opened with one of these, and none
+ * of the 5 that opened with centred text or a collage (tools/eval/taste/2026-11-14-salon-wall.json;
+ * docs/m0/04-rhythm-and-settings.md). Defaults use them whenever the business has a photo; text-only
+ * and collage heroes stay in the library for businesses without one.
+ */
+export const PHOTO_HEROES = [
+  'hero/editorial#framed',
+  'hero/editorial#card',
+  'hero/overlay#bottom',
+] as const
+
 export const DEFAULT_PLANS: Record<Kind, SitePlan> = {
   restaurant: {
     before: [s('header/classic', 'inline')],
@@ -40,7 +52,7 @@ export const DEFAULT_PLANS: Record<Kind, SitePlan> = {
   salon: {
     before: [s('header/classic', 'inline')],
     sections: [
-      s('hero/standard', 'split'),
+      s('hero/editorial', 'framed'),
       s('cards/grid', 'plain', { navLabel: 'Why us' }),
       s('price-list/menu', 'table', { navLabel: 'Prices', surface: 'muted' }),
       s('text-media/editorial', 'heading-aside', { navLabel: 'About' }),
@@ -53,7 +65,7 @@ export const DEFAULT_PLANS: Record<Kind, SitePlan> = {
   clinic: {
     before: [s('header/utility', 'bar')],
     sections: [
-      s('hero/standard', 'split'),
+      s('hero/editorial', 'card'),
       s('cards/grid', 'bordered', { navLabel: 'Why us' }),
       s('price-list/menu', 'list', { navLabel: 'Fees', surface: 'muted' }),
       s('text-media/split', 'image-start', { navLabel: 'About' }),
@@ -66,7 +78,7 @@ export const DEFAULT_PLANS: Record<Kind, SitePlan> = {
   trades: {
     before: [s('header/utility', 'bar')],
     sections: [
-      s('hero/standard', 'centered'),
+      s('hero/overlay', 'bottom'),
       s('cards/grid', 'bordered', { navLabel: 'Services' }),
       s('cards/steps', 'numbered', { navLabel: 'How it works', surface: 'muted' }),
       s('text-media/split', 'text-only', { navLabel: 'About' }),
@@ -79,7 +91,7 @@ export const DEFAULT_PLANS: Record<Kind, SitePlan> = {
   fitness: {
     before: [s('header/classic', 'inline')],
     sections: [
-      s('hero/overlay', 'center'),
+      s('hero/editorial', 'framed'),
       s('cards/grid', 'plain', { navLabel: 'Why us' }),
       s('price-list/cards', 'groups', { navLabel: 'Prices', surface: 'muted' }),
       s('text-media/split', 'image-start', { navLabel: 'Studio' }),
