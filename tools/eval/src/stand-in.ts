@@ -1,6 +1,7 @@
 import type { SectionPlan } from '@repo/pipeline'
 import type { Asset, RichText } from '@repo/spec'
 import type { SampleBusiness } from './businesses.ts'
+import { readManifest, type Slot } from './photos.ts'
 
 // Section content from a sample business's facts and stand-in copy. A placeholder for the text
 // model: it fills the same typed fields, so layouts can be judged before the pipeline writes text.
@@ -11,13 +12,43 @@ const aid = (kind: string, n: number) =>
 const iid = (n: number) => `i_${String(n).padStart(10, '0')}` as const
 const fid = 'f_newsletter' as const
 
+/**
+ * The five pictures of a sample business. A licensed stock photo where photos/manifest.json has one
+ * for that slot (decided 2026-11-14), otherwise generated art from Surfaces.
+ */
 export function sampleAssets(s: SampleBusiness): Asset[] {
-  const make = (n: number, seed: string, alt: string): Asset => ({
-    id: aid(s.kind, n),
-    type: 'image',
-    source: { type: 'generated', generator: 'surfaces', style: 'riso', seed: `${s.kind}-${seed}` },
-    alt,
-  })
+  const photos = readManifest()[s.kind] ?? {}
+  const make = (n: number, slot: Slot, alt: string): Asset => {
+    const p = photos[slot]
+    if (p)
+      return {
+        id: aid(s.kind, n),
+        type: 'image',
+        source: {
+          type: 'stock',
+          provider: 'pexels',
+          id: p.id,
+          page: p.page,
+          photographer: p.photographer,
+          ...(p.photographerUrl ? { photographerUrl: p.photographerUrl } : {}),
+          key: p.file,
+        },
+        width: p.width,
+        height: p.height,
+        alt: p.alt.slice(0, 250),
+      }
+    return {
+      id: aid(s.kind, n),
+      type: 'image',
+      source: {
+        type: 'generated',
+        generator: 'surfaces',
+        style: 'riso',
+        seed: `${s.kind}-${slot}`,
+      },
+      alt,
+    }
+  }
   return [
     make(1, 'hero', `${s.business.name}: ${s.standIn.tagline}`),
     make(2, 'about', `Inside ${s.business.name}`),

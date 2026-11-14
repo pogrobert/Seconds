@@ -94,6 +94,21 @@ export const Asset = z.strictObject({
   type: z.literal('image'),
   source: z.discriminatedUnion('type', [
     z.strictObject({ type: z.literal('upload'), key: z.string().min(1).max(200) }),
+    /**
+     * A licensed stock photo, stored by us (Pexels allows storing and resizing; decided 2026-11-14).
+     * The credit is kept so the photographer and Pexels can always be named.
+     */
+    z.strictObject({
+      type: z.literal('stock'),
+      provider: z.literal('pexels'),
+      id: z.string().regex(/^\d{1,12}$/),
+      /** The photo's page on the provider's site. */
+      page: z.url({ protocol: /^https$/ }),
+      photographer: z.string().min(1).max(80),
+      photographerUrl: z.url({ protocol: /^https$/ }).optional(),
+      /** Where our stored copy lives. */
+      key: z.string().min(1).max(200),
+    }),
     /** Generated art from Surfaces: the same parameters always draw the same picture. */
     z.strictObject({
       type: z.literal('generated'),

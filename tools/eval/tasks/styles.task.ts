@@ -2,13 +2,18 @@
 // then checks each page in Chromium at 360 and 1280 px: page wider than the window, elements
 // sticking out, and axe WCAG 2.2 AA (including colour contrast with the real fonts loaded).
 // Run: pnpm --filter @repo/eval styles
-import { mkdirSync, writeFileSync } from 'node:fs'
+import { cpSync, existsSync, mkdirSync, writeFileSync } from 'node:fs'
 import AxeBuilder from '@axe-core/playwright'
 import { FAMILY_IDS } from '@repo/blocks/themes'
 import { type Browser, chromium } from 'playwright'
 import { afterAll, beforeAll, expect, it } from 'vitest'
 import { KINDS } from '../src/businesses.ts'
 import { renderSample } from '../src/render-sample.ts'
+
+// Licensed photos (if fetched) sit beside the pages, so the pages work locally and when published.
+const photos = new URL('../photos/', import.meta.url)
+if (existsSync(photos))
+  cpSync(photos, new URL('../out/styles/photos/', import.meta.url), { recursive: true })
 
 let browser: Browser
 beforeAll(async () => {
@@ -35,7 +40,7 @@ const overflow = () => {
 for (const family of FAMILY_IDS) {
   for (const kind of KINDS) {
     it(`${family} / ${kind}`, async () => {
-      const r = await renderSample(kind, { family })
+      const r = await renderSample(kind, { family, photoBase: '../photos/' })
       expect(r.problems).toEqual([])
       const dir = new URL(`../out/styles/${family}/`, import.meta.url)
       mkdirSync(dir, { recursive: true })

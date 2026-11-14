@@ -25,12 +25,11 @@ The sheets are produced by `pnpm --filter @repo/eval sheet` into `tools/eval/out
 
 ## The plan, biggest effect first
 
-1. **Imagery (decision needed).** Owners will upload their own photos, but the M0 blind test needs believable ones. Options:
-   - (a) generate photos per sample business with an image model, once, when the briefs are made (a few cents each, estimated)
-   - (b) licensed stock photos stored with the briefs, following each provider's rules
-   - (c) keep Surfaces art only
-
-   Surfaces stays either way, as texture, backgrounds and art for blocks where a photo is wrong.
+1. **Imagery: decided on 2026-11-14, licensed stock photos from Pexels.**
+   - Pexels' licence allows downloading, storing, resizing and use on websites, including templates that are sold. Attribution is not required by the licence; its API terms ask for a Pexels link and photographer credit when possible, so every photo keeps its credit.
+   - Unsplash is out: its API terms require hotlinked image URLs on every use. Pixabay forbids permanent hotlinking and mass downloads.
+   - Pexels' terms forbid "bulk, large-scale or systematic copying" without permission: ask Pexels in writing before the 30 briefs need hundreds of photos, or before the product offers stock photos.
+   - Surfaces stays for texture, backgrounds and blocks where a photo is wrong.
 2. **Expressive variants.** Rebuild hero, cards, text-media and cta around distinct compositions, so each section type has 5 to 8 variants that look clearly different:
    - huge type over or beside images
    - asymmetric editorial grids

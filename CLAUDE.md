@@ -35,6 +35,7 @@ The reason to build it: code-writing builders (Lovable, v0, Bolt, Replit) take m
 - **Keys Robert has (2026-11-14):** a Cloudflare account (so `clef-flash`), TypeSafe (Jev), OpenRouter and Anthropic. No Cerebras or Groq account: the fast text model goes through OpenRouter. Never ask for key values in chat.
 - **M0 business kinds (2026-11-14):** restaurant or café, hair and beauty salon, dental or medical clinic, trades (plumber, electrician, roofer…), fitness or yoga studio.
 - **M0 style families (2026-11-14):** Poster, Quiet and Soft (`docs/decisions/0002-style-families.md`). Workshop and Deep stay as options outside M0.
+- **Test images (2026-11-14):** licensed stock photos for M0's sample businesses and briefs, from Pexels (licence allows storing, resizing and website use; terms checked 2026-11-14). Credit photographers and link to Pexels. Ask Pexels in writing before downloading hundreds or offering stock photos in the product (its terms forbid bulk copying without permission). Unsplash is out: its API requires hotlinking.
 - **Ambition.** Robert does not accept "it is not possible". When something blocks the goal, find the strongest way around it. Still report honestly: say what is measured, what is estimated and what failed.
 
 ### What we know about naming

@@ -102,6 +102,24 @@ const site = (): SiteSpec => ({
 })
 
 describe('validateSite', () => {
+  it('accepts a stock photo with its credit', () => {
+    const s = site()
+    s.content.assets[id('a', 1)] = {
+      id: id('a', 1),
+      type: 'image',
+      source: {
+        type: 'stock',
+        provider: 'pexels',
+        id: '3992874',
+        page: 'https://www.pexels.com/photo/3992874/',
+        photographer: 'A. Photographer',
+        key: 'pexels/3992874.jpg',
+      },
+      alt: 'A stylist at work',
+    }
+    const r = validateSite(s)
+    expect(r.ok ? [] : r.problems).toEqual([])
+  })
   it('accepts a valid two-page site', () => {
     const r = validateSite(site())
     expect(r.ok ? [] : r.problems).toEqual([])

@@ -12,7 +12,8 @@
     "samples": "vitest run --config vitest.tasks.config.ts samples",
     "block-log": "node src/block-log.ts",
     "styles": "vitest run --config vitest.tasks.config.ts styles",
-    "sheet": "vitest run --config vitest.tasks.config.ts sheet"
+    "sheet": "vitest run --config vitest.tasks.config.ts sheet",
+    "photos": "node --env-file-if-exists=../../.env src/photos.ts"
   },
   "dependencies": {
     "@repo/spec": "workspace:*",

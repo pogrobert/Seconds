@@ -16,3 +16,6 @@ playwright-report/
 test-results/
 tools/eval/out/
 docs/decisions/0001-data/rows.json
+
+# Stock photo files (licensed, fetched by tools/eval/src/photos.ts); the manifest with credits is committed
+tools/eval/photos/*/

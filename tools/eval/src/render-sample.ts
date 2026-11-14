@@ -12,7 +12,12 @@ import { sampleAssets, standInContent } from './stand-in.ts'
 /** Renders one sample business with a plan, in a style family (or the draft placeholder theme). */
 export async function renderSample(
   kind: Kind,
-  opts: { plan?: SitePlan; family?: FamilyId } = {},
+  opts: {
+    plan?: SitePlan
+    family?: FamilyId
+    /** URL prefix where the page will find photos/ files, relative to the page. */
+    photoBase?: string
+  } = {},
 ): Promise<{ html: string; spec: SiteSpec; problems: string[]; notes: string[] }> {
   const s = SAMPLES[kind]
   const plan = opts.plan ?? DEFAULT_PLANS[kind]
@@ -43,6 +48,12 @@ export async function renderSample(
     library: { manifests, components },
     button: t?.button ?? 'solid',
     imageUrl: (asset, o) => {
+      if (asset.source.type === 'stock')
+        return {
+          src: `${opts.photoBase ?? new URL('../photos/', import.meta.url).href}${asset.source.key}`,
+          width: asset.width ?? 1600,
+          height: asset.height ?? 1067,
+        }
       const w = 1200
       const h = Math.round(w / (o.aspect ?? 1.5))
       const seed = asset.source.type === 'generated' ? asset.source.seed : asset.id
