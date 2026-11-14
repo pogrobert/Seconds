@@ -1,5 +1,5 @@
 {
   "extends": "../../tsconfig.base.json",
-  "compilerOptions": { "types": ["node"], "lib": ["es2024", "dom", "dom.iterable"] },
+  "compilerOptions": { "types": ["node", "react", "react-dom"], "lib": ["es2024", "dom", "dom.iterable"] },
   "include": ["src", "test", "tasks", "vitest.tasks.config.ts"]
 }
