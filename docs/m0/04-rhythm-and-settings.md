@@ -70,3 +70,27 @@
 ## Not decided
 
 All of these are options. Robert picks which pairings, palettes and rhythms stay, and whether dark mode and inset framing belong in M0. The decision model will be asked about rhythm and settings by name, so the list can shrink without code changes elsewhere.
+
+## Robert's picks from the salon Wall (2026-11-14)
+
+He liked 14 of 24: 01, 04, 05, 08, 10, 11, 12, 14, 15, 16, 21, 22, 23, 24. The picks are stored as taste data in `tools/eval/taste/2026-11-14-salon-wall.json`.
+
+**The hero decides it** *(measured on these 24; one business, one rater)*:
+
+| Hero | Liked |
+|---|---|
+| Photo-led: `hero/editorial#framed`, `#card`, `hero/overlay#bottom` | **9 of 9** |
+| `hero/editorial#stacked` (huge headline, photo below) | 3 of 6 |
+| `hero/overlay#center`, `hero/standard#split` | 2 of 4 |
+| Text only or collage: `hero/standard#centered`, `#collage` | **0 of 5** |
+
+- If he had picked 14 of 24 at random, the chance that all 9 photo-led heroes are among them is 0.15%. The chance that all 5 text-only or collage heroes are left out is 0.6%.
+- The Wall's thumbnails show only the first screen, so the picks mostly judge the hero and the menu bar. They say little yet about the rest of the page.
+
+**Everything else is too thin to read** (each setting appeared 1 to 13 times). Hints only:
+
+- Fonts:
+  - Anton and Instrument Serif were liked 3 of 3 each.
+  - Geist 2 of 5, Cormorant 1 of 3, Big Shoulders 1 of 3.
+- The calm rhythm was liked 3 of 7; every other rhythm 3 of 4 or better.
+- Families were even: Poster 5 of 8, Quiet 5 of 8, Soft 4 of 8.
