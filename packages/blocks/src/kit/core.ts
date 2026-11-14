@@ -24,6 +24,11 @@ export type RenderCtx = {
   headingLevel: 1 | 2
   /** The theme's button style, read once by ButtonLink. */
   button: 'solid' | 'outline' | 'text'
+  /**
+   * The site's style settings (spec.style.axes), for the few blocks whose drawing depends on one,
+   * such as the lettered name's drawings (`marks`). Read-only; colours and type come from the theme.
+   */
+  axes: Readonly<Record<string, string>>
   href: (to: LinkTarget) => string
   image: (
     img: ImageRef,

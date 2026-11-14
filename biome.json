@@ -6,7 +6,13 @@
     "useIgnoreFile": true
   },
   "files": {
-    "includes": ["**", "!**/routeTree.gen.ts", "!**/worker-configuration.d.ts", "!docs"]
+    "includes": [
+      "**",
+      "!**/routeTree.gen.ts",
+      "!**/worker-configuration.d.ts",
+      "!docs",
+      "!tools/eval/directions"
+    ]
   },
   "formatter": {
     "indentStyle": "space",

@@ -110,6 +110,7 @@ it('photographs block variants in every M0 family', async () => {
             surface: 'base',
             headingLevel: 2,
             button: t.button,
+            axes: {},
             href: () => '#',
             business: f.context.business,
             collection: (id) => f.context.collections[id],

@@ -5,7 +5,7 @@ import { renderToStaticMarkup } from 'react-dom/server'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import type { BlockProps } from '../../src/kit/index.tsx'
 import type { BlockManifest } from '../../src/manifest/contract.ts'
-import { familyAxes, M0_FAMILIES, theme } from '../../src/themes/index.ts'
+import { DIRECTION_FAMILIES, familyAxes, M0_FAMILIES, theme } from '../../src/themes/index.ts'
 import { contentAtCaps, testCtx } from '../helpers.ts'
 import { artUri, dirs, measure, page, stylesheet } from './shared.ts'
 
@@ -15,7 +15,7 @@ import { artUri, dirs, measure, page, stylesheet } from './shared.ts'
 // box, clipped text or anything sticking out of the window. Colour and accessibility are the main
 // gate's job. Needs the network for the fonts (Google Fonts, for now; published sites will self-host).
 
-const PAIRINGS = M0_FAMILIES.flatMap((family) =>
+const PAIRINGS = [...M0_FAMILIES, ...DIRECTION_FAMILIES].flatMap((family) =>
   familyAxes(family).type.map((type) => ({ family, type })),
 )
 

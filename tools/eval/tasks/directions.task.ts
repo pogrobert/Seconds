@@ -29,12 +29,19 @@ it(`checks ${pages.length} direction pages`, async () => {
       await page.goto(new URL(`${name}.html`, dir).href, { waitUntil: 'networkidle' })
       await page.evaluate(() => document.fonts.ready)
       found.push(...(await page.evaluate(pageProblems)).map((x) => `${width}px: ${x}`))
-      const axe = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze()
+      const axe = await new AxeBuilder({ page })
+        .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa'])
+        .analyze()
       for (const v of axe.violations)
-        found.push(`${width}px: axe ${v.id} (${v.nodes.length}) ${v.nodes[0]?.target.join(' ') ?? ''}`)
+        found.push(
+          `${width}px: axe ${v.id} (${v.nodes.length}) ${v.nodes[0]?.target.join(' ') ?? ''}`,
+        )
       const tag = width > 500 ? 'desktop' : 'phone'
       await page.screenshot({ path: new URL(`${name}-${tag}-top.png`, out).pathname })
-      await page.screenshot({ path: new URL(`${name}-${tag}-full.png`, out).pathname, fullPage: true })
+      await page.screenshot({
+        path: new URL(`${name}-${tag}-full.png`, out).pathname,
+        fullPage: true,
+      })
       await ctx.close()
     }
     problems[name] = found

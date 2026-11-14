@@ -9,6 +9,8 @@ export function Section(p: {
   as?: 'section' | 'header' | 'footer'
   /** Vertical space: a full section, a compact bar (headers, notices) or none. */
   space?: 'section' | 'compact' | 'none'
+  /** No ground of its own: a menu bar laid over the photo of the block below it. */
+  clear?: boolean
   className?: string
   children: ReactNode
 }) {
@@ -22,7 +24,7 @@ export function Section(p: {
       data-variant={p.ctx.variant}
       data-surface={p.ctx.surface}
       aria-label={p.label}
-      className={cx('bg-bg text-fg px-gutter', space, p.className)}
+      className={cx(p.clear ? 'bg-transparent' : 'bg-bg', 'text-fg px-gutter', space, p.className)}
     >
       {p.children}
     </Tag>
@@ -80,7 +82,7 @@ export function FitLine(p: {
   const Tag = p.as ?? 'p'
   const chars = Math.max(4, [...p.text].length)
   return (
-    <div className="@container min-w-0 max-w-full">
+    <div className="@container w-full min-w-0 max-w-full">
       <Tag
         className={cx('type-fit min-w-0 max-w-full break-words', p.className)}
         style={{ '--fit-chars': chars } as CSSProperties}

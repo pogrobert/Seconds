@@ -17,10 +17,16 @@ export const dirs = readdirSync(join(root, 'src/blocks'), { withFileTypes: true 
 export async function stylesheet(themeCss?: string) {
   const compiler = await kitCompiler()
   const sources = [
-    ...['primitives.tsx', 'facts.tsx', 'core.ts'].map((f) => join(root, 'src/kit', f)),
-    ...readdirSync(join(root, 'src/blocks'))
-      .map((d) => join(root, 'src/blocks', d, 'component.tsx'))
-      .filter((f) => existsSync(f)), // another agent's folder may still be empty
+    ...['primitives.tsx', 'facts.tsx', 'core.ts', 'marks.tsx'].map((f) => join(root, 'src/kit', f)),
+    // Every .tsx file of every block: a block may split its variants into files of its own.
+    ...readdirSync(join(root, 'src/blocks')).flatMap((d) => {
+      const dir = join(root, 'src/blocks', d)
+      return existsSync(dir)
+        ? readdirSync(dir)
+            .filter((f) => f.endsWith('.tsx'))
+            .map((f) => join(dir, f))
+        : []
+    }),
   ]
   const candidates = [...new Set(sources.flatMap((f) => candidatesIn(readFileSync(f, 'utf8'))))]
   return (

@@ -40,6 +40,7 @@ export function testCtx(
     surface: 'base',
     headingLevel: 1,
     button: 'solid',
+    axes: {},
     href,
     image: (img, o) => ({
       src: `/img/${img.asset}.jpg`,

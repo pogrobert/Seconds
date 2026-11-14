@@ -1,6 +1,6 @@
 // Node-side build helpers: the stylesheet for a set of blocks. Not for Workers (it reads files);
 // published sites will use candidate lists precomputed at library build (report 02, D8).
-import { existsSync, readFileSync } from 'node:fs'
+import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -34,8 +34,15 @@ export async function siteCss(types: readonly string[], themeCss?: string): Prom
     },
   })
   const files = [
-    ...['core.ts', 'primitives.tsx', 'facts.tsx'].map((f) => join(root, 'src/kit', f)),
-    ...types.map((t) => join(folderOf(t), 'component.tsx')),
+    ...['core.ts', 'primitives.tsx', 'facts.tsx', 'marks.tsx'].map((f) => join(root, 'src/kit', f)),
+    // Every source file of each block: a block may split its variants into files of its own.
+    ...types.flatMap((t) =>
+      existsSync(folderOf(t))
+        ? readdirSync(folderOf(t))
+            .filter((f) => f.endsWith('.tsx'))
+            .map((f) => join(folderOf(t), f))
+        : [],
+    ),
   ].filter((f) => existsSync(f))
   const candidates = [...new Set(files.flatMap((f) => candidatesIn(readFileSync(f, 'utf8'))))]
   return (

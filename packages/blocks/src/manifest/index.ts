@@ -4,6 +4,7 @@
 import cardsFeature from '../blocks/cards-feature/manifest.ts'
 import cardsGrid from '../blocks/cards-grid/manifest.ts'
 import cardsList from '../blocks/cards-list/manifest.ts'
+import cardsMarks from '../blocks/cards-marks/manifest.ts'
 import cardsSteps from '../blocks/cards-steps/manifest.ts'
 import ctaBand from '../blocks/cta-band/manifest.ts'
 import ctaFeature from '../blocks/cta-feature/manifest.ts'
@@ -12,10 +13,12 @@ import footerColumns from '../blocks/footer-columns/manifest.ts'
 import footerSimple from '../blocks/footer-simple/manifest.ts'
 import footerWordmark from '../blocks/footer-wordmark/manifest.ts'
 import headerClassic from '../blocks/header-classic/manifest.ts'
+import headerOver from '../blocks/header-over/manifest.ts'
 import headerUtility from '../blocks/header-utility/manifest.ts'
 import heroEditorial from '../blocks/hero-editorial/manifest.ts'
 import heroOverlay from '../blocks/hero-overlay/manifest.ts'
 import heroPhoto from '../blocks/hero-photo/manifest.ts'
+import heroStage from '../blocks/hero-stage/manifest.ts'
 import heroStandard from '../blocks/hero-standard/manifest.ts'
 import hoursLocationPanel from '../blocks/hours-location-panel/manifest.ts'
 import hoursLocationSplit from '../blocks/hours-location-split/manifest.ts'
@@ -34,6 +37,7 @@ export const manifests: readonly BlockManifest[] = [
   cardsFeature,
   cardsGrid,
   cardsList,
+  cardsMarks,
   cardsSteps,
   ctaBand,
   ctaFeature,
@@ -42,10 +46,12 @@ export const manifests: readonly BlockManifest[] = [
   footerSimple,
   footerWordmark,
   headerClassic,
+  headerOver,
   headerUtility,
   heroEditorial,
   heroOverlay,
   heroPhoto,
+  heroStage,
   heroStandard,
   hoursLocationPanel,
   hoursLocationSplit,

@@ -84,7 +84,16 @@ function surface(
 
 /* ------------------------------------------------------------------ families */
 
-export type FamilyId = 'poster' | 'quiet' | 'workshop' | 'soft' | 'deep'
+export type FamilyId =
+  | 'poster'
+  | 'quiet'
+  | 'workshop'
+  | 'soft'
+  | 'deep'
+  | 'landscape'
+  | 'wordmark'
+  | 'signature'
+  | 'atelier'
 
 type TypeRole = {
   family: string
@@ -92,7 +101,10 @@ type TypeRole = {
   leading: number
   tracking: string
   weight: number
-  case?: 'uppercase' | 'none'
+  case?: 'uppercase' | 'lowercase' | 'none'
+  style?: 'italic' | 'normal'
+  /** Width, for variable fonts with a width axis: "75%". */
+  stretch?: string
 }
 
 /** One font pairing: every type role, the fonts to load and the jumbo size. */
@@ -116,6 +128,11 @@ type Pairing = {
    * names (tools/eval/tasks/advance.task.ts). Lets a wordmark fill its width without JavaScript.
    */
   advance: number
+  /**
+   * How the business name is set when it is the design (a masthead, a wordmark across a photo).
+   * Defaults to the display role. `advance` is then the name's own character width.
+   */
+  name?: TypeRole
 }
 
 type Corners = { control: string; card: string; media: string }
@@ -135,6 +152,13 @@ export type Family = {
   space: { section: string; scale: number }
   button: 'solid' | 'outline' | 'text'
   art: string
+  /** Photo treatments this family allows, the first being its default. All of them when absent. */
+  photo?: readonly string[]
+  /**
+   * Sets of drawings the family can letter the name and mark lists with (kit/marks.tsx), the first
+   * being its default. Families that draw nothing have only "none".
+   */
+  marks?: readonly string[]
 }
 
 const sans = (f: string) => `"${f}", system-ui, -apple-system, "Segoe UI", sans-serif`
@@ -164,6 +188,28 @@ const quietH2 = 'clamp(1.5rem, 1.25rem + 1.1cqi, 2.125rem)'
 /* Soft: friendly and reassuring. */
 const softDisplay = 'clamp(2.5rem, 1.7rem + 4cqi, 4.75rem)'
 const softH2 = 'clamp(1.875rem, 1.45rem + 2cqi, 3.125rem)'
+
+/**
+ * A quiet ground for the direction families: fixed neutrals from the photographs' world, the brand
+ * colour as the accent only. Every text pair is checked for AA by surface().
+ */
+function quietGround(
+  base: string,
+  ink: string,
+  muted: string,
+  inverseBg: string,
+  inverseFg: string,
+) {
+  return (brand: string): Palette => {
+    const strong = ensure(brand, base, 4.5)
+    return {
+      base: surface(base, ink, strong),
+      muted: surface(muted, ink, ensure(brand, muted, 4.5)),
+      brand: surface(strong, onColour(strong), mix(brand, '#ffffff', 0.85)),
+      inverse: surface(inverseBg, inverseFg, mix(brand, '#ffffff', 0.55)),
+    }
+  }
+}
 
 export const FAMILIES: Record<FamilyId, Family> = {
   poster: {
@@ -587,12 +633,265 @@ export const FAMILIES: Record<FamilyId, Family> = {
     button: 'solid',
     art: 'mezzotint',
   },
+
+  /* ---------------------------------------------------------------- directions
+   * Four families drawn from the homepages Robert scored 4 and 5 (docs/m0/09-directions.md).
+   * Each is one finished look: one pairing, one palette, a fixed set of blocks (the pipeline's
+   * DIRECTIONS). The colour comes from the photographs; the brand colour is an accent only. */
+
+  landscape: {
+    id: 'landscape',
+    label: 'Landscape',
+    feel: 'The place is the page: a sunlit photo, a thin serif name in the sky, almost no interface.',
+    pairings: {
+      cormorant: {
+        label: 'Cormorant Garamond and Instrument Sans',
+        feel: 'A light, classical serif with a plain modern sans: quiet, crafted and outdoors.',
+        fonts:
+          'family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Instrument+Sans:wght@400;500',
+        display: role(
+          serif('Cormorant Garamond'),
+          'clamp(2.25rem, 1.4rem + 3.4cqi, 4rem)',
+          1.08,
+          '0',
+          300,
+        ),
+        h2: role(
+          serif('Cormorant Garamond'),
+          'clamp(1.9rem, 1.4rem + 1.9cqi, 2.9rem)',
+          1.1,
+          '0',
+          300,
+        ),
+        h3: role(serif('Cormorant Garamond'), '1.5rem', 1.2, '0', 400),
+        body: sans('Instrument Sans'),
+        bodyWeight: 400,
+        label_: role(sans('Instrument Sans'), '0.875rem', 1.4, '0.02em', 500),
+        button: role(sans('Instrument Sans'), '0.9375rem', 1.2, '0.03em', 400),
+        jumbo: 'clamp(3.25rem, 1rem + 9cqi, 9.25rem)',
+        advance: 0.7,
+        name: role(serif('Cormorant Garamond'), '', 0.9, '0.06em', 300, true),
+      },
+    },
+    palettes: {
+      stone: {
+        label: 'Paper and garden green',
+        make: quietGround('#fbfaf7', '#1e231c', '#f1efe9', '#1e231c', '#fbfaf7'),
+      },
+    },
+    dark: quietGround('#fbfaf7', '#1e231c', '#f1efe9', '#1e231c', '#fbfaf7'),
+    corners: { square: SQUARE },
+    sizes: {
+      lead: 'clamp(1.0625rem, 1rem + 0.3cqi, 1.1875rem)',
+      body: '1.0625rem',
+      small: '0.875rem',
+    },
+    space: { section: 'clamp(5rem, 2rem + 9cqi, 10.5rem)', scale: 1.1 },
+    button: 'outline',
+    art: 'riso',
+    photo: ['warm', 'natural'],
+  },
+
+  wordmark: {
+    id: 'wordmark',
+    label: 'Wordmark',
+    feel: 'The name, huge and thin, across two photographs; below, a quiet page set like a printed menu.',
+    pairings: {
+      josefin: {
+        label: 'Josefin Sans and Newsreader',
+        feel: 'A thin geometric sans for the name and headings, a bookish serif for everything else.',
+        fonts:
+          'family=Josefin+Sans:wght@200;400&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,300;1,6..72,400',
+        display: {
+          ...role(serif('Newsreader'), 'clamp(1.75rem, 1.3rem + 1.8cqi, 2.6rem)', 1.3, '0', 300),
+          style: 'italic',
+        },
+        h2: role(
+          sans('Josefin Sans'),
+          'clamp(2.6rem, 1.6rem + 3.4cqi, 4.5rem)',
+          1,
+          '-0.02em',
+          200,
+          false,
+        ),
+        h3: { ...role(serif('Newsreader'), '1.375rem', 1.2, '0', 400), style: 'italic' },
+        body: serif('Newsreader'),
+        bodyWeight: 400,
+        label_: role(sans('Josefin Sans'), '0.9375rem', 1.4, '0.04em', 400),
+        button: role(sans('Josefin Sans'), '0.9375rem', 1.2, '0.05em', 400),
+        jumbo: 'clamp(4rem, 1rem + 12cqi, 14.5rem)',
+        advance: 0.48,
+        name: { ...role(sans('Josefin Sans'), '', 0.9, '-0.035em', 200), case: 'lowercase' },
+      },
+    },
+    palettes: {
+      white: {
+        label: 'White with a mist of the brand colour',
+        make: (b) =>
+          quietGround(
+            '#ffffff',
+            '#1d2e30',
+            mix(b, '#ffffff', 0.92),
+            mix(b, '#141c1d', 0.82),
+            '#eef3f2',
+          )(b),
+      },
+    },
+    dark: (b) =>
+      quietGround(
+        '#ffffff',
+        '#1d2e30',
+        mix(b, '#ffffff', 0.92),
+        mix(b, '#141c1d', 0.82),
+        '#eef3f2',
+      )(b),
+    corners: { pill: { control: '999px', card: '0', media: '0' } },
+    sizes: {
+      lead: 'clamp(1.125rem, 1rem + 0.5cqi, 1.3125rem)',
+      body: '1.125rem',
+      small: '0.9375rem',
+    },
+    space: { section: 'clamp(5rem, 2rem + 8cqi, 9.5rem)', scale: 1.05 },
+    button: 'solid',
+    art: 'riso',
+    photo: ['natural', 'warm'],
+  },
+
+  signature: {
+    id: 'signature',
+    label: 'Signature',
+    feel: 'No photographs needed: heavy condensed letters, with drawings standing in for some of them.',
+    pairings: {
+      bricolage: {
+        label: 'Bricolage Grotesque',
+        feel: 'One family: heavy and condensed for the name and headings, plain and friendly for the rest.',
+        fonts: 'family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800',
+        display: {
+          ...role(
+            sans('Bricolage Grotesque'),
+            'clamp(1.125rem, 1rem + 0.4cqi, 1.3125rem)',
+            1.5,
+            '0',
+            500,
+          ),
+        },
+        h2: {
+          ...role(
+            sans('Bricolage Grotesque'),
+            'clamp(2.75rem, 1.4rem + 4.6cqi, 5.75rem)',
+            0.9,
+            '0',
+            800,
+            true,
+          ),
+          stretch: '75%',
+        },
+        h3: role(sans('Bricolage Grotesque'), '1.5rem', 1.15, '0', 700),
+        body: sans('Bricolage Grotesque'),
+        bodyWeight: 400,
+        label_: role(sans('Bricolage Grotesque'), '0.9375rem', 1.35, '0', 600),
+        button: role(sans('Bricolage Grotesque'), '0.9375rem', 1.2, '0', 600),
+        jumbo: 'clamp(4rem, 1rem + 12cqi, 12.5rem)',
+        advance: 0.5,
+        name: {
+          ...role(sans('Bricolage Grotesque'), '', 0.86, '-0.01em', 800, true),
+          stretch: '75%',
+        },
+      },
+    },
+    palettes: {
+      black: {
+        label: 'Black, warm white and the brand colour',
+        make: (b) => {
+          const strong = ensure(b, '#ffffff', 3)
+          return {
+            base: surface('#fffdf8', '#111111', ensure(b, '#fffdf8', 4.5)),
+            muted: surface('#f3efe6', '#111111', ensure(b, '#f3efe6', 4.5)),
+            brand: surface(strong, onColour(strong), '#000000'),
+            inverse: surface('#000000', '#ffffff', mix(b, '#ffffff', 0.35)),
+          }
+        },
+      },
+    },
+    dark: (b) => {
+      const strong = ensure(b, '#ffffff', 3)
+      return {
+        base: surface('#fffdf8', '#111111', ensure(b, '#fffdf8', 4.5)),
+        muted: surface('#f3efe6', '#111111', ensure(b, '#f3efe6', 4.5)),
+        brand: surface(strong, onColour(strong), '#000000'),
+        inverse: surface('#000000', '#ffffff', mix(b, '#ffffff', 0.35)),
+      }
+    },
+    corners: { cards: { control: '0', card: '18px', media: '18px' } },
+    sizes: {
+      lead: 'clamp(1.125rem, 1rem + 0.4cqi, 1.25rem)',
+      body: '1.125rem',
+      small: '0.9375rem',
+    },
+    space: { section: 'clamp(5rem, 2rem + 8cqi, 10rem)', scale: 1.05 },
+    button: 'solid',
+    art: 'screenprint',
+    photo: ['natural'],
+    marks: ['shop', 'dental', 'food', 'hair', 'trades', 'fitness'],
+  },
+
+  atelier: {
+    id: 'atelier',
+    label: 'Atelier',
+    feel: 'A calm interior photo with a large, light serif headline low on it, like a magazine feature.',
+    pairings: {
+      fraunces: {
+        label: 'Fraunces and Hanken Grotesk',
+        feel: 'A soft, light serif at large sizes with a neat grotesk: warm, calm and upmarket.',
+        fonts:
+          'family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..500,50;1,9..144,300,50&family=Hanken+Grotesk:wght@400;500',
+        display: role(serif('Fraunces'), 'clamp(3rem, 1.4rem + 6cqi, 7rem)', 0.98, '-0.025em', 300),
+        h2: {
+          ...role(serif('Fraunces'), 'clamp(2.4rem, 1.5rem + 3cqi, 4.1rem)', 1, '-0.02em', 300),
+          case: 'lowercase',
+        },
+        h3: role(serif('Fraunces'), '1.75rem', 1.1, '0', 400),
+        body: sans('Hanken Grotesk'),
+        bodyWeight: 400,
+        label_: role(sans('Hanken Grotesk'), '0.875rem', 1.4, '0', 500),
+        button: role(sans('Hanken Grotesk'), '0.9375rem', 1.2, '0', 500),
+        jumbo: 'clamp(5rem, 1rem + 22cqi, 26rem)',
+        advance: 0.47,
+        name: { ...role(serif('Fraunces'), '', 0.8, '-0.045em', 300), case: 'lowercase' },
+      },
+    },
+    palettes: {
+      chalk: {
+        label: 'Chalk and oak',
+        make: quietGround('#f8f6f2', '#2b2521', '#efebe5', '#2b2521', '#f8f6f2'),
+      },
+    },
+    dark: quietGround('#f8f6f2', '#2b2521', '#efebe5', '#2b2521', '#f8f6f2'),
+    corners: { soft: { control: '999px', card: '4px', media: '0' } },
+    sizes: {
+      lead: 'clamp(1.0625rem, 1rem + 0.4cqi, 1.25rem)',
+      body: '1.0625rem',
+      small: '0.9375rem',
+    },
+    space: { section: 'clamp(5rem, 2rem + 8cqi, 10rem)', scale: 1.05 },
+    button: 'solid',
+    art: 'riso',
+    photo: ['warm', 'natural'],
+  },
 }
 
 export const FAMILY_IDS = Object.keys(FAMILIES) as FamilyId[]
 
 /** The three families M0 tests (Robert, 2026-11-14; docs/decisions/0002-style-families.md). */
 export const M0_FAMILIES = ['poster', 'quiet', 'soft'] as const satisfies readonly FamilyId[]
+
+/** The direction families, each one finished look (Robert's scores, docs/m0/09-directions.md). */
+export const DIRECTION_FAMILIES = [
+  'landscape',
+  'wordmark',
+  'signature',
+  'atelier',
+] as const satisfies readonly FamilyId[]
 
 /* ------------------------------------------------------------------ settings (style axes) */
 
@@ -608,7 +907,7 @@ const FRAME = ['bleed', 'inset'] as const
  * How every photo on the site is treated: as taken, black and white, or toned in the brand colour.
  * One treatment for the whole site, so photos from different sources read as one set.
  */
-const PHOTO = ['natural', 'mono', 'tint'] as const
+const PHOTO = ['natural', 'mono', 'tint', 'warm'] as const
 
 /** The brand's hue in degrees and its saturation (0 to 1), from HSL. */
 const hueSat = (hex: string): [number, number] => {
@@ -631,6 +930,8 @@ const hueSat = (hex: string): [number, number] => {
  */
 export function photoFilter(treatment: string, brand: string): string {
   if (treatment === 'mono') return 'grayscale(1) contrast(1.06)'
+  // A gentle warm grade, as on the sites Robert loved: sunlit, never orange.
+  if (treatment === 'warm') return 'sepia(0.14) saturate(1.06) brightness(0.99)'
   if (treatment !== 'tint') return 'none'
   const [h, s] = hueSat(brand)
   if (s < 0.15) return 'grayscale(1) sepia(0.55) contrast(1.04)'
@@ -650,10 +951,19 @@ export function familyAxes(id: FamilyId): Record<AxisName, string[]> {
     corners: Object.keys(f.corners),
     density: Object.keys(DENSITY),
     frame: [...FRAME],
-    photo: [...PHOTO],
+    photo: [...(f.photo ?? PHOTO)],
+    marks: [...(f.marks ?? ['none'])],
   }
 }
-export const AXIS_NAMES = ['type', 'palette', 'corners', 'density', 'frame', 'photo'] as const
+export const AXIS_NAMES = [
+  'type',
+  'palette',
+  'corners',
+  'density',
+  'frame',
+  'photo',
+  'marks',
+] as const
 export type AxisName = (typeof AXIS_NAMES)[number]
 export type Axes = Partial<Record<AxisName, string>>
 
@@ -699,6 +1009,8 @@ const vars = (prefix: string, t: TypeRole) =>
     `--type-${prefix}-tracking: ${t.tracking};`,
     `--type-${prefix}-weight: ${t.weight};`,
     `--type-${prefix}-case: ${t.case ?? 'none'};`,
+    `--type-${prefix}-style: ${t.style ?? 'normal'};`,
+    `--type-${prefix}-stretch: ${t.stretch ?? 'normal'};`,
   ].join('\n  ')
 
 /**
@@ -741,6 +1053,10 @@ export function theme(
 }
 `
       : ''
+  const marks =
+    axes.marks && axes.marks !== 'none'
+      ? `\n  --mark-a: ${mix(brand, '#ffffff', 0.15)}; --mark-b: #ffd23f; --mark-c: #f59bc3;`
+      : ''
   const filter = photoFilter(axes.photo, brand)
   const photo = filter === 'none' ? '' : `\n[data-site] img.media-cover { filter: ${filter}; }\n`
   const css = `[data-site] {
@@ -753,6 +1069,7 @@ export function theme(
   ${vars('button', t.button)}
   --type-jumbo-size: ${t.jumbo};
   --type-display-advance: ${t.advance};
+  ${t.name ? vars('name', t.name) : ''}
   --type-body-family: ${t.body};
   --type-body-weight: ${t.bodyWeight};
   --type-body-size: ${f.sizes.body};
@@ -766,7 +1083,7 @@ export function theme(
   --space-section: calc(${f.space.section} * ${d});
   --space-gutter: clamp(1rem, 0.5rem + 2cqi, 2.5rem);
   --space-columns: clamp(1.5rem, 1rem + 2cqi, 3rem);
-  --corner-control: ${c.control}; --corner-card: ${c.card}; --corner-media: ${c.media};
+  --corner-control: ${c.control}; --corner-card: ${c.card}; --corner-media: ${c.media};${marks}
 }
 ${frame}${photo}`
   return {

@@ -4,6 +4,7 @@ import type { ComponentType } from 'react'
 import cardsFeature from '../blocks/cards-feature/component.tsx'
 import cardsGrid from '../blocks/cards-grid/component.tsx'
 import cardsList from '../blocks/cards-list/component.tsx'
+import cardsMarks from '../blocks/cards-marks/component.tsx'
 import cardsSteps from '../blocks/cards-steps/component.tsx'
 import ctaBand from '../blocks/cta-band/component.tsx'
 import ctaFeature from '../blocks/cta-feature/component.tsx'
@@ -12,10 +13,12 @@ import footerColumns from '../blocks/footer-columns/component.tsx'
 import footerSimple from '../blocks/footer-simple/component.tsx'
 import footerWordmark from '../blocks/footer-wordmark/component.tsx'
 import headerClassic from '../blocks/header-classic/component.tsx'
+import headerOver from '../blocks/header-over/component.tsx'
 import headerUtility from '../blocks/header-utility/component.tsx'
 import heroEditorial from '../blocks/hero-editorial/component.tsx'
 import heroOverlay from '../blocks/hero-overlay/component.tsx'
 import heroPhoto from '../blocks/hero-photo/component.tsx'
+import heroStage from '../blocks/hero-stage/component.tsx'
 import heroStandard from '../blocks/hero-standard/component.tsx'
 import hoursLocationPanel from '../blocks/hours-location-panel/component.tsx'
 import hoursLocationSplit from '../blocks/hours-location-split/component.tsx'
@@ -35,6 +38,7 @@ const byFolder = [
   cardsFeature,
   cardsGrid,
   cardsList,
+  cardsMarks,
   cardsSteps,
   ctaBand,
   ctaFeature,
@@ -43,10 +47,12 @@ const byFolder = [
   footerSimple,
   footerWordmark,
   headerClassic,
+  headerOver,
   headerUtility,
   heroEditorial,
   heroOverlay,
   heroPhoto,
+  heroStage,
   heroStandard,
   hoursLocationPanel,
   hoursLocationSplit,

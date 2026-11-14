@@ -74,8 +74,11 @@ describe('style settings', () => {
   it('photo treatments: none by default, grey for mono, the brand hue for tint', () => {
     expect(theme('quiet', '#5b4a7a').css).not.toContain('filter')
     expect(theme('quiet', '#5b4a7a', { axes: { photo: 'mono' } }).css).toContain('grayscale(1)')
-    for (const id of FAMILY_IDS)
+    for (const id of FAMILY_IDS.filter((f) => familyAxes(f).photo.includes('tint')))
       expect(theme(id, '#5b4a7a', { axes: { photo: 'tint' } }).css).toMatch(/hue-rotate\(\d+deg\)/)
+    // The direction families allow only the treatments their look was designed with.
+    expect(familyAxes('landscape').photo).toEqual(['warm', 'natural'])
+    expect(theme('landscape', '#5b4a7a').css).toContain('sepia(0.14)')
     // A colourless brand gives a warm sepia instead of an arbitrary hue.
     expect(photoFilter('tint', '#111111')).toContain('sepia(0.55)')
     expect(photoFilter('tint', '#5b4a7a')).toContain('hue-rotate(223deg)')

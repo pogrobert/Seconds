@@ -7,7 +7,9 @@ import {
   checkCopy,
   compileQuestions,
   DEFAULT_PLANS,
+  DIRECTION_IDS,
   defaultSite,
+  directionPlan,
   fixedText,
   generateSite,
   KINDS,
@@ -215,5 +217,24 @@ describe('generate()', () => {
     expect(checkCopy(copy, false)).toEqual([])
     expect(checkCopy({ ...copy, headline: 'x'.repeat(41) }, false)).toHaveLength(1)
     expect(checkCopy(copy, true)).toContain('steps must have 3 items')
+  })
+})
+
+describe('directions', () => {
+  it('every direction draws every section of every kind with a real variant', () => {
+    for (const id of DIRECTION_IDS)
+      for (const kind of KINDS) {
+        const plan = directionPlan(kind, id)
+        for (const s of [...plan.before, ...plan.sections, ...plan.after])
+          expect(
+            manifests.find((m) => m.type === s.type)?.variants[s.variant],
+            `${id} ${kind} ${s.type}#${s.variant}`,
+          ).toBeDefined()
+        expect(plan.style.family).toBe(`${id}@1`)
+      }
+  })
+  it('signature letters each kind with its own drawings', () => {
+    expect(directionPlan('clinic', 'signature').style.axes.marks).toBe('dental')
+    expect(directionPlan('clinic', 'landscape').style.axes.marks).toBeUndefined()
   })
 })

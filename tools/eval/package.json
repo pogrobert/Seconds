@@ -18,7 +18,8 @@
     "wall": "vitest run --config vitest.tasks.config.ts wall",
     "m0": "vitest run --config vitest.tasks.config.ts m0",
     "board": "vitest run --config vitest.tasks.config.ts board",
-    "directions": "vitest run --config vitest.tasks.config.ts directions"
+    "directions": "vitest run --config vitest.tasks.config.ts directions",
+    "directions-wall": "vitest run --config vitest.tasks.config.ts directions-wall"
   },
   "dependencies": {
     "@repo/blocks": "workspace:*",

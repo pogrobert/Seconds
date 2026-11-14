@@ -95,9 +95,9 @@ function progress() {
 async function save(id, patch) {
   ratings[id] = { ...(ratings[id] || {}), ...patch, at: new Date().toISOString() }
   try { localStorage.setItem(LS, JSON.stringify(ratings)) } catch {}
-  const s = $('s-' + id)
+  const s = $(`s-${id}`)
   if (db) {
-    try { await db.doc('ratings/' + id).set(ratings[id]); s.textContent = 'Saved.' }
+    try { await db.doc(`ratings/${id}`).set(ratings[id]); s.textContent = 'Saved.' }
     catch (e) { s.textContent = `Saved in this browser only (${e?.code || 'error'}).` }
   } else s.textContent = 'Saved in this browser only.'
   progress()

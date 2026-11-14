@@ -139,6 +139,7 @@ export function renderPage(spec: SiteSpec, pageId: PageId, o: RenderOptions): Re
       surface: b.props.surface ?? 'base',
       headingLevel: id === firstBody ? 1 : 2,
       button: o.button,
+      axes: spec.style.axes ?? {},
       href: (to) => resolveHref(spec, to),
       image: (img, io) => {
         const asset = spec.content.assets[img.asset]

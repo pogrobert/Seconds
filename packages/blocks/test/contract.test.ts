@@ -27,8 +27,14 @@ const allDirs = readdirSync(join(root, 'src/blocks'), { withFileTypes: true })
   .map((d) => d.name)
   .sort()
 const dirs = allDirs.filter((d) => !only || d === only)
+/** A block's source. For component.tsx, every .tsx file in the folder, so split variants are checked too. */
 const source = (dir: string, file: string) =>
-  readFileSync(join(root, 'src/blocks', dir, file), 'utf8')
+  file === 'component.tsx'
+    ? readdirSync(join(root, 'src/blocks', dir))
+        .filter((f) => f.endsWith('.tsx'))
+        .map((f) => readFileSync(join(root, 'src/blocks', dir, f), 'utf8'))
+        .join('\n')
+    : readFileSync(join(root, 'src/blocks', dir, file), 'utf8')
 
 type Loaded = {
   dir: string
@@ -96,7 +102,7 @@ describe('library', () => {
   })
   it('kit primitives use only kit classes', async () => {
     const exists = await classExists()
-    const kit = ['primitives.tsx', 'facts.tsx']
+    const kit = ['primitives.tsx', 'facts.tsx', 'marks.tsx']
       .map((f) => readFileSync(join(root, 'src/kit', f), 'utf8'))
       .join('\n')
     expect(classesIn(kit).filter((c) => !exists(c))).toEqual([])
