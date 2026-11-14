@@ -4,6 +4,7 @@ import {
   Container,
   cx,
   EmailLink,
+  FitLine,
   hoursRows,
   MapLink,
   NewsletterForm,
@@ -21,23 +22,27 @@ type Loc = RenderCtx['business']['locations'][number]
 type Node = Parameters<typeof Section>[0]['children']
 
 /**
- * The business name as a wordmark. Jumbo type for short names; longer names step down a size so
- * they never become a wall of giant lines. Always the name as text (not the logo image): the type
- * is the design.
+ * The business name as a wordmark that fills the width of the footer, in every family (the kit's
+ * FitLine). Names longer than a short line step down to display or h2 type instead of shrinking
+ * to nothing. Always the name as text (not the logo image): the type is the design.
  */
 function Wordmark(p: { ctx: RenderCtx }) {
   const name = p.ctx.business.name
-  const n = name.length
+  const n = [...name].length
+  const link = (
+    <a href="/" data-slot="logo" className="text-fg no-underline">
+      {name}
+    </a>
+  )
+  if (n <= 28) return <FitLine text={name}>{link}</FitLine>
   return (
     <p
       className={cx(
         'min-w-0 max-w-full break-words text-balance',
-        n <= 18 ? 'type-jumbo' : n <= 44 ? 'type-display' : 'type-h2',
+        n <= 44 ? 'type-display' : 'type-h2',
       )}
     >
-      <a href="/" data-slot="logo" className="text-fg no-underline">
-        {name}
-      </a>
+      {link}
     </p>
   )
 }

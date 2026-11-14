@@ -33,9 +33,10 @@ export default function TextMediaEditorial({ content: c, variant, ctx }: BlockPr
     // heading-aside: a narrow heading column and a wider text column, side by side on wide screens.
     return (
       <Section ctx={ctx}>
-        <Container className="grid gap-lg @lg:grid-cols-3 @lg:gap-columns">
-          {heading}
-          <div className="min-w-0 @lg:col-span-2">{body}</div>
+        <Container className="grid gap-lg @lg:grid-cols-5 @lg:gap-columns">
+          {/* Two fifths, not a third: wide enough for long words in the largest capitals. */}
+          <div className="min-w-0 @lg:col-span-2">{heading}</div>
+          <div className="min-w-0 @lg:col-span-3">{body}</div>
         </Container>
       </Section>
     )

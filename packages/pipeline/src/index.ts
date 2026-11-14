@@ -2,3 +2,4 @@
 // baselines the decision model is compared with (code defaults and random valid choices).
 export * from './assemble.ts'
 export * from './defaults.ts'
+export * from './rhythm.ts'

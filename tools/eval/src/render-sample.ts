@@ -2,19 +2,25 @@ import { generate, toSvg } from '@pogrobert/surfaces'
 import { siteCss } from '@repo/blocks/build'
 import { components } from '@repo/blocks/components'
 import { manifests } from '@repo/blocks/manifest'
-import { type FamilyId, theme } from '@repo/blocks/themes'
-import { assemble, DEFAULT_PLANS, type SitePlan } from '@repo/pipeline'
+import { type FamilyId, resolveStyle, theme } from '@repo/blocks/themes'
+import { assemble, type ContentFor, DEFAULT_PLANS, type SitePlan } from '@repo/pipeline'
 import { renderDocument } from '@repo/render'
 import { type SiteSpec, validateSite } from '@repo/spec'
 import { type Kind, SAMPLES } from './businesses.ts'
 import { sampleAssets, standInContent } from './stand-in.ts'
 
-/** Renders one sample business with a plan, in a style family (or the draft placeholder theme). */
+/**
+ * Renders one sample business with a plan, in the plan's style family and settings (`family`
+ * overrides the family; `draft` uses the draft placeholder theme).
+ */
 export async function renderSample(
   kind: Kind,
   opts: {
     plan?: SitePlan
     family?: FamilyId
+    draft?: boolean
+    /** Section content; the stand-in content when absent. */
+    content?: ContentFor
     /** URL prefix where the page will find photos/ files, relative to the page. */
     photoBase?: string
   } = {},
@@ -31,12 +37,13 @@ export async function renderSample(
       locale: 'en-GB',
       dir: 'ltr',
     },
-    (sec) => standInContent(s, sec),
+    opts.content ?? ((sec) => standInContent(s, sec)),
     { seed: kind, release: '2026.11.14' },
   )
   if (opts.family) spec.style = { ...spec.style, family: `${opts.family}@1` }
   const v = validateSite(spec)
-  const t = opts.family ? theme(opts.family, s.palette) : undefined
+  const st = resolveStyle(spec.style)
+  const t = opts.draft ? undefined : theme(st.id, s.palette, { axes: st.axes, mode: st.mode })
   const types = [...plan.before, ...plan.sections, ...plan.after].map((x) => x.type)
   const css = await siteCss(types, t?.css)
   const art = t?.art ?? 'riso'

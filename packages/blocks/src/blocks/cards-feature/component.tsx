@@ -202,13 +202,15 @@ function Tiles(p: { ctx: RenderCtx; items: Item[]; level: Level }) {
     >
       {items.map((item, i) => {
         const id = `${ctx.id}-${item.id}`
+        // Each tile is its own size container, so the theme's fluid heading size follows the
+        // tile's width, not the page's: long words fit in narrow tiles in every font.
         return (
           <li
             key={item.id}
             data-item-id={item.id}
             data-surface={surfaces[i % surfaces.length]}
             className={cx(
-              'flex min-w-0 flex-col justify-end gap-sm rounded-card bg-bg p-md text-fg aspect-landscape @md:aspect-square @md:p-lg',
+              '@container flex min-w-0 flex-col justify-end gap-sm rounded-card bg-bg p-md text-fg aspect-landscape @md:aspect-square @md:p-lg',
               n === 2 && '@lg:aspect-landscape',
             )}
           >

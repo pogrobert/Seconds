@@ -158,6 +158,23 @@
   font-weight: var(--type-display-weight);
   text-transform: var(--type-display-case, none);
 }
+/*
+ * Fit: one line of display type sized to fill its own box's width (FitLine). The font size is the
+ * box width divided by the line's character count times the face's measured average character width
+ * (--type-display-advance, from the theme). No JavaScript. A small margin keeps it inside; if an
+ * unusually wide name still runs over, it wraps instead of overflowing.
+ */
+@utility type-fit {
+  font-family: var(--type-display-family);
+  font-size: min(
+    calc(94cqi / (var(--fit-chars, 12) * var(--type-display-advance, 0.55))),
+    var(--fit-max, 30cqi)
+  );
+  line-height: 0.92;
+  letter-spacing: var(--type-display-tracking);
+  font-weight: var(--type-display-weight);
+  text-transform: var(--type-display-case, none);
+}
 @utility type-h2 {
   font-family: var(--type-h2-family);
   font-size: var(--type-h2-size);

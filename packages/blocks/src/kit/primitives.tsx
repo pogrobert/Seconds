@@ -65,6 +65,32 @@ export function Heading(p: {
   )
 }
 
+/**
+ * One line of display type that fills the width of its box, such as a wordmark along the footer.
+ * Sized from the character count and the theme's measured character width, so it needs no
+ * JavaScript. Keep the text short (up to about 28 characters); longer lines become small.
+ */
+export function FitLine(p: {
+  text: string
+  /** Rendered as a paragraph unless a heading level is wanted. */
+  as?: 'p' | 'h2' | 'h3'
+  className?: string
+  children?: ReactNode
+}) {
+  const Tag = p.as ?? 'p'
+  const chars = Math.max(4, [...p.text].length)
+  return (
+    <div className="@container min-w-0 max-w-full">
+      <Tag
+        className={cx('type-fit min-w-0 max-w-full break-words', p.className)}
+        style={{ '--fit-chars': chars } as CSSProperties}
+      >
+        {p.children ?? p.text}
+      </Tag>
+    </div>
+  )
+}
+
 export function Text(p: {
   style: 'lead' | 'body' | 'small'
   slot?: string

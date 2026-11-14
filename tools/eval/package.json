@@ -13,22 +13,24 @@
     "block-log": "node src/block-log.ts",
     "styles": "vitest run --config vitest.tasks.config.ts styles",
     "sheet": "vitest run --config vitest.tasks.config.ts sheet",
-    "photos": "node --env-file-if-exists=../../.env src/photos.ts"
+    "photos": "node --env-file-if-exists=../../.env src/photos.ts",
+    "advance": "vitest run --config vitest.tasks.config.ts advance",
+    "wall": "vitest run --config vitest.tasks.config.ts wall"
   },
   "dependencies": {
-    "@repo/spec": "workspace:*",
+    "@repo/blocks": "workspace:*",
     "@repo/pipeline": "workspace:*",
     "@repo/render": "workspace:*",
-    "@repo/blocks": "workspace:*"
+    "@repo/spec": "workspace:*"
   },
   "devDependencies": {
-    "@types/node": "catalog:",
-    "@pogrobert/surfaces": "catalog:",
-    "react": "catalog:",
-    "playwright": "catalog:",
     "@axe-core/playwright": "catalog:",
-    "react-dom": "catalog:",
+    "@pogrobert/surfaces": "catalog:",
+    "@types/node": "catalog:",
     "@types/react": "catalog:",
-    "@types/react-dom": "catalog:"
+    "@types/react-dom": "catalog:",
+    "playwright": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:"
   }
 }

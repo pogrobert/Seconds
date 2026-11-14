@@ -2,7 +2,7 @@ import { defineBlock } from '../../manifest/contract.ts'
 
 export default defineBlock({
   type: 'text-media/editorial',
-  version: '1.0.0',
+  version: '1.0.1',
   sectionType: 'text-media',
   variants: {
     'heading-aside': {
