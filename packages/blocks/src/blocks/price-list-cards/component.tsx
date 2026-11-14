@@ -125,6 +125,106 @@ function Item(p: { item: Offering; price?: Price; columns: Columns; ctx: RenderC
   )
 }
 
+/** One line of small facts under an item: duration and tags, separated by dots. */
+function Meta(p: { item: Offering; ctx: RenderCtx }) {
+  const parts = [
+    ...(p.item.duration !== undefined ? [minutes(p.item.duration, p.ctx.locale)] : []),
+    ...(p.item.tags ?? []),
+  ]
+  if (!parts.length) return null
+  return <p className="type-small text-fg-muted break-words">{parts.join(' · ')}</p>
+}
+
+/**
+ * Featured: the items that have a photo come first, as large photo cards; every other item follows
+ * as a tidy two-column list of names and prices. Never a grid that mixes the two.
+ */
+function Featured(p: {
+  items: { item: Offering; price?: Price }[]
+  columns: Columns
+  level: 'h2' | 'h3'
+  ctx: RenderCtx
+}) {
+  const photos = p.items.filter((x) => x.item.image)
+  const rest = p.items.filter((x) => !x.item.image)
+  const one = photos.length === 1
+  const two = photos.length === 2
+  const many = photos.length > 2
+  return (
+    <div data-slot="source" className="flex flex-col gap-xl">
+      {photos.length > 0 && (
+        <ul
+          className={cx(
+            'grid gap-x-columns gap-y-xl',
+            two && '@md:grid-cols-2',
+            many && '@md:grid-cols-2 @lg:grid-cols-3',
+          )}
+        >
+          {photos.map(({ item, price }) => (
+            <li
+              key={item.id}
+              className={cx(
+                'flex min-w-0 flex-col gap-md',
+                one && '@md:grid @md:grid-cols-2 @md:items-end @md:gap-x-columns',
+              )}
+            >
+              {item.image && (
+                <Picture
+                  ctx={p.ctx}
+                  image={item.image}
+                  aspect={4 / 5}
+                  share={one || two ? 'half' : 'third'}
+                  className={cx(
+                    'w-full',
+                    one && 'aspect-landscape @md:aspect-portrait',
+                    two && 'aspect-portrait @lg:aspect-square',
+                    many && 'aspect-portrait',
+                  )}
+                />
+              )}
+              <div className="flex min-w-0 flex-col gap-xs">
+                <NameAndPrice
+                  name={item.name}
+                  price={price}
+                  columns={p.columns}
+                  ctx={p.ctx}
+                  as={p.level}
+                />
+                {item.description && (
+                  <Text style="small" muted className="break-words">
+                    {item.description}
+                  </Text>
+                )}
+                <Meta item={item} ctx={p.ctx} />
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+      {rest.length > 0 && (
+        <ul
+          className={cx('gap-x-columns border-t border-border', rest.length > 2 && '@md:columns-2')}
+        >
+          {rest.map(({ item, price }) => (
+            <li
+              key={item.id}
+              className="flex min-w-0 break-inside-avoid flex-col gap-xs border-b border-border py-md"
+            >
+              <NameAndPrice name={item.name} price={price} columns={p.columns} ctx={p.ctx} />
+              {item.description && (
+                <Text style="small" muted className="break-words">
+                  {item.description}
+                </Text>
+              )}
+              <Meta item={item} ctx={p.ctx} />
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  )
+}
+
 export default function PriceListCards({ content: c, variant, ctx }: BlockProps<'price-list'>) {
   const { columns, groups } = resolve(c, ctx)
   const level = c.headline ? 'h3' : 'h2'
@@ -148,39 +248,7 @@ export default function PriceListCards({ content: c, variant, ctx }: BlockProps<
           </div>
         )}
         {featured ? (
-          <ul data-slot="source" className="grid gap-lg @md:grid-cols-2 @lg:grid-cols-3">
-            {items.map(({ item, price }) => (
-              <li
-                key={item.id}
-                className={cx(
-                  'flex flex-col gap-sm',
-                  !item.image && 'border-t border-border pt-md',
-                )}
-              >
-                {item.image && (
-                  <Picture
-                    ctx={ctx}
-                    image={item.image}
-                    aspect={3 / 2}
-                    share="third"
-                    className="aspect-landscape w-full"
-                  />
-                )}
-                <NameAndPrice
-                  name={item.name}
-                  price={price}
-                  columns={columns}
-                  ctx={ctx}
-                  as={level}
-                />
-                {item.description && (
-                  <Text style="small" muted className="break-words">
-                    {item.description}
-                  </Text>
-                )}
-              </li>
-            ))}
-          </ul>
+          <Featured items={items} columns={columns} level={level} ctx={ctx} />
         ) : (
           <div
             data-slot="source"

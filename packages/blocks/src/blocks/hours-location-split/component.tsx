@@ -212,6 +212,68 @@ export default function HoursLocationSplit({
 
   // With no words to stand beside, the facts stand alone in a narrower column.
   const copy = !!(c.headline || c.body || c.primaryCta)
+  const first = locs[0]
+
+  // No body: a headline alone cannot balance a full table. With one place, the address, contacts and
+  // button move beside the headline and the hours table holds the other side. With several places,
+  // the words sit in one row above and the places stand side by side.
+  if (copy && !c.body && first) {
+    const hasHours = show.has('hours') && !!(first.hours?.length || first.specialHours?.length)
+    if (!many && hasHours) {
+      return (
+        <Section ctx={ctx}>
+          <Container className="grid gap-xl @lg:grid-cols-2 @lg:gap-columns">
+            <div className="flex min-w-0 flex-col items-start gap-lg">
+              {c.headline ? (
+                <Heading ctx={ctx} style="h2" slot="headline">
+                  {c.headline}
+                </Heading>
+              ) : (
+                <NameTag className="type-h2 text-balance wrap-anywhere">{first.name}</NameTag>
+              )}
+              <div data-slot="facts" className="flex min-w-0 flex-col gap-sm">
+                <PlaceFacts location={first} show={show} />
+                <ContactFacts ctx={ctx} location={first} show={show} />
+              </div>
+              <Actions ctx={ctx} primary={c.primaryCta} />
+            </div>
+            <div data-slot="facts" className="min-w-0">
+              <HoursFacts ctx={ctx} location={first} />
+            </div>
+          </Container>
+        </Section>
+      )
+    }
+    if (many)
+      return (
+        <Section ctx={ctx}>
+          <Container className="flex flex-col gap-xl">
+            <div className="flex flex-col items-start gap-md @lg:flex-row @lg:items-end @lg:justify-between @lg:gap-columns">
+              {c.headline && (
+                <Heading ctx={ctx} style="h2" slot="headline" className="max-w-prose">
+                  {c.headline}
+                </Heading>
+              )}
+              <Actions ctx={ctx} primary={c.primaryCta} className="shrink-0" />
+            </div>
+            <ul data-slot="facts" className="grid gap-xl @lg:grid-cols-2 @lg:gap-columns">
+              {locs.map((l) => (
+                <li
+                  key={l.id}
+                  className="flex min-w-0 flex-col gap-md border-t border-border pt-lg"
+                >
+                  <NameTag className="type-h3 text-balance wrap-anywhere">{l.name}</NameTag>
+                  {show.has('hours') && <HoursFacts ctx={ctx} location={l} />}
+                  <PlaceFacts location={l} show={show} />
+                  <ContactFacts ctx={ctx} location={l} show={show} />
+                </li>
+              ))}
+            </ul>
+          </Container>
+        </Section>
+      )
+  }
+
   return (
     <Section ctx={ctx}>
       <Container

@@ -2,7 +2,7 @@ import { defineBlock } from '../../manifest/contract.ts'
 
 export default defineBlock({
   type: 'hours-location/split',
-  version: '1.0.0',
+  version: '1.1.0',
   sectionType: 'hours-location',
   variants: {
     'with-text': {

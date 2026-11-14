@@ -2,7 +2,7 @@ import { defineBlock } from '../../manifest/contract.ts'
 
 export default defineBlock({
   type: 'hero/overlay',
-  version: '1.0.0',
+  version: '1.1.0',
   sectionType: 'hero',
   variants: {
     bottom: {

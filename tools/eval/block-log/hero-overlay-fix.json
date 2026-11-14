@@ -1,0 +1,12 @@
+{
+  "block": "hero/overlay",
+  "started": "2026-11-14T11:10:35Z",
+  "finished": "2026-11-14T11:13:36Z",
+  "testRuns": 4,
+  "failedRuns": 0,
+  "failures": [],
+  "wanted": [],
+  "previewRounds": 2,
+  "idea": "bottom: dark-shaded photo, text at foot; center: evenly shaded photo, centred text",
+  "notes": "Replaced the light section-colour scrim and bg-bg/65 wash with the kit's PhotoShade (bottom / even) and wrapped the text in OnPhoto, so text is light on a dark shade and the photo keeps its colour. Variant names, caps and signatures unchanged; version bumped to 1.1.0. Round 2 added pt-section on the foot variant so very long text pushes the photo taller instead of reaching its lightly shaded top."
+}

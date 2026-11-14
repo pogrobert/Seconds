@@ -1,0 +1,20 @@
+{
+  "block": "footer/wordmark",
+  "started": "2026-11-14T11:10:34Z",
+  "finished": "2026-11-14T11:18:11Z",
+  "testRuns": 4,
+  "failedRuns": 0,
+  "failures": [],
+  "previewRounds": 2,
+  "idea": {
+    "wordmark": "Ledger grid over giant name",
+    "signup": "Giant name masthead over sign-up"
+  },
+  "wanted": [
+    "A fit-to-width wordmark size: jumbo is a fixed per-family size, so the name spans nearly the full width in Poster but only about half in Quiet and Soft. The block steps down by name length instead (18 characters or fewer: jumbo; up to 44: display; longer: h2)",
+    "The sheet uses the typical content, which has no form, so form-only variants (this signup, footer/columns#signup) never appear on the contact sheets; I previewed signup with a scratch script",
+    "A larger text size option on RichText (lead), so a sign-up invitation in body can be set bigger than body text",
+    "Localised strings for 'Footer' (nav label) and 'Contact'"
+  ],
+  "notes": "Both checks passed on the first run; the two preview rounds fixed ledger order on phones (hours moved last so short cells pair up) and aligned plain-text cells with tap-high links. Nav and facts share one grid through display: contents on nav and dl."
+}

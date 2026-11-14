@@ -1,0 +1,15 @@
+{
+  "block": "hero/editorial",
+  "started": "2026-11-14T11:13:36Z",
+  "finished": "2026-11-14T11:16:32Z",
+  "testRuns": 4,
+  "failedRuns": 0,
+  "failures": [],
+  "wanted": [
+    "A sanctioned full-bleed option on Section (or a kit wrapper) instead of stepping out of the gutter with -mx-gutter, and a Picture prop for square corners when full-bleed (rounded-none currently wins over rounded-media only by stylesheet order).",
+    "The contact sheet falls back to the rtl fixture when typical content exceeds a cap, and hero rtl has no media, so a jumbo cap under 33 characters cannot be previewed; the stacked cap is 36 for that reason, not purely by design."
+  ],
+  "previewRounds": 2,
+  "idea": "stacked: jumbo headline over full-bleed photo; framed: headline panel bites photo corner; card: floating card on full-bleed photo",
+  "notes": "Three photo-led variants, all requiring media: jumbo type then a full-bleed band (caps 36/140), an inset photo whose lower start corner is cut by a page-coloured headline panel (56/150), and an unshaded full-bleed photo with a solid card (44/120). Round 2 moved the framed panel into the photo's last grid row so the headline sits in the cut corner instead of under an empty notch."
+}

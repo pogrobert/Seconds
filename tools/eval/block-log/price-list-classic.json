@@ -1,0 +1,15 @@
+{
+  "block": "price-list/classic",
+  "started": "2026-11-14T11:13:27Z",
+  "finished": "2026-11-14T11:19:06Z",
+  "testRuns": 4,
+  "failedRuns": 0,
+  "failures": [],
+  "wanted": [
+    "A small-capitals text style. Menu-board group names use type-eyebrow, which is spaced capitals in Poster and Quiet but plain case in Soft, so the printed-menu look is weaker in Soft.",
+    "The sheet shows only the typical content. The longest case (24 items, 4 columns) was photographed by hand from a scratch script; a sheet option for the longest case would help."
+  ],
+  "notes": "Two variants: leaders (name and price joined by a dotted line, levels as indented dotted lines, groups in two columns on wide screens) and menu-board (one centred column, group names in spaced capitals between thin rules, price beneath each item). Round 2 moved descriptions above the price levels, put prices before durations on the board, and added a rule above the note in leaders.",
+  "previewRounds": 2,
+  "idea": "leaders: dotted leaders, two-column groups; menu-board: centred printed menu, tracked capitals"
+}

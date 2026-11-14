@@ -2,7 +2,7 @@ import { defineBlock } from '../../manifest/contract.ts'
 
 export default defineBlock({
   type: 'price-list/cards',
-  version: '1.0.0',
+  version: '1.1.0',
   sectionType: 'price-list',
   variants: {
     groups: {
@@ -21,10 +21,8 @@ export default defineBlock({
     featured: {
       label: 'Featured items',
       describe:
-        'A few highlighted items as cards with their photo, name and price. For signature dishes or headline treatments that have good photos; items without a photo show as plain cards.',
+        'Items with a photo first, as large photo cards; every other item follows as a tidy two-column list of names and prices. For signature dishes or headline treatments with good photos, followed by the rest.',
       uses: ['source', 'headline', 'subhead', 'note', 'primaryCta'],
-      // Item photos come from the collection, not from a media field, so the contract only allows
-      // media 'none' here (see the block log, "wanted").
       signature: {
         media: 'image',
         align: 'start',

@@ -4,15 +4,17 @@ import {
   Container,
   cx,
   Heading,
+  OnPhoto,
+  PhotoShade,
   Picture,
   Section,
   Text,
 } from '../../kit/index.tsx'
 
-// Text over one full-width photo. The photo and the text share one grid cell, so the photo grows
-// with the text and nothing is ever clipped. A shade in the section's own background colour sits
-// between them: the kit's scrim (strongest at the foot) for `bottom`, an even shade for `center`.
-// Text uses the full foreground colour, never the muted one, because it sits on a photo.
+// Text over one full-width photo. The photo, the kit's dark shade and the text share one grid cell,
+// so the photo grows with the text and nothing is ever clipped. The shade comes from the inverse
+// surface: strongest at the foot for `bottom`, even for `center`. OnPhoto switches the text to
+// light-on-dark, so the photo keeps its own colour instead of being washed out.
 export default function HeroOverlay({ content: c, variant, ctx }: BlockProps<'hero'>) {
   const centered = variant === 'center'
   if (!c.media) return null
@@ -29,22 +31,16 @@ export default function HeroOverlay({ content: c, variant, ctx }: BlockProps<'he
           className="col-start-1 row-start-1 h-full w-full aspect-portrait @md:aspect-landscape @lg:aspect-wide"
         />
         {centered ? (
-          <div aria-hidden="true" className="col-start-1 row-start-1 rounded-media bg-bg/65" />
+          <PhotoShade from="even" className="col-start-1 row-start-1 rounded-media" />
         ) : (
-          <>
-            <div
-              aria-hidden="true"
-              className="col-start-1 row-start-1 rounded-media bg-bg/30 @lg:bg-transparent"
-            />
-            <div aria-hidden="true" className="col-start-1 row-start-1 rounded-media scrim" />
-          </>
+          <PhotoShade from="bottom" className="col-start-1 row-start-1 rounded-media" />
         )}
-        <div
+        <OnPhoto
           className={cx(
-            'col-start-1 row-start-1 flex max-w-prose flex-col gap-md p-md @md:p-xl text-fg',
+            'col-start-1 row-start-1 flex max-w-prose flex-col gap-md p-md @md:p-xl',
             centered
               ? 'items-center self-center justify-self-center text-center'
-              : 'self-end items-start',
+              : 'self-end items-start pt-section',
           )}
         >
           <div className={cx('flex flex-col gap-sm', centered && 'items-center')}>
@@ -73,7 +69,7 @@ export default function HeroOverlay({ content: c, variant, ctx }: BlockProps<'he
               {c.proof.link ? <a href={ctx.href(c.proof.link)}>{c.proof.text}</a> : c.proof.text}
             </p>
           )}
-        </div>
+        </OnPhoto>
       </Container>
     </Section>
   )
