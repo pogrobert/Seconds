@@ -22,7 +22,51 @@ const salon = Object.values(readManifest().salon ?? {})
 const photoFor = (asset: string) => {
   const n = Number.parseInt(asset.replace(/\D/g, ''), 10) || 0
   const p = salon[n % Math.max(salon.length, 1)]
-  return p && existsSync(new URL(p.file, photosDir)) ? new URL(p.file, photosDir).href : ''
+  if (!p || !existsSync(new URL(p.file, photosDir))) return ''
+  // SHEET_PUBLISH=1 writes paths relative to the sheet pages, for publishing; otherwise absolute file URLs.
+  return process.env.SHEET_PUBLISH ? `../photos/${p.file}` : new URL(p.file, photosDir).href
+}
+
+/**
+ * Content that shows a variant at its best: the typical case, plus any field the variant requires
+ * (photo, gallery, form) taken from the longest case, text cut to the variant's caps, and item
+ * photos added when the variant shows images. So every variant appears on the sheet.
+ */
+function showcase(
+  m: BlockManifest,
+  variant: string,
+  section: M0Section,
+): Record<string, unknown> | null {
+  const v = m.variants[variant]
+  if (!v) return null
+  const typical = { ...(fixtures[section].typical.content as Record<string, unknown>) }
+  const longest = fixtures[section].longest.content as Record<string, unknown>
+  const rtl = fixtures[section].rtl.content as Record<string, unknown>
+  for (const f of (v.requires ?? []) as readonly string[])
+    if (typical[f] === undefined) typical[f] = longest[f] ?? rtl[f]
+  for (const [f, cap] of Object.entries(v.caps ?? {}) as [string, number | { max?: number }][]) {
+    const max = typeof cap === 'number' ? cap : cap.max
+    const value = typical[f]
+    if (typeof value === 'string' && max !== undefined && value.length > max)
+      typical[f] = value.slice(0, max).trimEnd()
+    if (
+      Array.isArray(value) &&
+      max !== undefined &&
+      value.length > max &&
+      !(value[0] && 'spans' in (value[0] as object))
+    )
+      typical[f] = value.slice(0, max)
+  }
+  if (v.signature.media !== 'none' && Array.isArray(typical.items))
+    typical.items = (typical.items as Record<string, unknown>[]).map((it, i) =>
+      it.media
+        ? it
+        : {
+            ...it,
+            media: { asset: `a_00000000${String(30 + i).padStart(2, '0')}`, alt: 'Salon detail' },
+          },
+    )
+  return eligibility(m, variant, typical).ok ? typical : null
 }
 
 async function load(): Promise<{ m: BlockManifest; C: ComponentType<never> }[]> {
@@ -55,11 +99,9 @@ it('photographs block variants in every M0 family', async () => {
       for (const { m, C } of blocks.filter((b) => (only ? true : b.m.sectionType === group))) {
         const section = m.sectionType as M0Section
         for (const variant of Object.keys(m.variants)) {
-          let f = fixtures[section].typical
-          if (!eligibility(m, variant, f.content as Record<string, unknown>).ok)
-            f = fixtures[section].rtl
-          const content = f.content as Record<string, unknown>
-          if (!eligibility(m, variant, content).ok) continue
+          const f = fixtures[section].typical
+          const content = showcase(m, variant, section)
+          if (!content) continue
           const ctx: RenderCtx = {
             id: 'b_0000000001',
             section,
