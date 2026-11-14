@@ -6,7 +6,7 @@ import { type FamilyId, resolveStyle, theme } from '@repo/blocks/themes'
 import { assemble, type ContentFor, DEFAULT_PLANS, type SitePlan } from '@repo/pipeline'
 import { renderDocument } from '@repo/render'
 import { type SiteSpec, validateSite } from '@repo/spec'
-import { type Kind, SAMPLES } from './businesses.ts'
+import { type Kind, SAMPLES, type SampleBusiness } from './businesses.ts'
 import { sampleAssets, standInContent } from './stand-in.ts'
 
 /**
@@ -25,9 +25,11 @@ export async function renderSample(
     photoBase?: string
     /** The brand colour; the sample business's own when absent. */
     brand?: string
+    /** Another business of the same kind (a brief's name and words); the sample when absent. */
+    sample?: SampleBusiness
   } = {},
 ): Promise<{ html: string; spec: SiteSpec; problems: string[]; notes: string[] }> {
-  const s = SAMPLES[kind]
+  const s = opts.sample ?? SAMPLES[kind]
   const plan = opts.plan ?? DEFAULT_PLANS[kind]
   const brand = opts.brand ?? s.palette
   const spec = assemble(
@@ -41,7 +43,7 @@ export async function renderSample(
       dir: 'ltr',
     },
     opts.content ?? ((sec) => standInContent(s, sec)),
-    { seed: kind, release: '2026.11.14' },
+    { seed: opts.sample ? `${kind}-${s.business.name}` : kind, release: '2026.11.14' },
   )
   if (opts.family) spec.style = { ...spec.style, family: `${opts.family}@1` }
   const v = validateSite(spec)

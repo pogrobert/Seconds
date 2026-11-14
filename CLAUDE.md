@@ -32,6 +32,7 @@ The reason to build it: code-writing builders (Lovable, v0, Bolt, Replit) take m
 - **Content size (2026-11-14):** small lists only in the first year (menus, services, a few dozen posts). Reserve room to move large content out of the spec later.
 - **First milestone (2026-11-14):** the taste-and-contract test (M0 below). It is about taste first: does the decision model make better-looking sites than sensible defaults written in code?
 - **M0 pass mark (2026-11-14, set before any results):** the decision model earns its place if Robert prefers its site over the code defaults in at least 20 of the 30 blind pairs. It must also beat random choices.
+- **Decision model (2026-11-14):** TypeSafe's Jev, called directly at `api.typesafe.ai` and pinned to `jev-1.14.0`, instead of Cloudflare's `clef-flash`. The key is `TYPESAFE_API_KEY` in `.env`. Cloudflare stays the host.
 - **Keys Robert has (2026-11-14):** a Cloudflare account (so `clef-flash`), TypeSafe (Jev), OpenRouter and Anthropic. No Cerebras or Groq account: the fast text model goes through OpenRouter. Never ask for key values in chat.
 - **M0 business kinds (2026-11-14):** restaurant or café, hair and beauty salon, dental or medical clinic, trades (plumber, electrician, roofer…), fitness or yoga studio.
 - **M0 style families (2026-11-14):** Poster, Quiet and Soft (`docs/decisions/0002-style-families.md`). Workshop and Deep stay as options outside M0.

@@ -1,5 +1,9 @@
-// generate() and the decision and text interfaces. M0 so far: assembly from a plan, and the two
-// baselines the decision model is compared with (code defaults and random valid choices).
+// generate() and the decision and text interfaces, plus the two baselines the decision model is
+// compared with in M0 (code defaults and random valid choices).
 export * from './assemble.ts'
+export * from './choose.ts'
+export * from './decide.ts'
 export * from './defaults.ts'
+export * from './generate.ts'
 export * from './rhythm.ts'
+export * from './text.ts'

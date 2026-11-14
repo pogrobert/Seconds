@@ -98,6 +98,8 @@ type TypeRole = {
 /** One font pairing: every type role, the fonts to load and the jumbo size. */
 type Pairing = {
   label: string
+  /** What the type feels like, in plain words. Read by the decision model. */
+  feel: string
   /** Google Fonts css2 query for previews. Published sites will self-host (report 02, D11). */
   fonts: string
   display: TypeRole
@@ -171,6 +173,7 @@ export const FAMILIES: Record<FamilyId, Family> = {
     pairings: {
       oswald: {
         label: 'Oswald and Inter',
+        feel: 'Tall condensed capitals, sturdy and sporty, like a gig poster.',
         fonts: 'family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600',
         display: role(sans('Oswald'), posterDisplay, 0.92, '-0.01em', 700, true),
         h2: role(sans('Oswald'), posterH2, 0.95, '0', 700, true),
@@ -184,6 +187,7 @@ export const FAMILIES: Record<FamilyId, Family> = {
       },
       anton: {
         label: 'Anton and Inter',
+        feel: 'Heavy, tightly packed capitals that shout, like a billboard headline.',
         fonts: 'family=Anton&family=Oswald:wght@600&family=Inter:wght@400;500;600',
         display: role(sans('Anton'), posterDisplay, 0.95, '0', 400, true),
         h2: role(sans('Anton'), posterH2, 0.98, '0.005em', 400, true),
@@ -197,6 +201,7 @@ export const FAMILIES: Record<FamilyId, Family> = {
       },
       shoulders: {
         label: 'Big Shoulders and Archivo',
+        feel: 'Very narrow, tall capitals with an industrial, city-signage feel.',
         fonts: 'family=Big+Shoulders+Display:wght@700;800&family=Archivo:wght@400;500;600',
         display: role(sans('Big Shoulders Display'), posterDisplay, 0.9, '0', 800, true),
         h2: role(sans('Big Shoulders Display'), posterH2, 0.94, '0.005em', 800, true),
@@ -261,6 +266,7 @@ export const FAMILIES: Record<FamilyId, Family> = {
     pairings: {
       newsreader: {
         label: 'Newsreader and Hanken Grotesk',
+        feel: 'A classic newspaper serif: trustworthy, literate and calm.',
         fonts:
           'family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Hanken+Grotesk:wght@400;500;600',
         display: role(serif('Newsreader'), quietDisplay, 1.12, '-0.01em', 400),
@@ -275,6 +281,7 @@ export const FAMILIES: Record<FamilyId, Family> = {
       },
       instrument: {
         label: 'Instrument Serif and Inter Tight',
+        feel: 'A fine, slightly condensed fashion-magazine serif: elegant and modern.',
         fonts: 'family=Instrument+Serif&family=Inter+Tight:wght@400;500;600',
         display: role(
           serif('Instrument Serif'),
@@ -300,6 +307,7 @@ export const FAMILIES: Record<FamilyId, Family> = {
       },
       cormorant: {
         label: 'Cormorant Garamond and Work Sans',
+        feel: 'A delicate old-style serif with long strokes: romantic and refined.',
         fonts: 'family=Cormorant+Garamond:wght@500;600&family=Work+Sans:wght@400;500;600',
         display: role(
           serif('Cormorant Garamond'),
@@ -376,6 +384,7 @@ export const FAMILIES: Record<FamilyId, Family> = {
     pairings: {
       schibsted: {
         label: 'Schibsted Grotesk and IBM Plex Mono',
+        feel: 'A plain technical sans with typewriter labels: practical and precise.',
         fonts: 'family=Schibsted+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500',
         display: role(
           sans('Schibsted Grotesk'),
@@ -437,6 +446,7 @@ export const FAMILIES: Record<FamilyId, Family> = {
     pairings: {
       geist: {
         label: 'Geist',
+        feel: 'A clean modern sans: neutral, clear and friendly.',
         fonts: 'family=Geist:wght@300;400;500;600',
         display: role(sans('Geist'), softDisplay, 1.04, '-0.035em', 300),
         h2: role(sans('Geist'), softH2, 1.1, '-0.03em', 300),
@@ -450,6 +460,7 @@ export const FAMILIES: Record<FamilyId, Family> = {
       },
       fraunces: {
         label: 'Fraunces and Geist',
+        feel: 'A soft, warm serif with rounded curves: homely and approachable.',
         fonts: 'family=Fraunces:opsz,wght@9..144,300;9..144,400&family=Geist:wght@400;500;600',
         display: role(serif('Fraunces'), softDisplay, 1.04, '-0.02em', 300),
         h2: role(serif('Fraunces'), softH2, 1.1, '-0.015em', 300),
@@ -463,6 +474,7 @@ export const FAMILIES: Record<FamilyId, Family> = {
       },
       outfit: {
         label: 'Outfit',
+        feel: 'A round geometric sans: light, cheerful and easy-going.',
         fonts: 'family=Outfit:wght@300;400;500;600',
         display: role(sans('Outfit'), softDisplay, 1.04, '-0.025em', 300),
         h2: role(sans('Outfit'), softH2, 1.1, '-0.02em', 300),
@@ -533,6 +545,7 @@ export const FAMILIES: Record<FamilyId, Family> = {
     pairings: {
       antonio: {
         label: 'Antonio, Inter and Oxygen Mono',
+        feel: 'Pale compressed capitals with typewriter labels: moody and nocturnal.',
         fonts: 'family=Antonio:wght@500;600;700&family=Inter:wght@400;500&family=Oxygen+Mono',
         display: role(
           sans('Antonio'),

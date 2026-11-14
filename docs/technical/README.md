@@ -165,7 +165,7 @@ The speed spike measured the safest numbers. This tests the three riskiest assum
 
 1. **On paper first.** Take 40 real small-business sites in 5 kinds of business. Cut each into sections and map them to a draft section-type list. Count how many map cleanly and which fields do not fit.
 2. **Library.** 8 section types, about 20 blocks (2 or 3 per section type), 2 or 3 variants each, 3 style families, images from Surfaces. Blocks written by coding agents; log the time and the failures per block.
-3. **Pipeline.** One decision model (`clef-flash` needs no extra key on Cloudflare), one text model, questions about attributes, character-limit checks, records saved to files.
+3. **Pipeline.** One decision model (Robert chose TypeSafe's Jev on 2026-11-14, pinned to `jev-1.14.0`, instead of `clef-flash`), one text model, questions about attributes, character-limit checks, records saved to files.
 4. **Three versions of 30 briefs:** (A) the decision model chooses, (B) defaults written in code with no model, (C) random valid choices.
 5. **Blind rating.** Robert compares A against B and A against C without knowing which is which.
 6. **Shared text.** Put each brief's text into every variant it is allowed in, and count overflows in a real browser.
