@@ -1,0 +1,129 @@
+<title>Five Directions</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&display=swap">
+<style>
+/* A rating sheet for five hand-designed homepages: each shown at desktop and phone size, with a
+   link to the real page, a 1-to-5 score against one fixed question, and a note. */
+:root {
+  --bg: #f1f0ec; --panel: #ffffff; --fg: #1b1b19; --muted: #5d5d56; --line: #d9d8d0;
+  --accent: #2f5d50; --accent-fg: #ffffff;
+  --f-display: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #131312; --panel: #1c1c1a; --fg: #ececE6; --muted: #a4a49b; --line: #34342f; --accent: #8fc4b2; --accent-fg: #10201b; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #131312; --panel: #1c1c1a; --fg: #ececE6; --muted: #a4a49b; --line: #34342f; --accent: #8fc4b2; --accent-fg: #10201b; color-scheme: dark }
+body { background: var(--bg); color: var(--fg); font: 15px/1.55 var(--f-body); }
+.wrap { max-width: 1440px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px 56px; display: grid; gap: 40px; }
+h1 { font: 600 clamp(26px, 3vw, 36px)/1.1 var(--f-display); margin: 0; }
+h2 { font: 600 24px/1.15 var(--f-display); margin: 0; }
+p { margin: 0; }
+.lede { color: var(--muted); max-width: 78ch; }
+.q { font: 500 17px/1.4 var(--f-display); }
+.progress { color: var(--muted); font-size: 14px; }
+.dir { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 20px; display: grid; gap: 16px; }
+.dir header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px 20px; }
+.dir header p { color: var(--muted); }
+.views { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 260px); gap: 16px; align-items: start; }
+@media (max-width: 760px) { .views { grid-template-columns: minmax(0, 1fr); } }
+.views img { width: 100%; height: auto; display: block; border: 1px solid var(--line); border-radius: 8px; }
+.phone { max-height: 640px; overflow: auto; border: 1px solid var(--line); border-radius: 8px; }
+.phone img { border: 0; border-radius: 0; }
+.full { max-height: 70vh; overflow: auto; border: 1px solid var(--line); border-radius: 8px; }
+.full img { border: 0; border-radius: 0; }
+details summary { cursor: pointer; color: var(--muted); font-size: 14px; }
+details[open] summary { margin-bottom: 10px; }
+.links { display: flex; gap: 18px; flex-wrap: wrap; font-size: 14px; }
+.links a { color: var(--fg); }
+.rate { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; }
+fieldset { border: 0; margin: 0; padding: 0; display: flex; gap: 6px; flex-wrap: wrap; }
+button { font: 500 15px/1 var(--f-body); color: var(--fg); background: var(--panel); border: 1px solid var(--line); border-radius: 999px; padding: 10px 15px; cursor: pointer; min-width: 44px; }
+button:hover { border-color: var(--muted); }
+button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); }
+button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.scale { font-size: 13px; color: var(--muted); }
+.note { flex: 1 1 260px; min-width: 0; font: 14px var(--f-body); color: var(--fg); background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 9px 11px; }
+.status { font-size: 13px; color: var(--muted); min-height: 1.3em; }
+.credits { font-size: 13px; color: var(--muted); }
+.credits a { color: inherit; }
+</style>
+
+<div class="wrap">
+  <header style="display:grid; gap:10px">
+    <h1>Five directions</h1>
+    <p class="lede">Each homepage was designed by hand from the sites you loved on the taste board, for one of our sample businesses, with photos picked by hand. Open each page at full size, scroll it on your phone too, then answer one question for each.</p>
+    <p class="q">Would you proudly hand this site to the owner? <span class="scale">1 no, 3 it's fine, 5 yes, without changing anything</span></p>
+    <p class="progress" id="progress"></p>
+  </header>
+  <div id="list" style="display:grid; gap:28px"></div>
+  <p class="credits" id="credits"></p>
+</div>
+
+<script>
+const DIRS = /*DIRS*/[]
+const CREDITS = /*CREDITS*/[]
+const LS = 'directions-ratings'
+let ratings = {}
+try { ratings = JSON.parse(localStorage.getItem(LS) || '{}') } catch {}
+let db = null
+const $ = (id) => document.getElementById(id)
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c])
+
+function draw() {
+  $('list').innerHTML = DIRS.map((d) => `<section class="dir" aria-labelledby="t-${d.id}">
+    <header><h2 id="t-${d.id}">${d.n}. ${esc(d.title)}</h2><p>${esc(d.business)}</p></header>
+    <p>${esc(d.idea)}</p>
+    <div class="views">
+      <a href="pages/${d.id}.html" target="_blank" rel="noopener"><img src="shots/${d.id}-desktop-top.jpg" alt="${esc(d.title)}: the first screen on a desktop" width="1440" height="900" loading="lazy"></a>
+      <div class="phone"><img src="shots/${d.id}-phone-full.jpg" alt="${esc(d.title)}: the whole page on a phone" loading="lazy"></div>
+    </div>
+    <details><summary>Show the whole desktop page here</summary><div class="full"><img src="shots/${d.id}-desktop-full.jpg" alt="${esc(d.title)}: the whole page on a desktop" loading="lazy"></div></details>
+    <div class="links"><a href="pages/${d.id}.html" target="_blank" rel="noopener">Open the page at full size</a></div>
+    <div class="rate">
+      <fieldset aria-label="Score for ${esc(d.title)}">${[1, 2, 3, 4, 5].map((n) => `<button type="button" data-id="${d.id}" data-score="${n}" aria-pressed="${ratings[d.id]?.score === n}">${n}</button>`).join('')}</fieldset>
+      <input class="note" data-note="${d.id}" placeholder="What makes it, or what spoils it?" value="${esc(ratings[d.id]?.note || '')}" aria-label="Note on ${esc(d.title)}">
+    </div>
+    <p class="status" id="s-${d.id}" aria-live="polite"></p>
+  </section>`).join('')
+  progress()
+}
+function progress() {
+  const n = DIRS.filter((d) => ratings[d.id]?.score).length
+  $('progress').textContent = `${n} of ${DIRS.length} rated`
+}
+async function save(id, patch) {
+  ratings[id] = { ...(ratings[id] || {}), ...patch, at: new Date().toISOString() }
+  try { localStorage.setItem(LS, JSON.stringify(ratings)) } catch {}
+  const s = $('s-' + id)
+  if (db) {
+    try { await db.doc('ratings/' + id).set(ratings[id]); s.textContent = 'Saved.' }
+    catch (e) { s.textContent = `Saved in this browser only (${e?.code || 'error'}).` }
+  } else s.textContent = 'Saved in this browser only.'
+  progress()
+}
+document.addEventListener('click', (e) => {
+  const b = e.target.closest('button[data-score]')
+  if (!b) return
+  const id = b.dataset.id
+  for (const x of document.querySelectorAll(`button[data-id="${id}"]`)) x.setAttribute('aria-pressed', String(x === b))
+  save(id, { score: Number(b.dataset.score) })
+})
+document.addEventListener('change', (e) => {
+  const i = e.target.closest('input[data-note]')
+  if (i) save(i.dataset.note, { note: i.value.trim() })
+})
+$('credits').innerHTML = 'Photos from <a href="https://pixabay.com/">Pixabay</a> under the Pixabay Content License, by ' +
+  CREDITS.map((c) => `<a href="${c.page}">${esc(c.photographer)}</a>`).join(', ') + '. The businesses are invented stand-ins.'
+draw()
+;(async () => {
+  try { db = await window.claude?.use?.('db') } catch { db = null }
+  if (!db) return
+  try {
+    const snap = await db.collection('ratings').get()
+    for (const d of snap.docs) { const v = d.data(); if (v) ratings[d.id] = v }
+    try { localStorage.setItem(LS, JSON.stringify(ratings)) } catch {}
+    draw()
+  } catch {}
+})()
+</script>
