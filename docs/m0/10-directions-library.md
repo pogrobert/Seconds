@@ -55,3 +55,20 @@
 - **These directions depend on photos more than anything else.** With the sample businesses' ordinary stock photos, Landscape and Wordmark are clearly weaker than the hand-made pages.
 - **Atelier needs a bright photo.** On a dark one, the light wash makes the photo look milky. Choosing a direction should therefore take each photo's brightness into account, measured once when the photo arrives. That is not built.
 - **The words are the samples' stand-ins,** so the about sections still say "About Northside Hair".
+
+## Robert's scores (2026-11-15)
+
+| Direction | Made by hand | From the library, 5 businesses | Notes |
+|---|---|---|---|
+| Landscape | 5 | **4, 4, 4, 4, 4** | "text is not very readable" (on 4 of 5) |
+| Wordmark | 5 | **4, 4, 4, 4, 4** | |
+| Signature | 5 | 3, 3, 3, 3, 3 | "i kinda do not like the black bg and square buttons" |
+| Atelier | 4 | 2, 2, 2, 2, 2 | "text not readable, blur looks bad." |
+
+**Each direction scored the same for every business.** So the scores judge the direction as built, not how well it fits one business.
+
+**The library versions lost one to two points against the hand-made pages.** The causes are:
+- **Readability:** light type over the sample businesses' ordinary photos, and Atelier's wash.
+- **Signature's look:** the black ground and square buttons, which suited the hand-made page with its own drawings and colours but not this version.
+
+Stored in `tools/eval/taste/2026-11-15-directions-library.json`.

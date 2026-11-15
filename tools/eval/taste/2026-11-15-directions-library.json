@@ -1,0 +1,135 @@
+{
+ "date": "2026-11-15",
+ "page": "https://claude.ai/artifact/MVX7mABEbCspTfUitEK8Qc",
+ "rater": "Robert",
+ "question": "Would you proudly hand this site to the owner? 1 no, 3 fine, 5 yes without changing anything",
+ "note": "The four directions built from library blocks, drawn for the five sample businesses with their stock photos and stand-in words.",
+ "ratings": [
+  {
+   "site": "atelier-clinic",
+   "direction": "atelier",
+   "kind": "clinic",
+   "score": 2
+  },
+  {
+   "site": "atelier-fitness",
+   "direction": "atelier",
+   "kind": "fitness",
+   "score": 2
+  },
+  {
+   "site": "atelier-restaurant",
+   "direction": "atelier",
+   "kind": "restaurant",
+   "score": 2,
+   "note": "text not readable, blur looks bad."
+  },
+  {
+   "site": "atelier-salon",
+   "direction": "atelier",
+   "kind": "salon",
+   "score": 2
+  },
+  {
+   "site": "atelier-trades",
+   "direction": "atelier",
+   "kind": "trades",
+   "score": 2
+  },
+  {
+   "site": "landscape-clinic",
+   "direction": "landscape",
+   "kind": "clinic",
+   "score": 4,
+   "note": "same"
+  },
+  {
+   "site": "landscape-fitness",
+   "direction": "landscape",
+   "kind": "fitness",
+   "score": 4
+  },
+  {
+   "site": "landscape-restaurant",
+   "direction": "landscape",
+   "kind": "restaurant",
+   "score": 4,
+   "note": "text is not very readable"
+  },
+  {
+   "site": "landscape-salon",
+   "direction": "landscape",
+   "kind": "salon",
+   "score": 4,
+   "note": "text not too readable"
+  },
+  {
+   "site": "landscape-trades",
+   "direction": "landscape",
+   "kind": "trades",
+   "score": 4,
+   "note": "same"
+  },
+  {
+   "site": "signature-clinic",
+   "direction": "signature",
+   "kind": "clinic",
+   "score": 3,
+   "note": "i kinda do not like the black bg and square buttons"
+  },
+  {
+   "site": "signature-fitness",
+   "direction": "signature",
+   "kind": "fitness",
+   "score": 3
+  },
+  {
+   "site": "signature-restaurant",
+   "direction": "signature",
+   "kind": "restaurant",
+   "score": 3
+  },
+  {
+   "site": "signature-salon",
+   "direction": "signature",
+   "kind": "salon",
+   "score": 3
+  },
+  {
+   "site": "signature-trades",
+   "direction": "signature",
+   "kind": "trades",
+   "score": 3
+  },
+  {
+   "site": "wordmark-clinic",
+   "direction": "wordmark",
+   "kind": "clinic",
+   "score": 4
+  },
+  {
+   "site": "wordmark-fitness",
+   "direction": "wordmark",
+   "kind": "fitness",
+   "score": 4
+  },
+  {
+   "site": "wordmark-restaurant",
+   "direction": "wordmark",
+   "kind": "restaurant",
+   "score": 4
+  },
+  {
+   "site": "wordmark-salon",
+   "direction": "wordmark",
+   "kind": "salon",
+   "score": 4
+  },
+  {
+   "site": "wordmark-trades",
+   "direction": "wordmark",
+   "kind": "trades",
+   "score": 4
+  }
+ ]
+}
