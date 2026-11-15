@@ -42,6 +42,14 @@ export const richTextLength = (r: RichText): number =>
 
 export const Focal = z.strictObject({ x: z.number().min(0).max(1), y: z.number().min(0).max(1) })
 
+/**
+ * How light and how busy a photo is in its top, middle and bottom thirds, each 0 to 1. Measured
+ * once when the photo arrives, so blocks can place and shade words on it without looking at pixels.
+ */
+const Band = z.strictObject({ light: z.number().min(0).max(1), busy: z.number().min(0).max(1) })
+export const Tone = z.strictObject({ top: Band, middle: Band, bottom: Band })
+export type Tone = z.infer<typeof Tone>
+
 /** An image as used in one place. The asset table holds the file; alt can be overridden here. */
 export const ImageRef = z.strictObject({
   asset: AssetId,

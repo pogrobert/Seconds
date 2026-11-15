@@ -1,15 +1,11 @@
-import { type BlockProps, FitLine, LetteredName, Section } from '../../kit/index.tsx'
+import { Actions, type BlockProps, FitLine, LetteredName, Section } from '../../kit/index.tsx'
 
-// The name is fitted by its longest word, since it is set one word to a line. The buttons are
-// joined plain blocks in the surface's colours swapped, like tickets, rather than the theme button.
+// The name is fitted by its longest word, since it is set one word to a line. The buttons are the
+// theme's own (rounded in the Signature family).
 export function Lettered({ content: c, ctx }: BlockProps<'hero'>) {
   const name = ctx.business.name
   const longest = name.split(/\s+/).reduce((a, w) => (w.length > a.length ? w : a), '')
   const H = `h${ctx.headingLevel}` as 'h1' | 'h2'
-  const cta = [
-    c.primaryCta && { cta: c.primaryCta, slot: 'primaryCta' },
-    c.secondaryCta && { cta: c.secondaryCta, slot: 'secondaryCta' },
-  ].filter((x) => !!x)
   return (
     <Section
       ctx={ctx}
@@ -24,20 +20,12 @@ export function Lettered({ content: c, ctx }: BlockProps<'hero'>) {
       <H data-slot="headline" className="type-lead max-w-prose text-balance">
         {c.headline}
       </H>
-      {cta.length > 0 && (
-        <div className="flex flex-wrap justify-center">
-          {cta.map((x) => (
-            <a
-              key={x.slot}
-              data-slot={x.slot}
-              href={ctx.href(x.cta.to)}
-              className="type-button min-h-tap border-e border-bg bg-fg px-lg py-sm text-bg no-underline last:border-e-0"
-            >
-              {x.cta.label}
-            </a>
-          ))}
-        </div>
-      )}
+      <Actions
+        ctx={ctx}
+        primary={c.primaryCta}
+        secondary={c.secondaryCta}
+        className="justify-center"
+      />
     </Section>
   )
 }

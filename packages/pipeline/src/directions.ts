@@ -18,6 +18,8 @@ export type Direction = {
   sections: Partial<Record<SectionTypeName, Slot>> & { steps?: Slot }
   /** The drawings set for each kind of business, for directions that draw. */
   marks?: Partial<Record<Kind, string>>
+  /** Kept in the library but not offered: it did not hold up across businesses (Robert's scores). */
+  parked?: string
 }
 
 const at = (type: string, variant: string, surface: SurfaceName = 'base'): Slot => ({
@@ -60,14 +62,16 @@ export const DIRECTIONS: Record<Direction['id'], Direction> = {
   signature: {
     id: 'signature',
     label: 'Signature',
-    header: at('header/over', 'on-dark', 'inverse'),
-    footer: at('footer/simple', 'inline', 'inverse'),
+    // Light and warm, no black (Robert, 2026-11-15: "i kinda do not like the black bg and square
+    // buttons"). The colour comes from the drawings and one brand-coloured band.
+    header: at('header/over', 'on-light'),
+    footer: at('footer/simple', 'inline', 'muted'),
     sections: {
-      hero: at('hero/stage', 'lettered', 'inverse'),
-      'text-media': at('text-media/split', 'text-only'),
-      cards: at('cards/marks', 'row'),
-      steps: at('cards/steps', 'numbered', 'muted'),
-      'price-list': at('price-list/menu', 'list', 'inverse'),
+      hero: at('hero/stage', 'lettered'),
+      'text-media': at('text-media/split', 'text-only', 'muted'),
+      cards: at('cards/marks', 'row', 'muted'),
+      steps: at('cards/steps', 'numbered'),
+      'price-list': at('price-list/menu', 'list'),
       'hours-location': at('hours-location/split', 'with-text', 'brand'),
       cta: at('cta/band', 'centered'),
     },
@@ -82,6 +86,8 @@ export const DIRECTIONS: Record<Direction['id'], Direction> = {
   atelier: {
     id: 'atelier',
     label: 'Atelier',
+    parked:
+      'Scored 2 for every business from the library (2026-11-15): its wash fails on anything but one kind of bright photo.',
     header: at('header/over', 'on-light'),
     footer: at('footer/wordmark', 'wordmark'),
     sections: {
@@ -96,7 +102,10 @@ export const DIRECTIONS: Record<Direction['id'], Direction> = {
   },
 }
 
-export const DIRECTION_IDS = Object.keys(DIRECTIONS) as Direction['id'][]
+/** The directions on offer. Parked ones stay in the library for sites that already use them. */
+export const DIRECTION_IDS = (Object.keys(DIRECTIONS) as Direction['id'][]).filter(
+  (d) => !DIRECTIONS[d].parked,
+)
 
 /**
  * A kind's default page in a direction: the same sections in the same order with the same menu

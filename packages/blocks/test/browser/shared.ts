@@ -17,7 +17,9 @@ export const dirs = readdirSync(join(root, 'src/blocks'), { withFileTypes: true 
 export async function stylesheet(themeCss?: string) {
   const compiler = await kitCompiler()
   const sources = [
-    ...['primitives.tsx', 'facts.tsx', 'core.ts', 'marks.tsx'].map((f) => join(root, 'src/kit', f)),
+    ...['primitives.tsx', 'facts.tsx', 'core.ts', 'marks.tsx', 'photo.ts'].map((f) =>
+      join(root, 'src/kit', f),
+    ),
     // Every .tsx file of every block: a block may split its variants into files of its own.
     ...readdirSync(join(root, 'src/blocks')).flatMap((d) => {
       const dir = join(root, 'src/blocks', d)

@@ -65,6 +65,8 @@ export type Photo = {
   height: number
   /** Path under tools/eval/photos/. */
   file: string
+  /** Light and busyness by third, from tasks/photo-tones.task.ts. */
+  tone?: import('@repo/spec').Tone
 }
 export type Manifest = Partial<Record<Kind, Partial<Record<Slot, Photo>>>>
 

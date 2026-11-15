@@ -14,6 +14,7 @@ import {
   generateSite,
   KINDS,
   PHOTO_HEROES,
+  photoTone,
   randomDecisions,
   resolveSite,
   type SectionPlan,
@@ -236,5 +237,29 @@ describe('directions', () => {
   it('signature letters each kind with its own drawings', () => {
     expect(directionPlan('clinic', 'signature').style.axes.marks).toBe('dental')
     expect(directionPlan('clinic', 'landscape').style.axes.marks).toBeUndefined()
+  })
+})
+
+describe('photo tone', () => {
+  const img = (w: number, h: number, f: (x: number, y: number) => number) => {
+    const px: number[] = []
+    for (let y = 0; y < h; y++)
+      for (let x = 0; x < w; x++) {
+        const v = f(x, y)
+        px.push(v, v, v, 255)
+      }
+    return px
+  }
+  it('measures light and busy per third', () => {
+    // A dark, calm top; a white middle; a striped bottom.
+    const t = photoTone(
+      img(30, 30, (x, y) => (y < 10 ? 20 : y < 20 ? 255 : x % 2 ? 255 : 0)),
+      30,
+      30,
+    )
+    expect(t.top.light).toBeLessThan(0.25)
+    expect(t.top.busy).toBe(0)
+    expect(t.middle.light).toBeGreaterThan(0.95)
+    expect(t.bottom.busy).toBeGreaterThan(0.9)
   })
 })

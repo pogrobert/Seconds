@@ -7,7 +7,21 @@
       "photographer": "GregMontani",
       "photographerUrl": "https://pixabay.com/users/GregMontani-1014946/",
       "tags": "house, residence, building, mansion, nature, facade, great chalfield, manor, uk, garden, park, architecture, story, traditional, english, historical",
-      "query": "timber house garden meadow"
+      "query": "timber house garden meadow",
+      "tone": {
+        "top": {
+          "light": 0.842,
+          "busy": 0.282
+        },
+        "middle": {
+          "light": 0.593,
+          "busy": 0.69
+        },
+        "bottom": {
+          "light": 0.553,
+          "busy": 0.461
+        }
+      }
     },
     {
       "id": "5385995",
@@ -16,7 +30,21 @@
       "photographer": "Tama66",
       "photographerUrl": "https://pixabay.com/users/Tama66-1032521/",
       "tags": "garden, roses, herbs, flower wallpaper, flower, flower background, pink, bloom, romantic, summer, botany, beautiful flowers, nature, flora, shrub, old, historical, estate, herb garden",
-      "query": "cottage garden summer path"
+      "query": "cottage garden summer path",
+      "tone": {
+        "top": {
+          "light": 0.72,
+          "busy": 0.512
+        },
+        "middle": {
+          "light": 0.609,
+          "busy": 0.653
+        },
+        "bottom": {
+          "light": 0.593,
+          "busy": 0.396
+        }
+      }
     },
     {
       "id": "7457294",
@@ -25,7 +53,21 @@
       "photographer": "murrayderek",
       "photographerUrl": "https://pixabay.com/users/murrayderek-5172262/",
       "tags": "secret garden, flowers, door, doorway, garden path, beautiful flowers, path, flower wallpaper, flower background, nature, garden",
-      "query": "cottage garden summer path"
+      "query": "cottage garden summer path",
+      "tone": {
+        "top": {
+          "light": 0.607,
+          "busy": 0.746
+        },
+        "middle": {
+          "light": 0.644,
+          "busy": 0.796
+        },
+        "bottom": {
+          "light": 0.727,
+          "busy": 1
+        }
+      }
     },
     {
       "id": "4384068",
@@ -34,7 +76,21 @@
       "photographer": "Kunphotographer",
       "photographerUrl": "https://pixabay.com/users/Kunphotographer-13221290/",
       "tags": "flowers, beautiful flowers, lavender, flower wallpaper, plantation, flower background, travel, nature, landscape",
-      "query": "modern house garden lavender"
+      "query": "modern house garden lavender",
+      "tone": {
+        "top": {
+          "light": 0.824,
+          "busy": 0.302
+        },
+        "middle": {
+          "light": 0.653,
+          "busy": 0.593
+        },
+        "bottom": {
+          "light": 0.576,
+          "busy": 0.653
+        }
+      }
     },
     {
       "id": "246881",
@@ -43,7 +99,21 @@
       "photographer": "khfalk",
       "photographerUrl": "https://pixabay.com/users/khfalk-36012/",
       "tags": "dartmoor, english garden, mansion, country estate, landscaped garden, park, dartmoor, english garden, english garden, english garden, english garden, english garden",
-      "query": "cottage garden summer path"
+      "query": "cottage garden summer path",
+      "tone": {
+        "top": {
+          "light": 0.794,
+          "busy": 0.367
+        },
+        "middle": {
+          "light": 0.567,
+          "busy": 0.677
+        },
+        "bottom": {
+          "light": 0.605,
+          "busy": 0.594
+        }
+      }
     }
   ],
   "atelier": [
@@ -54,7 +124,21 @@
       "photographer": "AndiP",
       "photographerUrl": "https://pixabay.com/users/AndiP-7089121/",
       "tags": "yoga, asana, pose, hatha, woman, girl, stretching, fitness, sports, flexible, person, international yoga day, yoga, yoga, yoga, yoga, yoga",
-      "query": "yoga studio sunlight wooden floor"
+      "query": "yoga studio sunlight wooden floor",
+      "tone": {
+        "top": {
+          "light": 0.944,
+          "busy": 0.324
+        },
+        "middle": {
+          "light": 0.92,
+          "busy": 0.403
+        },
+        "bottom": {
+          "light": 0.896,
+          "busy": 0.484
+        }
+      }
     },
     {
       "id": "2959233",
@@ -63,7 +147,21 @@
       "photographer": "AndiP",
       "photographerUrl": "https://pixabay.com/users/AndiP-7089121/",
       "tags": "yoga, pose, asana, yoga, yoga, yoga, yoga, yoga",
-      "query": "pilates studio"
+      "query": "pilates studio",
+      "tone": {
+        "top": {
+          "light": 0.939,
+          "busy": 0.3
+        },
+        "middle": {
+          "light": 0.926,
+          "busy": 0.289
+        },
+        "bottom": {
+          "light": 0.873,
+          "busy": 0.444
+        }
+      }
     },
     {
       "id": "3053488",
@@ -72,7 +170,21 @@
       "photographer": "lograstudio",
       "photographerUrl": "https://pixabay.com/users/lograstudio-4785951/",
       "tags": "yoga, exercise, fitness, woman, health, strength, body, relaxation, sport, meditation, lifestyle, wellbeing, pilates, abdomen, stretch, adult, leisure, people, studio, pose, international yoga day, yoga, yoga, yoga, yoga, yoga, exercise, health, meditation",
-      "query": "yoga studio sunlight wooden floor"
+      "query": "yoga studio sunlight wooden floor",
+      "tone": {
+        "top": {
+          "light": 0.759,
+          "busy": 0.259
+        },
+        "middle": {
+          "light": 0.691,
+          "busy": 0.236
+        },
+        "bottom": {
+          "light": 0.616,
+          "busy": 0.276
+        }
+      }
     },
     {
       "id": "1146277",
@@ -81,7 +193,21 @@
       "photographer": "jeviniya",
       "photographerUrl": "https://pixabay.com/users/jeviniya-1342849/",
       "tags": "yoga, legs, young woman, sports, international yoga day, stretch, stretching, yoga, yoga, yoga, yoga, yoga",
-      "query": "yoga studio sunlight wooden floor"
+      "query": "yoga studio sunlight wooden floor",
+      "tone": {
+        "top": {
+          "light": 0.698,
+          "busy": 0.096
+        },
+        "middle": {
+          "light": 0.684,
+          "busy": 0.396
+        },
+        "bottom": {
+          "light": 0.617,
+          "busy": 0.241
+        }
+      }
     },
     {
       "id": "6888603",
@@ -90,7 +216,21 @@
       "photographer": "ymyphoto",
       "photographerUrl": "https://pixabay.com/users/ymyphoto-23007053/",
       "tags": "da guojing, indoor, indoor decorations, bedroom, furniture, indoor, bedroom, bedroom, bedroom, bedroom, furniture, furniture, furniture, furniture, furniture",
-      "query": "yoga studio sunlight wooden floor"
+      "query": "yoga studio sunlight wooden floor",
+      "tone": {
+        "top": {
+          "light": 0.747,
+          "busy": 0.184
+        },
+        "middle": {
+          "light": 0.776,
+          "busy": 0.351
+        },
+        "bottom": {
+          "light": 0.71,
+          "busy": 0.274
+        }
+      }
     }
   ],
   "spread": [
@@ -101,7 +241,21 @@
       "photographer": "petitcarre",
       "photographerUrl": "https://pixabay.com/users/petitcarre-478534/",
       "tags": "hairdresser, hair salon, salon, beauty, hair salon, hair salon, hair salon, hair salon, hair salon, salon",
-      "query": "hair salon chair window"
+      "query": "hair salon chair window",
+      "tone": {
+        "top": {
+          "light": 0.6,
+          "busy": 0.331
+        },
+        "middle": {
+          "light": 0.582,
+          "busy": 0.415
+        },
+        "bottom": {
+          "light": 0.596,
+          "busy": 0.201
+        }
+      }
     },
     {
       "id": "1853957",
@@ -110,7 +264,21 @@
       "photographer": "Pexels",
       "photographerUrl": "https://pixabay.com/users/Pexels-2286921/",
       "tags": "woman, hair, braid, hairstyle, blur, braided hair, brunette, fashion, female, girl, hairdo, lady, model, hair, hair, hair, hair, hair",
-      "query": "hair salon chair window"
+      "query": "hair salon chair window",
+      "tone": {
+        "top": {
+          "light": 0.728,
+          "busy": 0.226
+        },
+        "middle": {
+          "light": 0.757,
+          "busy": 0.203
+        },
+        "bottom": {
+          "light": 0.802,
+          "busy": 0.324
+        }
+      }
     },
     {
       "id": "4682949",
@@ -119,7 +287,21 @@
       "photographer": "Engin_Akyurt",
       "photographerUrl": "https://pixabay.com/users/Engin_Akyurt-3656355/",
       "tags": "hairdresser, maintenance, hair, living room, fashion, beauty, woman, beautiful, portrait, people, girl, style, human, women, design, paint",
-      "query": "hair salon interior"
+      "query": "hair salon interior",
+      "tone": {
+        "top": {
+          "light": 0.8,
+          "busy": 0.229
+        },
+        "middle": {
+          "light": 0.732,
+          "busy": 0.247
+        },
+        "bottom": {
+          "light": 0.622,
+          "busy": 0.231
+        }
+      }
     },
     {
       "id": "1854110",
@@ -128,7 +310,21 @@
       "photographer": "Pexels",
       "photographerUrl": "https://pixabay.com/users/Pexels-2286921/",
       "tags": "curtains, decoration, indoors, plant, nature, potted plant, window, minimalist, minimalistic, interior decoration, indoor plant",
-      "query": "hairdresser natural light"
+      "query": "hairdresser natural light",
+      "tone": {
+        "top": {
+          "light": 0.699,
+          "busy": 0.16
+        },
+        "middle": {
+          "light": 0.732,
+          "busy": 0.212
+        },
+        "bottom": {
+          "light": 0.629,
+          "busy": 0.266
+        }
+      }
     },
     {
       "id": "1369446",
@@ -137,7 +333,21 @@
       "photographer": "UniqueMarfa",
       "photographerUrl": "https://pixabay.com/users/UniqueMarfa-2503692/",
       "tags": "morning, girl, beautiful, femininity, tenderness, people, person, hair, woman, sensual, brown beauty, brown hair, brown morning",
-      "query": "hairdresser natural light"
+      "query": "hairdresser natural light",
+      "tone": {
+        "top": {
+          "light": 0.624,
+          "busy": 0.183
+        },
+        "middle": {
+          "light": 0.611,
+          "busy": 0.128
+        },
+        "bottom": {
+          "light": 0.48,
+          "busy": 0.105
+        }
+      }
     },
     {
       "id": "5441655",
@@ -146,7 +356,21 @@
       "photographer": "CoiffeurTeamLaurentius",
       "photographerUrl": "https://pixabay.com/users/CoiffeurTeamLaurentius-17661731/",
       "tags": "barbershop, nature, hairdresser, business, interior, chairs, mirrors, plants, windows, decoration",
-      "query": "hair salon chair window"
+      "query": "hair salon chair window",
+      "tone": {
+        "top": {
+          "light": 0.918,
+          "busy": 0.434
+        },
+        "middle": {
+          "light": 0.807,
+          "busy": 0.657
+        },
+        "bottom": {
+          "light": 0.877,
+          "busy": 0.457
+        }
+      }
     }
   ],
   "wordmark": [
@@ -157,7 +381,21 @@
       "photographer": "matthiasboeckel",
       "photographerUrl": "https://pixabay.com/users/matthiasboeckel-3930681/",
       "tags": "loaf, wine, supper, worship, church, christianity, supper, supper, supper, supper, supper, worship",
-      "query": "rustic food table linen"
+      "query": "rustic food table linen",
+      "tone": {
+        "top": {
+          "light": 0.791,
+          "busy": 0.33
+        },
+        "middle": {
+          "light": 0.677,
+          "busy": 0.495
+        },
+        "bottom": {
+          "light": 0.752,
+          "busy": 0.439
+        }
+      }
     },
     {
       "id": "2151201",
@@ -166,7 +404,21 @@
       "photographer": "Daria-Yakovleva",
       "photographerUrl": "https://pixabay.com/users/Daria-Yakovleva-3938704/",
       "tags": "breakfast, syrniki, plate, confectionery, delicious, sweet, nutrition, close-up, table, food, dessert, dish, cooking, bakery products, useful, home, diet, recipe, healthy, kitchen, recipe, recipe, recipe, recipe, recipe",
-      "query": "plate food top view"
+      "query": "plate food top view",
+      "tone": {
+        "top": {
+          "light": 0.727,
+          "busy": 0.525
+        },
+        "middle": {
+          "light": 0.706,
+          "busy": 0.659
+        },
+        "bottom": {
+          "light": 0.673,
+          "busy": 0.601
+        }
+      }
     },
     {
       "id": "5916804",
@@ -175,7 +427,21 @@
       "photographer": "congerdesign",
       "photographerUrl": "https://pixabay.com/users/congerdesign-509903/",
       "tags": "bread, roll, bun, sweet, dessert, fresh, baked, table, bread, bread, bread, bread, bread",
-      "query": "rustic food table linen"
+      "query": "rustic food table linen",
+      "tone": {
+        "top": {
+          "light": 0.626,
+          "busy": 0.21
+        },
+        "middle": {
+          "light": 0.617,
+          "busy": 0.423
+        },
+        "bottom": {
+          "light": 0.621,
+          "busy": 0.378
+        }
+      }
     },
     {
       "id": "5267056",
@@ -184,7 +450,21 @@
       "photographer": "MatteoPhotoPro2020",
       "photographerUrl": "https://pixabay.com/users/MatteoPhotoPro2020-11599221/",
       "tags": "food, pasta dish, delicious, to eat, kitchen, nutrition, vegetables, cook",
-      "query": "ceramic plate dish overhead"
+      "query": "ceramic plate dish overhead",
+      "tone": {
+        "top": {
+          "light": 0.729,
+          "busy": 0.565
+        },
+        "middle": {
+          "light": 0.702,
+          "busy": 0.551
+        },
+        "bottom": {
+          "light": 0.713,
+          "busy": 0.574
+        }
+      }
     },
     {
       "id": "8510868",
@@ -193,7 +473,21 @@
       "photographer": "JohnyVid",
       "photographerUrl": "https://pixabay.com/users/JohnyVid-6243568/",
       "tags": "plate, leaf, blank, empty, copy space, nature, top view",
-      "query": "ceramic plate dish overhead"
+      "query": "ceramic plate dish overhead",
+      "tone": {
+        "top": {
+          "light": 0.929,
+          "busy": 0.195
+        },
+        "middle": {
+          "light": 0.894,
+          "busy": 0.166
+        },
+        "bottom": {
+          "light": 0.869,
+          "busy": 0.176
+        }
+      }
     }
   ]
 }

@@ -822,7 +822,7 @@ export const FAMILIES: Record<FamilyId, Family> = {
         inverse: surface('#000000', '#ffffff', mix(b, '#ffffff', 0.35)),
       }
     },
-    corners: { cards: { control: '0', card: '18px', media: '18px' } },
+    corners: { cards: { control: '999px', card: '18px', media: '18px' } },
     sizes: {
       lead: 'clamp(1.125rem, 1rem + 0.4cqi, 1.25rem)',
       body: '1.125rem',

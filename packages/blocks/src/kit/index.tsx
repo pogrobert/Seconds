@@ -2,5 +2,6 @@
 export * from './core.ts'
 export * from './facts.tsx'
 export * from './marks.tsx'
+export * from './photo.ts'
 export * from './primitives.tsx'
 export * from './strings.ts'

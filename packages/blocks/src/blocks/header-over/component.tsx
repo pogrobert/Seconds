@@ -6,7 +6,7 @@ import { type BlockProps, ButtonLink, Logo, NavMenu, OnPhoto, Section } from '..
 // .over-ground), so it stays readable wherever it is placed.
 export default function HeaderOver({ content: c, variant, ctx }: BlockProps<'header'>) {
   const row = (
-    <div className="over-ground -mx-gutter flex flex-wrap items-center justify-between gap-x-md gap-y-sm bg-bg px-gutter py-sm">
+    <div className="over-ground -mx-gutter flex flex-wrap items-center justify-between gap-x-md gap-y-sm px-gutter py-sm">
       <Logo ctx={ctx} className="flex min-h-tap items-center" />
       <div className="ms-auto flex flex-wrap items-center justify-end gap-md">
         <NavMenu ctx={ctx} nav={c.nav} />

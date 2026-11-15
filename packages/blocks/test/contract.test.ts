@@ -102,7 +102,7 @@ describe('library', () => {
   })
   it('kit primitives use only kit classes', async () => {
     const exists = await classExists()
-    const kit = ['primitives.tsx', 'facts.tsx', 'marks.tsx']
+    const kit = ['primitives.tsx', 'facts.tsx', 'marks.tsx', 'photo.ts']
       .map((f) => readFileSync(join(root, 'src/kit', f), 'utf8'))
       .join('\n')
     expect(classesIn(kit).filter((c) => !exists(c))).toEqual([])

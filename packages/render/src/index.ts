@@ -144,7 +144,8 @@ export function renderPage(spec: SiteSpec, pageId: PageId, o: RenderOptions): Re
       image: (img, io) => {
         const asset = spec.content.assets[img.asset]
         if (!asset) return { src: '', width: 1, height: 1 }
-        return o.imageUrl({ ...asset, alt: img.alt, focal: img.focal ?? asset.focal }, io)
+        const url = o.imageUrl({ ...asset, alt: img.alt, focal: img.focal ?? asset.focal }, io)
+        return asset.tone ? { ...url, tone: asset.tone } : url
       },
       business: spec.content.business,
       collection: (cid) => spec.content.collections[cid],

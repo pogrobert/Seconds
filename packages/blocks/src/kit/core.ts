@@ -7,6 +7,7 @@ import type {
   ImageRef,
   LinkTarget,
   SectionTypeName,
+  Tone,
 } from '@repo/spec'
 import type { Surface } from '../manifest/contract.ts'
 
@@ -33,7 +34,7 @@ export type RenderCtx = {
   image: (
     img: ImageRef,
     o: { sizes: string; aspect?: number },
-  ) => { src: string; srcSet?: string; width: number; height: number }
+  ) => { src: string; srcSet?: string; width: number; height: number; tone?: Tone }
   business: Business
   collection: (id: string) => CollectionValue | undefined
   /** BCP 47 locale for prices, times and day names, for example "en-GB". */

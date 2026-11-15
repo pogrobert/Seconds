@@ -106,10 +106,7 @@
   [data-block-id] {
     container-type: inline-size;
   }
-  /* A menu bar laid over a full-screen opening loses its own ground: the photo is its ground. */
-  [data-site]:has([data-block-type="hero/stage"]) .over-ground {
-    background: transparent;
-  }
+
   [data-site] th {
     font-weight: inherit;
   }
@@ -410,4 +407,26 @@
   text-shadow:
     0 1px 2px color-mix(in oklab, var(--p-inverse-bg) 30%, transparent),
     0 2px 28px color-mix(in oklab, var(--p-inverse-bg) 45%, transparent);
+}
+
+/* A soft pool of shade behind light words on a photo; its strength comes from the photo (wordsOn). */
+@utility photo-halo {
+  background: radial-gradient(
+    closest-side,
+    color-mix(in oklab, var(--p-inverse-bg) 85%, transparent),
+    color-mix(in oklab, var(--p-inverse-bg) 40%, transparent) 60%,
+    transparent
+  );
+}
+/* An even dim over a whole photo, for very bright ones. */
+@utility photo-dim {
+  background: var(--p-inverse-bg);
+}
+
+/* A menu bar's own ground, which it loses over a full-screen opening: the photo is its ground. */
+@utility over-ground {
+  background-color: var(--role-bg);
+  [data-site]:has([data-block-type="hero/stage"]) & {
+    background-color: transparent;
+  }
 }

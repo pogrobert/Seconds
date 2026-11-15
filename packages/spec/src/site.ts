@@ -9,7 +9,7 @@ import {
   SECTION_TYPES,
   type SectionTypeName,
 } from './section-types.ts'
-import { Focal, type LinkTarget } from './values.ts'
+import { Focal, type LinkTarget, Tone } from './values.ts'
 
 // The site spec, version 1: the plain data file that says which blocks, in what order, with what
 // text, colours and fonts. Four parts: structure, style, content, settings (architecture README).
@@ -121,6 +121,7 @@ export const Asset = z.strictObject({
   height: z.int().positive().optional(),
   alt: z.string().max(250),
   focal: Focal.optional(),
+  tone: Tone.optional(),
 })
 export type Asset = z.infer<typeof Asset>
 

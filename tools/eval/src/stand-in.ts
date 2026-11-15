@@ -36,6 +36,7 @@ export function sampleAssets(s: SampleBusiness): Asset[] {
         width: p.width,
         height: p.height,
         alt: p.alt.slice(0, 250),
+        ...(p.tone ? { tone: p.tone } : {}),
       }
     return {
       id: aid(s.kind, n),

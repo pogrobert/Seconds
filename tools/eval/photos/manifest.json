@@ -9,7 +9,21 @@
       "alt": "restaurant dining room evening warm light",
       "width": 1280,
       "height": 960,
-      "file": "restaurant/hero-5107506.jpg"
+      "file": "restaurant/hero-5107506.jpg",
+      "tone": {
+        "top": {
+          "light": 0.51,
+          "busy": 0.377
+        },
+        "middle": {
+          "light": 0.479,
+          "busy": 0.541
+        },
+        "bottom": {
+          "light": 0.333,
+          "busy": 0.15
+        }
+      }
     },
     "about": {
       "provider": "pixabay",
@@ -20,7 +34,21 @@
       "alt": "chef plating food restaurant kitchen",
       "width": 1280,
       "height": 853,
-      "file": "restaurant/about-1284351.jpg"
+      "file": "restaurant/about-1284351.jpg",
+      "tone": {
+        "top": {
+          "light": 0.788,
+          "busy": 0.425
+        },
+        "middle": {
+          "light": 0.677,
+          "busy": 0.585
+        },
+        "bottom": {
+          "light": 0.599,
+          "busy": 0.197
+        }
+      }
     },
     "cta": {
       "provider": "pixabay",
@@ -31,7 +59,21 @@
       "alt": "restaurant table set for dinner",
       "width": 1280,
       "height": 853,
-      "file": "restaurant/cta-449952.jpg"
+      "file": "restaurant/cta-449952.jpg",
+      "tone": {
+        "top": {
+          "light": 0.609,
+          "busy": 0.3
+        },
+        "middle": {
+          "light": 0.643,
+          "busy": 0.703
+        },
+        "bottom": {
+          "light": 0.667,
+          "busy": 0.556
+        }
+      }
     },
     "detail-2": {
       "provider": "pixabay",
@@ -42,7 +84,21 @@
       "alt": "wine glasses bar counter",
       "width": 1280,
       "height": 853,
-      "file": "restaurant/detail-2-4896541.jpg"
+      "file": "restaurant/detail-2-4896541.jpg",
+      "tone": {
+        "top": {
+          "light": 0.566,
+          "busy": 0.454
+        },
+        "middle": {
+          "light": 0.508,
+          "busy": 0.479
+        },
+        "bottom": {
+          "light": 0.494,
+          "busy": 0.39
+        }
+      }
     },
     "detail-1": {
       "provider": "pixabay",
@@ -53,7 +109,21 @@
       "alt": "small plates tapas sharing dinner table",
       "width": 1280,
       "height": 853,
-      "file": "restaurant/detail-1-791110.jpg"
+      "file": "restaurant/detail-1-791110.jpg",
+      "tone": {
+        "top": {
+          "light": 0.706,
+          "busy": 0.544
+        },
+        "middle": {
+          "light": 0.66,
+          "busy": 0.885
+        },
+        "bottom": {
+          "light": 0.689,
+          "busy": 0.935
+        }
+      }
     }
   },
   "salon": {
@@ -66,7 +136,21 @@
       "alt": "hair salon interior chairs mirrors",
       "width": 1280,
       "height": 1067,
-      "file": "salon/hero-4043096.jpg"
+      "file": "salon/hero-4043096.jpg",
+      "tone": {
+        "top": {
+          "light": 0.612,
+          "busy": 0.354
+        },
+        "middle": {
+          "light": 0.598,
+          "busy": 0.342
+        },
+        "bottom": {
+          "light": 0.592,
+          "busy": 0.337
+        }
+      }
     },
     "about": {
       "provider": "pixabay",
@@ -77,7 +161,21 @@
       "alt": "hairdresser styling hair client",
       "width": 1280,
       "height": 853,
-      "file": "salon/about-834280.jpg"
+      "file": "salon/about-834280.jpg",
+      "tone": {
+        "top": {
+          "light": 0.503,
+          "busy": 0.243
+        },
+        "middle": {
+          "light": 0.657,
+          "busy": 0.459
+        },
+        "bottom": {
+          "light": 0.781,
+          "busy": 0.269
+        }
+      }
     },
     "cta": {
       "provider": "pixabay",
@@ -88,7 +186,21 @@
       "alt": "hair salon wash basin",
       "width": 1280,
       "height": 853,
-      "file": "salon/cta-7022733.jpg"
+      "file": "salon/cta-7022733.jpg",
+      "tone": {
+        "top": {
+          "light": 0.659,
+          "busy": 0.312
+        },
+        "middle": {
+          "light": 0.54,
+          "busy": 0.468
+        },
+        "bottom": {
+          "light": 0.463,
+          "busy": 0.289
+        }
+      }
     },
     "detail-1": {
       "provider": "pixabay",
@@ -99,7 +211,21 @@
       "alt": "hair colour balayage close up",
       "width": 1280,
       "height": 853,
-      "file": "salon/detail-1-4682949.jpg"
+      "file": "salon/detail-1-4682949.jpg",
+      "tone": {
+        "top": {
+          "light": 0.8,
+          "busy": 0.229
+        },
+        "middle": {
+          "light": 0.732,
+          "busy": 0.247
+        },
+        "bottom": {
+          "light": 0.622,
+          "busy": 0.231
+        }
+      }
     },
     "detail-2": {
       "provider": "pixabay",
@@ -110,7 +236,21 @@
       "alt": "hair styling tools brushes",
       "width": 1280,
       "height": 853,
-      "file": "salon/detail-2-4769976.jpg"
+      "file": "salon/detail-2-4769976.jpg",
+      "tone": {
+        "top": {
+          "light": 0.767,
+          "busy": 0.256
+        },
+        "middle": {
+          "light": 0.682,
+          "busy": 0.43
+        },
+        "bottom": {
+          "light": 0.69,
+          "busy": 0.114
+        }
+      }
     }
   },
   "clinic": {
@@ -123,7 +263,21 @@
       "alt": "modern dental clinic treatment room",
       "width": 1280,
       "height": 850,
-      "file": "clinic/hero-2586827.jpg"
+      "file": "clinic/hero-2586827.jpg",
+      "tone": {
+        "top": {
+          "light": 0.732,
+          "busy": 0.455
+        },
+        "middle": {
+          "light": 0.622,
+          "busy": 0.219
+        },
+        "bottom": {
+          "light": 0.529,
+          "busy": 0.141
+        }
+      }
     },
     "about": {
       "provider": "pixabay",
@@ -134,7 +288,21 @@
       "alt": "dentist talking with patient",
       "width": 1280,
       "height": 848,
-      "file": "clinic/about-428646.jpg"
+      "file": "clinic/about-428646.jpg",
+      "tone": {
+        "top": {
+          "light": 0.628,
+          "busy": 0.125
+        },
+        "middle": {
+          "light": 0.76,
+          "busy": 0.336
+        },
+        "bottom": {
+          "light": 0.705,
+          "busy": 0.147
+        }
+      }
     },
     "cta": {
       "provider": "pixabay",
@@ -145,7 +313,21 @@
       "alt": "clinic reception waiting area",
       "width": 1280,
       "height": 816,
-      "file": "clinic/cta-2093368.jpg"
+      "file": "clinic/cta-2093368.jpg",
+      "tone": {
+        "top": {
+          "light": 0.888,
+          "busy": 0.219
+        },
+        "middle": {
+          "light": 0.625,
+          "busy": 0.479
+        },
+        "bottom": {
+          "light": 0.543,
+          "busy": 0.3
+        }
+      }
     },
     "detail-1": {
       "provider": "pixabay",
@@ -156,7 +338,21 @@
       "alt": "dental tools tray clean",
       "width": 1280,
       "height": 853,
-      "file": "clinic/detail-1-2458195.jpg"
+      "file": "clinic/detail-1-2458195.jpg",
+      "tone": {
+        "top": {
+          "light": 0.869,
+          "busy": 0.175
+        },
+        "middle": {
+          "light": 0.776,
+          "busy": 0.344
+        },
+        "bottom": {
+          "light": 0.731,
+          "busy": 0.302
+        }
+      }
     },
     "detail-2": {
       "provider": "pixabay",
@@ -167,7 +363,21 @@
       "alt": "smiling patient dental check up",
       "width": 1280,
       "height": 850,
-      "file": "clinic/detail-2-2530990.jpg"
+      "file": "clinic/detail-2-2530990.jpg",
+      "tone": {
+        "top": {
+          "light": 0.68,
+          "busy": 0.409
+        },
+        "middle": {
+          "light": 0.792,
+          "busy": 0.383
+        },
+        "bottom": {
+          "light": 0.761,
+          "busy": 0.44
+        }
+      }
     }
   },
   "trades": {
@@ -180,7 +390,21 @@
       "alt": "electrician working on fuse box",
       "width": 1280,
       "height": 852,
-      "file": "trades/hero-1080584.jpg"
+      "file": "trades/hero-1080584.jpg",
+      "tone": {
+        "top": {
+          "light": 0.719,
+          "busy": 0.73
+        },
+        "middle": {
+          "light": 0.716,
+          "busy": 0.746
+        },
+        "bottom": {
+          "light": 0.706,
+          "busy": 0.538
+        }
+      }
     },
     "about": {
       "provider": "pixabay",
@@ -191,7 +415,21 @@
       "alt": "electrician van tools",
       "width": 1280,
       "height": 852,
-      "file": "trades/about-1080554.jpg"
+      "file": "trades/about-1080554.jpg",
+      "tone": {
+        "top": {
+          "light": 0.791,
+          "busy": 0.194
+        },
+        "middle": {
+          "light": 0.712,
+          "busy": 0.384
+        },
+        "bottom": {
+          "light": 0.746,
+          "busy": 0.243
+        }
+      }
     },
     "detail-1": {
       "provider": "pixabay",
@@ -202,7 +440,21 @@
       "alt": "electrical wiring cables close up",
       "width": 1280,
       "height": 853,
-      "file": "trades/detail-1-4393425.jpg"
+      "file": "trades/detail-1-4393425.jpg",
+      "tone": {
+        "top": {
+          "light": 0.653,
+          "busy": 0.683
+        },
+        "middle": {
+          "light": 0.596,
+          "busy": 0.664
+        },
+        "bottom": {
+          "light": 0.572,
+          "busy": 0.606
+        }
+      }
     },
     "detail-2": {
       "provider": "pixabay",
@@ -213,7 +465,21 @@
       "alt": "electric car charger home",
       "width": 1280,
       "height": 719,
-      "file": "trades/detail-2-1458836.jpg"
+      "file": "trades/detail-2-1458836.jpg",
+      "tone": {
+        "top": {
+          "light": 0.591,
+          "busy": 0.324
+        },
+        "middle": {
+          "light": 0.738,
+          "busy": 0.441
+        },
+        "bottom": {
+          "light": 0.722,
+          "busy": 0.261
+        }
+      }
     },
     "cta": {
       "provider": "pixabay",
@@ -224,7 +490,21 @@
       "alt": "electrician installing ceiling light",
       "width": 1280,
       "height": 853,
-      "file": "trades/cta-7827771.jpg"
+      "file": "trades/cta-7827771.jpg",
+      "tone": {
+        "top": {
+          "light": 0.545,
+          "busy": 0.123
+        },
+        "middle": {
+          "light": 0.674,
+          "busy": 0.308
+        },
+        "bottom": {
+          "light": 0.598,
+          "busy": 0.11
+        }
+      }
     }
   },
   "fitness": {
@@ -237,7 +517,21 @@
       "alt": "reformer pilates studio",
       "width": 1280,
       "height": 852,
-      "file": "fitness/hero-1948813.jpg"
+      "file": "fitness/hero-1948813.jpg",
+      "tone": {
+        "top": {
+          "light": 0.704,
+          "busy": 0.159
+        },
+        "middle": {
+          "light": 0.686,
+          "busy": 0.704
+        },
+        "bottom": {
+          "light": 0.662,
+          "busy": 0.667
+        }
+      }
     },
     "about": {
       "provider": "pixabay",
@@ -248,7 +542,21 @@
       "alt": "pilates instructor helping client",
       "width": 1280,
       "height": 1280,
-      "file": "fitness/about-1840275.jpg"
+      "file": "fitness/about-1840275.jpg",
+      "tone": {
+        "top": {
+          "light": 0.86,
+          "busy": 0.152
+        },
+        "middle": {
+          "light": 0.874,
+          "busy": 0.195
+        },
+        "bottom": {
+          "light": 0.889,
+          "busy": 0.094
+        }
+      }
     },
     "detail-1": {
       "provider": "pixabay",
@@ -259,7 +567,21 @@
       "alt": "pilates reformer close up",
       "width": 1280,
       "height": 854,
-      "file": "fitness/detail-1-2557534.jpg"
+      "file": "fitness/detail-1-2557534.jpg",
+      "tone": {
+        "top": {
+          "light": 0.48,
+          "busy": 0.179
+        },
+        "middle": {
+          "light": 0.497,
+          "busy": 0.222
+        },
+        "bottom": {
+          "light": 0.511,
+          "busy": 0.212
+        }
+      }
     },
     "cta": {
       "provider": "pixabay",
@@ -270,7 +592,21 @@
       "alt": "pilates class indoor studio mat",
       "width": 1280,
       "height": 813,
-      "file": "fitness/cta-3772674.jpg"
+      "file": "fitness/cta-3772674.jpg",
+      "tone": {
+        "top": {
+          "light": 0.883,
+          "busy": 0.214
+        },
+        "middle": {
+          "light": 0.791,
+          "busy": 0.332
+        },
+        "bottom": {
+          "light": 0.633,
+          "busy": 0.285
+        }
+      }
     },
     "detail-2": {
       "provider": "pixabay",
@@ -281,7 +617,21 @@
       "alt": "yoga mats rolled studio floor",
       "width": 1280,
       "height": 719,
-      "file": "fitness/detail-2-3967979.jpg"
+      "file": "fitness/detail-2-3967979.jpg",
+      "tone": {
+        "top": {
+          "light": 0.552,
+          "busy": 0.141
+        },
+        "middle": {
+          "light": 0.527,
+          "busy": 0.185
+        },
+        "bottom": {
+          "light": 0.53,
+          "busy": 0.157
+        }
+      }
     }
   }
 }

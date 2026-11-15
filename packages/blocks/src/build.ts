@@ -34,7 +34,9 @@ export async function siteCss(types: readonly string[], themeCss?: string): Prom
     },
   })
   const files = [
-    ...['core.ts', 'primitives.tsx', 'facts.tsx', 'marks.tsx'].map((f) => join(root, 'src/kit', f)),
+    ...['core.ts', 'primitives.tsx', 'facts.tsx', 'marks.tsx', 'photo.ts'].map((f) =>
+      join(root, 'src/kit', f),
+    ),
     // Every source file of each block: a block may split its variants into files of its own.
     ...types.flatMap((t) =>
       existsSync(folderOf(t))
