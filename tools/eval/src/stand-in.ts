@@ -1,7 +1,7 @@
 import type { SectionPlan } from '@repo/pipeline'
 import type { Asset, RichText } from '@repo/spec'
 import type { SampleBusiness } from './businesses.ts'
-import { readManifest, type Slot } from './photos.ts'
+import type { Manifest, Slot } from './photos.ts'
 
 // Section content from a sample business's facts and stand-in copy. A placeholder for the text
 // model: it fills the same typed fields, so layouts can be judged before the pipeline writes text.
@@ -14,10 +14,11 @@ const fid = 'f_newsletter' as const
 
 /**
  * The five pictures of a sample business. A licensed stock photo where photos/manifest.json has one
- * for that slot (decided 2026-11-14), otherwise generated art from Surfaces.
+ * for that slot (decided 2026-11-14), otherwise generated art from Surfaces. The manifest is passed
+ * in, so this file reads no files and also runs in the Worker (apps/web).
  */
-export function sampleAssets(s: SampleBusiness): Asset[] {
-  const photos = readManifest()[s.kind] ?? {}
+export function sampleAssets(s: SampleBusiness, manifest: Manifest): Asset[] {
+  const photos = manifest[s.kind] ?? {}
   const make = (n: number, slot: Slot, alt: string): Asset => {
     const p = photos[slot]
     if (p)

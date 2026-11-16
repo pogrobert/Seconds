@@ -33,7 +33,7 @@ export type Photo = { n: number; shows: string }
 /** Everything about a site that is not in the plan: what the content needs to know. */
 export type Look = { leadPhoto: number; rhythm?: Rhythm }
 
-const KIND_LABEL: Record<Kind, string> = {
+export const KIND_LABEL: Record<Kind, string> = {
   restaurant: 'restaurant or café',
   salon: 'hair and beauty salon',
   clinic: 'dental or medical clinic',

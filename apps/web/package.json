@@ -3,14 +3,18 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "predev": "node scripts/prepare.ts",
     "dev": "vite dev",
     "build": "vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "test": "vitest run --passWithNoTests",
-    "cf-types": "wrangler types"
+    "cf-types": "wrangler types",
+    "prebuild": "node scripts/prepare.ts"
   },
   "dependencies": {
+    "@repo/blocks": "workspace:*",
+    "@repo/eval": "workspace:*",
     "@repo/pipeline": "workspace:*",
     "@repo/render": "workspace:*",
     "@repo/spec": "workspace:*",

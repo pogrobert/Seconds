@@ -3,7 +3,13 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./businesses": "./src/businesses.ts",
+    "./stand-in": "./src/stand-in.ts",
+    "./site-content": "./src/site-content.ts",
+    "./briefs": "./src/briefs.ts",
+    "./photos/manifest.json": "./photos/manifest.json",
+    "./photos": "./src/photos.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

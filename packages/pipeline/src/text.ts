@@ -7,6 +7,8 @@ import type { Brief } from './choose.ts'
 
 /** The words of one site. Every M0 block's text comes from these slots or from the facts. */
 export type Copy = {
+  /** The business's name, written only when the brief has none on record (askName). */
+  name?: string
   tagline: string
   headline: string
   subhead: string
@@ -87,6 +89,8 @@ export type TextInput = {
   facts: string
   /** Whether the site has a "how it works" section that needs three steps. */
   needSteps: boolean
+  /** Take the name from the brief, or choose one, when no name is on record (the build page). */
+  askName?: boolean
 }
 
 export interface TextPort {
@@ -110,13 +114,14 @@ const item = (L: typeof COPY_LIMITS) => ({
   },
 })
 
-function schema(needSteps: boolean) {
+function schema(needSteps: boolean, askName = false) {
   const L = COPY_LIMITS
   const list = { type: 'array', minItems: 3, maxItems: 3, items: item(L) }
   return {
     type: 'object',
     additionalProperties: false,
     required: [
+      ...(askName ? ['name'] : []),
       'tagline',
       'headline',
       'subhead',
@@ -127,6 +132,7 @@ function schema(needSteps: boolean) {
       ...(needSteps ? ['steps'] : []),
     ],
     properties: {
+      ...(askName ? { name: { type: 'string', maxLength: 40 } } : {}),
       tagline: { type: 'string', maxLength: L.tagline },
       headline: { type: 'string', maxLength: L.headline },
       subhead: { type: 'string', maxLength: L.subhead },
@@ -152,7 +158,9 @@ function prompt(input: TextInput): string {
   const L = COPY_LIMITS
   const b = input.brief
   return [
-    `Write the words for the home page of ${b.name}, a business in ${b.place}.`,
+    b.name
+      ? `Write the words for the home page of ${b.name}, a business in ${b.place}.`
+      : 'Write the words for the home page of the business described below.',
     '',
     "The owner's brief, in their own words:",
     b.words,
@@ -163,6 +171,11 @@ function prompt(input: TextInput): string {
     'Rules:',
     '- British English. Plain, warm, specific words in the tone the brief asks for. No clichés such as "elevate", "unlock" or "nestled".',
     '- Never invent prices, opening hours, phone numbers, addresses, awards, years, names of staff or numbers of reviews. The site shows those from the business record.',
+    ...(input.askName
+      ? [
+          "- name: the business's name exactly as the brief gives it; if it gives none, a short, plausible, ordinary name for such a business (at most 40 characters).",
+        ]
+      : []),
     `- tagline: a short label shown above the headline, such as "Hair salon in Leith" (at most ${L.tagline} characters).`,
     `- headline: the main promise, short and memorable (at most ${L.headline} characters).`,
     `- subhead: one sentence under the headline (at most ${L.subhead} characters).`,
@@ -215,7 +228,11 @@ export function openRouterText(o: {
           provider: { order: o.providers ?? ['cerebras', 'groq'], allow_fallbacks: true },
           response_format: {
             type: 'json_schema',
-            json_schema: { name: 'copy', strict: true, schema: schema(input.needSteps) },
+            json_schema: {
+              name: 'copy',
+              strict: true,
+              schema: schema(input.needSteps, input.askName),
+            },
           },
           usage: { include: true },
         }

@@ -7,6 +7,7 @@ import { assemble, type ContentFor, DEFAULT_PLANS, type SitePlan } from '@repo/p
 import { renderDocument } from '@repo/render'
 import { type SiteSpec, validateSite } from '@repo/spec'
 import { type Kind, SAMPLES, type SampleBusiness } from './businesses.ts'
+import { readManifest } from './photos.ts'
 import { sampleAssets, standInContent } from './stand-in.ts'
 
 /**
@@ -37,7 +38,7 @@ export async function renderSample(
     {
       business: s.business,
       collections: s.collections,
-      assets: sampleAssets(s),
+      assets: sampleAssets(s, readManifest()),
       color: brand,
       locale: 'en-GB',
       dir: 'ltr',

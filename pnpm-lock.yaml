@@ -83,6 +83,12 @@ importers:
 
   apps/web:
     dependencies:
+      '@repo/blocks':
+        specifier: workspace:*
+        version: link:../../packages/blocks
+      '@repo/eval':
+        specifier: workspace:*
+        version: link:../../tools/eval
       '@repo/pipeline':
         specifier: workspace:*
         version: link:../../packages/pipeline
