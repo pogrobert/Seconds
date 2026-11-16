@@ -26,7 +26,8 @@
     "board": "vitest run --config vitest.tasks.config.ts board",
     "directions": "vitest run --config vitest.tasks.config.ts directions",
     "directions-wall": "vitest run --config vitest.tasks.config.ts directions-wall",
-    "photo-tones": "vitest run --config vitest.tasks.config.ts photo-tones"
+    "photo-tones": "vitest run --config vitest.tasks.config.ts photo-tones",
+    "grammar": "vitest run --config vitest.tasks.config.ts grammar"
   },
   "dependencies": {
     "@repo/blocks": "workspace:*",
