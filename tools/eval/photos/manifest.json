@@ -124,6 +124,39 @@
           "busy": 0.935
         }
       }
+    },
+    "lowkey-hero": {
+      "provider": "pixabay",
+      "id": "6900215",
+      "page": "https://pixabay.com/photos/decoration-christmas-sylvester-6900215/",
+      "photographer": "mariya_m",
+      "photographerUrl": "https://pixabay.com/users/mariya_m-12752456/",
+      "alt": "moody restaurant interior candlelight dark",
+      "width": 1280,
+      "height": 853,
+      "file": "restaurant/lowkey-hero-6900215.jpg"
+    },
+    "lowkey-detail": {
+      "provider": "pixabay",
+      "id": "5138946",
+      "page": "https://pixabay.com/photos/still-life-tomato-meal-vegetables-5138946/",
+      "photographer": "fietzfotos",
+      "photographerUrl": "https://pixabay.com/users/fietzfotos-6795508/",
+      "alt": "food plate dark background dramatic light",
+      "width": 1280,
+      "height": 960,
+      "file": "restaurant/lowkey-detail-5138946.jpg"
+    },
+    "lowkey-people": {
+      "provider": "pixabay",
+      "id": "4807317",
+      "page": "https://pixabay.com/photos/chef-cooking-street-costumer-4807317/",
+      "photographer": "binmassam",
+      "photographerUrl": "https://pixabay.com/users/binmassam-15041405/",
+      "alt": "chef portrait dark kitchen",
+      "width": 1280,
+      "height": 853,
+      "file": "restaurant/lowkey-people-4807317.jpg"
     }
   },
   "salon": {
@@ -251,6 +284,39 @@
           "busy": 0.114
         }
       }
+    },
+    "lowkey-hero": {
+      "provider": "pixabay",
+      "id": "4666064",
+      "page": "https://pixabay.com/photos/hairdresser-table-shear-hair-4666064/",
+      "photographer": "guvo59",
+      "photographerUrl": "https://pixabay.com/users/guvo59-9285194/",
+      "alt": "hair stylist hands scissors dark",
+      "width": 1280,
+      "height": 853,
+      "file": "salon/lowkey-detail-4666064.jpg"
+    },
+    "lowkey-detail": {
+      "provider": "pixabay",
+      "id": "6560988",
+      "page": "https://pixabay.com/photos/shaving-brush-razor-vintage-mirror-6560988/",
+      "photographer": "9nails",
+      "photographerUrl": "https://pixabay.com/users/9nails-20062995/",
+      "alt": "hair brush comb dark background",
+      "width": 1280,
+      "height": 834,
+      "file": "salon/lowkey-detail-6560988.jpg"
+    },
+    "lowkey-people": {
+      "provider": "pixabay",
+      "id": "4682912",
+      "page": "https://pixabay.com/photos/hairdresser-maintenance-hair-4682912/",
+      "photographer": "Engin_Akyurt",
+      "photographerUrl": "https://pixabay.com/users/Engin_Akyurt-3656355/",
+      "alt": "hairdresser cutting hair client dark moody",
+      "width": 1280,
+      "height": 853,
+      "file": "salon/lowkey-people-4682912.jpg"
     }
   },
   "clinic": {
@@ -378,6 +444,39 @@
           "busy": 0.44
         }
       }
+    },
+    "lowkey-hero": {
+      "provider": "pixabay",
+      "id": "2589771",
+      "page": "https://pixabay.com/photos/dentist-dental-chair-clinic-medical-2589771/",
+      "photographer": "StockSnap",
+      "photographerUrl": "https://pixabay.com/users/StockSnap-894430/",
+      "alt": "dental clinic interior evening",
+      "width": 1280,
+      "height": 853,
+      "file": "clinic/lowkey-hero-2589771.jpg"
+    },
+    "lowkey-people": {
+      "provider": "pixabay",
+      "id": "4636439",
+      "page": "https://pixabay.com/photos/portrait-close-up-skin-natural-4636439/",
+      "photographer": "Sunriseforever",
+      "photographerUrl": "https://pixabay.com/users/Sunriseforever-6314823/",
+      "alt": "woman calm portrait dark background natural light",
+      "width": 1280,
+      "height": 853,
+      "file": "clinic/lowkey-people-4636439.jpg"
+    },
+    "lowkey-detail": {
+      "provider": "pixabay",
+      "id": "7276387",
+      "page": "https://pixabay.com/photos/leaves-forest-green-dark-7276387/",
+      "photographer": "mariya_m",
+      "photographerUrl": "https://pixabay.com/users/mariya_m-12752456/",
+      "alt": "green leaves dark background calm",
+      "width": 1280,
+      "height": 864,
+      "file": "clinic/lowkey-detail-7276387.jpg"
     }
   },
   "trades": {
@@ -505,6 +604,39 @@
           "busy": 0.11
         }
       }
+    },
+    "lowkey-hero": {
+      "provider": "pixabay",
+      "id": "4863393",
+      "page": "https://pixabay.com/photos/workshop-carpenter-crafts-artisan-4863393/",
+      "photographer": "ThMilherou",
+      "photographerUrl": "https://pixabay.com/users/ThMilherou-5808126/",
+      "alt": "carpenter workshop warm light dark",
+      "width": 1280,
+      "height": 848,
+      "file": "trades/lowkey-hero-4863393.jpg"
+    },
+    "lowkey-people": {
+      "provider": "pixabay",
+      "id": "1866533",
+      "page": "https://pixabay.com/photos/adult-artisan-tools-workshop-1866533/",
+      "photographer": "Pexels",
+      "photographerUrl": "https://pixabay.com/users/Pexels-2286921/",
+      "alt": "craftsman working wood dark workshop",
+      "width": 1280,
+      "height": 852,
+      "file": "trades/lowkey-people-1866533.jpg"
+    },
+    "lowkey-detail": {
+      "provider": "pixabay",
+      "id": "7013387",
+      "page": "https://pixabay.com/photos/iron-nails-rope-composition-autumn-7013387/",
+      "photographer": "francescobovolin",
+      "photographerUrl": "https://pixabay.com/users/francescobovolin-15327715/",
+      "alt": "old tools dark background",
+      "width": 1280,
+      "height": 850,
+      "file": "trades/lowkey-detail-7013387.jpg"
     }
   },
   "fitness": {
@@ -632,6 +764,39 @@
           "busy": 0.157
         }
       }
+    },
+    "lowkey-people": {
+      "provider": "pixabay",
+      "id": "5586338",
+      "page": "https://pixabay.com/photos/man-warrior-jujitsu-discipline-5586338/",
+      "photographer": "tothstefan1983",
+      "photographerUrl": "https://pixabay.com/users/tothstefan1983-13495165/",
+      "alt": "athlete training dark background dramatic light",
+      "width": 1280,
+      "height": 853,
+      "file": "fitness/lowkey-people-5586338.jpg"
+    },
+    "lowkey-hero": {
+      "provider": "pixabay",
+      "id": "1284616",
+      "page": "https://pixabay.com/photos/weight-lifting-fitness-gym-1284616/",
+      "photographer": "Pexels",
+      "photographerUrl": "https://pixabay.com/users/Pexels-2286921/",
+      "alt": "gym interior dark dumbbells",
+      "width": 1280,
+      "height": 853,
+      "file": "fitness/lowkey-hero-1284616.jpg"
+    },
+    "lowkey-detail": {
+      "provider": "pixabay",
+      "id": "1839088",
+      "page": "https://pixabay.com/photos/dark-effort-exercise-fitness-gym-1839088/",
+      "photographer": "Pexels",
+      "photographerUrl": "https://pixabay.com/users/Pexels-2286921/",
+      "alt": "kettlebell dark background",
+      "width": 1280,
+      "height": 853,
+      "file": "fitness/lowkey-detail-1839088.jpg"
     }
   }
 }

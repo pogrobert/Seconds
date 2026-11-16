@@ -1,10 +1,13 @@
-// The design-rules proof (docs/m0/12-design-rules.md): a page is one composition (layer 1) drawn in
-// one type system (layer 2). This file holds what every composition shares: the content they draw,
-// the colours, the base styles and small helpers. Plain HTML and CSS, no JavaScript in the page.
-// An experiment kept out of the library on purpose: if it works, it moves into the spec and blocks.
+// The design-rules proof (docs/m0/12-design-rules.md, round 2 in 13): a page is one rule from each
+// layer: composition, type system, colour strategy, hero and signature detail. This file holds what
+// every layer shares: the content they draw, the base styles, small helpers and the page assembly.
+// Plain HTML and CSS, no JavaScript in the page. An experiment kept out of the library on purpose:
+// if it works, it moves into the spec and blocks.
 
 import type { Copy } from '@repo/pipeline'
 import type { SampleBusiness } from '../businesses.ts'
+import type { ColourRule } from './colour-rules.ts'
+import type { DetailRule, HeroRule, PhotoRule } from './layers.ts'
 import type { TypeRule } from './type-rules.ts'
 
 export type Photo = { src: string; alt: string; w: number; h: number }
@@ -28,7 +31,18 @@ export type Content = {
   book: string
   cta: { headline: string; subhead: string; label: string }
   photos: { hero: Photo; about: Photo; cta: Photo; d1: Photo; d2: Photo }
+  /** The business's atmospheric set, for the low-key photo treatment (round 3). */
+  lowkey?: { hero: Photo; people: Photo; detail: Photo }
   brand: string
+  /** Facts the signature details are built from; none is invented. */
+  facts: {
+    area: string
+    founded?: number
+    rating?: string
+    reviews?: string
+    late?: { day: string; time: string }
+    openDays?: string
+  }
 }
 
 export type Composition = {
@@ -37,7 +51,19 @@ export type Composition = {
   /** What the decision model reads. */
   text: string
   css: string
-  html: (c: Content) => string
+  /** The page, with `slot` placed on the opening photo (for a stamp or monogram). Marks its own
+   * menu with <!--top--> and its opening with <!--hero-->, so a hero rule can replace both. */
+  html: (c: Content, slot: string) => string
+}
+
+export type Design = {
+  composition: Composition
+  type: TypeRule
+  colour: ColourRule
+  hero: HeroRule
+  detail: DetailRule
+  /** Round 3. Missing means natural. */
+  photo?: PhotoRule
 }
 
 /* ------------------------------------------------------------------ helpers */
@@ -57,12 +83,9 @@ const longest = (s: string) => Math.max(4, ...s.split(/\s+/).map((w) => [...w].l
 export const fit = (tag: string, cls: string, text: string, attrs = '') =>
   `<${tag} class="${cls}" style="--long:${longest(text)};--chars:${[...text].length}"${attrs}>${esc(text)}</${tag}>`
 
-/** The hero headline, with its last word set in the type system's emphasis. */
-export const headline = (tag: string, cls: string, text: string) => {
-  const words = text.trim().split(/\s+/)
-  const last = words.pop() ?? ''
-  return `<${tag} class="${cls}" data-slot="headline" style="--long:${longest(text)}">${esc(words.join(' '))} <em>${esc(last)}</em></${tag}>`
-}
+/** The opening headline. Round 1 set its last word in italics; that is a known AI tell. */
+export const headline = (tag: string, cls: string, text: string) =>
+  `<${tag} class="${cls}" data-slot="headline" style="--long:${longest(text)}">${esc(text)}</${tag}>`
 
 export const img = (p: Photo, cls = '', eager = false) =>
   `<img class="${cls}" src="${p.src}" alt="${esc(p.alt)}" width="${p.w}" height="${p.h}"${eager ? ' fetchpriority="high"' : ' loading="lazy"'}>`
@@ -94,37 +117,6 @@ export const addressBlock = (c: Content) => `<address>${c.address.map(esc).join(
 export const contact = (c: Content) =>
   `<p class="contact"><a href="tel:${c.phone.replace(/\s/g, '')}">${esc(c.phone)}</a><br><a href="mailto:${c.email}">${esc(c.email)}</a></p>`
 
-/* ------------------------------------------------------------------ colour */
-
-const hex = (h: string) => [1, 3, 5].map((i) => Number.parseInt(h.slice(i, i + 2), 16))
-const toHex = (rgb: number[]) =>
-  `#${rgb
-    .map((v) =>
-      Math.round(Math.max(0, Math.min(255, v)))
-        .toString(16)
-        .padStart(2, '0'),
-    )
-    .join('')}`
-const mix = (a: string, b: string, t: number) => {
-  const x = hex(a)
-  const y = hex(b)
-  return toHex(x.map((v, i) => v + ((y[i] ?? 0) - v) * t))
-}
-
-/** One palette from the brand colour: warm paper, near-black ink with a hint of the brand. */
-export function palette(brand: string) {
-  return {
-    '--brand': brand,
-    '--on-brand': '#ffffff',
-    '--ground': mix('#f7f4ef', brand, 0.02),
-    '--tint': mix('#f7f4ef', brand, 0.1),
-    '--ink': mix('#1c1a1d', brand, 0.12),
-    '--muted': mix('#57535a', brand, 0.1),
-    '--line': mix('#d9d4cd', brand, 0.12),
-    '--night': mix('#18161a', brand, 0.18),
-  }
-}
-
 /* ------------------------------------------------------------------ base CSS */
 
 const BASE = `
@@ -136,21 +128,23 @@ a{color:inherit;text-underline-offset:0.2em;text-decoration-thickness:1px}
 p,h1,h2,h3,ul,dl,dd,figure,address{margin:0;padding:0}
 ul{list-style:none}
 address{font-style:normal}
-:focus-visible{outline:2px solid var(--brand);outline-offset:3px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .cq{container-type:inline-size;min-width:0}
 .d1,.d2,.d3,.name{font-family:var(--f-d);font-weight:var(--w-d);letter-spacing:var(--t-d);text-transform:var(--c-d);line-height:var(--lh-d);text-wrap:balance}
 .d1{font-size:min(var(--d1),calc(94cqi / (var(--long) * var(--adv))))}
 .d2{font-size:min(var(--d2),calc(94cqi / (var(--long) * var(--adv))))}
 .d3{font-size:var(--d3);line-height:1.15}
 header .name,.bar .name{white-space:nowrap}
-.d1 em,.d2 em{font-style:var(--em-style);color:var(--em-color)}
+.has-slot{position:relative}
+.h-bar{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:22px var(--g)}
+.slot{position:absolute;right:clamp(14px,2vw,28px);bottom:clamp(14px,2vw,28px);z-index:2}
 .st{font-family:var(--f-st);font-weight:var(--w-st);letter-spacing:var(--t-st,-0.01em);font-size:var(--st);line-height:1.28;text-wrap:pretty}
 .lead{font-size:var(--lead);line-height:1.5;text-wrap:pretty}
 .lab{font-family:var(--f-l);font-weight:var(--w-l);letter-spacing:var(--t-l);text-transform:var(--c-l);font-variant-caps:var(--var-l,normal);font-size:var(--size-l);line-height:1.3}
 .muted{color:var(--muted)}
-.btn{display:inline-flex;align-items:center;justify-content:center;min-height:50px;padding:0 26px;border-radius:var(--radius);background:var(--brand);color:var(--on-brand);text-decoration:none;font-family:var(--f-btn);font-weight:600;text-transform:var(--c-btn,none);letter-spacing:var(--t-btn,0);font-size:var(--size-btn);line-height:1;white-space:nowrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:50px;padding:0 26px;border-radius:var(--radius);background:var(--btn);color:var(--on-btn);text-decoration:none;font-family:var(--f-btn);font-weight:600;text-transform:var(--c-btn,none);letter-spacing:var(--t-btn,0);font-size:var(--size-btn);line-height:1;white-space:nowrap}
 .btn.small{min-height:40px;padding:0 18px}
-.btn.light{background:var(--on-brand);color:var(--brand)}
+.btn.light{background:var(--on-band);color:var(--band)}
 .nav{display:flex;align-items:center;gap:clamp(14px,2.2vw,32px);font-size:15px}
 .nav a:not(.btn){text-decoration:none}
 .nav a:not(.btn):hover{text-decoration:underline}
@@ -173,13 +167,32 @@ header .name,.bar .name{white-space:nowrap}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 `
 
-export function renderPage(
-  c: Content,
-  comp: Composition,
-  type: TypeRule,
-  o: { title?: string } = {},
-): string {
-  const vars = { ...palette(c.brand), ...type.vars, '--adv': String(type.advance) }
+export function renderPage(content: Content, d: Design, o: { title?: string } = {}): string {
+  const { composition: comp, type } = d
+  // Low-key: the atmospheric set leads; the remaining photos are graded to sit with it.
+  const k = d.photo?.lowkey ? content.lowkey : undefined
+  const c: Content = k
+    ? {
+        ...content,
+        photos:
+          d.photo?.lead === 'people'
+            ? { ...content.photos, hero: k.people, about: k.hero, d1: k.detail }
+            : { ...content.photos, hero: k.hero, about: k.people, d1: k.detail },
+      }
+    : content
+  const vars = { ...d.colour.palette(c.brand), ...type.vars, '--adv': String(type.advance) }
+  const slot = d.detail.slot?.(c) ?? ''
+  let body = comp.html(c, d.hero.html ? '' : slot)
+  if (d.hero.html) {
+    body = body.replace(/<!--top-->[\s\S]*?<!--\/top-->/, '')
+    body = body.replace(
+      /<!--hero-->[\s\S]*?<!--\/hero-->/,
+      `<!--hero-->${d.hero.html(c, slot)}<!--/hero-->`,
+    )
+  }
+  if (d.detail.after) body = body.replace('<!--/hero-->', `<!--/hero-->${d.detail.after(c)}`)
+  body = body.replace(/<!--\/?(top|hero)-->/g, '')
+  const before = d.detail.before?.(c) ?? ''
   const root = `:root{${Object.entries(vars)
     .map(([k, v]) => `${k}:${v}`)
     .join(';')};--g:clamp(20px,4.4vw,72px);--sp:clamp(72px,9vw,148px)}`
@@ -192,10 +205,10 @@ export function renderPage(
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?${type.fonts}&display=swap">
-<style>${root}${BASE}${comp.css}</style>
+<style>${root}${BASE}${comp.css}${d.hero.css}${d.detail.css}${d.photo?.css ?? ''}</style>
 </head>
-<body class="c-${comp.key} t-${type.key}">
-${comp.html(c)}
+<body class="layout-${comp.key} type-${type.key} colour-${d.colour.key} hero-${d.hero.key} detail-${d.detail.key} photo-${d.photo?.key ?? 'natural'}">
+${before}${body}
 </body>
 </html>`
 }
@@ -203,6 +216,7 @@ ${comp.html(c)}
 /* ------------------------------------------------------------------ content */
 
 const DAY = ['', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+const DAYS = ['', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 const pounds = (m: { amount: number }) => `£${(m.amount / 100).toFixed(m.amount % 100 ? 2 : 0)}`
 const minutes = (n: number) =>
   n < 60 ? `${n} min` : `${Math.floor(n / 60)} hr${n % 60 ? ` ${n % 60} min` : ''}`
@@ -234,7 +248,7 @@ export function contentOf(
   s: SampleBusiness,
   photos: Record<string, ManifestPhoto>,
   photoBase: string,
-  o: { name?: string; brand?: string; copy?: Copy } = {},
+  o: { name?: string; brand?: string; copy?: Copy; founded?: number } = {},
 ): Content {
   const w = o.copy ?? s.standIn
   const b = s.business
@@ -278,6 +292,23 @@ export function contentOf(
       },
     ])
   }
+  // The latest closing time, when one day stays open later than the others.
+  const closes = (loc.hours ?? []).map((h) => ({ day: h.day, time: h.closes }))
+  const latest = [...closes].sort((x, y) => y.time.localeCompare(x.time))[0]
+  const late =
+    latest && closes.filter((x) => x.time === latest.time).length === 1
+      ? { day: `${DAYS[latest.day]}s`, time: latest.time }
+      : undefined
+  const days = [...open].sort((x, y) => x - y)
+  const run = days.every((d, i) => i === 0 || d === (days[i - 1] ?? 0) + 1)
+  const openDays = days.length
+    ? run && days.length > 2
+      ? `${DAY[days[0] ?? 1]}–${DAY[days[days.length - 1] ?? 7]}`
+      : days.map((d) => DAY[d]).join(', ')
+    : undefined
+  const proof = b.proof?.text ?? ''
+  const rating = proof.match(/(\d(?:\.\d)?)\s*★/)?.[1]
+  const reviews = proof.match(/(\d[\d,]*)\s+(?:Google\s+)?reviews/i)?.[1]
   const a = loc.address
   return {
     name: o.name ?? b.name,
@@ -303,6 +334,23 @@ export function contentOf(
       d1: ph('detail-1'),
       d2: ph('detail-2'),
     },
+    ...(photos['lowkey-hero'] && photos['lowkey-people'] && photos['lowkey-detail']
+      ? {
+          lowkey: {
+            hero: ph('lowkey-hero'),
+            people: ph('lowkey-people'),
+            detail: ph('lowkey-detail'),
+          },
+        }
+      : {}),
     brand: o.brand ?? s.palette,
+    facts: {
+      area: loc.name ?? a?.locality ?? '',
+      ...(o.founded ? { founded: o.founded } : {}),
+      ...(rating ? { rating } : {}),
+      ...(reviews ? { reviews } : {}),
+      ...(late ? { late } : {}),
+      ...(openDays ? { openDays } : {}),
+    },
   }
 }

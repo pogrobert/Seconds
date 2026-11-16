@@ -16,12 +16,16 @@ export type ChoiceQuestion = {
   options: { key: string; text: string }[]
 }
 export type BoolQuestion = { kind: 'bool'; id: string; prompt: string }
-export type Question = ChoiceQuestion | BoolQuestion
+/** A position on an ordered scale. `levels` run from the low end to the high end (2 to 10). */
+export type ScoreQuestion = { kind: 'score'; id: string; prompt: string; levels: string[] }
+export type Question = ChoiceQuestion | BoolQuestion | ScoreQuestion
 
 export type Dist = Record<string, number>
 export type Answer =
   | { kind: 'choice'; id: string; top: string; dist: Dist | null; pTop: number; margin: number }
   | { kind: 'bool'; id: string; pTrue: number }
+  /** `score` runs from 0 to levels − 1 and can fall between levels; `dist` is per level index. */
+  | { kind: 'score'; id: string; score: number; dist: number[] | null }
   | { kind: 'missing'; id: string; reason: 'error' | 'unsupported' }
 
 /** One call to a provider, kept whole in the generation record. */
@@ -84,6 +88,10 @@ function toWire(questions: Question[]) {
       wire[name] = { type: 'noul', instructions: q.prompt }
       return
     }
+    if (q.kind === 'score') {
+      wire[name] = { type: 'score', instructions: q.prompt, criteria: q.levels }
+      return
+    }
     const keys = new Map<string, string>()
     const criteria: Record<string, string> = {}
     q.options.forEach((o, k) => {
@@ -100,6 +108,7 @@ function toWire(questions: Question[]) {
 type SystemOneAnswer =
   | { type: 'choice'; choice: string; confidence?: number; probabilities?: Record<string, number> }
   | { type: 'noul'; noul: number }
+  | { type: 'score'; score: number; probabilities?: Record<string, number> }
 
 /**
  * TypeSafe's System One API (docs.typesafe.ai/api, read 2026-11-14): one request carries the state
@@ -171,6 +180,13 @@ export function typesafeDecisions(o: {
           answers.set(q.id, { kind: 'bool', id: q.id, pTrue: a.noul })
           continue
         }
+        if (q.kind === 'score' && a.type === 'score') {
+          const dist = a.probabilities
+            ? q.levels.map((_, i) => a.probabilities?.[String(i)] ?? 0)
+            : null
+          answers.set(q.id, { kind: 'score', id: q.id, score: a.score, dist })
+          continue
+        }
         if (q.kind === 'choice' && a.type === 'choice') {
           const keys = optionKeys.get(name) ?? new Map()
           const dist: Dist | null = a.probabilities
@@ -207,6 +223,12 @@ export function randomDecisions(seed: string): DecisionPort {
       for (const q of questions) {
         if (q.kind === 'bool') {
           answers.set(q.id, { kind: 'bool', id: q.id, pTrue: rand() < 0.5 ? 0.9 : 0.1 })
+          continue
+        }
+        if (q.kind === 'score') {
+          const level = Math.floor(rand() * q.levels.length)
+          const dist = q.levels.map((_, i) => (i === level ? 1 : 0))
+          answers.set(q.id, { kind: 'score', id: q.id, score: level, dist })
           continue
         }
         const pick = q.options[Math.floor(rand() * q.options.length)]?.key ?? ''

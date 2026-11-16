@@ -1,0 +1,1042 @@
+[
+  {
+    "name": "BAO",
+    "kind": 1,
+    "city": "London, UK",
+    "url": "https://baolondon.com",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Brown sans with the hand-drawn 'lonely man' mark; earthy tan, olive and brown palette (#bc8444, #565d35) instead of white-and-black.",
+    "verified": true
+  },
+  {
+    "name": "St. JOHN",
+    "kind": 1,
+    "city": "London, UK",
+    "url": "https://stjohnrestaurant.com",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Almost austere: black-and-white, one engraved pig mark, plain text menus. Restraint as identity.",
+    "verified": true
+  },
+  {
+    "name": "Noble Rot",
+    "kind": 1,
+    "city": "London, UK",
+    "url": "https://noblerot.co.uk",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Reads like their wine magazine: Clarendon Black and Century Expanded headlines with Futura PT, one claret red (#d1242b).",
+    "verified": true
+  },
+  {
+    "name": "Kiln",
+    "kind": 1,
+    "city": "London, UK",
+    "url": "https://www.kilnsoho.com",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Near text-only page: Baskerville plus Gotham on grey, no decoration. Shows how far a confident restaurant can strip back.",
+    "verified": true
+  },
+  {
+    "name": "Hoppers",
+    "kind": 1,
+    "city": "London, UK",
+    "url": "https://www.hopperslondon.com",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Mix of a display face (Lemondrop), Letter Gothic and Bebas Neue on warm cream (#e6ddd6) with a sea-green accent (#739f90).",
+    "verified": true
+  },
+  {
+    "name": "Sessions Arts Club",
+    "kind": 1,
+    "city": "London, UK",
+    "url": "https://sessionsartsclub.com",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Moody and romantic: Williams Caslon and Freight Text serifs with Favorit sans on a dark bottle green (#2b342e).",
+    "verified": true
+  },
+  {
+    "name": "KOL",
+    "kind": 1,
+    "city": "London, UK",
+    "url": "https://kolrestaurant.com",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Custom KOL display face with Clearface serif; deep brown (#50302e) palette.",
+    "verified": true
+  },
+  {
+    "name": "The Barbary",
+    "kind": 1,
+    "city": "London, UK",
+    "url": "https://www.thebarbary.co.uk",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Single custom-feeling face (Director) on cream (#f2ebd8) with hot orange (#ff6c2f) and sage (#bfcfc9).",
+    "verified": true
+  },
+  {
+    "name": "Atomix",
+    "kind": 1,
+    "city": "New York, USA",
+    "url": "https://www.atomixnyc.com",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Dark, quiet fine-dining page (Squarespace) with Calluna serif and near-black grounds; photography does the work.",
+    "verified": true
+  },
+  {
+    "name": "Via Carota",
+    "kind": 1,
+    "city": "New York, USA",
+    "url": "https://www.viacarota.com",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Rustic trattoria feel: Libre Baskerville with Josefin Sans, brown (#523725) and tomato red (#cc3b3b).",
+    "verified": true
+  },
+  {
+    "name": "noma",
+    "kind": 1,
+    "city": "Copenhagen, Denmark",
+    "url": "https://noma.dk",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Minimal, lower-case, season-led pages; almost no chrome, large food and landscape imagery.",
+    "verified": true
+  },
+  {
+    "name": "Hart Bageri",
+    "kind": 1,
+    "city": "Copenhagen, Denmark",
+    "url": "https://hartbageri.com",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Bakery site set in Basel Grotesk Mono and Graphik on a warm off-white (#fcfaf1); shop-like grid.",
+    "verified": true
+  },
+  {
+    "name": "Tartine Bakery",
+    "kind": 1,
+    "city": "San Francisco, USA",
+    "url": "https://tartinebakery.com",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Custom monospaced-feel PitchSans throughout with a baked-crust orange (#c87e1e).",
+    "verified": true
+  },
+  {
+    "name": "Sqirl",
+    "kind": 1,
+    "city": "Los Angeles, USA",
+    "url": "https://sqirlla.com",
+    "agency": "View Source",
+    "caseStudy": "https://www.siteinspire.com/websites/category/food-and-drink",
+    "note": "Deliberately quirky type mix (Marfa Pre, Office Times Sharp, G2 Ciao, Favorit) on pale greys with a single blue.",
+    "verified": true
+  },
+  {
+    "name": "Saint Peter",
+    "kind": 1,
+    "city": "Sydney, Australia",
+    "url": "https://www.saintpeter.com.au",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Fish restaurant plus boutique hotel; editorial, photo-led layout with Adobe Fonts type.",
+    "verified": true
+  },
+  {
+    "name": "Africola",
+    "kind": 1,
+    "city": "Adelaide, Australia",
+    "url": "https://www.africola.com.au",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Loud and maximal: custom MASH Africola display face, flag red (#e11f26) and yellow (#ffce06).",
+    "verified": true
+  },
+  {
+    "name": "Lina Stores",
+    "kind": 1,
+    "city": "London, UK",
+    "url": "https://www.linastores.co.uk",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Custom Lina Sans and the shop's pistachio-green stripe palette (#a7d9c7, #8ebbaa) carried from awning to web.",
+    "verified": true
+  },
+  {
+    "name": "Carousel",
+    "kind": 1,
+    "city": "London, UK",
+    "url": "https://www.carousel-london.com",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Rotating guest-chef calendar; Caslon with Overpass, playful yellow, pink and sky-blue accents.",
+    "verified": true
+  },
+  {
+    "name": "Dishoom",
+    "kind": 1,
+    "city": "UK (small group)",
+    "url": "https://www.dishoom.com",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Storytelling Bombay-café identity: Cheltenham, Gill Sans Nova, Hepta Slab and a typewriter face on parchment (#f0ece0).",
+    "verified": true
+  },
+  {
+    "name": "Atelier Crenn",
+    "kind": 1,
+    "city": "San Francisco, USA",
+    "url": "https://www.ateliercrenn.com",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Poetic, airy fine dining: Julius Sans One caps with Halant serif on cool greys.",
+    "verified": true
+  },
+  {
+    "name": "Aulis",
+    "kind": 1,
+    "city": "London / Cartmel, UK",
+    "url": "https://www.aulis.co.uk",
+    "agency": "GP works",
+    "caseStudy": "https://www.siteinspire.com/websites/category/food-and-drink",
+    "note": "Chef's-table site set entirely in a typewriter mono (Relative Mono) on off-white (#f4f4ec); feels like a menu card.",
+    "verified": true
+  },
+  {
+    "name": "Tacaloa",
+    "kind": 1,
+    "city": "Bogotá, Colombia",
+    "url": "https://www.tacaloa.com",
+    "agency": "Contra Studio",
+    "caseStudy": "https://www.siteinspire.com/websites/category/food-and-drink",
+    "note": "Editorial New serif with Aktiv Grotesk Condensed; taco bar dressed like a magazine (Webflow).",
+    "verified": true
+  },
+  {
+    "name": "Tripletta",
+    "kind": 1,
+    "city": "Paris, France",
+    "url": "https://www.triplettapizza.com",
+    "agency": null,
+    "caseStudy": "https://www.siteinspire.com/websites/category/food-and-drink",
+    "note": "Neighbourhood pizzeria: cream (#fef8dd), deep green (#004632) and Oswald condensed headlines (Webflow).",
+    "verified": true
+  },
+  {
+    "name": "Double Dimanche",
+    "kind": 1,
+    "city": "Hossegor, France",
+    "url": "https://www.doubledimanche.fr",
+    "agency": "Della Mattia",
+    "caseStudy": "https://www.siteinspire.com/websites/category/food-and-drink",
+    "note": "Surf-town restaurants: PP Frama with a thin sans on bone (#f5f5ef), one red accent.",
+    "verified": true
+  },
+  {
+    "name": "Union Boulangerie",
+    "kind": 1,
+    "city": "Paris, France",
+    "url": "https://unionboulangerie.com",
+    "agency": "View Source",
+    "caseStudy": "https://www.siteinspire.com/websites/category/food-and-drink",
+    "note": "Bakery with custom-feel faces (Serial Blur, Kiddo, Shinka); oxblood (#960a00), bright blue and orange on warm grey.",
+    "verified": true
+  },
+  {
+    "name": "MÁLÀ Project",
+    "kind": 1,
+    "city": "New York, USA",
+    "url": "https://www.malaproject.com",
+    "agency": "Jingqi Fan",
+    "caseStudy": "https://www.siteinspire.com/websites/category/food-and-drink",
+    "note": "Bilingual type (Chinese faces ZhuZi GuDian and Hei with Latin); spice palette of chilli orange and deep red.",
+    "verified": true
+  },
+  {
+    "name": "Stereoscope Coffee",
+    "kind": 1,
+    "city": "California, USA (city not confirmed)",
+    "url": "https://www.stereoscopecoffee.com",
+    "agency": "OlssønBarbieri",
+    "caseStudy": "https://www.siteinspire.com/websites/category/food-and-drink",
+    "note": "Single grotesque (Brunswick Grotesque) in near-black on greys; Scandinavian restraint for a café.",
+    "verified": true
+  },
+  {
+    "name": "Dash Burger",
+    "kind": 1,
+    "city": "Dublin, Ireland",
+    "url": "https://www.dashburger.ie",
+    "agency": "Unthink",
+    "caseStudy": "https://www.siteinspire.com/websites/category/food-and-drink",
+    "note": "Burger joint with Kommissar extra-condensed headlines, Messina Sans and a bubblegum pink (#f3c0db).",
+    "verified": true
+  },
+  {
+    "name": "COQODAQ",
+    "kind": 1,
+    "city": "New York, USA",
+    "url": "https://www.coqodaq.com",
+    "agency": "Pentagram (Emily Oberman)",
+    "caseStudy": "https://www.pentagram.com/work/coqodaq",
+    "note": "Plaak plus a custom Ekklodt family in three widths; fried-chicken orange (#f85c2b) on cream with deep green.",
+    "verified": true
+  },
+  {
+    "name": "COTE Korean Steakhouse",
+    "kind": 1,
+    "city": "New York, USA (small group)",
+    "url": "https://www.cotekoreansteakhouse.com",
+    "agency": "Pentagram",
+    "caseStudy": "https://www.pentagram.com/work/cote",
+    "note": "Sang Bleu Sans with Baxter; brass (#b67f30), racing green (#1e4c31) and parchment.",
+    "verified": true
+  },
+  {
+    "name": "53",
+    "kind": 1,
+    "city": "New York, USA",
+    "url": "https://53-nyc.com",
+    "agency": "Pentagram",
+    "caseStudy": "https://pentagram.com/work/53/story",
+    "note": "GrandSlang display serif with Yport; soft peach (#f0d7cd) against near-black.",
+    "verified": true
+  },
+  {
+    "name": "HIDE",
+    "kind": 1,
+    "city": "London, UK",
+    "url": "https://hide.co.uk",
+    "agency": "Here Design",
+    "caseStudy": "https://www.dexigner.com/news/31282",
+    "note": "Warm leather-brown and cream with Avenir and Bookman; luxury but calm.",
+    "verified": true
+  },
+  {
+    "name": "The Palomar",
+    "kind": 1,
+    "city": "London, UK",
+    "url": "https://thepalomar.co.uk",
+    "agency": "Here Design",
+    "caseStudy": "https://www.designweek.co.uk/issues/april-2014/here-design-creates-nostalgic-romantic-look-for-restaurant-the-palomar/",
+    "note": "GT America Expanded caps on navy (#16273c), gold (#d0a96d) and cream.",
+    "verified": true
+  },
+  {
+    "name": "Retrograde Coffee",
+    "kind": 1,
+    "city": "Nashville, USA",
+    "url": "https://retrogradecoffee.com",
+    "agency": "Perky Bros",
+    "caseStudy": "https://perkybros.com/work/brand-identity/retrograde-e-nashvilles-coffee-shop/",
+    "note": "Neighbourhood coffee shop with a tan-and-gold (#936f35) palette; identity stronger than the web build.",
+    "verified": true
+  },
+  {
+    "name": "Room for Milly",
+    "kind": 1,
+    "city": "Denver, USA",
+    "url": "https://www.roomformilly.com",
+    "agency": "Perky Bros",
+    "caseStudy": "https://perkybros.com/work/brand-identity/room-for-milly-cocktails-and-color/",
+    "note": "Cocktail bar in Cormorant Garamond with Futura; blush pinks (#ffefef, #f9e8e5) and gold.",
+    "verified": true
+  },
+  {
+    "name": "Quo Vadis",
+    "kind": 1,
+    "city": "London, UK",
+    "url": "https://www.quovadissoho.co.uk",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Members' club and restaurant; Adobe Caslon with a custom Quo Vadis display face, very bookish.",
+    "verified": true
+  },
+  {
+    "name": "Hershesons",
+    "kind": 2,
+    "city": "London, UK",
+    "url": "https://www.hershesons.com",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Salon plus product shop; fashion-editorial photography, Poppins/Centra sans, black and grey with a red accent.",
+    "verified": true
+  },
+  {
+    "name": "Larry King",
+    "kind": 2,
+    "city": "London, UK",
+    "url": "https://larrykinghair.com",
+    "agency": null,
+    "caseStudy": null,
+    "note": "GT America Condensed in thin and medium weights; quiet grey palette.",
+    "verified": true
+  },
+  {
+    "name": "Gielly Green",
+    "kind": 2,
+    "city": "London, UK",
+    "url": "https://giellygreen.co.uk",
+    "agency": "Lovelace Studio",
+    "caseStudy": "https://www.awwwards.com/sites/gielly-green",
+    "note": "Awwwards Honorable Mention 2026. GT America with Sagittaire; a full rose-to-plum ramp (#efe2df to #7d3f45).",
+    "verified": true
+  },
+  {
+    "name": "UNA Hair Studio",
+    "kind": 2,
+    "city": "Auckland, New Zealand",
+    "url": "https://www.una-akl.com",
+    "agency": "Made Studio",
+    "caseStudy": "https://www.awwwards.com/sites/una-1",
+    "note": "Awwwards Honorable Mention 2024. PP Eiko serif with PP Neue Montreal; lilac palette (#9678d3, #deceff).",
+    "verified": true
+  },
+  {
+    "name": "Marco Ambrosi",
+    "kind": 2,
+    "city": "Italy (city not confirmed)",
+    "url": "https://www.marcoambrosi.it",
+    "agency": null,
+    "caseStudy": "https://awwwards.com/sites/marco-ambrosi-salon",
+    "note": "Awwwards Honorable Mention 2021. Video and motion show the stylist's process; dark slate with a deep red.",
+    "verified": true
+  },
+  {
+    "name": "Spoke & Weal",
+    "kind": 2,
+    "city": "USA (several salons)",
+    "url": "https://spokeandweal.com",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Instrument Serif with Inter; tan and caramel (#c2a176, #83643a) on cream (#faf7f2).",
+    "verified": true
+  },
+  {
+    "name": "Nine Zero One",
+    "kind": 2,
+    "city": "Los Angeles, USA",
+    "url": "https://ninezeroonesalon.com",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Custom display faces; cream (#f5ebdf) and black with an electric-yellow (#fffb00) accent.",
+    "verified": true
+  },
+  {
+    "name": "Duck & Dry",
+    "kind": 2,
+    "city": "London, UK",
+    "url": "https://duckanddry.com",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Blow-dry bars; Brandon Grotesque with a deep teal (#00434f).",
+    "verified": true
+  },
+  {
+    "name": "Fellow Barber",
+    "kind": 2,
+    "city": "USA (several shops)",
+    "url": "https://www.fellowbarber.com",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Reckless serif with Neue Haas Grotesk on warm stone (#ebe7df); a single green accent.",
+    "verified": true
+  },
+  {
+    "name": "Pankhurst London",
+    "kind": 2,
+    "city": "London, UK",
+    "url": "https://pankhurstlondon.com",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Grooming house; Fraunces serif with Red Hat Text and an apothecary green (#108474).",
+    "verified": true
+  },
+  {
+    "name": "Ruffians",
+    "kind": 2,
+    "city": "London and Edinburgh, UK",
+    "url": "https://ruffians.co.uk",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Heritage barber: Gotham caps, navy (#0c3e65) and red.",
+    "verified": true
+  },
+  {
+    "name": "Townhouse",
+    "kind": 2,
+    "city": "London, UK",
+    "url": "https://townhouse.co.uk",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Nail salons; Mallory in light weights, peach (#f7d2c0) on near-black.",
+    "verified": true
+  },
+  {
+    "name": "Joanna Vargas",
+    "kind": 2,
+    "city": "New York and Los Angeles, USA",
+    "url": "https://joannavargas.com",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Facial salons; Playfair Display with Archivo on cream (#f6f5f0) and an emerald accent (#007956).",
+    "verified": true
+  },
+  {
+    "name": "Heyday",
+    "kind": 2,
+    "city": "USA (small chain)",
+    "url": "https://www.heydayskincare.com",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Facial studios; Sunset Gothic and a soft blue palette (#0f2a59, #a0cfdc). A chain, included for its clear booking flow.",
+    "verified": true
+  },
+  {
+    "name": "Bathhouse",
+    "kind": 2,
+    "city": "New York, USA",
+    "url": "https://bathhouse.com",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Spa set entirely in Roboto Mono on near-black (#111); dark, minimal, spa-as-nightlife.",
+    "verified": true
+  },
+  {
+    "name": "Othership",
+    "kind": 2,
+    "city": "Toronto and New York",
+    "url": "https://www.othership.us",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Sauna and ice bath; Founders Grotesk, Lido Condensed and DM Serif; plum (#372338), rust and acid lime (#dbf572).",
+    "verified": true
+  },
+  {
+    "name": "Remedy Place",
+    "kind": 2,
+    "city": "Los Angeles and New York, USA",
+    "url": "https://www.remedyplace.com",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Wellness club; Beausite on stone (#dedad4) and near-black, champagne accent (#ac9e83).",
+    "verified": true
+  },
+  {
+    "name": "Löyly",
+    "kind": 2,
+    "city": "Helsinki, Finland",
+    "url": "https://www.loylyhelsinki.fi",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Public sauna and restaurant; Stem in regular and hairline, salmon pink (#f4b9a9) on blush white.",
+    "verified": true
+  },
+  {
+    "name": "Goldust Spa",
+    "kind": 2,
+    "city": "Canggu, Bali, Indonesia",
+    "url": "https://goldustspa.com",
+    "agency": "Two Moons Studio",
+    "caseStudy": "https://www.awwwards.com/sites/goldust-spa",
+    "note": "Awwwards Honorable Mention 2025. Pangaia serif; sand (#d5b8a6) and linen (#f5f0e7).",
+    "verified": true
+  },
+  {
+    "name": "Blind Barber",
+    "kind": 2,
+    "city": "New York and Los Angeles, USA",
+    "url": "https://blindbarber.com",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Barbershop with a bar behind it, plus products; Monument Grotesk on near-black.",
+    "verified": true
+  },
+  {
+    "name": "Body Freedom Day Spa",
+    "kind": 2,
+    "city": "Melbourne, Australia",
+    "url": "https://bodyfreedom.com.au",
+    "agency": "Stoke Design",
+    "caseStudy": "https://www.awwwards.com/sites/body-freedom-day-spa",
+    "note": "Awwwards Honorable Mention 2023. NOT VERIFIED: the live site failed the TLS handshake from both test clients.",
+    "verified": false
+  },
+  {
+    "name": "Arbor: A Dental Concept",
+    "kind": 3,
+    "city": "Long Island City, New York, USA",
+    "url": "https://www.arbordentalnyc.com",
+    "agency": "Studio 8E8",
+    "caseStudy": "https://s8e8.com/articles/best-dental-websites",
+    "note": "Awwwards Honorable Mention 2025. Reads like a design studio: near-black and slate blue (#667d90), Proxima Nova, airy layout (Webflow).",
+    "verified": true
+  },
+  {
+    "name": "LAVA dental",
+    "kind": 3,
+    "city": "Riga, Latvia",
+    "url": "https://lavadental.lv/en",
+    "agency": "DigiComm / Reinhards",
+    "caseStudy": "https://www.awwwards.com/sites/lava-dental",
+    "note": "Awwwards Honorable Mention 2026. One-page 'dental studio': PP Neue Montreal, very dark green (#031c14) with mint (#ddefde).",
+    "verified": true
+  },
+  {
+    "name": "South Cliff Dental Group",
+    "kind": 3,
+    "city": "UK (city not confirmed)",
+    "url": "https://southcliffdentalgroup.com",
+    "agency": "ThisIsLD (Awwwards profile)",
+    "caseStudy": "https://www.awwwards.com/sites/south-cliff-dental-group",
+    "note": "Awwwards Honorable Mention 2026. NHS and private practices; Century Gothic, slate (#334343) and muted gold (#817040).",
+    "verified": true
+  },
+  {
+    "name": "Alley Dental (靜巷美學牙醫)",
+    "kind": 3,
+    "city": "Taiwan (city not confirmed)",
+    "url": "https://alleydentaloffice.com.tw",
+    "agency": "ES design studio",
+    "caseStudy": "https://www.awwwards.com/sites/alley-dental",
+    "note": "Awwwards nominee 2023. Japanese-calm: Noto Serif TC and soft blues.",
+    "verified": true
+  },
+  {
+    "name": "Dentologie",
+    "kind": 3,
+    "city": "Chicago and Seattle, USA",
+    "url": "https://www.dentologie.com",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Playfair Display with Inter on cream (#f5f1eb), pink (#f5b5c8) and teal; dentistry styled like a boutique.",
+    "verified": true
+  },
+  {
+    "name": "Tend",
+    "kind": 3,
+    "city": "USA (dental group)",
+    "url": "https://www.hellotend.com",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Design-led dental studios (a growing group). NOT VERIFIED: Cloudflare blocked the automated check.",
+    "verified": false
+  },
+  {
+    "name": "Six Physio",
+    "kind": 3,
+    "city": "London, UK",
+    "url": "https://sixphysio.com",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Physio that looks like hospitality: Tobias serif with DM Sans, burgundy (#5c0935), cream and pink.",
+    "verified": true
+  },
+  {
+    "name": "Ten Health & Fitness",
+    "kind": 3,
+    "city": "London, UK",
+    "url": "https://www.ten.co.uk",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Physio, pilates and training; Futura PT, forest green (#223429) with pale green and a lime accent.",
+    "verified": true
+  },
+  {
+    "name": "Pure Sports Medicine",
+    "kind": 3,
+    "city": "London, UK",
+    "url": "https://puresportsmed.com",
+    "agency": null,
+    "caseStudy": null,
+    "note": "TWK Lausanne on teal-black (#002a30) and cream (#f8f7f2), one bright blue.",
+    "verified": true
+  },
+  {
+    "name": "101 Physio",
+    "kind": 3,
+    "city": "Toronto, Canada",
+    "url": "https://101physio.ca",
+    "agency": "lifewebanddesign (Awwwards profile)",
+    "caseStudy": "https://www.awwwards.com/sites/101-physio",
+    "note": "Awwwards nominee 2025. Conventional (Poppins, blues) but clean; a realistic benchmark rather than a showpiece.",
+    "verified": true
+  },
+  {
+    "name": "Marsea",
+    "kind": 3,
+    "city": "Bastia, Corsica, France",
+    "url": "https://www.centremarsea.com",
+    "agency": "Cete Studio and Cinq septembre",
+    "caseStudy": "https://www.awwwards.com/sites/marsea",
+    "note": "Awwwards Honorable Mention 2026. Aesthetic medicine; wide Termina/Zalando Sans Expanded with burgundy (#400d1c) on cream (#fff8ef).",
+    "verified": true
+  },
+  {
+    "name": "Dębski Clinic",
+    "kind": 3,
+    "city": "Poland (city not confirmed)",
+    "url": "https://www.debskiclinic.pl",
+    "agency": "Targa",
+    "caseStudy": "https://www.awwwards.com/sites/debski-clinic",
+    "note": "Awwwards Honorable Mention 2023. Heldane Display serif with Basier Circle; blush pinks (#f4d7e5, #ffcace).",
+    "verified": true
+  },
+  {
+    "name": "Royal Clinic",
+    "kind": 3,
+    "city": "Poland (city not confirmed)",
+    "url": "https://royalclinic.pl",
+    "agency": "Tinge Studio",
+    "caseStudy": "https://www.awwwards.com/sites/royal-clinic",
+    "note": "Awwwards Honorable Mention 2023. Aesthetic clinic and spa; Recife serif with Apercu, espresso (#2d1d12) on cream.",
+    "verified": true
+  },
+  {
+    "name": "Ever/Body",
+    "kind": 3,
+    "city": "New York, USA",
+    "url": "https://everbody.com",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Cosmetic dermatology; Cambon and Cormorant serifs with Manrope; deep teal (#003b49) and a red-orange accent.",
+    "verified": true
+  },
+  {
+    "name": "Alchemy 43",
+    "kind": 3,
+    "city": "LA, NYC, Dallas, Houston",
+    "url": "https://alchemy43.com",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Med spa; Freight Neo with Work Sans, ochre (#e5ad5a) and teal (#27494e).",
+    "verified": true
+  },
+  {
+    "name": "Parsley Health",
+    "kind": 3,
+    "city": "USA (clinics and virtual)",
+    "url": "https://www.parsleyhealth.com",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Teodor serif with Euclid Circular; deep green (#284849) on warm white. Calm, non-clinical.",
+    "verified": true
+  },
+  {
+    "name": "Tia",
+    "kind": 3,
+    "city": "USA (several clinics)",
+    "url": "https://asktia.com",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Women's health clinic; Basis Grotesque with Inferi serif; berry (#831a4a), coral (#f95647) and cream.",
+    "verified": true
+  },
+  {
+    "name": "HUM2N",
+    "kind": 3,
+    "city": "London, UK",
+    "url": "https://www.hum2n.com",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Longevity clinic; Raveo Display with Aspekta, light and clean, a green accent (Webflow).",
+    "verified": true
+  },
+  {
+    "name": "Haven Constructions",
+    "kind": 4,
+    "city": "Melbourne, Australia",
+    "url": "https://www.havenconstructions.com.au",
+    "agency": "Dobre Agency",
+    "caseStudy": "https://www.awwwards.com/sites/haven-constructions",
+    "note": "Awwwards Honorable Mention 2026. Custom-home builder; Suisse grotesk, cobalt (#0c388d) and stone, project-photo led.",
+    "verified": true
+  },
+  {
+    "name": "Infinity Built",
+    "kind": 4,
+    "city": "Melbourne, Australia",
+    "url": "https://www.infinitybuilt.com.au",
+    "agency": "Something Great",
+    "caseStudy": "https://www.awwwards.com/sites/infinity-built",
+    "note": "Awwwards Honorable Mention 2024. High-end builder. PARTLY VERIFIED: domain answers but sits behind a Cloudflare bot check.",
+    "verified": false
+  },
+  {
+    "name": "Arc.",
+    "kind": 4,
+    "city": "Not confirmed",
+    "url": "https://www.arcprojects.build",
+    "agency": "For Good / Kyle Craven",
+    "caseStudy": "https://www.awwwards.com/sites/arc-1",
+    "note": "Awwwards Honorable Mention 2025. Timber builder; Neue Haas Grotesk Display, signal orange (#ff4c24) on off-white.",
+    "verified": true
+  },
+  {
+    "name": "Dan Pearson Studio",
+    "kind": 4,
+    "city": "London, UK",
+    "url": "https://www.danpearsonstudio.com",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Landscape and garden design; Genath serif with Founders Grotesk Condensed, image-first.",
+    "verified": true
+  },
+  {
+    "name": "Tom Stuart-Smith Studio",
+    "kind": 4,
+    "city": "London, UK",
+    "url": "https://www.tomstuartsmith.co.uk",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Garden design; Neuzeit with a planting palette of pale green, blue-green, ochre and coral.",
+    "verified": true
+  },
+  {
+    "name": "Terremoto",
+    "kind": 4,
+    "city": "Los Angeles, USA",
+    "url": "https://terremoto.la",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Landscape studio; Mabry grotesk and an acid-yellow (#ebff50) accent on off-white.",
+    "verified": true
+  },
+  {
+    "name": "Arne Maynard",
+    "kind": 4,
+    "city": "UK (Wales)",
+    "url": "https://www.arnemaynard.com",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Garden design; Gill Sans, earth browns (#68351a) and blush neutrals.",
+    "verified": true
+  },
+  {
+    "name": "Andy Sturgeon Design",
+    "kind": 4,
+    "city": "UK",
+    "url": "https://www.andysturgeon.com",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Garden design; Century Gothic, grey and white, large project photos.",
+    "verified": true
+  },
+  {
+    "name": "Plain English",
+    "kind": 4,
+    "city": "UK",
+    "url": "https://plainenglishdesign.co.uk",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Cabinet makers (joinery trade); Baskerville, lots of space, room photography.",
+    "verified": true
+  },
+  {
+    "name": "Thelen Heating & Air",
+    "kind": 4,
+    "city": "St. Michael, Minnesota, USA",
+    "url": "https://callthelen.com",
+    "agency": "Hook Agency",
+    "caseStudy": "https://hookagency.com/blog/plumbing-websites/",
+    "note": "Trade site with real character: Parkside and Fairweather display faces, cream (#fce7c2), orange (#e54b21) and navy.",
+    "verified": true
+  },
+  {
+    "name": "Tuck & Howell",
+    "kind": 4,
+    "city": "Upstate South Carolina, USA (likely; title says Upstate)",
+    "url": "https://tuckandhowell.com",
+    "agency": "KickCharge Creative (brand, fleet; website not credited)",
+    "caseStudy": "https://www.kickcharge.com/portfolio/tuck-howell-plumbing-heating-air/",
+    "note": "Plumbing and HVAC; navy (#293745) and orange (#e17636) carried from van wraps to web; PT Sans Narrow.",
+    "verified": true
+  },
+  {
+    "name": "Genz-Ryan",
+    "kind": 4,
+    "city": "Twin Cities, Minnesota, USA",
+    "url": "https://genzryan.com",
+    "agency": "Hook Agency",
+    "caseStudy": "https://hookagency.com/blog/plumbing-websites/",
+    "note": "HVAC and plumbing; primary red, yellow and blue, reviews and booking button up top.",
+    "verified": true
+  },
+  {
+    "name": "Lorenz Plumbing",
+    "kind": 4,
+    "city": "USA (city not confirmed)",
+    "url": "https://lorenzplumbing.com",
+    "agency": "Hook Agency",
+    "caseStudy": "https://hookagency.com/blog/plumbing-websites/",
+    "note": "Video hero of the real trucks; conventional Bootstrap build. A typical good trade site, not a design showpiece.",
+    "verified": true
+  },
+  {
+    "name": "Electric City",
+    "kind": 4,
+    "city": "USA (city not confirmed)",
+    "url": "https://electriccityllc.com",
+    "agency": "Hook Agency",
+    "caseStudy": "https://hookagency.com/blog/plumbing-websites/",
+    "note": "Electrician; Playfair with Montserrat. Template-like, kept as a mainstream baseline.",
+    "verified": true
+  },
+  {
+    "name": "Fraemohs Homes",
+    "kind": 4,
+    "city": "New Zealand",
+    "url": "https://www.fraemohs.co.nz",
+    "agency": null,
+    "caseStudy": "https://www.awwwards.com/sites/fraemohs-homes",
+    "note": "Awwwards Honorable Mention 2020 (timber homes). NOT VERIFIED: the site returned Access Denied to the check.",
+    "verified": false
+  },
+  {
+    "name": "Psycle",
+    "kind": 5,
+    "city": "London, UK",
+    "url": "https://psyclelondon.com",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Lust Text serif with Area Extended sans; bone (#f4f3f0), deep green (#00684c) and a neon lime (#ccff00).",
+    "verified": true
+  },
+  {
+    "name": "Frame",
+    "kind": 5,
+    "city": "London, UK",
+    "url": "https://moveyourframe.com",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Bright, playful studio brand; Program Narrow (Adobe Fonts), saturated blues (Webflow).",
+    "verified": true
+  },
+  {
+    "name": "Third Space",
+    "kind": 5,
+    "city": "London, UK (small group)",
+    "url": "https://www.thirdspace.london",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Premium gym; GT Sectra serif with Circular, deep navy (#00112c).",
+    "verified": true
+  },
+  {
+    "name": "Y7 Studio",
+    "kind": 5,
+    "city": "New York and Los Angeles, USA",
+    "url": "https://www.y7-studio.com",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Hot yoga; minimal Inter, dark moody photography.",
+    "verified": true
+  },
+  {
+    "name": "Humming Puppy",
+    "kind": 5,
+    "city": "Melbourne and Sydney, Australia",
+    "url": "https://www.hummingpuppy.com",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Yoga studios; Squarespace with Voltaire display face, calm dark-on-light.",
+    "verified": true
+  },
+  {
+    "name": "Heartcore",
+    "kind": 5,
+    "city": "London, UK",
+    "url": "https://weareheartcore.com",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Pilates; PP Neue Montreal with Sometype Mono, warm cream (#f6f2ed) and brown (#332e27).",
+    "verified": true
+  },
+  {
+    "name": "Dogpound",
+    "kind": 5,
+    "city": "New York and Los Angeles, USA",
+    "url": "https://www.thedogpound.com",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Gym; Chalet Comprime and Acumin Condensed in black, very high contrast.",
+    "verified": true
+  },
+  {
+    "name": "BLOK",
+    "kind": 5,
+    "city": "London, UK",
+    "url": "https://www.bloklondon.com",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Authentic Sans, Inter and Suisse in greys; architectural, gallery-like.",
+    "verified": true
+  },
+  {
+    "name": "1Rebel",
+    "kind": 5,
+    "city": "London, UK (small group)",
+    "url": "https://www.1rebel.com",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Suisse Intl with Agency FB Bold; lime (#cede54) with pastel greens and pinks on near-black.",
+    "verified": true
+  },
+  {
+    "name": "Core Atelier Pilates",
+    "kind": 5,
+    "city": "Not confirmed",
+    "url": "https://coreatelierpilates.com",
+    "agency": "Greydient Lab",
+    "caseStudy": "https://www.awwwards.com/sites/core-atelier-pilates",
+    "note": "Awwwards Honorable Mention 2026. Minion Pro serif with Albert Sans; espresso (#25140c) and blush (#f7e7de).",
+    "verified": true
+  },
+  {
+    "name": "Temple Noble Art",
+    "kind": 5,
+    "city": "Paris, France",
+    "url": "https://www.temple-nobleart.com",
+    "agency": "Adveris",
+    "caseStudy": "https://www.awwwards.com/sites/temple-noble-art",
+    "note": "Awwwards Honorable Mention 2021. Boxing club; GT America Compressed with Circular, gold (#b99c70) on black.",
+    "verified": true
+  },
+  {
+    "name": "AlpineCore",
+    "kind": 5,
+    "city": "Geneva, Switzerland",
+    "url": "https://alpinecore.ch",
+    "agency": "alice.junckers (Awwwards profile)",
+    "caseStudy": "https://www.awwwards.com/sites/alpinecore",
+    "note": "Awwwards Honorable Mention 2025. Pilates in the mountains; Signore script with Outfit, deep teal and plum.",
+    "verified": true
+  },
+  {
+    "name": "Trevor Blount Pilates",
+    "kind": 5,
+    "city": "London, UK",
+    "url": "https://www.trevorblountpilates.com",
+    "agency": null,
+    "caseStudy": "https://www.awwwards.com/sites/trevor-blount-pilates",
+    "note": "Awwwards Site of the Day 2019. Freight Display with Neue Haas Grotesk on warm cream (#f7efe7).",
+    "verified": true
+  },
+  {
+    "name": "Sky Ting Yoga",
+    "kind": 5,
+    "city": "New York, USA",
+    "url": "https://www.skyting.com",
+    "agency": null,
+    "caseStudy": null,
+    "note": "Design-led yoga brand. NOT VERIFIED: Cloudflare blocked the automated check.",
+    "verified": false
+  }
+]

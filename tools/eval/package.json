@@ -9,7 +9,10 @@
     "./site-content": "./src/site-content.ts",
     "./briefs": "./src/briefs.ts",
     "./photos/manifest.json": "./photos/manifest.json",
-    "./photos": "./src/photos.ts"
+    "./photos": "./src/photos.ts",
+    "./grammar/choose": "./src/grammar/choose.ts",
+    "./grammar/page": "./src/grammar/page.ts",
+    "./grammar/rule-profiles.json": "./src/grammar/rule-profiles.json"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
@@ -27,13 +30,15 @@
     "directions": "vitest run --config vitest.tasks.config.ts directions",
     "directions-wall": "vitest run --config vitest.tasks.config.ts directions-wall",
     "photo-tones": "vitest run --config vitest.tasks.config.ts photo-tones",
-    "grammar": "vitest run --config vitest.tasks.config.ts grammar"
+    "grammar": "vitest run --config vitest.tasks.config.ts grammar",
+    "references": "vitest run --config vitest.tasks.config.ts references"
   },
   "dependencies": {
     "@repo/blocks": "workspace:*",
     "@repo/pipeline": "workspace:*",
     "@repo/render": "workspace:*",
-    "@repo/spec": "workspace:*"
+    "@repo/spec": "workspace:*",
+    "culori": "catalog:"
   },
   "devDependencies": {
     "@axe-core/playwright": "catalog:",
@@ -41,6 +46,7 @@
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
+    "@types/culori": "catalog:",
     "playwright": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:"

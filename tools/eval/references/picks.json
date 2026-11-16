@@ -1,0 +1,394 @@
+{
+  "53": {
+    "at": "2026-11-16T17:24:49.204Z",
+    "verdict": "like"
+  },
+  "101-physio": {
+    "at": "2026-11-16T17:32:14.310Z",
+    "verdict": "like"
+  },
+  "1rebel": {
+    "at": "2026-11-16T17:32:51.510Z",
+    "verdict": "no"
+  },
+  "africola": {
+    "at": "2026-11-16T17:25:18.400Z",
+    "verdict": "no"
+  },
+  "alchemy-43": {
+    "at": "2026-11-16T17:32:15.135Z",
+    "verdict": "like"
+  },
+  "alley-dental": {
+    "at": "2026-11-16T17:32:16.006Z",
+    "verdict": "like"
+  },
+  "alpinecore": {
+    "at": "2026-11-16T17:32:53.281Z",
+    "verdict": "like"
+  },
+  "andy-sturgeon-design": {
+    "at": "2026-11-16T17:32:33.269Z",
+    "verdict": "like"
+  },
+  "arbor-a-dental-concept": {
+    "at": "2026-11-16T17:32:16.949Z",
+    "verdict": "like"
+  },
+  "arc": {
+    "at": "2026-11-16T17:32:33.990Z",
+    "verdict": "like"
+  },
+  "arne-maynard": {
+    "at": "2026-11-16T17:32:34.680Z",
+    "verdict": "like"
+  },
+  "atelier-crenn": {
+    "at": "2026-11-16T17:25:01.611Z",
+    "verdict": "no"
+  },
+  "atomix": {
+    "at": "2026-11-16T17:25:35.907Z",
+    "verdict": "like"
+  },
+  "aulis": {
+    "at": "2026-11-16T17:30:28.679Z",
+    "verdict": "like"
+  },
+  "bao": {
+    "at": "2026-11-16T17:30:31.632Z",
+    "verdict": "like"
+  },
+  "bathhouse": {
+    "at": "2026-11-16T17:31:32.728Z",
+    "verdict": "like"
+  },
+  "blind-barber": {
+    "at": "2026-11-16T17:31:33.883Z",
+    "verdict": "no"
+  },
+  "blok": {
+    "at": "2026-11-16T17:32:54.435Z",
+    "verdict": "like"
+  },
+  "carousel": {
+    "at": "2026-11-16T17:30:32.833Z",
+    "verdict": "like"
+  },
+  "coqodaq": {
+    "at": "2026-11-16T17:30:34.753Z",
+    "verdict": "like"
+  },
+  "cote-korean-steakhouse": {
+    "at": "2026-11-16T17:30:36.703Z",
+    "verdict": "like"
+  },
+  "dan-pearson-studio": {
+    "at": "2026-11-16T17:32:35.369Z",
+    "verdict": "like"
+  },
+  "dash-burger": {
+    "at": "2026-11-16T17:30:39.134Z",
+    "verdict": "like"
+  },
+  "de-bski-clinic": {
+    "at": "2026-11-16T17:32:17.789Z",
+    "verdict": "like"
+  },
+  "dentologie": {
+    "at": "2026-11-16T17:32:18.599Z",
+    "verdict": "like"
+  },
+  "dishoom": {
+    "at": "2026-11-16T17:30:41.217Z",
+    "verdict": "like"
+  },
+  "dogpound": {
+    "at": "2026-11-16T17:32:55.620Z",
+    "verdict": "love"
+  },
+  "double-dimanche": {
+    "at": "2026-11-16T17:30:46.993Z",
+    "verdict": "like"
+  },
+  "duck-dry": {
+    "at": "2026-11-16T17:31:35.189Z",
+    "verdict": "like"
+  },
+  "electric-city": {
+    "at": "2026-11-16T17:32:37.005Z",
+    "verdict": "no"
+  },
+  "ever-body": {
+    "at": "2026-11-16T17:32:19.424Z",
+    "verdict": "like"
+  },
+  "fellow-barber": {
+    "at": "2026-11-16T17:31:36.508Z",
+    "verdict": "no"
+  },
+  "frame": {
+    "at": "2026-11-16T17:32:56.866Z",
+    "verdict": "no"
+  },
+  "genz-ryan": {
+    "at": "2026-11-16T17:32:37.860Z",
+    "verdict": "no"
+  },
+  "gielly-green": {
+    "at": "2026-11-16T17:31:37.648Z",
+    "verdict": "like"
+  },
+  "goldust-spa": {
+    "at": "2026-11-16T17:31:39.014Z",
+    "verdict": "no"
+  },
+  "hart-bageri": {
+    "at": "2026-11-16T17:30:49.588Z",
+    "verdict": "like"
+  },
+  "haven-constructions": {
+    "at": "2026-11-16T17:32:42.330Z",
+    "verdict": "like"
+  },
+  "heartcore": {
+    "at": "2026-11-16T17:32:58.185Z",
+    "verdict": "love"
+  },
+  "hershesons": {
+    "at": "2026-11-16T17:31:40.452Z",
+    "verdict": "like"
+  },
+  "heyday": {
+    "at": "2026-11-16T17:31:41.880Z",
+    "verdict": "like"
+  },
+  "hide": {
+    "at": "2026-11-16T17:30:50.924Z",
+    "verdict": "like"
+  },
+  "hoppers": {
+    "at": "2026-11-16T17:30:51.870Z",
+    "verdict": "like"
+  },
+  "hum2n": {
+    "at": "2026-11-16T17:32:22.109Z",
+    "verdict": "like"
+  },
+  "humming-puppy": {
+    "at": "2026-11-16T17:32:59.130Z",
+    "verdict": "love"
+  },
+  "joanna-vargas": {
+    "at": "2026-11-16T17:31:43.183Z",
+    "verdict": "like"
+  },
+  "kiln": {
+    "at": "2026-11-16T17:30:55.603Z",
+    "verdict": "like"
+  },
+  "kol": {
+    "at": "2026-11-16T17:30:58.947Z",
+    "verdict": "love"
+  },
+  "larry-king": {
+    "at": "2026-11-16T17:31:44.581Z",
+    "verdict": "like"
+  },
+  "lava-dental": {
+    "at": "2026-11-16T17:32:25.797Z",
+    "verdict": "love"
+  },
+  "lina-stores": {
+    "at": "2026-11-16T17:31:00.795Z",
+    "verdict": "like"
+  },
+  "lo-yly": {
+    "at": "2026-11-16T17:31:46.257Z",
+    "verdict": "like"
+  },
+  "lorenz-plumbing": {
+    "at": "2026-11-16T17:32:43.664Z",
+    "verdict": "no"
+  },
+  "ma-la-project": {
+    "at": "2026-11-16T17:31:02.489Z",
+    "verdict": "no"
+  },
+  "marco-ambrosi": {
+    "at": "2026-11-16T17:31:47.501Z",
+    "verdict": "no"
+  },
+  "marsea": {
+    "at": "2026-11-16T17:32:26.819Z",
+    "verdict": "like"
+  },
+  "nine-zero-one": {
+    "at": "2026-11-16T17:31:49.289Z",
+    "verdict": "no"
+  },
+  "noble-rot": {
+    "at": "2026-11-16T17:31:05.534Z",
+    "verdict": "like"
+  },
+  "noma": {
+    "at": "2026-11-16T17:31:08.653Z",
+    "verdict": "no"
+  },
+  "othership": {
+    "at": "2026-11-16T17:31:56.985Z",
+    "verdict": "no"
+  },
+  "pankhurst-london": {
+    "at": "2026-11-16T17:31:58.798Z",
+    "verdict": "like"
+  },
+  "parsley-health": {
+    "at": "2026-11-16T17:32:27.719Z",
+    "verdict": "like"
+  },
+  "plain-english": {
+    "at": "2026-11-16T17:32:44.955Z",
+    "verdict": "no"
+  },
+  "psycle": {
+    "at": "2026-11-16T17:33:01.772Z",
+    "verdict": "like"
+  },
+  "pure-sports-medicine": {
+    "at": "2026-11-16T17:32:28.799Z",
+    "verdict": "like"
+  },
+  "quo-vadis": {
+    "at": "2026-11-16T17:31:13.484Z",
+    "verdict": "no"
+  },
+  "remedy-place": {
+    "at": "2026-11-16T17:32:01.443Z",
+    "verdict": "love"
+  },
+  "retrograde-coffee": {
+    "at": "2026-11-16T17:31:15.959Z",
+    "verdict": "like"
+  },
+  "room-for-milly": {
+    "at": "2026-11-16T17:31:17.295Z",
+    "verdict": "like"
+  },
+  "royal-clinic": {
+    "at": "2026-11-16T17:32:29.581Z",
+    "verdict": "like"
+  },
+  "ruffians": {
+    "at": "2026-11-16T17:32:03.703Z",
+    "verdict": "like"
+  },
+  "saint-peter": {
+    "at": "2026-11-16T17:31:18.390Z",
+    "verdict": "like"
+  },
+  "sessions-arts-club": {
+    "at": "2026-11-16T17:31:19.483Z",
+    "verdict": "like"
+  },
+  "six-physio": {
+    "at": "2026-11-16T17:32:30.374Z",
+    "verdict": "like"
+  },
+  "south-cliff-dental-group": {
+    "at": "2026-11-16T17:32:31.093Z",
+    "verdict": "like"
+  },
+  "spoke-weal": {
+    "at": "2026-11-16T17:32:07.710Z",
+    "verdict": "like"
+  },
+  "sqirl": {
+    "at": "2026-11-16T17:31:20.744Z",
+    "verdict": "like"
+  },
+  "st-john": {
+    "at": "2026-11-16T17:31:21.869Z",
+    "verdict": "like"
+  },
+  "stereoscope-coffee": {
+    "at": "2026-11-16T17:31:23.040Z",
+    "verdict": "like"
+  },
+  "tacaloa": {
+    "at": "2026-11-16T17:31:24.223Z",
+    "verdict": "no"
+  },
+  "tartine-bakery": {
+    "at": "2026-11-16T17:31:25.469Z",
+    "verdict": "like"
+  },
+  "temple-noble-art": {
+    "at": "2026-11-16T17:33:02.776Z",
+    "verdict": "like"
+  },
+  "ten-health-fitness": {
+    "at": "2026-11-16T17:32:31.844Z",
+    "verdict": "like"
+  },
+  "terremoto": {
+    "at": "2026-11-16T17:32:46.668Z",
+    "verdict": "no"
+  },
+  "the-barbary": {
+    "at": "2026-11-16T17:31:26.565Z",
+    "verdict": "like"
+  },
+  "the-palomar": {
+    "at": "2026-11-16T17:31:27.898Z",
+    "verdict": "like"
+  },
+  "thelen-heating-air": {
+    "at": "2026-11-16T17:32:47.626Z",
+    "verdict": "no"
+  },
+  "third-space": {
+    "at": "2026-11-16T17:33:03.781Z",
+    "verdict": "like"
+  },
+  "tia": {
+    "at": "2026-11-16T17:32:32.597Z",
+    "verdict": "like"
+  },
+  "tom-stuart-smith-studio": {
+    "at": "2026-11-16T17:32:49.064Z",
+    "verdict": "love"
+  },
+  "townhouse": {
+    "at": "2026-11-16T17:32:09.930Z",
+    "verdict": "no"
+  },
+  "trevor-blount-pilates": {
+    "at": "2026-11-16T17:33:06.826Z",
+    "verdict": "like"
+  },
+  "tripletta": {
+    "at": "2026-11-16T17:31:29.158Z",
+    "verdict": "like"
+  },
+  "tuck-howell": {
+    "at": "2026-11-16T17:32:50.369Z",
+    "verdict": "no"
+  },
+  "una-hair-studio": {
+    "at": "2026-11-16T17:32:11.432Z",
+    "verdict": "like"
+  },
+  "union-boulangerie": {
+    "at": "2026-11-16T17:31:30.390Z",
+    "verdict": "like"
+  },
+  "via-carota": {
+    "at": "2026-11-16T17:31:31.573Z",
+    "verdict": "like"
+  },
+  "y7-studio": {
+    "at": "2026-11-16T17:33:08.490Z",
+    "verdict": "no"
+  }
+}

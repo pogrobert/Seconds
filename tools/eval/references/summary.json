@@ -1,0 +1,212 @@
+{
+  "restaurants": {
+    "sites": 36,
+    "ground": {
+      "pure white": 17,
+      "off-white or light tint": 9,
+      "dark": 6,
+      "mid colour": 4
+    },
+    "strongColourArea": "28%",
+    "firstScreenPhotoMedian": "30%",
+    "photoLedOpenings": "36%",
+    "headlinePxMedian": 32,
+    "headlinePxRange": [12, 270],
+    "headlineUppercase": "53%",
+    "bodyPxMedian": 16,
+    "facesUsedMedian": 2,
+    "genericFaceOnly": "6%",
+    "buttons": {
+      "square": 13,
+      "pill": 2,
+      "rounded": 2
+    },
+    "displayFaces": [
+      "Yport Web",
+      "Mash-Africola-4",
+      "Julius Sans One",
+      "Heebo",
+      "relative-mono10pitch",
+      "Brown",
+      "caslon-bold",
+      "Plaak",
+      "Sangbleusans",
+      "MessinaSans-Bold",
+      "cheltenhamBT",
+      "Ppframa",
+      "Basel Grotesk Mono",
+      "BookmanOldStyle",
+      "Lemondrop",
+      "Gotham",
+      "KOL",
+      "Lina Sans",
+      "Helveesti",
+      "Futura PT",
+      "Helvetica Neue",
+      "Georgia",
+      "Space Mono",
+      "wfont_2a5108_c70620bd411e4cc196cc4699b6ca42b5",
+      "Times New Roman",
+      "Freight Text",
+      "Marfa Pre",
+      "Adigi Times",
+      "Brunswick Grotesque",
+      "Editorialnew"
+    ]
+  },
+  "salons": {
+    "sites": 20,
+    "ground": {
+      "pure white": 9,
+      "dark": 5,
+      "off-white or light tint": 4,
+      "mid colour": 2
+    },
+    "strongColourArea": "30%",
+    "firstScreenPhotoMedian": "1%",
+    "photoLedOpenings": "15%",
+    "headlinePxMedian": 60,
+    "headlinePxRange": [14, 72],
+    "headlineUppercase": "10%",
+    "bodyPxMedian": 15.2,
+    "facesUsedMedian": 2,
+    "genericFaceOnly": "20%",
+    "buttons": {
+      "rounded": 7,
+      "square": 7,
+      "pill": 3
+    },
+    "displayFaces": [
+      "robotoMono",
+      "MonumentGroteskMedium",
+      "brandon-grotesque",
+      "reckless",
+      "GT America",
+      "Pangaia",
+      "CentraNo2-Book",
+      "SunsetGothicLight",
+      "Playfair Display",
+      "Stem",
+      "-apple-system",
+      "riawna",
+      "Lido Condensed",
+      "Fraunces",
+      "Beausite Slick",
+      "Montserrat",
+      "Instrument Serif",
+      "ivypresto-display",
+      "PP Neue Montreal Book"
+    ]
+  },
+  "clinics": {
+    "sites": 16,
+    "ground": {
+      "off-white or light tint": 8,
+      "pure white": 5,
+      "dark": 3
+    },
+    "strongColourArea": "44%",
+    "firstScreenPhotoMedian": "5%",
+    "photoLedOpenings": "19%",
+    "headlinePxMedian": 67,
+    "headlinePxRange": [14, 100],
+    "headlineUppercase": "13%",
+    "bodyPxMedian": 18,
+    "facesUsedMedian": 2,
+    "genericFaceOnly": "6%",
+    "buttons": {
+      "pill": 7,
+      "square": 5,
+      "rounded": 2
+    },
+    "displayFaces": [
+      "Poppins",
+      "freight-neo-pro",
+      "proxima-nova",
+      "Heldane display",
+      "Playfair Display",
+      "Lora-Regular",
+      "Aspekta",
+      "Josefin Sans",
+      "Zalando Sans Expanded",
+      "Teodor",
+      "TWKLausanne",
+      "Recife",
+      "Tobias",
+      "Century Gothic",
+      "futura-pt",
+      "inferi-normal"
+    ]
+  },
+  "trades": {
+    "sites": 13,
+    "ground": {
+      "pure white": 10,
+      "off-white or light tint": 2,
+      "dark": 1
+    },
+    "strongColourArea": "31%",
+    "firstScreenPhotoMedian": "25%",
+    "photoLedOpenings": "38%",
+    "headlinePxMedian": 48,
+    "headlinePxRange": [16, 117],
+    "headlineUppercase": "31%",
+    "bodyPxMedian": 18,
+    "facesUsedMedian": 1,
+    "genericFaceOnly": "8%",
+    "buttons": {
+      "square": 3,
+      "rounded": 3,
+      "pill": 1
+    },
+    "displayFaces": [
+      "CenturyGothicStd",
+      "Neue Haas Grotesk Display",
+      "GillSansMTPro-Book",
+      "-apple-system",
+      "Playfair Display",
+      "ezra",
+      "fontSuisse",
+      "Archivo",
+      "BaskervilleBT-Roman",
+      "Mabry",
+      "fairweather",
+      "Neuzeit"
+    ]
+  },
+  "fitness": {
+    "sites": 12,
+    "ground": {
+      "dark": 6,
+      "off-white or light tint": 3,
+      "pure white": 3
+    },
+    "strongColourArea": "8%",
+    "firstScreenPhotoMedian": "5%",
+    "photoLedOpenings": "25%",
+    "headlinePxMedian": 66,
+    "headlinePxRange": [36, 134],
+    "headlineUppercase": "27%",
+    "bodyPxMedian": 18,
+    "facesUsedMedian": 2,
+    "genericFaceOnly": "0%",
+    "buttons": {
+      "rounded": 2,
+      "pill": 2,
+      "square": 1
+    },
+    "displayFaces": [
+      "__agencyFbBold_5a795c",
+      "Signore",
+      "Suisse Intl Medium",
+      "ChaletComprime",
+      "Program Nar OT",
+      "Sometype Mono",
+      "proxima-nova",
+      "area-variable",
+      "GT America Compressed",
+      "GTSectra",
+      "freight-display-pro"
+    ]
+  }
+}

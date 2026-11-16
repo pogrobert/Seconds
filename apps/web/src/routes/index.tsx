@@ -53,7 +53,7 @@ function Build() {
         ...m,
         {
           role: 'assistant',
-          text: `Built ${r.name}, a ${r.kindLabel}. It suits ${label} best; the other looks are above the preview. Tell me what to change.`,
+          text: `Built ${r.name}, a ${r.kindLabel}. ${label} fits it best; the other looks are above the preview. Looks 1 to 3 are the atmospheric direction from your reference picks; Jev's pick uses every rule. Tell me what to change.`,
           result: r,
         },
       ])
@@ -94,6 +94,7 @@ function Build() {
                 key={s.id}
                 type="button"
                 aria-pressed={s.id === site?.id}
+                title={s.rules}
                 onClick={() => setLook(s.id)}
                 className="relative rounded-full px-3.5 py-1.5 text-[13px] font-medium text-stone-600 transition-colors hover:text-stone-900 aria-pressed:bg-white aria-pressed:text-stone-900 aria-pressed:shadow-sm"
               >
@@ -214,27 +215,34 @@ function Build() {
           </form>
         </aside>
 
-        <main className="relative flex min-w-0 flex-1 items-stretch justify-center overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-stone-200">
-          {site ? (
-            <iframe
-              key={`${site.id}-${result?.name}`}
-              title={`${result?.name} in ${site.label}`}
-              srcDoc={site.html}
-              className={
-                device === 'phone'
-                  ? 'my-4 h-[calc(100%-2rem)] w-[390px] rounded-[28px] ring-8 ring-stone-900'
-                  : 'h-full w-full'
-              }
-            />
-          ) : (
-            <div className="grid flex-1 place-items-center text-sm text-stone-400">
-              {busy ? 'Building your site…' : 'Your site appears here.'}
-            </div>
+        <div className="flex min-w-0 flex-1 flex-col gap-2">
+          {site && (
+            <p className="truncate px-1 text-xs text-stone-500" title={site.rules}>
+              {site.label}: {site.rules}
+            </p>
           )}
-          {busy && site && (
-            <div className="pointer-events-none absolute inset-0 bg-white/50 backdrop-blur-[1px]" />
-          )}
-        </main>
+          <main className="relative flex min-w-0 flex-1 items-stretch justify-center overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-stone-200">
+            {site ? (
+              <iframe
+                key={`${site.id}-${result?.name}`}
+                title={`${result?.name} in ${site.label}`}
+                srcDoc={site.html}
+                className={
+                  device === 'phone'
+                    ? 'my-4 h-[calc(100%-2rem)] w-[390px] rounded-[28px] ring-8 ring-stone-900'
+                    : 'h-full w-full'
+                }
+              />
+            ) : (
+              <div className="grid flex-1 place-items-center text-sm text-stone-400">
+                {busy ? 'Building your site…' : 'Your site appears here.'}
+              </div>
+            )}
+            {busy && site && (
+              <div className="pointer-events-none absolute inset-0 bg-white/50 backdrop-blur-[1px]" />
+            )}
+          </main>
+        </div>
       </div>
     </div>
   )

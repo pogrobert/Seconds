@@ -95,7 +95,7 @@ const $ = (id) => document.getElementById(id)
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c])
 const scores = (id) => [1, 2, 3, 4, 5].map((n) => `<button type="button" data-id="${id}" data-score="${n}" aria-pressed="${ratings[id]?.score === n}">${n}</button>`).join('')
 const pct = (x) => `${Math.round(x * 100)}%`
-const top = (d) => Object.entries(d).sort((a, b) => b[1] - a[1]).filter(([, p]) => p >= 0.04).map(([k, p]) => `<span class="chip">${esc(DATA.labels[k] || k)} ${pct(p)}</span>`).join('')
+const topRules = (d) => Object.entries(d).sort((a, b) => b[1] - a[1]).filter(([, p]) => p >= 0.04).map(([k, p]) => `<span class="chip">${esc(DATA.labels[k] || k)} ${pct(p)}</span>`).join('')
 
 function site(s) {
   return `<section class="site" aria-labelledby="t-${s.id}">
@@ -118,8 +118,8 @@ function site(s) {
 function draw() {
   const b = DATA.brief
   $('brief1').innerHTML = `<h3>${esc(b.name)}, ${esc(b.place)}</h3><blockquote>“${esc(b.words)}”</blockquote>
-    <p class="scale">Jev's scores, layouts: </p><div class="chips">${top(b.composition)}</div>
-    <p class="scale">Type systems: </p><div class="chips">${top(b.type)}</div>
+    <p class="scale">Jev's scores, layouts: </p><div class="chips">${topRules(b.composition)}</div>
+    <p class="scale">Type systems: </p><div class="chips">${topRules(b.type)}</div>
     <p class="scale">Rules under 4% are left out, which leaves ${DATA.designs.length} combinations. Two layers of six can't give 20 different sites for one owner; more layers would.</p>`
   $('list1').innerHTML = DATA.designs.map(site).join('')
   $('list2').innerHTML = DATA.others.map(site).join('')

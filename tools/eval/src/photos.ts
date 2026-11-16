@@ -1,6 +1,7 @@
 // Picks and downloads licensed stock photos from Pixabay for the sample businesses.
 // Pexels was chosen first (2026-11-14) but has paused new API keys, so Pixabay is used instead.
 // Run from tools/eval:  pnpm photos            (fills slots that have no photo yet)
+//                       pnpm photos --lowkey   (the low-key set, round 3)
 //                       pnpm photos --refresh  (picks every slot again)
 // Needs PIXABAY_API_KEY in the project's .env file (never in code or chat).
 //
@@ -53,6 +54,41 @@ export const QUERIES: Record<Kind, Record<Slot, string>> = {
   },
 }
 
+/**
+ * A second, low-key set per business (round 3, docs/m0/14-design-rules-3.md): atmospheric photos
+ * with low, warm or coloured light on a deep ground, the look of every site Robert loved
+ * (docs/research/2026-11-16-reference-library.md). Fetched with --lowkey.
+ */
+export const LOWKEY_SLOTS = ['lowkey-hero', 'lowkey-people', 'lowkey-detail'] as const
+export type LowkeySlot = (typeof LOWKEY_SLOTS)[number]
+export const LOWKEY_QUERIES: Record<Kind, Record<LowkeySlot, string>> = {
+  restaurant: {
+    'lowkey-hero': 'moody restaurant interior candlelight dark',
+    'lowkey-people': 'chef portrait dark kitchen',
+    'lowkey-detail': 'food plate dark background dramatic light',
+  },
+  salon: {
+    'lowkey-hero': 'hair stylist hands scissors dark',
+    'lowkey-people': 'hairdresser cutting hair client dark moody',
+    'lowkey-detail': 'hair brush comb dark background',
+  },
+  clinic: {
+    'lowkey-hero': 'dental clinic interior evening',
+    'lowkey-people': 'woman calm portrait dark background natural light',
+    'lowkey-detail': 'green leaves dark background calm',
+  },
+  trades: {
+    'lowkey-hero': 'carpenter workshop warm light dark',
+    'lowkey-people': 'craftsman working wood dark workshop',
+    'lowkey-detail': 'old tools dark background',
+  },
+  fitness: {
+    'lowkey-hero': 'gym interior dark dumbbells',
+    'lowkey-people': 'athlete training dark background dramatic light',
+    'lowkey-detail': 'kettlebell dark background',
+  },
+}
+
 export type Photo = {
   provider: 'pixabay' | 'pexels'
   id: string
@@ -68,7 +104,7 @@ export type Photo = {
   /** Light and busyness by third, from tasks/photo-tones.task.ts. */
   tone?: import('@repo/spec').Tone
 }
-export type Manifest = Partial<Record<Kind, Partial<Record<Slot, Photo>>>>
+export type Manifest = Partial<Record<Kind, Partial<Record<Slot | LowkeySlot, Photo>>>>
 
 const dir = new URL('../photos/', import.meta.url)
 const manifestUrl = new URL('manifest.json', dir)
@@ -121,13 +157,17 @@ async function main() {
     ...rejected,
   ])
   let requests = 0
+  const lowkey = process.argv.includes('--lowkey')
+  const slots: readonly (Slot | LowkeySlot)[] = lowkey ? LOWKEY_SLOTS : SLOTS
+  const query = (kind: Kind, slot: Slot | LowkeySlot) =>
+    lowkey ? LOWKEY_QUERIES[kind][slot as LowkeySlot] : QUERIES[kind][slot as Slot]
   for (const kind of KINDS) {
-    for (const slot of SLOTS) {
+    for (const slot of slots) {
       const have = manifest[kind]?.[slot]
       if (!refresh && have && existsSync(new URL(have.file, dir))) continue
       const q = new URLSearchParams({
         key,
-        q: QUERIES[kind][slot],
+        q: query(kind, slot),
         image_type: 'photo',
         orientation: 'horizontal',
         safesearch: 'true',
@@ -140,7 +180,7 @@ async function main() {
       const body = (await res.json()) as { hits: PixabayHit[] }
       const pick = body.hits.find((h) => !used.has(String(h.id)))
       if (!pick) {
-        console.warn(`No photo found for ${kind}/${slot} ("${QUERIES[kind][slot]}")`)
+        console.warn(`No photo found for ${kind}/${slot} ("${query(kind, slot)}")`)
         continue
       }
       used.add(String(pick.id))
@@ -158,7 +198,7 @@ async function main() {
           page: pick.pageURL,
           photographer: pick.user,
           photographerUrl: `https://pixabay.com/users/${encodeURIComponent(pick.user)}-${pick.user_id}/`,
-          alt: QUERIES[kind][slot],
+          alt: query(kind, slot),
           width,
           height: Math.round((width * pick.imageHeight) / pick.imageWidth),
           file,

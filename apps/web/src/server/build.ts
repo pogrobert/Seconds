@@ -1,20 +1,21 @@
-import { components } from '@repo/blocks/components'
-import { manifests } from '@repo/blocks/manifest'
-import { resolveStyle, theme } from '@repo/blocks/themes'
 import { SAMPLES, type SampleBusiness } from '@repo/eval/businesses'
-import type { Manifest } from '@repo/eval/photos'
-import photoManifest from '@repo/eval/photos/manifest.json'
-import { contentFor, photoOrder } from '@repo/eval/site-content'
-import { sampleAssets } from '@repo/eval/stand-in'
 import {
-  assemble,
+  ATMOSPHERIC,
+  design,
+  OPEN,
+  type Pick,
+  pickDesigns,
+  type RuleCache,
+  readBrief,
+  weigh,
+} from '@repo/eval/grammar/choose'
+import { contentOf, renderPage } from '@repo/eval/grammar/page'
+import ruleProfiles from '@repo/eval/grammar/rule-profiles.json'
+import photoManifest from '@repo/eval/photos/manifest.json'
+import {
   type Brief,
   type Copy,
   type DecisionPort,
-  DIRECTION_IDS,
-  DIRECTIONS,
-  type Direction,
-  directionPlan,
   fixedText,
   KIND_LABEL,
   KINDS,
@@ -24,24 +25,23 @@ import {
   type TextPort,
   typesafeDecisions,
 } from '@repo/pipeline'
-import { renderDocument } from '@repo/render'
-import type { PageId } from '@repo/spec'
 import { createServerFn } from '@tanstack/react-start'
-import blocksCss from '../generated/blocks.css?raw'
 import { getEnv } from './env'
 
-// The build page's one server call: the owner's words in, the site in every direction out.
-// 1. The decision model picks the kind of business and the direction that suits the words.
+// The build page's one server call: the owner's words in, four finished looks out.
+// 1. In parallel, the decision model names the kind of business and reads the words: five scales
+//    and a direct pick in every layer of design rules (docs/m0/13 and 14).
 // 2. The text model writes the words, with the kind's facts (stand-ins: the sample business).
-// 3. Code draws the site in each direction, so switching looks needs no new call.
+// 3. Code draws four designs from the rules: three in the atmospheric direction Robert's reference
+//    picks pointed to, and Jev's own pick across every rule. Switching looks needs no new call.
 // Without keys, stand-ins answer (random choices, the sample's own words), and the reply says so.
 
-export type BuiltSite = { id: Direction['id']; label: string; html: string }
+export type BuiltSite = { id: string; label: string; rules: string; html: string }
 export type BuildResult = {
   name: string
   kind: Kind
   kindLabel: string
-  suggested: Direction['id']
+  suggested: string
   sites: BuiltSite[]
   ms: { decide: number; text: number; render: number; total: number }
   costUsd: number
@@ -58,17 +58,7 @@ const KIND_NAME: Record<Kind, string> = {
   fitness: 'fitness studio',
 }
 
-const DIRECTION_TEXT: Record<Direction['id'], string> = {
-  landscape:
-    'A full-screen photo of the place with the name thin and spaced in its sky. Calm, crafted, upmarket; for beautiful places and work.',
-  wordmark:
-    'Two close-up photos side by side with the name huge and thin across both, then a quiet page set like a printed menu. Refined and editorial; for food, hair, materials.',
-  signature:
-    'No photos: the name in heavy condensed letters with drawings from the trade standing in for letters, on a warm light page. Friendly, bold, characterful.',
-  atelier: 'A bright interior photo with a large light serif headline low on it.',
-}
-
-async function decide(port: DecisionPort, words: string) {
+async function decideKind(port: DecisionPort, words: string) {
   const res = await port.decide({ brief: words }, [
     {
       kind: 'choice',
@@ -76,26 +66,11 @@ async function decide(port: DecisionPort, words: string) {
       prompt: 'Which kind of business does the brief in `brief` describe?',
       options: KINDS.map((k) => ({ key: k, text: `A ${KIND_LABEL[k]}.` })),
     },
-    {
-      kind: 'choice',
-      id: 'direction',
-      prompt: "Given the brief in `brief`, which look suits this business's website best?",
-      options: DIRECTION_IDS.map((d) => ({ key: d, text: DIRECTION_TEXT[d] })),
-    },
   ])
-  const pick = (id: string) => {
-    const a = res.answers.get(id)
-    return a?.kind === 'choice' ? a.top : undefined
-  }
-  const kind = (KINDS as readonly string[]).includes(pick('kind') ?? '')
-    ? (pick('kind') as Kind)
-    : 'salon'
-  const dir = pick('direction')
-  const suggested = (DIRECTION_IDS as readonly string[]).includes(dir ?? '')
-    ? (dir as Direction['id'])
-    : 'landscape'
-  const costUsd = res.calls.reduce((n, c) => n + (c.costUsd ?? 0), 0)
-  return { kind, suggested, costUsd }
+  const a = res.answers.get('kind')
+  const top = a?.kind === 'choice' ? a.top : ''
+  const kind = (KINDS as readonly string[]).includes(top) ? (top as Kind) : 'salon'
+  return { kind, costUsd: res.calls.reduce((n, c) => n + (c.costUsd ?? 0), 0) }
 }
 
 /** Facts the words may mention, from the business record (here, the sample's). */
@@ -113,34 +88,18 @@ function factsOf(s: SampleBusiness): string {
     .join('\n')
 }
 
-function render(s: SampleBusiness, kind: Kind, id: Direction['id']): string {
-  const plan = directionPlan(kind, id)
-  const spec = assemble(
-    plan,
-    {
-      business: s.business,
-      collections: s.collections,
-      assets: sampleAssets(s, photoManifest as Manifest),
-      color: s.palette,
-      locale: 'en-GB',
-      dir: 'ltr',
-    },
-    contentFor(s, photoOrder(1)),
-    { seed: `${kind}-${s.business.name}`, release: 'local' },
-  )
-  const st = resolveStyle(spec.style)
-  const t = theme(st.id, s.palette, { axes: st.axes, mode: st.mode })
-  return renderDocument(spec, Object.keys(spec.structure.pages)[0] as PageId, {
-    css: blocksCss + t.css,
-    head: `<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="${t.fontsHref}">`,
-    library: { manifests, components },
-    button: t.button,
-    imageUrl: (asset) => ({
-      src: asset.source.type === 'stock' ? `/photos/${asset.source.key}` : '',
-      width: asset.width ?? 1600,
-      height: asset.height ?? 1067,
-    }),
-  }).html
+/** The rules a design is made of, in one readable line. */
+function describe(p: Pick) {
+  const d = design(p)
+  return {
+    rules: `${d.composition.label} layout · ${d.type.label} type · ${d.colour.label} colour · ${d.hero.label} opening · ${d.photo?.label ?? 'Natural'} photos · ${d.detail.label === 'None' ? 'no detail' : `${d.detail.label.toLowerCase()} detail`}`,
+  }
+}
+
+const seedOf = (s: string) => {
+  let h = 0
+  for (const ch of s) h = (h * 31 + ch.charCodeAt(0)) | 0
+  return `build-${h}`
 }
 
 export const buildSite = createServerFn({ method: 'POST' })
@@ -160,14 +119,19 @@ export const buildSite = createServerFn({ method: 'POST' })
       ? openRouterText({ apiKey: env.OPENROUTER_API_KEY })
       : fixedText(() => ({ ...SAMPLES.salon.standIn }))
 
+    // 1. Kind and reading, in parallel.
     const td = performance.now()
-    const d = await decide(decidePort, words)
+    const [k, reading] = await Promise.all([
+      decideKind(decidePort, words),
+      readBrief(decidePort, { business: 'local business', name: '', place: '', words }),
+    ])
     const decideMs = Math.round(performance.now() - td)
 
-    const sample = SAMPLES[d.kind]
+    // 2. The words.
+    const sample = SAMPLES[k.kind]
     const brief: Brief = {
       id: 'build',
-      kind: d.kind,
+      kind: k.kind,
       name: '',
       place: sample.business.locations?.[0]?.address?.locality ?? '',
       words,
@@ -177,27 +141,44 @@ export const buildSite = createServerFn({ method: 'POST' })
     const written = await textPort.write({
       brief,
       facts: factsOf(sample),
-      needSteps: d.kind === 'trades',
+      needSteps: false,
       askName: true,
     })
     const textMs = Math.round(performance.now() - tt)
-    const copy: Copy =
-      written.copy ?? (env.OPENROUTER_API_KEY ? sample.standIn : { ...SAMPLES[d.kind].standIn })
+    const copy: Copy = written.copy ?? { ...SAMPLES[k.kind].standIn }
     const name = copy.name?.trim() || sample.business.name
-    const s: SampleBusiness = { ...sample, business: { ...sample.business, name }, standIn: copy }
 
+    // 3. Four designs from the rules.
     const tr = performance.now()
-    const sites = DIRECTION_IDS.map((id) => ({
-      id,
-      label: DIRECTIONS[id].label,
-      html: render(s, d.kind, id),
-    }))
+    type Shot = { file: string; alt: string; width: number; height: number }
+    const photos = (photoManifest as Record<string, Record<string, Shot>>)[k.kind] ?? {}
+    const content = contentOf(sample, photos, '/photos/', { name, brand: sample.palette, copy })
+    const cache = ruleProfiles as RuleCache
+    const seed = seedOf(words)
+    const atmos = pickDesigns(
+      weigh(reading.profile, reading.direct, cache, content, ATMOSPHERIC),
+      seed,
+      3,
+    )
+    const open = pickDesigns(weigh(reading.profile, reading.direct, cache, content, OPEN), seed, 1)
+    const sites: BuiltSite[] = [
+      ...atmos.map((p, i) => ({ id: `a${i + 1}`, p })),
+      ...open.map((p) => ({ id: 'open', p })),
+    ].map(({ id, p }) => {
+      const dsc = describe(p)
+      return {
+        id,
+        label: id === 'open' ? "Jev's pick" : `Look ${id.slice(1)}`,
+        rules: dsc.rules,
+        html: renderPage(content, design(p)),
+      }
+    })
     const renderMs = Math.round(performance.now() - tr)
     return {
       name,
-      kind: d.kind,
-      kindLabel: KIND_NAME[d.kind],
-      suggested: d.suggested,
+      kind: k.kind,
+      kindLabel: KIND_NAME[k.kind],
+      suggested: sites[0]?.id ?? 'a1',
       sites,
       ms: {
         decide: decideMs,
@@ -205,7 +186,10 @@ export const buildSite = createServerFn({ method: 'POST' })
         render: renderMs,
         total: Math.round(performance.now() - t0),
       },
-      costUsd: d.costUsd + written.calls.reduce((n, c) => n + (c.costUsd ?? 0), 0),
+      costUsd:
+        k.costUsd +
+        reading.calls.reduce((n, c) => n + (c.costUsd ?? 0), 0) +
+        written.calls.reduce((n, c) => n + (c.costUsd ?? 0), 0),
       models: {
         decide: `${decidePort.id} ${decidePort.model}`,
         text: `${textPort.id} ${textPort.model}`,

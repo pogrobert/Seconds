@@ -1,17 +1,16 @@
-// The design-rules proof (docs/m0/12-design-rules.md). Two layers of rules, six compositions and six
-// type systems, so 36 pages per business. Jev reads each salon brief and gives a probability for
-// every rule in each layer; code then draws 20 designs for one brief by sampling pairs in proportion
-// to those probabilities, so the same brief gives different sites that all fit it.
-// All 36 pairs are checked in Chromium at 1440 and 390 px (overflow, elements sticking out, covered
-// text, axe WCAG 2.2 AA), because any pair the rules allow must look right.
-// Output: tools/eval/out/grammar/ (pages, shots, results.json).
-// Run: pnpm --filter @repo/eval grammar        (SHOTS=0 skips the browser)
+// The design-rules proof, round 3 (docs/m0/14-design-rules-3.md; rounds 1 and 2 in 12 and 13).
+// Six layers of rules: composition, type, colour, hero, signature detail and, new, photo treatment.
+// Round 3 adds the atmospheric direction from Robert's reference picks: low-key photos, deep or
+// near-black pages, a quiet opening and restraint. For each salon brief: three atmospheric designs
+// (Jev chooses within the direction) and Jev's open pick across every rule, for comparison.
+// Checked in Chromium at 1440 and 390 px: overflow, sticking out, covered text, axe WCAG 2.2 AA and
+// the tell linter, plus a random sample across all rules without screenshots.
+// Output: tools/eval/out/grammar-3/. Run: pnpm --filter @repo/eval grammar   (SHOTS=0, EXTRA=n)
 import { cpSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import AxeBuilder from '@axe-core/playwright'
 import {
-  type ChoiceQuestion,
   type Copy,
-  type Dist,
+  type DecisionPort,
   openRouterText,
   randomDecisions,
   rng,
@@ -21,9 +20,22 @@ import { chromium } from 'playwright'
 import { it } from 'vitest'
 import { BRIEFS } from '../src/briefs.ts'
 import { SAMPLES } from '../src/businesses.ts'
-import { COMPOSITIONS } from '../src/grammar/compositions.ts'
+import {
+  ATMOSPHERIC,
+  design,
+  LAYERS,
+  OPEN,
+  type Pick,
+  pickDesigns,
+  type RuleCache,
+  readBrief,
+  staleRules,
+  weigh,
+} from '../src/grammar/choose.ts'
+import { palettePairs } from '../src/grammar/colour-rules.ts'
 import { contentOf, renderPage } from '../src/grammar/page.ts'
-import { TYPE_RULES } from '../src/grammar/type-rules.ts'
+import { ruleProfile } from '../src/grammar/profiles.ts'
+import { tells } from '../src/grammar/tells.ts'
 import { pageProblems } from '../src/page-checks.ts'
 
 try {
@@ -33,10 +45,9 @@ try {
 }
 const KEY = process.env.TYPESAFE_API_KEY
 const OPENROUTER = process.env.OPENROUTER_API_KEY
-const N = Number(process.env.N ?? 20)
-const BRIEF = process.env.BRIEF ?? 'salon-1'
+const EXTRA = Number(process.env.EXTRA ?? 40)
 
-const out = new URL('../out/grammar/', import.meta.url)
+const out = new URL('../out/grammar-3/', import.meta.url)
 for (const d of ['pages', 'shots']) mkdirSync(new URL(`${d}/`, out), { recursive: true })
 const photosDir = new URL('../photos/', import.meta.url)
 if (existsSync(photosDir)) cpSync(photosDir, new URL('pages/photos/', out), { recursive: true })
@@ -44,45 +55,22 @@ const manifest = JSON.parse(
   readFileSync(new URL('../photos/manifest.json', import.meta.url), 'utf8'),
 ) as Record<string, Record<string, { file: string; alt: string; width: number; height: number }>>
 
-const questions: ChoiceQuestion[] = [
-  {
-    kind: 'choice',
-    id: 'composition',
-    prompt:
-      "Which page layout would make the best website for this business, given the owner's description?",
-    options: COMPOSITIONS.map((c) => ({ key: c.key, text: c.text })),
-  },
-  {
-    kind: 'choice',
-    id: 'type',
-    prompt:
-      "Which typography would make the best website for this business, given the owner's description?",
-    options: TYPE_RULES.map((t) => ({ key: t.key, text: t.text })),
-  },
-]
-
-/** Pairs drawn without repeats, each in proportion to p(composition) × p(type); rules under 4% are out. */
-function sample(comp: Dist, type: Dist, n: number, seed: string) {
-  const floor = 0.04
-  const pairs = COMPOSITIONS.flatMap((c) =>
-    TYPE_RULES.map((t) => ({ c: c.key, t: t.key, w: (comp[c.key] ?? 0) * (type[t.key] ?? 0) })),
-  ).filter((p) => (comp[p.c] ?? 0) >= floor && (type[p.t] ?? 0) >= floor)
-  const rand = rng(seed)
-  const picked: typeof pairs = []
-  const pool = [...pairs]
-  while (picked.length < n && pool.length) {
-    const total = pool.reduce((s, p) => s + p.w, 0)
-    let r = rand() * total
-    const i = Math.max(
-      0,
-      pool.findIndex((p) => {
-        r -= p.w
-        return r <= 0
-      }),
-    )
-    picked.push(...pool.splice(i, 1))
-  }
-  return { picked, eligible: pairs.length }
+/** Rule profiles, cached by layer, key and description: a changed description is scored again. */
+const cacheFile = new URL('../src/grammar/rule-profiles.json', import.meta.url)
+async function ruleProfiles(decide: DecisionPort) {
+  const cache: RuleCache = existsSync(cacheFile) ? JSON.parse(readFileSync(cacheFile, 'utf8')) : {}
+  let cost = 0
+  const todo = staleRules(cache)
+  await Promise.all(
+    todo.map(async (r) => {
+      const p = await ruleProfile(decide, r.name, r.text)
+      cost += p.calls.reduce((s, c) => s + (c.costUsd ?? 0), 0)
+      cache[`${r.layer}/${r.key}`] = { text: r.text, profile: p.profile }
+    }),
+  )
+  if (todo.length && decide.id !== 'random')
+    writeFileSync(cacheFile, `${JSON.stringify(cache, null, 2)}\n`)
+  return { cache, scored: todo.length, cost }
 }
 
 /** Facts the words may mention (the same as the M0 run): area, address, access, booking, services. */
@@ -98,6 +86,7 @@ function factsOf(place: string): string {
       ? `Address: ${[...loc.address.lines, loc.address.locality, loc.address.postalCode].join(', ')}.`
       : '',
     loc?.note ? `Access and parking: ${loc.note}` : '',
+    'Opened in 2009.',
     'Takes bookings online.',
     `What they offer: ${items.filter(Boolean).join('; ')}.`,
   ]
@@ -105,94 +94,97 @@ function factsOf(place: string): string {
     .join('\n')
 }
 
-it('renders the design-rules proof', async () => {
-  const decide = KEY ? typesafeDecisions({ apiKey: KEY }) : randomDecisions('grammar')
-  const salons = BRIEFS.filter((b) => b.kind === 'salon')
-
-  // Jev's reading of every salon brief, both layers in one call per brief.
-  const readings = await Promise.all(
-    salons.map(async (b) => {
-      const t0 = performance.now()
-      const r = await decide.decide(
-        {
-          business: 'hair salon',
-          name: b.name,
-          place: b.place,
-          owner_words: b.words,
-        },
-        questions,
-      )
-      const dist = (id: string): Dist => {
-        const a = r.answers.get(id)
-        return a?.kind === 'choice' && a.dist ? a.dist : {}
-      }
-      return {
-        brief: b.id,
-        place: b.place,
-        name: b.name,
-        words: b.words,
-        color: b.color,
-        composition: dist('composition'),
-        type: dist('type'),
-        ms: Math.round(performance.now() - t0),
-        costUsd: r.calls.reduce((s, c) => s + (c.costUsd ?? 0), 0),
-        error: r.calls.find((c) => c.error)?.error,
-      }
-    }),
-  )
-  // The words, written once per brief (the same words go into every design for that brief).
+it('renders the design-rules proof, round 3', async () => {
+  const decide = KEY ? typesafeDecisions({ apiKey: KEY }) : randomDecisions('grammar-3')
   const text = OPENROUTER ? openRouterText({ apiKey: OPENROUTER }) : null
-  const words = new Map<string, { copy: Copy | null; ms: number; costUsd: number }>()
-  await Promise.all(
+  const salons = BRIEFS.filter((b) => b.kind === 'salon')
+  const rules = await ruleProfiles(decide)
+
+  // Per brief, in parallel: Jev's reading of the brief and the words, as the product would.
+  const briefs = await Promise.all(
     salons.map(async (b) => {
-      if (!text) return
       const t0 = performance.now()
-      const r = await text.write({ brief: b, facts: factsOf(b.place), needSteps: false })
-      words.set(b.id, {
-        copy: r.copy,
+      const [p, w] = await Promise.all([
+        readBrief(decide, { business: 'hair salon', name: b.name, place: b.place, words: b.words }),
+        text ? text.write({ brief: b, facts: factsOf(b.place), needSteps: false }) : null,
+      ])
+      return {
+        brief: b,
+        profile: p.profile,
+        direct: p.direct,
+        copy: (w?.copy ?? null) as Copy | null,
         ms: Math.round(performance.now() - t0),
-        costUsd: r.calls.reduce((s, c) => s + (c.costUsd ?? 0), 0),
-      })
+        jevUsd: p.calls.reduce((s, c) => s + (c.costUsd ?? 0), 0),
+        textUsd: w?.calls.reduce((s, c) => s + (c.costUsd ?? 0), 0) ?? 0,
+      }
     }),
   )
-  const contentFor = (id: string) => {
-    const b = salons.find((x) => x.id === id)
-    const copy = words.get(id)?.copy
-    return contentOf(SAMPLES.salon, manifest.salon ?? {}, 'photos/', {
-      ...(b ? { name: b.name, brand: b.color } : {}),
-      ...(copy ? { copy } : {}),
-    })
+
+  type Page = {
+    file: string
+    brief: string
+    direction: string
+    pick: Pick
+    shots: boolean
+    pairs: Record<string, number>
   }
-
-  const reading = readings.find((r) => r.brief === BRIEF)
-  if (!reading) throw new Error(`no brief ${BRIEF}`)
-  const { picked, eligible } = sample(reading.composition, reading.type, N, BRIEF)
-
-  // Every pair, for the checks; the drawn designs are among them.
-  const content = contentFor(BRIEF)
+  const pages: Page[] = []
   const renderMs: number[] = []
-  const pages: { file: string; c: string; t: string }[] = []
-  for (const c of COMPOSITIONS)
-    for (const t of TYPE_RULES) {
+  const records = briefs.map((b) => {
+    const c = contentOf(SAMPLES.salon, manifest.salon ?? {}, 'photos/', {
+      name: b.brief.name,
+      brand: b.brief.color,
+      founded: 2009,
+      ...(b.copy ? { copy: b.copy } : {}),
+    })
+    const atmos = pickDesigns(weigh(b.profile, b.direct, rules.cache, c, ATMOSPHERIC), b.brief.id)
+    const open = pickDesigns(weigh(b.profile, b.direct, rules.cache, c, OPEN), b.brief.id, 1)
+    const all = [
+      ...atmos.map((p, i) => ({
+        p,
+        file: `${b.brief.id}-a${i + 1}.html`,
+        direction: 'atmospheric',
+      })),
+      ...open.map((p) => ({ p, file: `${b.brief.id}-open.html`, direction: 'open' })),
+    ]
+    for (const x of all) {
       const t0 = performance.now()
-      const html = renderPage(content, c, t)
+      const d = design(x.p)
+      writeFileSync(new URL(`pages/${x.file}`, out), renderPage(c, d))
       renderMs.push(performance.now() - t0)
-      const file = `${c.key}-${t.key}.html`
-      writeFileSync(new URL(`pages/${file}`, out), html)
-      pages.push({ file, c: c.key, t: t.key })
+      pages.push({
+        file: x.file,
+        brief: b.brief.id,
+        direction: x.direction,
+        pick: x.p,
+        shots: true,
+        pairs: palettePairs(d.colour.palette(c.brand)),
+      })
     }
-  // Jev's first choice for each of the other briefs, in their own words and colour.
-  const top = (d: Dist) => Object.entries(d).sort((a, b) => b[1] - a[1])[0]?.[0] ?? ''
-  const others = readings
-    .filter((r) => r.brief !== BRIEF)
-    .map((r) => ({ brief: r.brief, c: top(r.composition), t: top(r.type) }))
-  for (const o of others) {
-    const c = COMPOSITIONS.find((x) => x.key === o.c)
-    const t = TYPE_RULES.find((x) => x.key === o.t)
-    if (!c || !t) continue
-    const file = `brief-${o.brief}.html`
-    writeFileSync(new URL(`pages/${file}`, out), renderPage(contentFor(o.brief), c, t))
-    pages.push({ file, c: c.key, t: t.key })
+    return { ...b, content: c, atmos, open: open[0] }
+  })
+
+  // Robustness: random designs across every rule, checked but not photographed.
+  const rand = rng('grammar-3-extra')
+  const any = <T>(xs: readonly T[]) => xs[Math.floor(rand() * xs.length)] as T
+  for (let i = 0; i < EXTRA; i++) {
+    const r = any(records)
+    const c = r.content
+    const w = weigh(r.profile, r.direct, rules.cache, c, OPEN)
+    const p = Object.fromEntries(
+      (Object.keys(LAYERS) as (keyof typeof LAYERS)[]).map((l) => [l, any(w[l]).key]),
+    ) as Pick
+    const d = design(p)
+    const file = `extra-${String(i + 1).padStart(2, '0')}.html`
+    writeFileSync(new URL(`pages/${file}`, out), renderPage(c, d))
+    pages.push({
+      file,
+      brief: r.brief.id,
+      direction: 'random',
+      pick: p,
+      shots: false,
+      pairs: palettePairs(d.colour.palette(c.brand)),
+    })
   }
 
   const problems: Record<string, string[]> = {}
@@ -209,16 +201,18 @@ it('renders the design-rules proof', async () => {
         const page = await ctx.newPage()
         await page.goto(new URL(`pages/${p.file}`, out).href, { waitUntil: 'networkidle' })
         await page.evaluate(() => document.fonts.ready)
-        // Scroll through once so lazy photos load before the full-page screenshot.
         await page.evaluate(async () => {
           for (let y = 0; y < document.body.scrollHeight; y += 600) {
             window.scrollTo(0, y)
-            await new Promise((r) => setTimeout(r, 60))
+            await new Promise((r) => setTimeout(r, 40))
           }
           window.scrollTo(0, 0)
         })
         await page.waitForLoadState('networkidle')
         found.push(...(await page.evaluate(pageProblems)).map((x) => `${width}px: ${x}`))
+        const allowed =
+          p.pick.composition === 'framed' || p.pick.hero === 'quiet' ? ['everything centred'] : []
+        found.push(...(await page.evaluate(tells, allowed)).map((x) => `${width}px: tell, ${x}`))
         const axe = await new AxeBuilder({ page })
           .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa'])
           .analyze()
@@ -226,17 +220,19 @@ it('renders the design-rules proof', async () => {
           found.push(
             `${width}px: axe ${v.id} (${v.nodes.length}) ${v.nodes[0]?.target.join(' ') ?? ''}`,
           )
-        const tag = width > 500 ? 'desktop' : 'phone'
-        const base = p.file.replace('.html', '')
-        await page.screenshot({
-          path: new URL(`shots/${base}-${tag}-top.jpg`, out).pathname,
-          quality: 72,
-        })
-        await page.screenshot({
-          path: new URL(`shots/${base}-${tag}-full.jpg`, out).pathname,
-          fullPage: true,
-          quality: 62,
-        })
+        if (p.shots) {
+          const tag = width > 500 ? 'desktop' : 'phone'
+          const base = p.file.replace('.html', '')
+          await page.screenshot({
+            path: new URL(`shots/${base}-${tag}-top.jpg`, out).pathname,
+            quality: 72,
+          })
+          await page.screenshot({
+            path: new URL(`shots/${base}-${tag}-full.jpg`, out).pathname,
+            fullPage: true,
+            quality: 62,
+          })
+        }
         await ctx.close()
       }
       if (found.length) problems[p.file] = found
@@ -250,12 +246,22 @@ it('renders the design-rules proof', async () => {
     JSON.stringify(
       {
         decider: `${decide.id}:${decide.model}`,
-        brief: BRIEF,
-        readings,
-        words: Object.fromEntries(words),
-        others,
-        eligiblePairs: eligible,
-        designs: picked.map((p, i) => ({ n: i + 1, composition: p.c, type: p.t, weight: p.w })),
+        rulesScored: rules.scored,
+        rulesScoringUsd: rules.cost,
+        briefs: records.map((r) => ({
+          brief: r.brief.id,
+          name: r.brief.name,
+          words: r.brief.words,
+          color: r.brief.color,
+          profile: r.profile,
+          ms: r.ms,
+          jevUsd: r.jevUsd,
+          textUsd: r.textUsd,
+          headline: r.copy?.headline,
+          atmos: r.atmos,
+          open: r.open,
+        })),
+        pages: pages.map(({ content: _c, ...p }: Page & { content?: unknown }) => p),
         renderMsMedian: sorted[Math.floor(sorted.length / 2)],
         problems,
       },
@@ -263,4 +269,4 @@ it('renders the design-rules proof', async () => {
       2,
     ),
   )
-}, 1_800_000)
+}, 3_600_000)
