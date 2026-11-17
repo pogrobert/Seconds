@@ -1,7 +1,7 @@
 // POST /api/build {"messages": ["…"]} → BuildResult as JSON. For the benchmark harness
 // (tools/bench), so it measures the real runtime; the build page uses the server function.
 import { createFileRoute } from '@tanstack/react-router'
-import { build } from '../../server/build'
+import { build } from '../../server/make-site'
 
 export const Route = createFileRoute('/api/build')({
   server: {
