@@ -239,9 +239,11 @@ export function TestimonialsDuskTwo({ c }: BlockProps) {
   if (!c.testimonials?.length) return null
   return (
     <section className="py-16 md:py-20">
-      <div className="mx-auto max-w-3xl space-y-20 px-6">
+      {/* Dusk two's AnimatePresence: one quote at a time, changing every few seconds (motion.ts,
+          rotate); without the script every quote shows. */}
+      <div data-m="rotate" className="mx-auto max-w-3xl space-y-20 px-6">
         {c.testimonials.map((t) => (
-          <figure key={t.quote}>
+          <figure key={t.quote} data-m-item>
             <blockquote className="text-muted-foreground mb-10 text-2xl font-medium leading-snug md:text-4xl md:leading-tight">
               <span className="text-foreground">{t.quote}</span>
             </blockquote>

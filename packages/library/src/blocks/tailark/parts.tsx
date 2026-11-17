@@ -172,9 +172,31 @@ export const Wordmark = (p: BlockProps & { className?: string }) => (
  * "rule" sits on a bottom border (Dusk), "pill" floats as a small rounded bar (Veil hero five).
  */
 export function Bar(
-  p: BlockProps & { look?: 'centre' | 'rule' | 'pill'; wide?: boolean; children?: ReactNode },
+  p: BlockProps & {
+    look?: 'centre' | 'rule' | 'pill' | 'float'
+    wide?: boolean
+    children?: ReactNode
+  },
 ) {
   const { c } = p
+  if (p.look === 'float')
+    // Veil hero four's header: fixed at the top; once the page scrolls it draws in to a floating
+    // pill with a ring and a blur behind it, and the links fade out (motion.ts, scroll-header).
+    return (
+      <>
+        <div aria-hidden className="h-20" />
+        <header data-m="scroll-header" className="group fixed inset-x-0 top-0 z-30 px-4 pt-3">
+          <div className="mx-auto flex max-w-5xl items-center justify-between gap-6 rounded-xl px-5 py-3 transition-all duration-500 group-data-[scrolled]:bg-background/80 group-data-[scrolled]:max-w-3xl group-data-[scrolled]:shadow-lg group-data-[scrolled]:ring-1 group-data-[scrolled]:ring-border group-data-[scrolled]:backdrop-blur">
+            <Wordmark c={c} className="truncate" />
+            <Nav2
+              c={c}
+              className="transition duration-200 max-lg:hidden group-data-[scrolled]:opacity-0 group-data-[scrolled]:blur-xs"
+            />
+            <Button href={c.book}>{c.cta.label}</Button>
+          </div>
+        </header>
+      </>
+    )
   if (p.look === 'pill')
     return (
       <header className="relative z-20 pt-4">

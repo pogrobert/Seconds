@@ -122,7 +122,7 @@ export function FooterGlow({ c }: BlockProps) {
     >
       <div className="bg-foreground/20 absolute top-0 right-1/2 left-1/2 h-px w-1/3 -translate-x-1/2 -translate-y-1/2 rounded-full blur" />
       <div className="grid w-full gap-8 xl:grid-cols-3">
-        <div className="space-y-4">
+        <div data-m="reveal" data-m-delay={100} className="space-y-4">
           <p className="font-display text-xl">{c.name}</p>
           <Copy c={c} className="text-muted-foreground text-sm" />
           <ul className="flex flex-wrap gap-x-4 gap-y-2 text-sm">
@@ -136,8 +136,8 @@ export function FooterGlow({ c }: BlockProps) {
           </ul>
         </div>
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-3 xl:col-span-2">
-          {cols.map((g) => (
-            <div key={g.label} className="min-w-0">
+          {cols.map((g, i) => (
+            <div key={g.label} data-m="reveal" data-m-delay={200 + i * 100} className="min-w-0">
               <h3 className="text-xs">{g.label}</h3>
               <div className="text-muted-foreground mt-4 text-sm">{g.body}</div>
             </div>
@@ -238,7 +238,7 @@ export function FooterLight({ c }: BlockProps) {
         />
       </div>
       <div className="relative mx-auto flex w-full max-w-6xl flex-col gap-8 pt-12 md:flex-row">
-        <div className="w-full max-w-sm space-y-4">
+        <div data-m="reveal" data-m-delay={100} className="w-full max-w-sm space-y-4">
           <p className="font-display text-2xl">{c.name}</p>
           <p className="text-muted-foreground text-sm">{c.tagline}</p>
           <ul className="flex flex-wrap gap-x-4 gap-y-2 text-sm">
@@ -251,8 +251,13 @@ export function FooterLight({ c }: BlockProps) {
             ))}
           </ul>
         </div>
-        {cols.map((g) => (
-          <div key={g.label} className="w-full min-w-0">
+        {cols.map((g, i) => (
+          <div
+            key={g.label}
+            data-m="reveal"
+            data-m-delay={200 + i * 100}
+            className="w-full min-w-0"
+          >
             <h3 className="text-sm uppercase">{g.label}</h3>
             <div className="text-muted-foreground mt-4 text-sm">{g.body}</div>
           </div>

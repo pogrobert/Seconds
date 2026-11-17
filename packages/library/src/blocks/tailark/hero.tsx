@@ -243,7 +243,7 @@ export function HeroVeilThree({ c }: BlockProps) {
 export function HeroVeilFour({ c }: BlockProps) {
   return (
     <div id="top" className="overflow-hidden">
-      <Bar c={c} />
+      <Bar c={c} look="float" />
       <section className="bg-background">
         <div className="relative py-16 md:py-24">
           <Container className="relative z-10">

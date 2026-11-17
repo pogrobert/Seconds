@@ -19,17 +19,34 @@ function Actions({ c, centre }: BlockProps & { centre?: boolean }) {
   )
 }
 
-function Words({ c, centre }: BlockProps & { centre?: boolean }) {
+function Words({ c, centre, gradient }: BlockProps & { centre?: boolean; gradient?: boolean }) {
   return (
     <>
-      <Eyebrow
-        className={cx(
-          'bg-muted inline-block rounded-full border px-3 py-1',
-          centre ? 'mx-auto' : '',
-        )}
-      >
-        {c.tagline}
-      </Eyebrow>
+      {gradient ? (
+        // hero-03's GradientText: a slow gradient moving through the badge's words (motion.ts).
+        <p
+          data-m="gradient-text"
+          className={cx(
+            'border-border inline-block rounded-full border px-3 py-1 text-sm font-medium',
+            centre ? 'mx-auto' : '',
+          )}
+          style={{
+            backgroundImage:
+              'linear-gradient(90deg, var(--foreground), var(--muted-foreground), var(--primary), var(--foreground))',
+          }}
+        >
+          {c.tagline}
+        </p>
+      ) : (
+        <Eyebrow
+          className={cx(
+            'bg-muted inline-block rounded-full border px-3 py-1',
+            centre ? 'mx-auto' : '',
+          )}
+        >
+          {c.tagline}
+        </Eyebrow>
+      )}
       <h1
         className={cx(
           'mt-6 text-4xl leading-[1.15] sm:text-5xl md:text-6xl',
@@ -120,7 +137,7 @@ export function Hero03({ c }: BlockProps) {
       />
       <PillBar c={c} />
       <div className="mt-16 max-w-3xl text-center md:mt-24">
-        <Words c={c} centre />
+        <Words c={c} centre gradient />
         <Actions c={c} centre />
       </div>
       <div className="from-primary/70 via-primary/30 to-primary/60 mx-auto mt-16 aspect-video w-full max-w-6xl rounded-2xl bg-gradient-to-br p-2 md:mt-20">
@@ -205,6 +222,13 @@ export function Hero07({ c }: BlockProps) {
           ...gridLines(40),
           maskImage: 'radial-gradient(500px circle at center, white, transparent)',
         }}
+      />
+      {/* hero-07's AnimatedGridPattern: squares of the grid light up and fade (motion.ts). */}
+      <div
+        aria-hidden="true"
+        data-m="grid"
+        className="text-foreground absolute inset-0 -z-10 skew-y-12"
+        style={{ maskImage: 'radial-gradient(500px circle at center, white, transparent)' }}
       />
       <div className="max-w-3xl text-center">
         <Words c={c} centre />

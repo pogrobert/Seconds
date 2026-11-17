@@ -1,9 +1,11 @@
 // What customers say, adapted from Shadcn UI Blocks testimonials-01 to -08 and -11 (MIT, see
 // ../../../NOTICE.md). Only the owner's own quotes are shown. Social links, star ratings and stock
 // portraits are removed (a rating is a fact we do not have); avatars show the person's initial;
-// the marquee and carousels become a strip that scrolls sideways with no script.
+// the carousels become a strip that scrolls sideways; testimonials-04's marquee moves again
+// (motion.ts).
 
 import { Quote } from 'lucide-react'
+import type { CSSProperties } from 'react'
 import { type BlockProps, cx, type SiteContent } from '../../ui.tsx'
 import { Initial, L } from './parts.tsx'
 
@@ -74,19 +76,31 @@ export function Testimonials04({ c }: BlockProps) {
       <div className="px-6">
         <Head c={c} />
       </div>
-      <div className="mt-14 mask-x-from-90%">
-        <ul className="flex snap-x snap-mandatory gap-4 overflow-x-auto px-[10%] pb-4">
-          {c.testimonials.map((t) => (
-            <li
-              key={t.name + t.quote}
-              className="bg-accent text-accent-foreground w-80 shrink-0 snap-center rounded-(--radius) p-6 sm:w-96"
-            >
-              <Person t={t} />
-              <blockquote className="mt-5 text-[17px]">{t.quote}</blockquote>
-            </li>
-          ))}
-        </ul>
-      </div>
+      {/* testimonials-04's two Marquee rows, the second reversed, pausing on hover (motion.ts). */}
+      {[false, true].map((reverse) => (
+        <div
+          key={String(reverse)}
+          data-m="marquee"
+          {...(reverse ? { 'data-m-reverse': '' } : {})}
+          className={cx('mask-x-from-90%', reverse ? 'mt-4' : 'mt-14')}
+          style={{ '--m-duration': '60s' } as CSSProperties}
+        >
+          <ul className="m-track gap-4 pb-4">
+            {[0, 1].map((copy) =>
+              (c.testimonials ?? []).map((t) => (
+                <li
+                  key={`${copy}${t.name}${t.quote}`}
+                  aria-hidden={copy === 1 || undefined}
+                  className="bg-accent text-accent-foreground w-80 shrink-0 rounded-(--radius) p-6 sm:w-96"
+                >
+                  <Person t={t} />
+                  <blockquote className="mt-5 text-[17px]">{t.quote}</blockquote>
+                </li>
+              )),
+            )}
+          </ul>
+        </div>
+      ))}
     </section>
   )
 }

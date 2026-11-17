@@ -3,6 +3,7 @@
 // rendered on the server to finished HTML.
 
 import { renderToStaticMarkup } from 'react-dom/server'
+import { motionFor } from './motion.ts'
 import { type Entry, fits, KINDS, type Kind, REGISTRY } from './registry.ts'
 import type { Theme } from './theme.ts'
 import { hasVisit, type SiteContent } from './ui.tsx'
@@ -95,5 +96,7 @@ export function renderSite(
     </>,
   )
   const esc = (s: string) => s.replace(/[&<>"]/g, (x) => `&#${x.charCodeAt(0)};`)
-  return `<!doctype html><html lang="en"${t.dark ? ' class="dark"' : ''}><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${esc(c.name)}: ${esc(c.tagline)}</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="${t.fontsHref}"><style>${o.css}${t.css}</style></head><body${o.grade ? ' class="photo-grade"' : ''}>${body}</body></html>`
+  // Motion only for pages with a moving block (motion.ts); none otherwise.
+  const m = motionFor(body)
+  return `<!doctype html><html lang="en"${t.dark ? ' class="dark"' : ''}><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${esc(c.name)}: ${esc(c.tagline)}</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="${t.fontsHref}"><style>${o.css}${t.css}</style>${m.head}</head><body${o.grade ? ' class="photo-grade"' : ''}>${body}${m.end}</body></html>`
 }

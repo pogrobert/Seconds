@@ -189,7 +189,8 @@ async function one(brief: Brief): Promise<BriefRecord> {
       ['desktop', { width: 1280, height: 800 }],
       ['phone', { width: 390, height: 844 }],
     ] as const) {
-      const page = await browser.newPage({ viewport: size })
+      // Motion off (motion.ts): a whole-page shot never catches a section mid-fade.
+      const page = await browser.newPage({ viewport: size, reducedMotion: 'reduce' })
       await page.setContent(html, { waitUntil: 'load', timeout: 30_000 }).catch(() => {})
       await page.evaluate(() => document.fonts.ready).catch(() => {})
       problems[view] = await page.evaluate(pageChecks).catch((e) => [`checks failed: ${e}`])

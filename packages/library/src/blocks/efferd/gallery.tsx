@@ -4,8 +4,12 @@
 
 import { type BlockProps, Img, type Photo } from '../../ui.tsx'
 
+// image-gallery 1's lazy image fade: each photo fades in as it comes into view (motion.ts).
 const Frame = (p: { photo: Photo; className: string }) => (
-  <div className={`bg-muted overflow-hidden rounded-(--radius) border ${p.className}`}>
+  <div
+    data-m="reveal"
+    className={`bg-muted overflow-hidden rounded-(--radius) border ${p.className}`}
+  >
     <Img photo={p.photo} />
   </div>
 )
