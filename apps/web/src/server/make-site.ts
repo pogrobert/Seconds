@@ -1,7 +1,7 @@
 // The build itself (server only: it reaches Cloudflare through env.ts). Called by the build
 // page's server function (build.ts) and by POST /api/build (tools/bench).
 
-import { generate, toSvg } from '@pogrobert/surfaces'
+import { catalog, generate, toSvg } from '@pogrobert/surfaces'
 import { SAMPLES } from '@repo/eval/businesses'
 import {
   design,
@@ -27,6 +27,7 @@ import {
   writeSiteCopy,
 } from '@repo/pipeline'
 import libraryCss from '../generated/library.css?raw'
+import { ART_STRENGTHS, ART_STYLES, type ArtStrength, type ArtStyle } from './art'
 import { getEnv } from './env'
 import { type FoundPhoto, findPhotos } from './photos'
 
@@ -45,7 +46,10 @@ export type PhotoJob = {
   queries: { place: string; people: string; detail: string }
   about: { name: string; kind: string; town: string }
   seed: string
+  /** Jev's pick for drawn art, where no photo fits. */
+  art: { style: ArtStyle; strength: ArtStrength }
 }
+
 /** The photo step's answer: each slot token's image, by id, so a photo used twice is sent once. */
 export type PhotoResult = {
   slots: Record<string, string>
@@ -72,6 +76,40 @@ export type BuildResult = {
   notes: string[]
   /** The photo step to run next; null when the page already has its photos (the sample). */
   photoJob: PhotoJob | null
+}
+
+/** Jev matches drawn art to the business: a style and how much colour (one call, two questions). */
+async function pickArt(port: DecisionPort, words: string): Promise<PhotoJob['art']> {
+  const looks = (st: string) => catalog.find((c) => c.style === st)?.looks ?? ''
+  const res = await port.decide({ brief: words }, [
+    {
+      kind: 'choice',
+      id: 'art',
+      prompt:
+        "Where no photo fits, this organisation's website shows drawn art instead. Which style suits its mood and its visitors best?",
+      options: ART_STYLES.map((st) => ({ key: st, text: `${st}: ${looks(st)}` })),
+    },
+    {
+      kind: 'choice',
+      id: 'artColour',
+      prompt: 'How much colour should that art have, for this organisation?',
+      options: [
+        { key: 'grey', text: 'Almost grey: very quiet, serious or formal.' },
+        { key: 'muted', text: 'Muted: calm, with a hint of colour.' },
+        { key: 'gentle', text: 'Gentle colour: warm and friendly.' },
+        { key: 'clear', text: 'Clear colour: bright, lively or playful.' },
+      ],
+    },
+  ])
+  const top = (id: string) => {
+    const a = res.answers.get(id)
+    return a?.kind === 'choice' ? a.top : ''
+  }
+  const style = (ART_STYLES as readonly string[]).includes(top('art'))
+    ? (top('art') as ArtStyle)
+    : 'underpaint'
+  const strength = top('artColour') in ART_STRENGTHS ? (top('artColour') as ArtStrength) : 'muted'
+  return { style, strength }
 }
 
 /** The nearest of the sample kinds, only for falling back to sample photos and words. */
@@ -112,6 +150,9 @@ function sampleContent(kind: Kind, brand: string, copy: SiteCopy | null): Conten
   })
 }
 
+const darkTokens = (html: string, dark: boolean) =>
+  dark ? html.replace(/__IMG_([A-Za-z0-9]+)__/g, '__IMG_$1dk__') : html
+
 /** One build from the owner's messages. Used by the build page and by /api/build (tools/bench). */
 export async function build(messages: string[]): Promise<BuildResult> {
   const t0 = performance.now()
@@ -128,6 +169,7 @@ export async function build(messages: string[]): Promise<BuildResult> {
   const decided = Promise.all([
     readBrief(decide, { business: 'organisation', name: '', place: '', words }),
     nearestKind(decide, words),
+    pickArt(decide, words),
   ]).then((r) => ({ r, ms: Math.round(performance.now() - td) }))
   const written = env.OPENROUTER_API_KEY
     ? writeSiteCopy({ apiKey: env.OPENROUTER_API_KEY, words })
@@ -138,7 +180,7 @@ export async function build(messages: string[]): Promise<BuildResult> {
         costUsd: 0,
       })
   const [{ r, ms: decideMs }, w] = await Promise.all([decided, written])
-  const [reading, kind] = r
+  const [reading, kind, art] = r
   if (!w.copy)
     notes.push(
       `The words could not be written (${w.problems.join('; ')}); showing a sample business instead.`,
@@ -173,6 +215,7 @@ export async function build(messages: string[]): Promise<BuildResult> {
       queries: q,
       about: { name: w.copy.name, kind: w.copy.kind, town: w.copy.contact.place },
       seed: seedOf(words),
+      art,
     }
   } else {
     // No words were written: the sample business, with its own photos.
@@ -209,10 +252,14 @@ export async function build(messages: string[]): Promise<BuildResult> {
       id: `b${i + 1}`,
       label: `Blocks ${i + 1}`,
       rules: `${describePlan(plan)} · ${d.type.label} type · neutral ${theme(d.colour.palette(content.brand), d.type).dark ? 'dark' : 'light'} · ${d.photo?.label ?? 'Natural'} photos`,
-      html: renderSite(c, plan, theme(d.colour.palette(content.brand), d.type), {
-        css: libraryCss,
-        grade: !!d.photo?.lowkey,
-      }),
+      // A dark version gets its own photo tokens, so drawn art comes in Surfaces' dark theme there.
+      html: darkTokens(
+        renderSite(c, plan, theme(d.colour.palette(content.brand), d.type), {
+          css: libraryCss,
+          grade: !!d.photo?.lowkey,
+        }),
+        theme(d.colour.palette(content.brand), d.type).dark,
+      ),
     }
   })
   const sites = blocks
@@ -251,11 +298,11 @@ const SLOTS = {
 } as const
 
 /** A quiet colour for drawn art, one per business: low saturation, mid tone (neutral sites). */
-function artColour(seed: string) {
+function artColour(seed: string, s: number = ART_STRENGTHS.muted) {
   let h = 0
   for (const ch of seed) h = (h * 31 + ch.charCodeAt(0)) >>> 0
   const hue = h % 360
-  const [s, l] = [0.16, 0.46]
+  const l = 0.46
   const f = (n: number) => {
     const k = (n + hue / 30) % 12
     const c = l - s * Math.min(l, 1 - l) * Math.max(-1, Math.min(k - 3, 9 - k, 1))
@@ -301,27 +348,33 @@ export async function sitePhotos(job: PhotoJob): Promise<PhotoResult> {
   for (const [slot, subject] of Object.entries(SLOTS) as [keyof typeof SLOTS, string][]) {
     const p = chosen[slot]
     if (p && found.images[p.id]) {
+      // A photo is the same in light and dark versions.
       slots[slot] = p.id
+      slots[`${slot}dk`] = p.id
       images[p.id] = found.images[p.id] ?? ''
       continue
     }
-    // Drawn art in a quiet colour, the same for the same business every time.
-    const id = `art${subject}`
-    if (!images[id]) {
-      const svg = toSvg(
-        generate({
-          style: 'underpaint',
-          seed: `${job.seed}-${subject}`,
-          color: artColour(job.seed),
-          width: 1200,
-          height: 800,
-          mood: 'calm',
-        }),
-      )
-      images[id] =
-        `data:image/svg+xml;base64,${btoa(String.fromCharCode(...new TextEncoder().encode(svg)))}`
+    // Drawn art in Jev's style and colour strength, in each version's own theme; the same for
+    // the same business every time.
+    for (const dark of [false, true]) {
+      const id = `art${subject}${dark ? 'dk' : ''}`
+      if (!images[id]) {
+        const svg = toSvg(
+          generate({
+            style: job.art.style,
+            seed: `${job.seed}-${subject}`,
+            color: artColour(job.seed, ART_STRENGTHS[job.art.strength]),
+            width: 1200,
+            height: 800,
+            mood: 'calm',
+            theme: dark ? 'dark' : 'light',
+          }),
+        )
+        images[id] =
+          `data:image/svg+xml;base64,${btoa(String.fromCharCode(...new TextEncoder().encode(svg)))}`
+      }
+      slots[`${slot}${dark ? 'dk' : ''}`] = id
     }
-    slots[slot] = id
     if (!slot.startsWith('lk')) art++
   }
   const used = new Set(Object.values(slots))

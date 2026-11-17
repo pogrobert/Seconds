@@ -136,3 +136,31 @@ loading placeholders.
 counts spaces with drawn art. Its headless Chromium lives in `tools/bench/.browsers`
 (`pnpm --filter @repo/bench browsers`), because the system cache folder was cleared twice in one
 day.
+
+## Jev chooses the drawn art (2026-11-17)
+
+- **Robert:** "let jev choose among all 12 and the colour too", and "the styles support
+  light/dark modes so jev can decide based on website".
+- **The choice:** `pickArt` asks Jev two multiple-choice questions in the call it already makes
+  while the words are written, so no time is added:
+  - which of the 12 Surfaces styles suits this organisation (each described by Surfaces' own
+    catalogue);
+  - how much colour: almost grey, muted, gentle or clear.
+  
+  The answer travels in the photo job. The 12 styles and 4 strengths are in
+  `apps/web/src/server/art.ts`; `tools/eval/src/art-styles.ts` draws them side by side.
+- **First picks:**
+
+  | Business | Style | Colour |
+  |---|---|---|
+  | Funeral directors | aquatint | almost grey |
+  | Employment law firm | aquatint | almost grey |
+  | Berlin techno club | sfumato | clear |
+  | Lake sauna, optician | papercut | muted |
+  | Beekeeper | papercut | gentle |
+  | Yoga | underpaint | muted |
+  | Tattoo studio | aquatint | almost grey |
+
+- **Light and dark:** each version's light or dark ground is already Jev's pick. A dark
+  version's photo spaces get their own tokens, and the photo step draws the art in Surfaces' dark
+  theme there. Photos are the same in both.

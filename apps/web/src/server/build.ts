@@ -2,6 +2,7 @@
 // loaded in the browser (as a call to the server), so it must import nothing server-only besides
 // what the handler alone uses.
 import { createServerFn } from '@tanstack/react-start'
+import { ART_STRENGTHS, ART_STYLES } from './art'
 import { build, type PhotoJob, sitePhotos } from './make-site'
 
 export type { BuildResult, BuiltSite, PhotoJob, PhotoResult } from './make-site'
@@ -30,6 +31,12 @@ export const findSitePhotos = createServerFn({ method: 'POST' })
         town: str(d?.about?.town, 60),
       },
       seed: str(d?.seed, 40),
+      art: {
+        style: (ART_STYLES as readonly string[]).includes(d?.art?.style)
+          ? d.art.style
+          : 'underpaint',
+        strength: d?.art?.strength in ART_STRENGTHS ? d.art.strength : 'muted',
+      },
     }
   })
   .handler(({ data }) => sitePhotos(data))
