@@ -170,7 +170,8 @@ async function commons(town: string, n: number): Promise<Candidate[]> {
     gsrlimit: '20',
     prop: 'imageinfo',
     iiprop: 'url|size|mime|extmetadata',
-    iiurlwidth: '240',
+    // Standard thumbnail widths are ready-made; other widths are drawn on request (~1 s, bench).
+    iiurlwidth: '330',
     origin: '*',
   })
   const res = await fetch(`https://commons.wikimedia.org/w/api.php?${p}`, { headers: UA }).catch(
@@ -199,7 +200,7 @@ async function commons(town: string, n: number): Promise<Candidate[]> {
       const i = pg.imageinfo?.[0]
       const m = i?.extmetadata ?? {}
       const about = plain(`${pg.title} ${text(m.ImageDescription?.value)}`)
-      if (!i || i.mime !== 'image/jpeg' || i.width < 1600 || i.width < i.height * 1.2) return []
+      if (!i || i.mime !== 'image/jpeg' || i.width < 1280 || i.width < i.height * 1.2) return []
       if (!about.includes(want)) return []
       const artist = text(m.Artist?.value).slice(0, 60) || 'Wikimedia Commons'
       const licence = text(m.LicenseShortName?.value)
@@ -207,9 +208,9 @@ async function commons(town: string, n: number): Promise<Candidate[]> {
         {
           id: `c${pg.title.replace(/[^A-Za-z0-9]+/g, '').slice(4, 40)}`,
           preview: i.thumburl,
-          full: i.thumburl.replace(/\/240px-/, '/1600px-'),
-          width: 1600,
-          height: Math.round((1600 * i.height) / i.width),
+          full: i.thumburl.replace(/\/330px-/, '/1280px-'),
+          width: 1280,
+          height: Math.round((1280 * i.height) / i.width),
           alt: pg.title.replace(/^File:|\.\w+$/g, ''),
           credit: {
             photographer: licence ? `${artist} (${licence})` : artist,
@@ -319,6 +320,56 @@ function toDataUri(buf: ArrayBuffer, type: string) {
   return `data:${type};base64,${btoa(bin)}`
 }
 
+/**
+ * Whether a photo of the town itself suits this organisation: a text-only question, so Gemini
+ * never refuses it and the photo fallback (Qwen) does not decide it (bench: Qwen put views of
+ * Lisbon on a florist).
+ */
+async function townSuits(
+  apiKey: string,
+  about: { name: string; kind: string; town: string },
+  model: string,
+): Promise<{ fits: boolean; costUsd: number }> {
+  const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+    method: 'POST',
+    headers: { authorization: `Bearer ${apiKey}`, 'content-type': 'application/json' },
+    body: JSON.stringify({
+      model,
+      temperature: 0,
+      messages: [
+        {
+          role: 'user',
+          content: `${about.name} is a ${about.kind} in ${about.town}. Would a photo of ${about.town} itself (its streets, square or buildings) suit its home page? Yes only for a council, a civic or tourist body, or a museum; no for a shop, clinic, studio, trade, firm or restaurant.`,
+        },
+      ],
+      response_format: {
+        type: 'json_schema',
+        json_schema: {
+          name: 'town',
+          strict: true,
+          schema: {
+            type: 'object',
+            additionalProperties: false,
+            required: ['fits'],
+            properties: { fits: { type: 'boolean' } },
+          },
+        },
+      },
+      usage: { include: true },
+    }),
+  }).catch(() => null)
+  const body = (await res?.json().catch(() => null)) as {
+    choices?: { message?: { content?: string } }[]
+    usage?: { cost?: number }
+  } | null
+  try {
+    const fits = (JSON.parse(body?.choices?.[0]?.message?.content ?? '') as { fits: boolean }).fits
+    return { fits: fits === true, costUsd: body?.usage?.cost ?? 0 }
+  } catch {
+    return { fits: false, costUsd: body?.usage?.cost ?? 0 }
+  }
+}
+
 export async function findPhotos(
   keys: { pixabay?: string; openrouter?: string },
   q: Slots<string>,
@@ -330,10 +381,17 @@ export async function findPhotos(
   limited = false
   limitInfo = ''
   searches = 0
-  const [found, town] = await Promise.all([
+  const model = o.model ?? 'google/gemini-2.5-flash-lite'
+  // The town question runs with the searches; town photos are only fetched and shown when it
+  // says yes (a council, not a yoga studio), which saves their previews for most businesses.
+  const [found, suits, townFound] = await Promise.all([
     Promise.all(SUBJECTS.map((s) => (keys.pixabay ? pixabay(keys.pixabay, q[s], per) : []))),
-    about.town ? commons(about.town, 3) : Promise.resolve([]),
+    about.town && keys.openrouter
+      ? townSuits(keys.openrouter, about, model)
+      : Promise.resolve({ fits: false, costUsd: 0 }),
+    about.town && keys.openrouter ? commons(about.town, 3) : Promise.resolve([]),
   ])
+  const town = suits.fits ? townFound : []
   const pools: Slots<Candidate[]> = {
     place: [...town, ...(found[0] ?? [])],
     people: found[1] ?? [],
@@ -342,15 +400,73 @@ export async function findPhotos(
   const byId = new Map(SUBJECTS.flatMap((s) => pools[s].map((c) => [c.id, c] as const)))
 
   // Without the vision model, the first matches as before (and no Commons photos, unchecked).
-  const look = () =>
-    judge(keys.openrouter ?? '', about, pools, o.model ?? 'google/gemini-2.5-flash-lite')
   let looked: { choice: Choice | null; costUsd: number } = { choice: null, costUsd: 0 }
   if (keys.openrouter && byId.size) {
-    looked = await look()
-    // One retry: an unchecked photo is how wrong pictures got in before.
+    const key = keys.openrouter
+    const first = await judge(key, about, pools, model)
+    looked = {
+      choice: first.choice ? { ...first.choice, townFits: suits.fits } : null,
+      costUsd: first.costUsd + suits.costUsd,
+    }
+    const townFits = suits.fits
+    // Gemini refuses some photo sets outright ("blocked: OTHER", the same set every time; bench,
+    // 2026-11-17), so asking again is useless. Ask once per subject instead, at the same time:
+    // the subjects without the photo it objects to come back; a subject refused again is split in
+    // halves; Qwen3-VL (answers every set, but takes 9 to 18 s) is the last resort.
     if (!looked.choice) {
-      const again = await look()
-      looked = { choice: again.choice, costUsd: looked.costUsd + again.costUsd }
+      const alone = (s: Subject): Slots<Candidate[]> => ({
+        place: [],
+        people: [],
+        detail: [],
+        [s]: pools[s],
+      })
+      const parts = await Promise.all(
+        SUBJECTS.filter((s) => pools[s].length).map(async (s) => {
+          const first = await judge(key, about, alone(s), model)
+          if (first.choice) return { s, ...first }
+          // Still refused: one photo in this subject is the cause. Ask about each half at the same
+          // time (about 2 s); Qwen (9 to 18 s) only if both halves are refused.
+          const half = Math.ceil(pools[s].length / 2)
+          const halves = [pools[s].slice(0, half), pools[s].slice(half)].filter((h) => h.length)
+          const tries = await Promise.all(
+            halves.map((h) => judge(key, about, { ...alone(s), [s]: h }, model)),
+          )
+          let costUsd = first.costUsd + tries.reduce((n, t) => n + t.costUsd, 0)
+          const ok = tries.flatMap((t) => (t.choice ? [t.choice] : []))
+          if (ok.length) {
+            const choice: Choice = {
+              place: [],
+              people: [],
+              detail: [],
+              dark: { place: '', people: '', detail: '' },
+              townFits: false,
+            }
+            choice[s] = ok.flatMap((c) => c[s]).slice(0, 3)
+            choice.dark[s] = ok.map((c) => c.dark[s]).find(Boolean) ?? ''
+            return { s, choice, costUsd }
+          }
+          const last = await judge(key, about, alone(s), 'qwen/qwen3-vl-30b-a3b-instruct')
+          costUsd += last.costUsd
+          return { s, choice: last.choice, costUsd }
+        }),
+      )
+      const costUsd = looked.costUsd + parts.reduce((n, x) => n + x.costUsd, 0)
+      if (parts.some((x) => x.choice)) {
+        // A subject that no model would look at stays empty: unchecked photos are what this avoids.
+        const merged: Choice = {
+          place: [],
+          people: [],
+          detail: [],
+          dark: { place: '', people: '', detail: '' },
+          townFits,
+        }
+        for (const x of parts)
+          if (x.choice) {
+            merged[x.s] = x.choice[x.s]
+            merged.dark[x.s] = x.choice.dark[x.s]
+          }
+        looked = { choice: merged, costUsd }
+      } else looked = { choice: null, costUsd }
     }
   }
   const choice: Choice = looked.choice ?? {

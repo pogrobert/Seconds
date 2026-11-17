@@ -130,7 +130,7 @@ function prompt(words: string): string {
  * counts as invented unless the owner's words contain it.
  */
 const CLAIMS =
-  /\b(deliver(?:y|ed|s)? to your door|home delivery|free delivery|shipping|ships? (?:worldwide|nationwide|anywhere)|award[- ]winning|awards?|highly rated|reviews?|five[- ]star|certified|accredited|since \d{4}|\d+\+? years|years of experience|online (?:form|booking)|book online|free (?:parking|wifi|consultation|quotes?))\b/gi
+  /\b(deliver(?:y|ed|s)? to your door|home delivery|free delivery|shipping|ships? (?:worldwide|nationwide|anywhere)|award[- ]winning|awards?|highly rated|five[- ]stars?|certified|accredited|since \d{4}|\d+\+? years|years of experience|online (?:form|booking)|book online|free (?:parking|wifi|consultation|quotes?))\b/gi
 
 export function checkSiteCopy(c: SiteCopy, words = ''): string[] {
   const L = SITE_LIMITS

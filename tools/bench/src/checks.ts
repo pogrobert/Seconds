@@ -67,7 +67,7 @@ export function factProblems(brief: string, page: string): string[] {
     if (!b.includes(norm(v))) out.add(`"${v}" is not in the brief`)
   }
   const CLAIMS =
-    /\b(award[- ]winning|awards?|rated|reviews?|five[- ]stars?|certified|accredited|since \d{4}|\d+\+? years|years of experience|online (?:form|booking)|book online|guarantee[ds]?|free (?:parking|wifi|consultation|quote))\b/gi
+    /\b(award[- ]winning|awards?|rated|five[- ]stars?|certified|accredited|since \d{4}|\d+\+? years|years of experience|online (?:form|booking)|book online|guarantee[ds]?|free (?:parking|wifi|consultation|quote))\b/gi
   // Compare stems: the owner's "guarantee" covers the page's "guaranteed".
   for (const m of page.matchAll(CLAIMS))
     if (!b.includes(norm(m[0]).replace(/(ed|d|s)$/, '')))

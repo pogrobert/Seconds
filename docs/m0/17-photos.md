@@ -62,3 +62,37 @@ Pexels still isn't issuing API keys. Unsplash stays out: its terms require hotli
 - **Duplicates.** Pixabay sometimes has the same photo under two ids, so it can appear twice.
 - **Small towns.** Not measured yet: how often Commons has good photos of a small town.
 - **Later.** The owner's own photos, from uploads or their website.
+
+## The failing photo check, found and fixed (2026-11-17, measured)
+
+- **Cause.** Google's Gemini refuses some photo sets outright ("Gemini blocked the response:
+  OTHER"). The same set is refused every time, so asking again was useless. All 16 tries with
+  physio's and florist's photos were refused. Gemini 2.5 Flash, the larger model, refuses them
+  too. Gemini is also sometimes "rate-limited upstream" (HTTP 429).
+- **Fallback models tried on those sets:**
+  - Qwen3-VL-30B answers every set, $0.0004–0.0008, but takes 9–18 s.
+  - GPT-5 Nano answers too, but takes 38–51 s.
+- **Fix** (`apps/web/src/server/photos.ts`). When the whole set is refused:
+  1. Ask about each subject (place, people, detail) on its own, all at once.
+  2. Split a subject that is refused again into two halves, asked at once.
+  3. Use Qwen only when both halves are refused.
+  4. Leave a subject that no model will look at empty: unchecked photos are what this avoids.
+- **The town question is now separate.** "Does a photo of the town suit this organisation?" is a
+  text-only question, asked while the searches run, so it can't be refused and Qwen doesn't
+  decide it. Before, Qwen put views of Lisbon on a florist.
+- **Wikimedia previews are skipped unless the answer is yes,** and they use Wikimedia's
+  ready-made thumbnail sizes: 330px to check, 1280px for the page. The 240px and 1600px sizes
+  used before were drawn on request and took about 1 s.
+
+**Core runs (30 briefs):**
+
+| | before | Qwen fallback | + town question first | + halves, town search in parallel |
+|---|---|---|---|---|
+| "photo check failed" notes | 2 | 0 | 0 | 0 |
+| median build | 5.4 s | 6.1 s | 4.9 s | 5.0 s |
+| slowest 10% | 6.1 s | 7.4 s | 13.3 s | 7.2 s |
+| median photo time | – | 5.1 s | 3.9 s | 4.1 s |
+| cost per site | $0.0020 | $0.0020 | $0.0019 | $0.0019 |
+
+Zamość's council keeps its own town photos (3.8 s for photos). Brno's council got none in the
+last run: the check chose other photos.
