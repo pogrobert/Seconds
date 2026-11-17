@@ -25,7 +25,8 @@ export type SiteCopy = {
 }
 
 export const SITE_LIMITS = {
-  name: 40,
+  // Long enough for a society's full name (edge bench: 125 characters were cut to 40).
+  name: 130,
   kind: 40,
   tagline: 40,
   headline: 48,
@@ -76,7 +77,8 @@ function schema() {
       items: {
         type: 'array',
         minItems: 3,
-        maxItems: 8,
+        // Every item an owner lists (edge bench: a 15-dish menu was cut to 8).
+        maxItems: 30,
         items: obj({ name: str(L.offerName), detail: str(L.offerDetail), price: str(L.price) }),
       },
     }),
@@ -104,14 +106,17 @@ function prompt(words: string): string {
     '- British English. Plain, warm, specific words in the tone the owner asks for. No clichés such as "elevate", "unlock", "nestled" or "passionate".',
     '- Never invent facts. Prices, opening hours, addresses, phone numbers, emails, years, awards, staff names and review counts appear only if the owner wrote them; otherwise leave those fields as empty strings and do not mention them in other fields either.',
     '- Never move the organisation somewhere else: name only the place the owner gave, or no place at all.',
-    `- name: the name exactly as given; if none, a short, plausible, ordinary name (at most ${L.name} characters).`,
+    '- Promise nothing the owner did not: no delivery, shipping, online shop or checkout, online booking, parking, guarantees or opening times of your own. If the owner asks for something a simple website cannot do (such as taking payments), leave it out.',
+    "- If the owner's words contradict each other, leave out everything they contradict, and do not mention the contradiction. Example: 'closed every day and open 24 hours' → say nothing about opening times; 'quiet, very loud' → describe neither.",
+    '- Never claim to be the best, finest, number one or leading, even if the owner does: say what they actually do instead.',
+    `- name: the name exactly as given, never shortened; if none, a short, plausible, ordinary name.`,
     `- kind: what it is, in a few plain words, such as "tattoo studio" or "county council" (at most ${L.kind}).`,
     `- tagline: a short label such as "Tattoo studio in Leeds" or just "Tattoo studio" when no place is given (at most ${L.tagline}).`,
     `- headline: the main promise, short and memorable (at most ${L.headline}).`,
     `- subhead: one sentence under the headline (at most ${L.subhead}).`,
     `- about: a paragraph in the organisation's own voice ("we") (at most ${L.about}).`,
     `- reasonsTitle and reasons: a short heading such as "Why choose us" that suits this organisation, and three reasons; title at most ${L.itemTitle}, body at most ${L.itemBody}.`,
-    `- offer: what it offers. title is the section name people would expect here, such as "Services", "Menu", "Treatments", "What we do" (at most ${L.offerTitle}); items are 3 to 8 real things such an organisation offers, each with a short detail. price: only if the owner gave it, else "".`,
+    `- offer: what it offers. title is the section name people would expect here, such as "Services", "Menu", "Treatments", "What we do" (at most ${L.offerTitle}); items: every item the owner lists, in their order, with names and prices exactly as written (up to 30). If the owner lists none, 3 to 6 general kinds of thing such an organisation offers, as categories ("Scented candles", "Boiler repairs"), never invented product names, flavours or features. detail: a short plain description, or "" for a listed item the owner did not describe. price: only if the owner gave it, else "".`,
     '- contact: address, hours, phone, email exactly as the owner gave them, else "". place: the town or city the owner names, also when it is only part of the name ("Zamość City Council" → "Zamość"), else "".',
     `- cta: a closing call to action that fits (book, visit, call, get in touch, donate, enquire); headline at most ${L.ctaHeadline}, subhead at most ${L.ctaSubhead}, button label at most ${L.ctaLabel}.`,
     `- photos: three short English stock-photo searches (2 to 4 words, at most ${L.photo} characters) for things a camera can see in this organisation's own world. No place names, no brand names, no abstract words (not "community", "information", "quality"): place = the room or setting where it works, such as "bakery counter" or "dental surgery"; people = someone doing its work, such as "baker kneading dough"; detail = a close-up object or material, such as "sourdough loaf".`,
@@ -125,7 +130,7 @@ function prompt(words: string): string {
  * counts as invented unless the owner's words contain it.
  */
 const CLAIMS =
-  /\b(award[- ]winning|awards?|highly rated|reviews?|five[- ]star|certified|accredited|since \d{4}|\d+\+? years|years of experience|online (?:form|booking)|book online|free (?:parking|wifi|consultation|quotes?))\b/gi
+  /\b(deliver(?:y|ed|s)? to your door|home delivery|free delivery|shipping|ships? (?:worldwide|nationwide|anywhere)|award[- ]winning|awards?|highly rated|reviews?|five[- ]star|certified|accredited|since \d{4}|\d+\+? years|years of experience|online (?:form|booking)|book online|free (?:parking|wifi|consultation|quotes?))\b/gi
 
 export function checkSiteCopy(c: SiteCopy, words = ''): string[] {
   const L = SITE_LIMITS
@@ -136,6 +141,16 @@ export function checkSiteCopy(c: SiteCopy, words = ''): string[] {
     for (const m of new Set([...all.matchAll(CLAIMS)].map((x) => x[0].toLowerCase())))
       if (!said.includes(m)) p.push(`remove "${m}": the owner never said it`)
   }
+  // A simple website takes no payments, whatever the owner asks (edge bench: candle shop).
+  const pay = JSON.stringify({ ...c, photos: undefined }).match(
+    /\b(check ?out|card payments?|pay (?:securely|online|by card)|add [\w ]{0,24}to (?:a |your |the )?(?:shopping )?(?:basket|cart)|(?:your|a|the) (?:shopping )?(?:basket|cart)\b|shop now|buy now|order online|online (?:shop|store))/i,
+  )
+  if (pay) p.push(`remove "${pay[0]}": this website cannot take orders or payments`)
+  // Superlatives are never stated as fact, even the owner's own (edge bench: "best pizza in town").
+  const boast = JSON.stringify({ ...c, photos: undefined }).match(
+    /\b(?:the )?(?:best|finest|greatest|number one|no\.? ?1|#1|leading)\b[^."]{0,40}\b(?:in|of|around)\b/i,
+  )
+  if (boast) p.push(`remove "${boast[0]}": say what they do instead of claiming to be the best`)
   const over = (field: string, v: string, max: number) => {
     if (v.length > max) p.push(`${field} is ${v.length} characters; the limit is ${max}`)
   }

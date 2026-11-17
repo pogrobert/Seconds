@@ -42,6 +42,8 @@ export type Entry = {
   includesHeader?: boolean
   /** Other sections whose content this block already shows; the page leaves those out. */
   covers?: Kind[]
+  /** For a block that covers the offer: how many offer items it shows. */
+  showsItems?: number
 }
 
 /**
@@ -62,13 +64,21 @@ const COVERS: Record<string, Kind[]> = {
   'shadcnui/contact-02': ['cta'],
 }
 
-export const REGISTRY: Entry[] = [...core, ...tailark, ...shadcnui, ...efferd].map((e) =>
-  COVERS[e.id] ? { ...e, covers: COVERS[e.id] } : e,
-)
+/** Blocks that cover the offer but show only part of a long list (the bench's 15-dish menu). */
+const SHOWS_ITEMS: Record<string, number> = {
+  'tailark/hero-veil-one': 6,
+  'tailark/hero-veil-three': 8,
+}
+
+export const REGISTRY: Entry[] = [...core, ...tailark, ...shadcnui, ...efferd].map((e) => ({
+  ...e,
+  ...(COVERS[e.id] ? { covers: COVERS[e.id] } : {}),
+  ...(SHOWS_ITEMS[e.id] ? { showsItems: SHOWS_ITEMS[e.id] } : {}),
+}))
 
 /** Whether a block can be drawn for this content. */
 export const fits = (e: Entry, c: SiteContent) =>
   (e.needs ?? []).every((k) => {
     const v = c[k]
     return Array.isArray(v) && v.length > 0
-  })
+  }) && !(e.showsItems && c.prices.flatMap((g) => g.items).length > e.showsItems)

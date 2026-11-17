@@ -139,3 +139,36 @@ Three sets, chosen with `--set`:
   **Fix:** searches now send a User-Agent, and a refusal without rate-limit headers is retried
   once after 1.5 s. The same 8 builds then had 0 refusals, against 6 of 8 just before.
 - **The photo check failed twice** on 2 of 40 builds. Cause still not found.
+
+## Edge failures fixed (2026-11-17, measured)
+
+| Edge case | Before | After |
+|---|---|---|
+| 15-dish menu | 8 dishes kept | all 15, with every price, in all three versions |
+| Long society name | cut to 40 characters | kept whole; wraps on desktop and phone |
+| "Quiet, very loud, closed every day, open 24 hours" | repeated as fact | no opening times, no contradiction |
+| Online candle shop with checkout | made-up products, "delivered to your door", then "checkout and card payment" | plain categories, "View collection", no payment words |
+| "Best pizza in town 🔥" | stated as fact | not claimed |
+
+**How:**
+
+- **The word schema** allows up to 30 offer items. Listed items are kept exactly, with their
+  prices. When the owner lists none, the model writes general categories, never made-up product
+  names.
+- **New prompt rules:** promise nothing the owner didn't; leave contradictions out (with a worked
+  example); never claim to be the best.
+- **The word check** rejects, and asks again about:
+  - delivery or shipping promises the owner didn't make;
+  - payment and checkout words (a simple website takes no payments);
+  - superlatives such as "best … in town".
+- **The library** skips the two heroes that show only 6 or 8 offer items when the list is longer.
+
+**Core regression run (all 30):** 0 failures, 0 page problems, 0 fact flags, every site with
+photos. Median 5.4 s (it was 4.1 s), slowest 10% 6.1 s, $0.0020 per site. The stricter checks
+send more words back for a second try, which is the likely reason it's slower.
+
+**Still open:**
+
+- **Long names.** The name fills the menu bar; a short display name for names over about 40
+  characters would help.
+- **The photo check.** It still fails twice in a row now and then (2 of 30: physio, florist).
