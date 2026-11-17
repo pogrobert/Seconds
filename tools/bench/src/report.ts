@@ -27,9 +27,64 @@ export function reportHtml(
   }
   const stat = (label: string, v: string, bad = false) =>
     `<div class="stat${bad ? ' bad' : ''}"><b>${v}</b><span>${label}</span></div>`
+  // How bad a brief went: a failure outweighs everything, then invented facts, then the rest.
+  const badness = (r: BriefRecord) =>
+    r.ok
+      ? r.facts.length * 3 +
+        (r.notes?.length ?? 0) +
+        r.sites.reduce((n, x) => n + x.problems.desktop.length + x.problems.phone.length, 0)
+      : 100
+  const worst = [...records]
+    .filter((r) => badness(r) > 0)
+    .sort((a, b) => badness(b) - badness(a))
+    .slice(0, 15)
+  const worstHtml = worst.length
+    ? `<h3>Worst first</h3><ol class="worst">${worst
+        .map((r) => {
+          const why = r.ok
+            ? [
+                r.facts.length ? `${r.facts.length} invented-fact flags` : '',
+                r.notes?.length ? r.notes.join(' ') : '',
+                r.sites.some((x) => x.problems.desktop.length + x.problems.phone.length)
+                  ? 'page problems'
+                  : '',
+              ]
+                .filter(Boolean)
+                .join(' · ')
+            : `failed: ${r.error ?? ''}`
+          return `<li><a href="#${r.brief.id}">${esc(r.brief.id)}</a> <span>${esc(why)}</span></li>`
+        })
+        .join('')}</ol>`
+    : '<h3>Worst first</h3><p>Nothing flagged.</p>'
+  // Results by tag: kind of business, way of asking, place, language.
+  const tags = new Map<string, BriefRecord[]>()
+  for (const r of records) for (const t of r.brief.tags) tags.set(t, [...(tags.get(t) ?? []), r])
+  const tagRows = [...tags]
+    .filter(([t]) => !['wide', 'edge'].includes(t))
+    .map(([t, rs]) => {
+      const ms = rs
+        .filter((r) => r.ok)
+        .map((r) => r.ms?.total ?? 0)
+        .sort((a, b) => a - b)
+      return {
+        t,
+        n: rs.length,
+        failed: rs.filter((r) => !r.ok).length,
+        flagged: rs.filter((r) => badness(r) > 0).length,
+        ms: ms[Math.floor(ms.length / 2)] ?? 0,
+      }
+    })
+    .sort((a, b) => b.flagged / b.n - a.flagged / a.n || b.n - a.n)
+  const byTag = `<details class="bytag"><summary>Results by tag (${tagRows.length})</summary><table><tr><th>tag</th><th>briefs</th><th>flagged</th><th>failed</th><th>median time</th></tr>${tagRows
+    .map(
+      (x) =>
+        `<tr><td>${esc(x.t)}</td><td>${x.n}</td><td>${x.flagged}</td><td>${x.failed}</td><td>${(x.ms / 1000).toFixed(1)} s</td></tr>`,
+    )
+    .join('')}</table></details>`
   const rows = records
     .map((r) => {
-      const head = `<h2 id="${r.brief.id}">${esc(r.brief.id)} <small>${r.brief.tags.join(' · ')}</small></h2><p class="words">“${esc(r.brief.words)}”</p>`
+      const expect = (r.brief as { expect?: string }).expect
+      const head = `<h2 id="${r.brief.id}">${esc(r.brief.id)} <small>${r.brief.tags.join(' · ')}</small></h2><p class="words">“${esc(r.brief.words)}”</p>${expect ? `<p class="expect">Good result: ${esc(expect)}</p>` : ''}`
       if (!r.ok) return `<section>${head}<p class="bad">Failed: ${esc(r.error ?? '')}</p></section>`
       const ms = r.ms
       const info = [
@@ -69,6 +124,10 @@ h1{margin:0 0 4px;font-size:22px}h2{margin:0;font-size:16px}h2 small{color:var(-
 .stat.bad b,.bad{color:var(--bad)}
 section{border-top:1px solid var(--line);padding:18px 0}
 .words{margin:4px 0;font-style:italic}.info{color:var(--muted);margin:4px 0;font-size:12px}
+.worst{margin:4px 0 16px;padding-left:22px}.worst span{color:var(--muted);font-size:12px}
+.bytag{margin:0 0 20px}.bytag table{border-collapse:collapse;font-size:12px;margin-top:6px}.bytag td,.bytag th{padding:2px 14px 2px 0;text-align:left}
+.expect{margin:2px 0;font-size:12px;color:#1a5d2c}
+h3{font-size:15px;margin:8px 0 4px}
 .flags{margin:6px 0;padding-left:18px;color:var(--bad);font-size:12px;columns:2}
 .sites{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:10px}
 figure{margin:0;position:relative}figure img{width:100%;border:1px solid var(--line);border-radius:6px;display:block}
@@ -85,6 +144,8 @@ ${stat('median photo time', `${(s.photosMsMedian / 1000).toFixed(1)} s`)}${stat(
 ${stat('page problems', `${s.pageProblems}`, s.pageProblems > 0)}${stat('fact flags', `${s.factFlags}`, s.factFlags > 0)}
 ${stat('sites with no photo', `${s.noPhotoSites}`)}${stat('photos shared across briefs', `${s.sharedPhotos}`, s.sharedPhotos > 0)}
 </div>
+${worstHtml}
+${byTag}
 ${shared.length ? `<p class="bad">Same photo for different briefs: ${shared.map((x) => `${esc(x.photo)} (${x.briefs.join(', ')})`).join('; ')}</p>` : ''}
 ${rows}
 </html>`

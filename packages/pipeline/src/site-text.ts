@@ -46,7 +46,8 @@ export const SITE_LIMITS = {
 
 // The schema allows a third more than the prompt's limit: a hard cap at the limit stops the model
 // mid-word ("a warm,-f"); checkSiteCopy then asks for a shorter version instead.
-const str = (max: number) => ({ type: 'string', maxLength: Math.round(max * 1.34) })
+const capOf = (max: number) => Math.round(max * 1.34)
+const str = (max: number) => ({ type: 'string', maxLength: capOf(max) })
 const obj = (props: Record<string, unknown>) => ({
   type: 'object',
   additionalProperties: false,
@@ -154,9 +155,11 @@ export function checkSiteCopy(c: SiteCopy, words = ''): string[] {
  * The schema's length cap can stop the model mid-word ("a warm,-f"). A paragraph that does not end
  * like a sentence is cut back to its last full sentence.
  */
-export function cutToSentence(s: string): string {
+export function cutToSentence(s: string, cap = 0): string {
   const t = s.trim()
-  if (!t || /[.!?…"”')]$/.test(t)) return t
+  // Only text that reached the schema's cap was stopped by it; a short phrase without a full
+  // stop is finished (the bench found "…" added to whole phrases).
+  if (!t || /[.!?…"”')]$/.test(t) || (cap && t.length < cap)) return t
   const end = Math.max(...['. ', '! ', '? '].map((m) => t.lastIndexOf(m)))
   return end > t.length / 3 ? t.slice(0, end + 1) : t.replace(/[\s,;:-]*\S*$/, '…')
 }
@@ -178,9 +181,12 @@ function fitLengths(c: SiteCopy): SiteCopy {
 function wholeSentences(c: SiteCopy): SiteCopy {
   return {
     ...c,
-    subhead: cutToSentence(c.subhead),
-    about: cutToSentence(c.about),
-    reasons: c.reasons.map((r) => ({ ...r, body: cutToSentence(r.body) })),
+    subhead: cutToSentence(c.subhead, capOf(SITE_LIMITS.subhead)),
+    about: cutToSentence(c.about, capOf(SITE_LIMITS.about)),
+    reasons: c.reasons.map((r) => ({
+      ...r,
+      body: cutToSentence(r.body, capOf(SITE_LIMITS.itemBody)),
+    })),
   }
 }
 

@@ -48,7 +48,8 @@
   const key = (r) => `${r.a}|${r.b}|${r.brief}|${r.site}`
 
   async function load() {
-    RUNS = await (await fetch('/api/runs')).json()
+    // Only core runs are rated; the wide and edge sets are for the automatic checks.
+    RUNS = (await (await fetch('/api/runs')).json()).filter((r) => !r.summary.set || r.summary.set === 'core')
     RATINGS = await (await fetch('/api/ratings')).json()
     for (const sel of [$('ra'), $('rb')])
       sel.innerHTML = RUNS.map((r) => `<option>${r.summary.runId}</option>`).join('')

@@ -185,7 +185,7 @@ export async function build(messages: string[]): Promise<BuildResult> {
     if (!env.PIXABAY_API_KEY) notes.push('No PIXABAY_API_KEY, so the page has no photos.')
     else if (found?.limited)
       notes.push(
-        'Pixabay limits searches to 100 a minute and that limit was reached, so the page has no photos. Try again in a minute.',
+        `Pixabay limits searches to 100 a minute and that limit was reached, so the page has no photos. Try again in a minute. (${found.limitInfo})`,
       )
     else notes.push('No photo fitted this business, so the page has none.')
   } else {

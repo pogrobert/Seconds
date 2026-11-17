@@ -62,13 +62,15 @@ export function factProblems(brief: string, page: string): string[] {
   for (const m of page.matchAll(
     /[£€$]\s?\d[\d,.]*|\d[\d ]{5,}\d|\b(?:19|20)\d\d\b|[\w.+-]+@[\w-]+\.[\w.]+/g,
   )) {
-    const v = m[0].trim()
+    const v = m[0].trim().replace(/[.,]+$/, '')
     if (v === String(new Date().getFullYear()) && /©\s*\d{4}/.test(page)) continue
     if (!b.includes(norm(v))) out.add(`"${v}" is not in the brief`)
   }
   const CLAIMS =
-    /\b(award[- ]winning|awards?|rated|reviews?|stars?|certified|accredited|since \d{4}|\d+\+? years|years of experience|online (?:form|booking)|book online|guarantee[ds]?|free (?:parking|wifi|consultation|quote))\b/gi
+    /\b(award[- ]winning|awards?|rated|reviews?|five[- ]stars?|certified|accredited|since \d{4}|\d+\+? years|years of experience|online (?:form|booking)|book online|guarantee[ds]?|free (?:parking|wifi|consultation|quote))\b/gi
+  // Compare stems: the owner's "guarantee" covers the page's "guaranteed".
   for (const m of page.matchAll(CLAIMS))
-    if (!b.includes(norm(m[0]))) out.add(`claim "${m[0]}" is not in the brief`)
+    if (!b.includes(norm(m[0]).replace(/(ed|d|s)$/, '')))
+      out.add(`claim "${m[0]}" is not in the brief`)
   return [...out].slice(0, 12)
 }

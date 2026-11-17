@@ -29,6 +29,7 @@ export type Found = {
   ms: number
   /** Pixabay refused a search for going over its rate limit (100 a minute). */
   limited: boolean
+  limitInfo: string
   /** How the photos were chosen, for the build page's notes. */
   judged: boolean
   commons: number
@@ -60,6 +61,7 @@ type Hit = {
   user: string
   imageWidth: number
   imageHeight: number
+  previewURL: string
   webformatURL: string
   largeImageURL: string
 }
@@ -89,6 +91,9 @@ function relevant(hits: Hit[], subject: string): Hit[] {
 /** Recent searches, so a repeated build costs no requests (Pixabay allows 100 a minute). */
 const cache = new Map<string, Hit[]>()
 let limited = false
+/** What Pixabay said when it refused, for the build's note. */
+let limitInfo = ''
+let searches = 0
 
 async function search(key: string, q: string): Promise<Hit[]> {
   const cached = cache.get(q)
@@ -102,8 +107,21 @@ async function search(key: string, q: string): Promise<Hit[]> {
     min_width: '1280',
     per_page: '30',
   })
-  const res = await fetch(`https://pixabay.com/api/?${p}`).catch(() => null)
-  if (res?.status === 429) limited = true
+  searches++
+  const get = () => fetch(`https://pixabay.com/api/?${p}`, { headers: UA }).catch(() => null)
+  let res = await get()
+  // A 429 without Pixabay's rate-limit headers is not its 100-a-minute limit but a refusal in
+  // front of it (bench, 2026-11-17: 4 to 6 searches a build were refused): wait and ask once more.
+  if (res?.status === 429 && !res.headers.get('x-ratelimit-limit')) {
+    await new Promise((r) => setTimeout(r, 1500))
+    searches++
+    res = await get()
+  }
+  if (res?.status === 429) {
+    limited = true
+    const h = (k: string) => res.headers.get(`x-ratelimit-${k}`) ?? '?'
+    limitInfo = `${searches} searches this build; Pixabay: limit ${h('limit')}, remaining ${h('remaining')}, resets in ${h('reset')} s; server ${res.headers.get('server') ?? '?'}`
+  }
   if (!res?.ok) return []
   const body = (await res.json().catch(() => null)) as { hits?: Hit[] } | null
   const hits = body?.hits ?? []
@@ -115,9 +133,8 @@ async function search(key: string, q: string): Promise<Hit[]> {
 /** The phrase, then shorter versions of it, until a search finds a few that match. */
 async function pixabay(key: string, q: string, n: number): Promise<Candidate[]> {
   const ws = words(q)
-  const tries = [q, ws.slice(0, 2).join(' '), ws[0] ?? q].filter(
-    (t, i, all) => t && all.indexOf(t) === i,
-  )
+  // At most two searches per subject: three hit Pixabay's 100-a-minute limit in the bench.
+  const tries = [q, ws.slice(0, 2).join(' ')].filter((t, i, all) => t && all.indexOf(t) === i)
   let hits: Hit[] = []
   for (const t of tries) {
     hits = relevant(await search(key, t), q)
@@ -125,7 +142,9 @@ async function pixabay(key: string, q: string, n: number): Promise<Candidate[]> 
   }
   return hits.slice(0, n).map((h) => ({
     id: `p${h.id}`,
-    preview: h.webformatURL.replace('_640', '_180'),
+    // The 150px preview comes from Pixabay's CDN; webformat links (pixabay.com/get) seem to count
+    // toward the 100-a-minute limit (bench, 2026-11-17).
+    preview: h.previewURL,
     full: h.largeImageURL,
     width: h.imageWidth,
     height: h.imageHeight,
@@ -309,6 +328,8 @@ export async function findPhotos(
   const per = o.perSubject ?? 6
   const t0 = performance.now()
   limited = false
+  limitInfo = ''
+  searches = 0
   const [found, town] = await Promise.all([
     Promise.all(SUBJECTS.map((s) => (keys.pixabay ? pixabay(keys.pixabay, q[s], per) : []))),
     about.town ? commons(about.town, 3) : Promise.resolve([]),
@@ -400,6 +421,7 @@ export async function findPhotos(
     images,
     ms: Math.round(performance.now() - t0),
     limited,
+    limitInfo,
     judged: !!looked.choice,
     commons: wanted.filter((id) => id.startsWith('c') && images[id]).length,
     costUsd: looked.costUsd,

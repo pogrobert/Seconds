@@ -17,6 +17,26 @@ pnpm --filter @repo/bench serve
 The second command starts a small server. Then open http://127.0.0.1:8791 for the newest report,
 or http://127.0.0.1:8791/rate.html to rate runs blind. `--only dentist,plumber` runs a few briefs.
 
+Three sets, chosen with `--set`:
+
+| Set | Briefs | Used for | Default |
+|---|---|---|---|
+| `core` | 30 (`src/briefs.ts`) | blind rating by Robert, and the checks | all 30 |
+| `wide` | 195 (`src/wide.ts`) | the checks only | a sample of 40, a different 40 each day (`--sample`, `--seed`) |
+| `edge` | 16 (`src/edge.ts`) | briefs built to break things; each says what a good result does | all 16 |
+
+- **How the wide set is made:** 60 kinds of business across shops, trades, health, food, civic,
+  faith, education, culture, clubs, sport, freelancers, firms, farms, pets, events, nightlife and
+  funerals. Each appears in three of five ways of asking: one word, normal, detailed with facts,
+  messy, or with a tone. The place rotates between a big city, a small town and none. 15 more
+  briefs are hand-written in other languages.
+- **Why the wide set is sampled:** every build fetches stock photos, and Pixabay asks to be told
+  before bulk use.
+- **What the report adds:** "worst first" (failures, then invented facts, then the rest) and
+  results by tag (area, way of asking, place, language).
+- **Rating:** the rating page offers core runs only.
+- **Pixabay's limit:** when a build hits it, the runner waits a minute and builds once more.
+
 ## What it does
 
 - **Briefs** (`src/briefs.ts`): 30 fixed briefs with tags.
@@ -83,3 +103,39 @@ or http://127.0.0.1:8791/rate.html to rate runs blind. `--only dentist,plumber` 
   the same code use the same blocks. Run against run compares words and photos. To rate the blocks
   themselves, a run would need a different seed.
 - **No vision score for photo fit yet.** Robert's ratings are the measure of taste.
+
+## First edge run (16 briefs, 2026-11-17, measured)
+
+- **The code checks:** no failures and no page problems. Median time 5.4 s, $0.0019 per site.
+- **Read by eye against each "good result":**
+  - **Pass:** the prompt injection (a bakery, no poem), the Arabic restaurant, the funeral
+    directors, the abuse charity's words, the all-caps plumber.
+  - **Fails:**
+    - **Long menu.** A 15-dish menu keeps only 8 dishes, because the word schema allows at most 8
+      offer items.
+    - **Contradiction.** "Closed every day but always open" is repeated as if it were true.
+    - **Online candle shop.** Made-up candle products and "delivered to your door".
+    - **Emoji pizza.** "The best pizza in town" is stated as fact.
+    - **Long name.** Shortened to 40 characters.
+  - **A false alarm in the fact check.** The owner's own "guarantee" was flagged. The check now
+    compares word stems.
+- **Pixabay's limit.** It was hit on 6 of 16 builds, one at a time. A build now makes at most two
+  searches per subject (it was three), and the runner waits out the limit.
+
+## First wide sample (40 of 195, 2026-11-17, measured)
+
+- **The numbers:** no failures, and every site had photos. Median time 5.9 s, slowest 10% 7.8 s,
+  $0.0018 per site. 30 page problems and 3 fact flags.
+- **Text ending in "…" on 4 sites, a bug.** Any text without a full stop was treated as cut off,
+  so whole phrases got an "…". Now only text that reached the schema's cap is cut.
+- **Two false alarms in the fact check:** "£40," (a trailing comma) and "stars" ("under the
+  stars"). Both are fixed.
+- **Pixabay refusals (429) on 14 of 40 builds.** They were not the 100-a-minute limit:
+  - The refusals carry none of Pixabay's rate-limit headers.
+  - A build makes only 4 to 6 searches. Measured from Node, one photo search uses 3 of the 100,
+    and the previews and downloads from the CDN count for nothing.
+  - Something in front of Pixabay refuses requests from the Cloudflare runtime.
+  
+  **Fix:** searches now send a User-Agent, and a refusal without rate-limit headers is retried
+  once after 1.5 s. The same 8 builds then had 0 refusals, against 6 of 8 just before.
+- **The photo check failed twice** on 2 of 40 builds. Cause still not found.

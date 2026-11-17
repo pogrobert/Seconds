@@ -14,7 +14,9 @@ import { fileURLToPath } from 'node:url'
 import { chromium } from 'playwright'
 import { BRIEFS, type Brief } from './briefs.ts'
 import { factProblems, pageChecks } from './checks.ts'
+import { EDGE } from './edge.ts'
 import { reportHtml } from './report.ts'
+import { WIDE } from './wide.ts'
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const arg = (name: string, fallback = '') => {
@@ -27,7 +29,28 @@ const only = arg('only').split(',').filter(Boolean)
 // One at a time: Pixabay allows 100 searches a minute and a build can make up to nine; two at a
 // time hit the limit in 14 of 30 builds (baseline run, 2026-11-17).
 const concurrency = Number(arg('concurrency', '1'))
-const briefs = only.length ? BRIEFS.filter((b) => only.includes(b.id)) : BRIEFS
+// Sets: core (rated blind), wide (checks only; a rotating sample, since every build fetches stock
+// photos and Pixabay asks to be told before bulk use), edge (built to break things).
+const set = arg('set', 'core')
+const SETS: Record<string, Brief[]> = { core: BRIEFS, wide: WIDE, edge: EDGE }
+const pool = SETS[set]
+if (!pool) throw new Error(`--set must be one of ${Object.keys(SETS).join(', ')}`)
+// The wide set is sampled by default: 40 briefs, a different 40 each day unless --seed is given.
+const sample = Number(arg('sample', set === 'wide' ? '40' : '0'))
+const seed = arg('seed', new Date().toISOString().slice(0, 10))
+function sampled(xs: Brief[], n: number, key: string): Brief[] {
+  const score = (id: string) => {
+    let h = 2166136261
+    for (const ch of `${key}:${id}`) h = Math.imul(h ^ ch.charCodeAt(0), 16777619)
+    return h >>> 0
+  }
+  return [...xs].sort((a, b) => score(a.id) - score(b.id)).slice(0, n)
+}
+const briefs = only.length
+  ? [...BRIEFS, ...WIDE, ...EDGE].filter((b) => only.includes(b.id))
+  : sample > 0
+    ? sampled(pool, sample, seed)
+    : pool
 
 type Site = { id: string; label: string; rules: string; html: string }
 export type BuildResult = {
@@ -64,7 +87,7 @@ export type BriefRecord = {
 }
 
 const stamp = new Date().toISOString().slice(0, 16).replace(/[:T]/g, '-')
-const runId = `${stamp}-${label}`
+const runId = `${stamp}-${only.length ? 'only' : set}-${label}`
 const dir = join(root, 'runs', runId)
 mkdirSync(dir, { recursive: true })
 const git = (cmd: string) => {
@@ -77,6 +100,9 @@ const git = (cmd: string) => {
 const meta = {
   runId,
   label,
+  set: only.length ? 'only' : set,
+  sample: only.length ? 0 : sample,
+  seed: sample > 0 ? seed : '',
   date: new Date().toISOString(),
   commit: git('rev-parse --short HEAD'),
   uncommitted: git('status --porcelain').split('\n').filter(Boolean).length,
@@ -167,7 +193,15 @@ const queue = [...briefs]
 await Promise.all(
   Array.from({ length: concurrency }, async () => {
     for (let b = queue.shift(); b; b = queue.shift()) {
-      const rec = await one(b)
+      let rec = await one(b)
+      // Pixabay's limit is about the harness, not the build: wait it out and build once more.
+      if (rec.notes?.some((n) => n.includes('limits searches'))) {
+        console.log(
+          `    ${b.id}: Pixabay limit reached, waiting 60 s and building again. ${rec.notes?.find((n) => n.includes('limits searches'))?.match(/\((.*)\)/)?.[1] ?? ''}`,
+        )
+        await new Promise((r) => setTimeout(r, 60_000))
+        rec = await one(b)
+      }
       records.push(rec)
       const p = rec.sites.reduce(
         (n, s) => n + s.problems.desktop.length + s.problems.phone.length,
