@@ -508,8 +508,8 @@ function Reply({ m }: { m: Extract<Message, { role: 'assistant' }> }) {
             <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1.5 rounded-lg bg-white/70 p-2.5 ring-1 ring-stone-200/70">
               <dt className="text-stone-400">Time</dt>
               <dd>
-                choices {seconds(r.ms.decide)} and words {seconds(r.ms.text)} at once, drawing{' '}
-                {seconds(r.ms.render)}
+                choices {seconds(r.ms.decide)} and words {seconds(r.ms.text)} at once, answers
+                checked {seconds(r.ms.check ?? 0)}, drawing {seconds(r.ms.render)}
                 {p ? `, photos ${seconds(p.ms)} after` : ''} (measured on this computer)
               </dd>
               <dt className="text-stone-400">Cost</dt>

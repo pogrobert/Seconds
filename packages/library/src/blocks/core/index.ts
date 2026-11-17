@@ -2,6 +2,17 @@
 import type { Entry } from '../../registry.ts'
 import { HeroCard, HeroCover, HeroPlate, HeroSplit, HeroStack } from './hero.tsx'
 import {
+  AudienceGrid,
+  AudienceList,
+  AudiencePhoto,
+  StatementBand,
+  StatementLarge,
+  StatementPhoto,
+  StepsCards,
+  StepsLine,
+  StepsNumbers,
+} from './more.tsx'
+import {
   AboutBand,
   AboutColumn,
   AboutSplit,
@@ -150,4 +161,24 @@ export const core: Entry[] = [
     source: t('(own, Tailark tokens)'),
     component: FooterLarge,
   },
+  // Fuller pages (docs/m0/19-fuller-pages.md): our own, in Tailark's patterns.
+  ...(
+    [
+      ['statement-large', 'statement', StatementLarge],
+      ['statement-band', 'statement', StatementBand],
+      ['statement-photo', 'statement', StatementPhoto],
+      ['steps-numbers', 'steps', StepsNumbers],
+      ['steps-line', 'steps', StepsLine],
+      ['steps-cards', 'steps', StepsCards],
+      ['audience-grid', 'audience', AudienceGrid],
+      ['audience-list', 'audience', AudienceList],
+      ['audience-photo', 'audience', AudiencePhoto],
+    ] as const
+  ).map(([name, kind, component]) => ({
+    id: `core/${name}`,
+    kind,
+    source: t('(own, Tailark patterns)'),
+    component,
+    needs: [kind],
+  })),
 ]

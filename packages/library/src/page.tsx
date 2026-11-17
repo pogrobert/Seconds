@@ -49,7 +49,9 @@ export function plans(
   const wanted = (k: Kind) =>
     ALWAYS.includes(k) ||
     (k === 'contact' && hasVisit(c)) ||
-    ((k === 'faq' || k === 'stats' || k === 'testimonials' || k === 'team') && !!c[k]?.length)
+    ((k === 'faq' || k === 'stats' || k === 'testimonials' || k === 'team') && !!c[k]?.length) ||
+    (k === 'statement' && !!c.statement) ||
+    ((k === 'steps' || k === 'audience') && !!c[k]?.items.length)
 
   return Array.from({ length: n }, (_, i) => {
     const plan: Plan = {}

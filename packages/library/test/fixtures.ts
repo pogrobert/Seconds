@@ -86,6 +86,24 @@ export const full: SiteContent = {
     { name: 'Eva Nováková', role: 'Head of office', photo: photo('Eva') },
     { name: 'Tomáš Dvořák', role: 'Parking and permits' },
   ],
+  statement:
+    'A city office should be as easy to use as a good corner shop: open when you need it, clear about what it does.',
+  steps: {
+    title: 'How a visit works',
+    items: [
+      { title: 'Book a slot', body: 'Choose a counter and a time that suits you.' },
+      { title: 'Bring your papers', body: 'An ID card and anything the form asks for.' },
+      { title: 'Leave sorted', body: 'Most requests are finished at the counter.' },
+    ],
+  },
+  audience: {
+    title: 'Who we help',
+    items: [
+      { title: 'Residents of the centre', body: 'Permits, parking and the registry.' },
+      { title: 'Businesses on the square', body: 'Licences for terraces and signs.' },
+      { title: 'Newcomers to Brno', body: 'Registration and help in three languages.' },
+    ],
+  },
 }
 
 /** The least a site can have: no contact details, no optional sections, one item. */

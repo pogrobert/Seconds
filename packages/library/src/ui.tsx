@@ -28,6 +28,12 @@ export type SiteContent = {
    * when the words could answer them truthfully); a block for these returns null without them.
    */
   faq?: { q: string; a: string }[]
+  /** One or two sentences in the owner's voice, set large. */
+  statement?: string
+  /** How working with them goes, 3 or 4 steps. */
+  steps?: { title: string; items: { title: string; body: string }[] }
+  /** Who it is for, 3 or 4 groups. */
+  audience?: { title: string; items: { title: string; body: string }[] }
   stats?: { value: string; label: string }[]
   testimonials?: { quote: string; name: string; role?: string }[]
   team?: { name: string; role: string; photo?: Photo }[]

@@ -30,6 +30,9 @@ describe('library registry', () => {
     faq: full.faq?.[0]?.q,
     stats: 'usual wait',
     cta: full.cta.headline,
+    statement: full.statement?.slice(0, 40),
+    steps: full.steps?.items[1]?.body,
+    audience: full.audience?.items[1]?.body,
   }
 
   for (const e of REGISTRY)

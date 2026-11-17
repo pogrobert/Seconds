@@ -142,6 +142,7 @@ ${stat('sites built', `${s.built}`)}${stat('failed', `${s.failed}`, s.failed > 0
 ${stat('page shows (median)', `${(((s as unknown as { pageMsMedian?: number }).pageMsMedian ?? s.msMedian) / 1000).toFixed(1)} s`)}${stat('page and photos (median)', `${(s.msMedian / 1000).toFixed(1)} s`)}${stat('slowest 10%', `${(s.msP90 / 1000).toFixed(1)} s`)}
 ${stat('median photo time', `${(s.photosMsMedian / 1000).toFixed(1)} s`)}${stat('cost per site', `$${s.costUsdPerSite.toFixed(4)}`)}
 ${stat('page problems', `${s.pageProblems}`, s.pageProblems > 0)}${stat('fact flags', `${s.factFlags}`, s.factFlags > 0)}
+${stat('words per page (median)', `${(s as unknown as { wordsMedian?: number }).wordsMedian ?? '–'}`)}${stat('page height (median)', `${(s as unknown as { heightMedian?: number }).heightMedian ?? '–'} px`)}${stat('sections (median)', `${(s as unknown as { sectionsMedian?: number }).sectionsMedian ?? '–'}`)}
 ${stat('spaces with drawn art', `${(s as unknown as { artSpaces?: number }).artSpaces ?? 0}`)}${stat('photos shared across briefs', `${s.sharedPhotos}`, s.sharedPhotos > 0)}
 </div>
 ${worstHtml}

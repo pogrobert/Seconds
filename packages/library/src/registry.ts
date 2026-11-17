@@ -13,8 +13,11 @@ export const KINDS = [
   'header',
   'hero',
   'about',
+  'statement',
   'offer',
+  'steps',
   'reasons',
+  'audience',
   'gallery',
   'stats',
   'testimonials',
@@ -37,7 +40,7 @@ export type Entry = {
   }
   component: ComponentType<BlockProps>
   /** Optional content it cannot show without; the page skips it when any is missing. */
-  needs?: ('faq' | 'stats' | 'testimonials' | 'team')[]
+  needs?: ('faq' | 'stats' | 'testimonials' | 'team' | 'statement' | 'steps' | 'audience')[]
   /** Openings that bring their own menu bar: the page then adds no header. */
   includesHeader?: boolean
   /** Other sections whose content this block already shows; the page leaves those out. */
@@ -80,5 +83,5 @@ export const REGISTRY: Entry[] = [...core, ...tailark, ...shadcnui, ...efferd].m
 export const fits = (e: Entry, c: SiteContent) =>
   (e.needs ?? []).every((k) => {
     const v = c[k]
-    return Array.isArray(v) && v.length > 0
+    return Array.isArray(v) ? v.length > 0 : typeof v === 'object' && v ? v.items.length > 0 : !!v
   }) && !(e.showsItems && c.prices.flatMap((g) => g.items).length > e.showsItems)

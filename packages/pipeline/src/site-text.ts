@@ -4,6 +4,7 @@
 // reasons, a call to action, and three photo searches for its own subject. It never invents facts:
 // prices, hours, addresses, phone numbers and emails appear only if the owner gave them.
 
+import type { DecisionCall, DecisionPort } from './decide.ts'
 import { tidy } from './text.ts'
 
 export type SiteCopy = {
@@ -20,6 +21,15 @@ export type SiteCopy = {
   /** Only what the owner gave; empty strings otherwise. */
   contact: { place: string; address: string; hours: string; phone: string; email: string }
   cta: { headline: string; subhead: string; label: string }
+  /** Sections that make a page feel like a real site (docs/m0/19-fuller-pages.md); none invents. */
+  /** One or two sentences in the owner's own voice, set large. */
+  statement: string
+  /** How working with them goes, in 3 or 4 steps. */
+  steps: { title: string; items: { title: string; body: string }[] }
+  /** Questions people ask such a place, answered only from the owner's words or general knowledge. */
+  faq: { q: string; a: string }[]
+  /** Who it is for, in 3 or 4 groups. */
+  audience: { title: string; items: { title: string; body: string }[] }
   /** Stock photo searches for this business's own subject, in English. */
   photos: { place: string; people: string; detail: string }
 }
@@ -31,13 +41,17 @@ export const SITE_LIMITS = {
   tagline: 40,
   headline: 48,
   subhead: 120,
-  about: 420,
+  about: 560,
   reasonsTitle: 28,
   itemTitle: 32,
   itemBody: 120,
   offerTitle: 24,
   offerName: 48,
-  offerDetail: 110,
+  offerDetail: 160,
+  statement: 180,
+  sectionTitle: 40,
+  question: 90,
+  answer: 260,
   price: 24,
   ctaHeadline: 40,
   ctaSubhead: 110,
@@ -91,6 +105,31 @@ function schema() {
     }),
     cta: obj({ headline: str(L.ctaHeadline), subhead: str(L.ctaSubhead), label: str(L.ctaLabel) }),
     photos: obj({ place: str(L.photo), people: str(L.photo), detail: str(L.photo) }),
+    statement: str(L.statement),
+    steps: obj({
+      title: str(L.sectionTitle),
+      items: {
+        type: 'array',
+        minItems: 3,
+        maxItems: 4,
+        items: obj({ title: str(L.itemTitle), body: str(L.itemBody) }),
+      },
+    }),
+    faq: {
+      type: 'array',
+      minItems: 4,
+      maxItems: 6,
+      items: obj({ q: str(L.question), a: str(L.answer) }),
+    },
+    audience: obj({
+      title: str(L.sectionTitle),
+      items: {
+        type: 'array',
+        minItems: 3,
+        maxItems: 4,
+        items: obj({ title: str(L.itemTitle), body: str(L.itemBody) }),
+      },
+    }),
   })
 }
 
@@ -114,11 +153,16 @@ function prompt(words: string): string {
     `- tagline: a short label such as "Tattoo studio in Leeds" or just "Tattoo studio" when no place is given (at most ${L.tagline}).`,
     `- headline: the main promise, short and memorable (at most ${L.headline}).`,
     `- subhead: one sentence under the headline (at most ${L.subhead}).`,
-    `- about: a paragraph in the organisation's own voice ("we") (at most ${L.about}).`,
+    `- about: a full paragraph in the organisation's own voice ("we"): what it does, for whom, and how it works; at least 300 characters, at most ${L.about}.`,
     `- reasonsTitle and reasons: a short heading such as "Why choose us" that suits this organisation, and three reasons; title at most ${L.itemTitle}, body at most ${L.itemBody}.`,
-    `- offer: what it offers. title is the section name people would expect here, such as "Services", "Menu", "Treatments", "What we do" (at most ${L.offerTitle}); items: every item the owner lists, in their order, with names and prices exactly as written (up to 30). If the owner lists none, 3 to 6 general kinds of thing such an organisation offers, as categories ("Scented candles", "Boiler repairs"), never invented product names, flavours or features. detail: a short plain description, or "" for a listed item the owner did not describe. price: only if the owner gave it, else "".`,
+    `- offer: what it offers. title is the section name people would expect here, such as "Services", "Menu", "Treatments", "What we do" (at most ${L.offerTitle}); items: every item the owner lists, in their order, with names and prices exactly as written (up to 30). If the owner lists none, 3 to 6 general kinds of thing such an organisation offers, as categories ("Scented candles", "Boiler repairs"), never invented product names, flavours or features. detail: one or two plain sentences on what it is and who it is for (at most ${L.offerDetail}), never inventing facts about this business; for an item the owner listed without describing it, a plain description of what such an item is. price: only if the owner gave it, else "".`,
     '- contact: address, hours, phone, email exactly as the owner gave them, else "". place: the town or city the owner names, also when it is only part of the name ("Zamość City Council" → "Zamość"), else "".',
     `- cta: a closing call to action that fits (book, visit, call, get in touch, donate, enquire); headline at most ${L.ctaHeadline}, subhead at most ${L.ctaSubhead}, button label at most ${L.ctaLabel}.`,
+    '- Never mention a phone number, email or address the owner did not give (no "call the number on the site"); say "get in touch" instead. Steps and answers are about the organisation, never about using this website.',
+    `- statement: one or two sentences in the organisation's own voice, set large on the page: what it stands for, drawn from the owner's words (at most ${L.statement}). No slogans, no claims to be the best.`,
+    `- steps: how working with them goes. title such as "How it works", "Your first visit" or "How to book" (at most ${L.sectionTitle}); 3 or 4 steps, each a short title and one sentence. Only steps that follow from the owner's words or that every such organisation shares; no promises (no "free quote", "same day", "within 24 hours") unless the owner said so.`,
+    `- faq: 4 to 6 questions visitors ask such an organisation (question at most ${L.question}, answer at most ${L.answer}). Prefer questions the owner's words answer. Any answer about THIS organisation (what it does or does not do, who it serves, opening times, prices, parking, bookings, menus, policies) must come from the owner's words; if they do not say, answer only "Get in touch and we will tell you." or a close variant. General answers about the kind of service (what to bring, how long a treatment usually takes) are fine if true everywhere. Never send visitors to a website, page, section, form or document. Example: a vet asked "Do you offer emergency care?" without the owner saying → "Get in touch and we will tell you."`,
+    `- audience: who it is for. title such as "Who we help" or "Who comes here" (at most ${L.sectionTitle}); 3 or 4 groups, each a short title and one sentence, drawn from the owner's words and the kind of organisation.`,
     `- photos: three short English stock-photo searches (2 to 4 words, at most ${L.photo} characters) for things a camera can see in this organisation's own world. No place names, no brand names, no abstract words (not "community", "information", "quality"): place = the room or setting where it works, such as "bakery counter" or "dental surgery"; people = someone doing its work, such as "baker kneading dough"; detail = a close-up object or material, such as "sourdough loaf".`,
     'Count characters carefully: every limit is a hard limit.',
   ].join('\n')
@@ -141,6 +185,14 @@ export function checkSiteCopy(c: SiteCopy, words = ''): string[] {
     for (const m of new Set([...all.matchAll(CLAIMS)].map((x) => x[0].toLowerCase())))
       if (!said.includes(m)) p.push(`remove "${m}": the owner never said it`)
   }
+  // This page is the whole website: no "see our website", "Meetings section", "download the form".
+  const elsewhere = JSON.stringify({ ...c, photos: undefined }).match(
+    /\b(?:on|via|visit|see|check|from|using) (?:our|the|this) (?:website|site|web ?page|page|portal)\b|\b(?:listed|shown|found) on (?:our|the|this) (?:website|site|page)\b|\b\w+ (?:section|page|tab) (?:of|on) (?:our|the) (?:website|site)\b|\bthe ['‘’"]?\w+['‘’"]? section\b/i,
+  )
+  if (elsewhere)
+    p.push(
+      `remove "${elsewhere[0]}": this page is the whole website; do not send visitors elsewhere`,
+    )
   // A simple website takes no payments, whatever the owner asks (edge bench: candle shop).
   const pay = JSON.stringify({ ...c, photos: undefined }).match(
     /\b(check ?out|card payments?|pay (?:securely|online|by card)|add [\w ]{0,24}to (?:a |your |the )?(?:shopping )?(?:basket|cart)|(?:your|a|the) (?:shopping )?(?:basket|cart)\b|shop now|buy now|order online|online (?:shop|store))/i,
@@ -285,5 +337,49 @@ export async function writeSiteCopy(o: {
     problems,
     ms: Math.round(performance.now() - t0),
     costUsd,
+  }
+}
+
+const ASK = 'Get in touch and we will tell you.'
+
+/**
+ * The second check on the questions and answers (docs/m0/19-fuller-pages.md): prompt rules alone
+ * still let made-up answers through ("We do not charge an adoption fee"). Jev judges each answer
+ * against the owner's words; one that adds anything about this organisation becomes "Get in
+ * touch", and at most two such answers stay (a list of "get in touch" reads as empty). With fewer
+ * than two real answers left, the page has no questions section.
+ */
+export async function groundAnswers(
+  port: DecisionPort,
+  words: string,
+  copy: SiteCopy,
+): Promise<{ copy: SiteCopy; replaced: number; dropped: number; calls: DecisionCall[] }> {
+  if (!copy.faq.length) return { copy, replaced: 0, dropped: 0, calls: [] }
+  const res = await port.decide(
+    { owner_words: words },
+    copy.faq.map((f, i) => ({
+      kind: 'bool' as const,
+      id: `faq${i}`,
+      prompt: `The owner of an organisation described it only in \`owner_words\`. A website answers a visitor's question. Does the answer state anything specific about this organisation that \`owner_words\` do not say: what it does or does not offer, who it serves, fees or prices, times, forms, programmes, policies or promises? General facts true of any such organisation do not count. Question: "${f.q}" Answer: "${f.a}"`,
+    })),
+  )
+  let replaced = 0
+  const judged = copy.faq.map((f, i) => {
+    const a = res.answers.get(`faq${i}`)
+    if (a?.kind === 'bool' && a.pTrue > 0.5 && f.a !== ASK) {
+      replaced++
+      return { ...f, a: ASK }
+    }
+    return f
+  })
+  const asks = judged.filter((f) => f.a === ASK)
+  const real = judged.filter((f) => f.a !== ASK)
+  // Fewer than two real answers: no questions section at all.
+  const faq = real.length >= 2 ? [...real, ...asks.slice(0, 2)] : []
+  return {
+    copy: { ...copy, faq },
+    replaced,
+    dropped: judged.length - faq.length,
+    calls: res.calls,
   }
 }

@@ -35,6 +35,11 @@ export type Content = {
   /** The heading over the three reasons. */
   reasonsTitle: string
   photos: { hero: Photo; about: Photo; cta: Photo; d1: Photo; d2: Photo }
+  /** Fuller pages (docs/m0/19-fuller-pages.md): only when the words were written for them. */
+  statement?: string
+  steps?: { title: string; items: { title: string; body: string }[] }
+  faq?: { q: string; a: string }[]
+  audience?: { title: string; items: { title: string; body: string }[] }
   /** The business's atmospheric set, for the low-key photo treatment (round 3). */
   lowkey?: { hero: Photo; people: Photo; detail: Photo }
   brand: string
@@ -416,6 +421,10 @@ export function contentFromCopy(
     offerTitle: w.offer.title || 'What we do',
     reasonsTitle: w.reasonsTitle || 'Why choose us',
     photos,
+    ...(w.statement ? { statement: w.statement } : {}),
+    ...(w.steps?.items?.length ? { steps: w.steps } : {}),
+    ...(w.faq?.length ? { faq: w.faq } : {}),
+    ...(w.audience?.items?.length ? { audience: w.audience } : {}),
     ...(o.lowkey ? { lowkey: o.lowkey } : {}),
     brand: o.brand,
     facts: { area: k.place },

@@ -74,6 +74,9 @@ export type SiteRecord = {
   blocks: string[]
   photos: string[]
   problems: { desktop: string[]; phone: string[] }
+  /** Words on the page and its height at 1280px wide (desktop). */
+  words: number
+  height: number
 }
 export type BriefRecord = {
   brief: Brief
@@ -181,6 +184,7 @@ async function one(brief: Brief): Promise<BriefRecord> {
     const html = s.html.replace(/__IMG_([A-Za-z0-9]+)__/g, (t, id: string) => r.images[id] ?? t)
     writeFileSync(join(out, `${s.id}.html`), html)
     const problems = { desktop: [] as string[], phone: [] as string[] }
+    const measured = { words: 0, height: 0 }
     for (const [view, size] of [
       ['desktop', { width: 1280, height: 800 }],
       ['phone', { width: 390, height: 844 }],
@@ -189,7 +193,16 @@ async function one(brief: Brief): Promise<BriefRecord> {
       await page.setContent(html, { waitUntil: 'load', timeout: 30_000 }).catch(() => {})
       await page.evaluate(() => document.fonts.ready).catch(() => {})
       problems[view] = await page.evaluate(pageChecks).catch((e) => [`checks failed: ${e}`])
-      if (view === 'desktop') text = await page.evaluate(() => document.body.innerText)
+      if (view === 'desktop') {
+        text = await page.evaluate(() => document.body.innerText)
+        Object.assign(
+          measured,
+          await page.evaluate(() => ({
+            words: document.body.innerText.split(/\s+/).filter((w) => /\p{L}/u.test(w)).length,
+            height: document.documentElement.scrollHeight,
+          })),
+        )
+      }
       await page.screenshot({ path: join(out, `${s.id}-${view}.jpg`), type: 'jpeg', quality: 70 })
       if (view === 'desktop')
         await page.screenshot({
@@ -204,7 +217,7 @@ async function one(brief: Brief): Promise<BriefRecord> {
     const photos = [
       ...new Set([...s.html.matchAll(/__IMG_([A-Za-z0-9]+)__/g)].map((m) => m[1] ?? '')),
     ]
-    sites.push({ id: s.id, rules: s.rules, blocks, photos, problems })
+    sites.push({ id: s.id, rules: s.rules, blocks, photos, problems, ...measured })
   }
   const { images: _drop, sites: _pages, ...kept } = r
   writeFileSync(join(out, 'result.json'), JSON.stringify(kept, null, 2))
@@ -285,6 +298,18 @@ const summary = {
     0.9,
   ),
   artSpaces: ok.reduce((n, r) => n + (r.art ?? 0), 0),
+  wordsMedian: pct(
+    ok.flatMap((r) => r.sites.map((x) => x.words)).sort((a, b) => a - b),
+    0.5,
+  ),
+  heightMedian: pct(
+    ok.flatMap((r) => r.sites.map((x) => x.height)).sort((a, b) => a - b),
+    0.5,
+  ),
+  sectionsMedian: pct(
+    ok.flatMap((r) => r.sites.map((x) => x.blocks.length)).sort((a, b) => a - b),
+    0.5,
+  ),
   costUsdTotal: ok.reduce((s, r) => s + (r.costUsd ?? 0), 0),
   costUsdPerSite: ok.length ? ok.reduce((s, r) => s + (r.costUsd ?? 0), 0) / ok.length : 0,
   pageProblems: ok.reduce(

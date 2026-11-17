@@ -18,6 +18,7 @@ import photoManifest from '@repo/eval/photos/manifest.json'
 import { describePlan, type Plan, plans, renderSite, theme } from '@repo/library'
 import {
   type DecisionPort,
+  groundAnswers,
   KIND_LABEL,
   KINDS,
   type Kind,
@@ -71,7 +72,15 @@ export type BuildResult = {
   credits: { photographer: string; page: string }[]
   /** The photo searches the words asked for. */
   photoSearches: string[]
-  ms: { decide: number; text: number; photos: number; render: number; total: number }
+  ms: {
+    decide: number
+    text: number
+    /** Jev's check on the answers, after the words. */
+    check: number
+    photos: number
+    render: number
+    total: number
+  }
   costUsd: number
   notes: string[]
   /** The photo step to run next; null when the page already has its photos (the sample). */
@@ -181,6 +190,11 @@ export async function build(messages: string[]): Promise<BuildResult> {
       })
   const [{ r, ms: decideMs }, w] = await Promise.all([decided, written])
   const [reading, kind, art] = r
+  // Jev checks each answer against the owner's words (docs/m0/19-fuller-pages.md).
+  const tg = performance.now()
+  const grounded = w.copy ? await groundAnswers(decide, words, w.copy) : null
+  if (grounded) w.copy = grounded.copy
+  const groundMs = Math.round(performance.now() - tg)
   if (!w.copy)
     notes.push(
       `The words could not be written (${w.problems.join('; ')}); showing a sample business instead.`,
@@ -264,7 +278,10 @@ export async function build(messages: string[]): Promise<BuildResult> {
   })
   const sites = blocks
   const renderMs = Math.round(performance.now() - tr)
-  const jevUsd = reading.calls.reduce((s, c) => s + (c.costUsd ?? 0), 0)
+  const jevUsd = [...reading.calls, ...(grounded?.calls ?? [])].reduce(
+    (s, c) => s + (c.costUsd ?? 0),
+    0,
+  )
   return {
     name: content.name,
     kindLabel: w.copy?.kind || KIND_LABEL[kind],
@@ -275,6 +292,7 @@ export async function build(messages: string[]): Promise<BuildResult> {
     photoSearches: w.copy ? Object.values(w.copy.photos) : [],
     ms: {
       decide: decideMs,
+      check: groundMs,
       text: w.ms,
       photos: 0,
       render: renderMs,
