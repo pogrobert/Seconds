@@ -4,8 +4,9 @@
   "type": "module",
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "bench": "node --env-file-if-exists=../../.env src/run.ts",
-    "serve": "node src/serve.ts"
+    "bench": "PLAYWRIGHT_BROWSERS_PATH=$PWD/.browsers node --env-file-if-exists=../../.env src/run.ts",
+    "serve": "node src/serve.ts",
+    "browsers": "PLAYWRIGHT_BROWSERS_PATH=$PWD/.browsers playwright install --only-shell chromium"
   },
   "devDependencies": {
     "@types/node": "catalog:",

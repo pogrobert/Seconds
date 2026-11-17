@@ -26,3 +26,5 @@ apps/web/public/photos/
 
 # Benchmark runs (tools/bench): built pages, screenshots, results. tools/bench/ratings.json is kept.
 tools/bench/runs/*/
+# Headless Chromium for the bench (pnpm --filter @repo/bench browsers), kept here because the system cache gets cleared
+tools/bench/.browsers/

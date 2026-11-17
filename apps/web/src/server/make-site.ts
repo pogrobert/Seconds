@@ -1,5 +1,7 @@
 // The build itself (server only: it reaches Cloudflare through env.ts). Called by the build
 // page's server function (build.ts) and by POST /api/build (tools/bench).
+
+import { generate, toSvg } from '@pogrobert/surfaces'
 import { SAMPLES } from '@repo/eval/businesses'
 import {
   design,
@@ -38,6 +40,23 @@ import { type FoundPhoto, findPhotos } from './photos'
 // Nothing is invented: prices, hours, address and contact appear only if the owner gave them.
 
 export type BuiltSite = { id: string; label: string; rules: string; html: string }
+/** What the photo step needs, handed back by the page step (docs/m0/17-photos.md). */
+export type PhotoJob = {
+  queries: { place: string; people: string; detail: string }
+  about: { name: string; kind: string; town: string }
+  seed: string
+}
+/** The photo step's answer: each slot token's image, by id, so a photo used twice is sent once. */
+export type PhotoResult = {
+  slots: Record<string, string>
+  images: Record<string, string>
+  credits: { photographer: string; page: string }[]
+  notes: string[]
+  ms: number
+  costUsd: number
+  /** How many spaces got drawn art (Surfaces) because no photo fitted. */
+  art: number
+}
 export type BuildResult = {
   name: string
   kindLabel: string
@@ -51,6 +70,8 @@ export type BuildResult = {
   ms: { decide: number; text: number; photos: number; render: number; total: number }
   costUsd: number
   notes: string[]
+  /** The photo step to run next; null when the page already has its photos (the sample). */
+  photoJob: PhotoJob | null
 }
 
 /** The nearest of the sample kinds, only for falling back to sample photos and words. */
@@ -70,8 +91,6 @@ async function nearestKind(port: DecisionPort, words: string): Promise<Kind> {
 
 /** Sites are neutral (theme.ts); the rules still want a brand colour, so they get near-black. */
 const NEUTRAL_BRAND = '#171717'
-
-const asPhoto = (p: FoundPhoto) => ({ src: p.token, alt: p.alt, w: p.width, h: p.height })
 
 const seedOf = (s: string) => {
   let h = 0
@@ -125,68 +144,36 @@ export async function build(messages: string[]): Promise<BuildResult> {
       `The words could not be written (${w.problems.join('; ')}); showing a sample business instead.`,
     )
 
-  // 2. Photos for the business's own world.
-  let photosMs = 0
+  // 2. Photo spaces. The page is drawn now with a token in each space; the photo step
+  // (sitePhotos) fills them afterwards, so the page shows in ~2 s instead of waiting for photos.
   let content: Content
-  let images: Record<string, string> = {}
-  let credits: BuildResult['credits'] = []
-  let noPhotos = false
-  const found = w.copy
-    ? await findPhotos(
-        {
-          ...(env.PIXABAY_API_KEY ? { pixabay: env.PIXABAY_API_KEY } : {}),
-          ...(env.OPENROUTER_API_KEY ? { openrouter: env.OPENROUTER_API_KEY } : {}),
-        },
-        w.copy.photos,
-        { name: w.copy.name, kind: w.copy.kind, town: w.copy.contact.place },
-      )
-    : null
-  const n = found?.natural
-  const k = found?.lowkey
-  const all =
-    n && k ? [...n.place, ...n.people, ...n.detail, ...k.place, ...k.people, ...k.detail] : []
-  if (w.copy && found && n && k && all.length) {
-    photosMs = found.ms
-    images = found.images
-    const first = (...xs: (FoundPhoto | undefined)[]) =>
-      asPhoto(xs.find(Boolean) ?? (all[0] as FoundPhoto))
+  let photoJob: PhotoJob | null = null
+  if (w.copy) {
+    const q = w.copy.photos
+    const slot = (id: string, alt: string) => ({ src: `__IMG_${id}__`, alt, w: 1280, h: 853 })
     content = contentFromCopy(
       w.copy,
       {
-        hero: first(n.place[0], k.place[0], n.people[0]),
-        about: first(n.people[0], n.place[1], k.people[0]),
-        cta: first(n.place[1], n.place[0], k.place[0]),
-        d1: first(n.detail[0], k.detail[0], n.people[1]),
-        d2: first(n.detail[1], n.people[1], n.detail[0]),
+        hero: slot('hero', q.place),
+        about: slot('about', q.people),
+        cta: slot('cta', q.place),
+        d1: slot('d1', q.detail),
+        d2: slot('d2', q.detail),
       },
       {
         brand: NEUTRAL_BRAND,
         lowkey: {
-          hero: first(k.place[0], n.place[0]),
-          people: first(k.people[0], n.people[0]),
-          detail: first(k.detail[0], n.detail[0]),
+          hero: slot('lkhero', q.place),
+          people: slot('lkpeople', q.people),
+          detail: slot('lkdetail', q.detail),
         },
       },
     )
-    const seen = new Set<string>()
-    credits = all.filter((p) => !seen.has(p.id) && seen.add(p.id)).map((p) => p.credit)
-    if (!found.judged)
-      notes.push(
-        env.OPENROUTER_API_KEY
-          ? 'The photo check failed twice, so these photos were not checked for fit.'
-          : 'Photos were not checked for fit (no OPENROUTER_API_KEY).',
-      )
-  } else if (w.copy) {
-    // Nothing fitting: no photos at all, never another business's (docs/m0/17-photos.md).
-    photosMs = found?.ms ?? 0
-    noPhotos = true
-    content = sampleContent(kind, NEUTRAL_BRAND, w.copy)
-    if (!env.PIXABAY_API_KEY) notes.push('No PIXABAY_API_KEY, so the page has no photos.')
-    else if (found?.limited)
-      notes.push(
-        `Pixabay limits searches to 100 a minute and that limit was reached, so the page has no photos. Try again in a minute. (${found.limitInfo})`,
-      )
-    else notes.push('No photo fitted this business, so the page has none.')
+    photoJob = {
+      queries: q,
+      about: { name: w.copy.name, kind: w.copy.kind, town: w.copy.contact.place },
+      seed: seedOf(words),
+    }
   } else {
     // No words were written: the sample business, with its own photos.
     content = sampleContent(kind, NEUTRAL_BRAND, null)
@@ -204,7 +191,7 @@ export async function build(messages: string[]): Promise<BuildResult> {
     seed,
     3,
   ).filter((p): p is Pick => !!p)
-  const layouts = plans(seed, themes.length, content, { photos: !noPhotos })
+  const layouts = plans(seed, themes.length, content)
   const blocks: BuiltSite[] = themes.map((p, i) => {
     const d = design(p)
     const plan = layouts[i] as Plan
@@ -236,17 +223,133 @@ export async function build(messages: string[]): Promise<BuildResult> {
     kindLabel: w.copy?.kind || KIND_LABEL[kind],
     suggested: sites[0]?.id ?? 'b1',
     sites,
-    images,
-    credits,
+    images: {},
+    credits: [],
     photoSearches: w.copy ? Object.values(w.copy.photos) : [],
     ms: {
       decide: decideMs,
       text: w.ms,
-      photos: photosMs,
+      photos: 0,
       render: renderMs,
       total: Math.round(performance.now() - t0),
     },
-    costUsd: jevUsd + w.costUsd + (found?.costUsd ?? 0),
+    costUsd: jevUsd + w.costUsd,
     notes,
+    photoJob,
+  }
+}
+
+const SLOTS = {
+  hero: 'place',
+  about: 'people',
+  cta: 'place',
+  d1: 'detail',
+  d2: 'detail',
+  lkhero: 'place',
+  lkpeople: 'people',
+  lkdetail: 'detail',
+} as const
+
+/** A quiet colour for drawn art, one per business: low saturation, mid tone (neutral sites). */
+function artColour(seed: string) {
+  let h = 0
+  for (const ch of seed) h = (h * 31 + ch.charCodeAt(0)) >>> 0
+  const hue = h % 360
+  const [s, l] = [0.16, 0.46]
+  const f = (n: number) => {
+    const k = (n + hue / 30) % 12
+    const c = l - s * Math.min(l, 1 - l) * Math.max(-1, Math.min(k - 3, 9 - k, 1))
+    return Math.round(c * 255)
+      .toString(16)
+      .padStart(2, '0')
+  }
+  return `#${f(0)}${f(8)}${f(4)}`
+}
+
+/**
+ * The photo step: finds and checks photos for the page's spaces (photos.ts). A space no photo
+ * fits gets drawn art from Surfaces instead: never another business's photo, never unchecked.
+ */
+export async function sitePhotos(job: PhotoJob): Promise<PhotoResult> {
+  const t0 = performance.now()
+  const env = getEnv()
+  const notes: string[] = []
+  const found = await findPhotos(
+    {
+      ...(env.PIXABAY_API_KEY ? { pixabay: env.PIXABAY_API_KEY } : {}),
+      ...(env.OPENROUTER_API_KEY ? { openrouter: env.OPENROUTER_API_KEY } : {}),
+    },
+    job.queries,
+    job.about,
+  )
+  const n = found.natural
+  const k = found.lowkey
+  const pick = (...xs: (FoundPhoto | undefined)[]) => xs.find(Boolean)
+  const chosen: Record<keyof typeof SLOTS, FoundPhoto | undefined> = {
+    hero: pick(n.place[0], k.place[0], n.people[0]),
+    about: pick(n.people[0], n.place[1], k.people[0], n.place[0]),
+    cta: pick(n.place[1], n.place[0], k.place[0], n.people[1]),
+    d1: pick(n.detail[0], k.detail[0], n.people[1], n.detail[1]),
+    d2: pick(n.detail[1], n.people[1], n.detail[0]),
+    lkhero: pick(k.place[0], n.place[0]),
+    lkpeople: pick(k.people[0], n.people[0]),
+    lkdetail: pick(k.detail[0], n.detail[0]),
+  }
+  const slots: Record<string, string> = {}
+  const images: Record<string, string> = {}
+  let art = 0
+  for (const [slot, subject] of Object.entries(SLOTS) as [keyof typeof SLOTS, string][]) {
+    const p = chosen[slot]
+    if (p && found.images[p.id]) {
+      slots[slot] = p.id
+      images[p.id] = found.images[p.id] ?? ''
+      continue
+    }
+    // Drawn art in a quiet colour, the same for the same business every time.
+    const id = `art${subject}`
+    if (!images[id]) {
+      const svg = toSvg(
+        generate({
+          style: 'underpaint',
+          seed: `${job.seed}-${subject}`,
+          color: artColour(job.seed),
+          width: 1200,
+          height: 800,
+          mood: 'calm',
+        }),
+      )
+      images[id] =
+        `data:image/svg+xml;base64,${btoa(String.fromCharCode(...new TextEncoder().encode(svg)))}`
+    }
+    slots[slot] = id
+    if (!slot.startsWith('lk')) art++
+  }
+  const used = new Set(Object.values(slots))
+  const seen = new Set<string>()
+  const credits = [...n.place, ...n.people, ...n.detail, ...k.place, ...k.people, ...k.detail]
+    .filter((p) => used.has(p.id) && !seen.has(p.id) && seen.add(p.id))
+    .map((p) => p.credit)
+  if (art) {
+    if (!env.PIXABAY_API_KEY) notes.push('No PIXABAY_API_KEY, so the photo spaces show drawn art.')
+    else if (found.limited)
+      notes.push(
+        `Pixabay refused the searches, so ${art} photo spaces show drawn art. Try again in a minute. (${found.limitInfo})`,
+      )
+    else notes.push(`No photo fitted ${art} of the photo spaces, so they show drawn art.`)
+  }
+  if (credits.length && !found.judged)
+    notes.push(
+      env.OPENROUTER_API_KEY
+        ? 'The photo check failed, so these photos were not checked for fit.'
+        : 'Photos were not checked for fit (no OPENROUTER_API_KEY).',
+    )
+  return {
+    slots,
+    images,
+    credits,
+    notes,
+    ms: Math.round(performance.now() - t0),
+    costUsd: found.costUsd,
+    art,
   }
 }

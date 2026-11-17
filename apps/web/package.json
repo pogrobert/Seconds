@@ -13,6 +13,7 @@
     "prebuild": "node scripts/prepare.ts"
   },
   "dependencies": {
+    "@pogrobert/surfaces": "catalog:",
     "@repo/blocks": "workspace:*",
     "@repo/eval": "workspace:*",
     "@repo/library": "workspace:*",

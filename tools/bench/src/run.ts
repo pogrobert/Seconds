@@ -60,7 +60,11 @@ export type BuildResult = {
   images: Record<string, string>
   credits: { photographer: string; page: string }[]
   photoSearches: string[]
-  ms: { decide: number; text: number; photos: number; render: number; total: number }
+  /** page: until the page shows; photos: the photo step after it; total: both. */
+  ms: { decide: number; text: number; photos: number; render: number; total: number; page?: number }
+  photoJob?: unknown
+  /** Photo spaces filled with drawn art because no photo fitted. */
+  art?: number
   costUsd: number
   notes: string[]
 }
@@ -79,6 +83,7 @@ export type BriefRecord = {
   name?: string
   kind?: string
   ms?: BuildResult['ms']
+  art?: number
   costUsd?: number
   notes?: string[]
   photoSearches?: string[]
@@ -129,6 +134,35 @@ async function one(brief: Brief): Promise<BriefRecord> {
     })
     if (!res.ok) throw new Error(`HTTP ${res.status}: ${(await res.text()).slice(0, 200)}`)
     r = (await res.json()) as BuildResult
+    // The photo step, as the build page runs it once the page is showing.
+    r.ms.page = r.ms.total
+    if (r.photoJob) {
+      const pr = await fetch(`${base}/api/photos`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(r.photoJob),
+        signal: AbortSignal.timeout(120_000),
+      })
+      if (!pr.ok) throw new Error(`photos: HTTP ${pr.status}: ${(await pr.text()).slice(0, 200)}`)
+      const p = (await pr.json()) as {
+        slots: Record<string, string>
+        images: Record<string, string>
+        credits: BuildResult['credits']
+        notes: string[]
+        ms: number
+        costUsd: number
+        art: number
+      }
+      r.images = Object.fromEntries(
+        Object.entries(p.slots).map(([slot, id]) => [slot, p.images[id] ?? '']),
+      )
+      r.credits = p.credits
+      r.notes = [...r.notes, ...p.notes]
+      r.ms.photos = p.ms
+      r.ms.total += p.ms
+      r.costUsd += p.costUsd
+      r.art = p.art
+    }
   } catch (e) {
     return {
       brief,
@@ -181,6 +215,7 @@ async function one(brief: Brief): Promise<BriefRecord> {
     name: r.name,
     kind: r.kindLabel,
     ms: r.ms,
+    art: r.art ?? 0,
     costUsd: r.costUsd,
     notes: r.notes,
     photoSearches: r.photoSearches,
@@ -195,9 +230,9 @@ await Promise.all(
     for (let b = queue.shift(); b; b = queue.shift()) {
       let rec = await one(b)
       // Pixabay's limit is about the harness, not the build: wait it out and build once more.
-      if (rec.notes?.some((n) => n.includes('limits searches'))) {
+      if (rec.notes?.some((n) => n.includes('limits searches') || n.includes('Pixabay refused'))) {
         console.log(
-          `    ${b.id}: Pixabay limit reached, waiting 60 s and building again. ${rec.notes?.find((n) => n.includes('limits searches'))?.match(/\((.*)\)/)?.[1] ?? ''}`,
+          `    ${b.id}: Pixabay limit reached, waiting 60 s and building again. ${rec.notes?.find((n) => n.includes('limits searches') || n.includes('Pixabay refused'))?.match(/\((.*)\)/)?.[1] ?? ''}`,
         )
         await new Promise((r) => setTimeout(r, 60_000))
         rec = await one(b)
@@ -241,6 +276,15 @@ const summary = {
     totals((r) => r.ms?.photos ?? 0),
     0.5,
   ),
+  pageMsMedian: pct(
+    totals((r) => r.ms?.page ?? r.ms?.total ?? 0),
+    0.5,
+  ),
+  pageMsP90: pct(
+    totals((r) => r.ms?.page ?? r.ms?.total ?? 0),
+    0.9,
+  ),
+  artSpaces: ok.reduce((n, r) => n + (r.art ?? 0), 0),
   costUsdTotal: ok.reduce((s, r) => s + (r.costUsd ?? 0), 0),
   costUsdPerSite: ok.length ? ok.reduce((s, r) => s + (r.costUsd ?? 0), 0) / ok.length : 0,
   pageProblems: ok.reduce(

@@ -139,10 +139,10 @@ figcaption{font-size:11px;color:var(--muted);margin-top:4px;overflow-wrap:anywhe
 <p class="meta">commit ${esc(s.commit)}${s.uncommitted ? ` + ${s.uncommitted} uncommitted files` : ''} · all figures measured on this computer · <a href="/rate.html">rate runs blind</a></p>
 <div class="stats">
 ${stat('sites built', `${s.built}`)}${stat('failed', `${s.failed}`, s.failed > 0)}
-${stat('median time', `${(s.msMedian / 1000).toFixed(1)} s`)}${stat('slowest 10%', `${(s.msP90 / 1000).toFixed(1)} s`)}
+${stat('page shows (median)', `${(((s as unknown as { pageMsMedian?: number }).pageMsMedian ?? s.msMedian) / 1000).toFixed(1)} s`)}${stat('page and photos (median)', `${(s.msMedian / 1000).toFixed(1)} s`)}${stat('slowest 10%', `${(s.msP90 / 1000).toFixed(1)} s`)}
 ${stat('median photo time', `${(s.photosMsMedian / 1000).toFixed(1)} s`)}${stat('cost per site', `$${s.costUsdPerSite.toFixed(4)}`)}
 ${stat('page problems', `${s.pageProblems}`, s.pageProblems > 0)}${stat('fact flags', `${s.factFlags}`, s.factFlags > 0)}
-${stat('sites with no photo', `${s.noPhotoSites}`)}${stat('photos shared across briefs', `${s.sharedPhotos}`, s.sharedPhotos > 0)}
+${stat('spaces with drawn art', `${(s as unknown as { artSpaces?: number }).artSpaces ?? 0}`)}${stat('photos shared across briefs', `${s.sharedPhotos}`, s.sharedPhotos > 0)}
 </div>
 ${worstHtml}
 ${byTag}

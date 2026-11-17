@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { type FormEvent, type KeyboardEvent, useEffect, useRef, useState } from 'react'
-import { type BuildResult, buildSite } from '../server/build'
+import { type BuildResult, buildSite, findSitePhotos, type PhotoResult } from '../server/build'
 
 // The build page: chat on the left, the live site on the right (like Lovable or Meerlume's
 // builder). Each message rebuilds the site from everything said so far; the header switches
@@ -10,7 +10,7 @@ export const Route = createFileRoute('/')({ component: Build })
 
 type Message =
   | { role: 'user'; text: string }
-  | { role: 'assistant'; text: string; result?: BuildResult }
+  | { role: 'assistant'; text: string; result?: BuildResult; photos?: PhotoResult | 'waiting' }
   | { role: 'error'; text: string }
 
 const EXAMPLES = [
@@ -22,6 +22,34 @@ const EXAMPLES = [
 
 const seconds = (ms: number) => `${(ms / 1000).toFixed(1)} s`
 
+// The page shows before its photos (docs/m0/17-photos.md): each photo space starts as a soft
+// shimmer and the photo fades in when the photo step returns, without reloading the page.
+const BLANK = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
+const WAITING_CSS =
+  '<style>img[data-img]{background:linear-gradient(110deg,rgba(127,127,127,.10) 35%,rgba(127,127,127,.24) 50%,rgba(127,127,127,.10) 65%) 0 0/300% 100%;animation:img-wait 1.6s linear infinite}@keyframes img-wait{from{background-position:100% 0}to{background-position:-50% 0}}.img-in{animation:img-in .5s ease-out}@keyframes img-in{from{opacity:0}to{opacity:1}}@media (prefers-reduced-motion:reduce){img[data-img],.img-in{animation:none}}</style>'
+const withSpaces = (html: string) =>
+  html
+    .replace(/src="__IMG_([A-Za-z0-9]+)__"/g, `src="${BLANK}" data-img="$1"`)
+    .replace('</head>', `${WAITING_CSS}</head>`)
+
+/** Puts the photos into a page already showing: each space gets its photo and fades in. */
+function fillSpaces(doc: Document | null | undefined, links: Record<string, string>) {
+  if (!doc) return
+  for (const img of Array.from(doc.querySelectorAll<HTMLImageElement>('img[data-img]'))) {
+    const url = links[img.dataset.img ?? '']
+    if (!url) continue
+    img.addEventListener(
+      'load',
+      () => {
+        img.removeAttribute('data-img')
+        img.classList.add('img-in')
+      },
+      { once: true },
+    )
+    img.src = url
+  }
+}
+
 function Build() {
   const [messages, setMessages] = useState<Message[]>([])
   const [draft, setDraft] = useState('')
@@ -31,6 +59,16 @@ function Build() {
   const [device, setDevice] = useState<'desktop' | 'phone'>('desktop')
   const scroller = useRef<HTMLDivElement>(null)
   const photoUrls = useRef<string[]>([])
+  const frame = useRef<HTMLIFrameElement>(null)
+  /** Which build is current: photos from an older build are dropped. */
+  const generation = useRef(0)
+  const [links, setLinks] = useState<Record<string, string>>({})
+  const linksRef = useRef(links)
+  linksRef.current = links
+
+  useEffect(() => {
+    fillSpaces(frame.current?.contentDocument, links)
+  }, [links])
 
   useEffect(() => {
     scroller.current?.scrollTo({ top: scroller.current.scrollHeight, behavior: 'smooth' })
@@ -47,24 +85,13 @@ function Build() {
       const built = await buildSite({
         data: { messages: history.filter((m) => m.role === 'user').map((m) => m.text) },
       })
-      // Photos arrive once as data; every look shares one local link per photo.
+      const mine = ++generation.current
       for (const u of photoUrls.current) URL.revokeObjectURL(u)
       photoUrls.current = []
-      const links: Record<string, string> = {}
-      await Promise.all(
-        Object.entries(built.images).map(async ([id, data]) => {
-          const url = URL.createObjectURL(await (await fetch(data)).blob())
-          photoUrls.current.push(url)
-          links[id] = url
-        }),
-      )
+      setLinks({})
       const r: BuildResult = {
         ...built,
-        images: {},
-        sites: built.sites.map((s) => ({
-          ...s,
-          html: s.html.replace(/__IMG_([A-Za-z0-9]+)__/g, (t, id: string) => links[id] ?? t),
-        })),
+        sites: built.sites.map((x) => ({ ...x, html: withSpaces(x.html) })),
       }
       setResult(r)
       setLook(r.suggested)
@@ -74,8 +101,30 @@ function Build() {
           role: 'assistant',
           text: `Built ${r.name}, ${/^[aeiou]/i.test(r.kindLabel) ? 'an' : 'a'} ${r.kindLabel}. Blocks 1 to 3 are the block library (blocks from Tailark, Shadcn UI Blocks and Efferd), each a different mix, in neutral black, white and grey with the fonts Jev chose. Tell me what to change.${r.notes.length ? ` Note: ${r.notes.join(' ')}` : ''}`,
           result: r,
+          ...(r.photoJob ? { photos: 'waiting' as const } : {}),
         },
       ])
+      setBusy(false)
+      // The photo step: the page is already showing; photos fill its spaces as they come.
+      if (r.photoJob) {
+        const p = await findSitePhotos({ data: r.photoJob })
+        if (mine !== generation.current) return
+        const byId: Record<string, string> = {}
+        await Promise.all(
+          Object.entries(p.images).map(async ([id, data]) => {
+            const url = URL.createObjectURL(await (await fetch(data)).blob())
+            photoUrls.current.push(url)
+            byId[id] = url
+          }),
+        )
+        const bySlot = Object.fromEntries(
+          Object.entries(p.slots).map(([slot, id]) => [slot, byId[id] ?? '']),
+        )
+        setLinks(bySlot)
+        setMessages((m) =>
+          m.map((x) => (x.role === 'assistant' && x.result === r ? { ...x, photos: p } : x)),
+        )
+      }
     } catch (e) {
       setMessages((m) => [
         ...m,
@@ -183,13 +232,26 @@ function Build() {
                         <p>{m.text}</p>
                         {m.result && (
                           <p className="mt-1.5 text-xs text-stone-500">
-                            Ready in {seconds(m.result.ms.total)}: choices{' '}
+                            Page in {seconds(m.result.ms.total)}: choices{' '}
                             {seconds(m.result.ms.decide)} and words {seconds(m.result.ms.text)} at
-                            once, photos {seconds(m.result.ms.photos)}, drawing{' '}
-                            {seconds(m.result.ms.render)}. Models cost $
-                            {m.result.costUsd.toFixed(4)}. Measured on this computer.
-                            {m.result.credits.length > 0 &&
-                              ` Photos from Pixabay by ${m.result.credits.map((c) => c.photographer).join(', ')}.`}
+                            once, drawing {seconds(m.result.ms.render)}.{' '}
+                            {m.photos === 'waiting'
+                              ? 'Photos on the way…'
+                              : m.photos
+                                ? `Photos ${seconds(m.photos.ms)} after that.`
+                                : ''}{' '}
+                            Models cost $
+                            {(
+                              m.result.costUsd +
+                              (m.photos && m.photos !== 'waiting' ? m.photos.costUsd : 0)
+                            ).toFixed(4)}
+                            . Measured on this computer.
+                            {m.photos && m.photos !== 'waiting' && m.photos.credits.length > 0
+                              ? ` Photos by ${m.photos.credits.map((c) => c.photographer).join(', ')} (Pixabay, Wikimedia Commons).`
+                              : ''}
+                            {m.photos && m.photos !== 'waiting' && m.photos.notes.length > 0
+                              ? ` ${m.photos.notes.join(' ')}`
+                              : ''}
                             {m.result.photoSearches.length > 0 &&
                               ` Photo searches: ${m.result.photoSearches.join('; ')}.`}
                           </p>
@@ -248,6 +310,8 @@ function Build() {
           <main className="relative flex min-w-0 flex-1 items-stretch justify-center overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-stone-200">
             {site ? (
               <iframe
+                ref={frame}
+                onLoad={() => fillSpaces(frame.current?.contentDocument, linksRef.current)}
                 key={`${site.id}-${result?.name}`}
                 title={`${result?.name} in ${site.label}`}
                 srcDoc={site.html}

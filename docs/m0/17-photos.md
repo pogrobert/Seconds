@@ -96,3 +96,43 @@ Pexels still isn't issuing API keys. Unsplash stays out: its terms require hotli
 
 Zamość's council keeps its own town photos (3.8 s for photos). Brno's council got none in the
 last run: the check chose other photos.
+
+## Page first, photos after (2026-11-17, measured)
+
+Robert: photos are the bottleneck; find alternatives, maybe use Surfaces, maybe show the page with
+loading placeholders.
+
+- **Two steps.**
+  - `build()` (in `apps/web/src/server/make-site.ts`) writes the words, chooses the blocks and
+    draws the page with a token in each photo space. It returns a photo job.
+  - `sitePhotos(job)` then finds and checks the photos.
+  - The build page shows the page at once, with a soft neutral shimmer in each photo space. When
+    the photos arrive, each fades in, without reloading the page. Photos from an older build are
+    dropped. The shimmer stays still for visitors who turn off motion.
+- **Drawn art where no photo fits.** A space with no fitting photo gets Surfaces art (`underpaint`,
+  calm, a quiet colour from the business's seed) instead of a photo-free page. It is drawn on the
+  server in a few milliseconds. The style and colour are placeholders until Robert picks them.
+- **The check starts sooner.** The town question and Wikimedia's photos no longer hold it back.
+  Town photos (already named after the town) go straight into place when the town suits.
+- **No 960px downloads.** Pixabay's download links refuse sizes other than their own (HTTP 400),
+  so photos stay at 1280px. A first run with 960px gave every site drawn art.
+- **Gemini "temporarily rate-limited upstream" (429)** now waits a second and asks once more,
+  before splitting the set.
+- **Other photo sources:** none better found. Pexels still has no keys, Unsplash requires
+  hotlinking, Openverse was worse. The time is in checking and fetching, not in searching.
+
+**Core bench (30 briefs):**
+
+| | before (one step) | page first |
+|---|---|---|
+| page shows, median | about 5.0 s (all at once) | 0.97 s |
+| page shows, slowest 10% | about 7.2 s | 1.8 s |
+| photos, median | 4.1 s | 3.2 s after the page |
+| page and photos, median | 5.0 s | 4.2 s |
+| photo spaces with drawn art | – | 2 of about 150 (yoga) |
+| cost per site | $0.0019 | $0.0019 |
+
+**Bench:** it now runs both steps, reports "page shows" and "page and photos" separately, and
+counts spaces with drawn art. Its headless Chromium lives in `tools/bench/.browsers`
+(`pnpm --filter @repo/bench browsers`), because the system cache folder was cleared twice in one
+day.

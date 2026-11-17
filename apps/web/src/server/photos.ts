@@ -145,6 +145,7 @@ async function pixabay(key: string, q: string, n: number): Promise<Candidate[]> 
     // The 150px preview comes from Pixabay's CDN; webformat links (pixabay.com/get) seem to count
     // toward the 100-a-minute limit (bench, 2026-11-17).
     preview: h.previewURL,
+    // The 1280px version: Pixabay's download links refuse other sizes such as 960px (HTTP 400).
     full: h.largeImageURL,
     width: h.imageWidth,
     height: h.imageHeight,
@@ -285,20 +286,27 @@ async function judge(
       dark: slots({ type: 'string' }),
     },
   }
-  const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-    method: 'POST',
-    headers: { authorization: `Bearer ${apiKey}`, 'content-type': 'application/json' },
-    body: JSON.stringify({
-      model,
-      messages: [{ role: 'user', content }],
-      temperature: 0,
-      response_format: {
-        type: 'json_schema',
-        json_schema: { name: 'photos', strict: true, schema },
-      },
-      usage: { include: true },
-    }),
-  }).catch(() => null)
+  const ask = () =>
+    fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: { authorization: `Bearer ${apiKey}`, 'content-type': 'application/json' },
+      body: JSON.stringify({
+        model,
+        messages: [{ role: 'user', content }],
+        temperature: 0,
+        response_format: {
+          type: 'json_schema',
+          json_schema: { name: 'photos', strict: true, schema },
+        },
+        usage: { include: true },
+      }),
+    }).catch(() => null)
+  let res = await ask()
+  // "Temporarily rate-limited upstream" (429) passes in a moment; a refusal (502) does not.
+  if (res?.status === 429) {
+    await new Promise((r) => setTimeout(r, 1000))
+    res = await ask()
+  }
   const body = (await res?.json().catch(() => null)) as {
     choices?: { message?: { content?: string } }[]
     usage?: { cost?: number }
@@ -382,33 +390,31 @@ export async function findPhotos(
   limitInfo = ''
   searches = 0
   const model = o.model ?? 'google/gemini-2.5-flash-lite'
-  // The town question runs with the searches; town photos are only fetched and shown when it
-  // says yes (a council, not a yoga studio), which saves their previews for most businesses.
-  const [found, suits, townFound] = await Promise.all([
-    Promise.all(SUBJECTS.map((s) => (keys.pixabay ? pixabay(keys.pixabay, q[s], per) : []))),
+  // The town runs on its own, beside the look: the question (does a photo of the town suit this
+  // organisation?) and Commons' quality images of it. They are not shown to the vision model:
+  // they already name the town, and waiting for them held the look back (~0.5 s, bench).
+  const townP: Promise<[{ fits: boolean; costUsd: number }, Candidate[]]> =
     about.town && keys.openrouter
-      ? townSuits(keys.openrouter, about, model)
-      : Promise.resolve({ fits: false, costUsd: 0 }),
-    about.town && keys.openrouter ? commons(about.town, 3) : Promise.resolve([]),
-  ])
-  const town = suits.fits ? townFound : []
+      ? Promise.all([townSuits(keys.openrouter, about, model), commons(about.town, 2)])
+      : Promise.resolve([{ fits: false, costUsd: 0 }, []])
+  const found = await Promise.all(
+    SUBJECTS.map((s) => (keys.pixabay ? pixabay(keys.pixabay, q[s], per) : [])),
+  )
   const pools: Slots<Candidate[]> = {
-    place: [...town, ...(found[0] ?? [])],
+    place: found[0] ?? [],
     people: found[1] ?? [],
     detail: found[2] ?? [],
   }
   const byId = new Map(SUBJECTS.flatMap((s) => pools[s].map((c) => [c.id, c] as const)))
+  const suits = { fits: false, costUsd: 0 }
 
   // Without the vision model, the first matches as before (and no Commons photos, unchecked).
   let looked: { choice: Choice | null; costUsd: number } = { choice: null, costUsd: 0 }
   if (keys.openrouter && byId.size) {
     const key = keys.openrouter
     const first = await judge(key, about, pools, model)
-    looked = {
-      choice: first.choice ? { ...first.choice, townFits: suits.fits } : null,
-      costUsd: first.costUsd + suits.costUsd,
-    }
-    const townFits = suits.fits
+    looked = { choice: first.choice, costUsd: first.costUsd }
+    const townFits = false
     // Gemini refuses some photo sets outright ("blocked: OTHER", the same set every time; bench,
     // 2026-11-17), so asking again is useless. Ask once per subject instead, at the same time:
     // the subjects without the photo it objects to come back; a subject refused again is split in
@@ -469,6 +475,10 @@ export async function findPhotos(
       } else looked = { choice: null, costUsd }
     }
   }
+  const [townAnswer, townFound] = await townP
+  suits.fits = townAnswer.fits
+  suits.costUsd = townAnswer.costUsd
+  looked.costUsd += townAnswer.costUsd
   const choice: Choice = looked.choice ?? {
     place: (found[0] ?? []).slice(0, 2).map((c) => c.id),
     people: (found[1] ?? []).slice(0, 2).map((c) => c.id),
@@ -476,11 +486,13 @@ export async function findPhotos(
     dark: { place: '', people: '', detail: '' },
     townFits: false,
   }
-  // Town photos only where the town itself is the subject (councils, civic and tourist bodies).
-  if (!choice.townFits)
-    for (const s of SUBJECTS) {
-      choice[s] = choice[s].filter((id) => !id.startsWith('c'))
-      if (choice.dark[s].startsWith('c')) choice.dark[s] = ''
+  // Town photos first, only where the town itself is the subject (councils, civic and tourist
+  // bodies).
+  if (suits.fits)
+    for (const c of townFound) {
+      byId.set(c.id, c)
+      pools.place.unshift(c)
+      choice.place.unshift(c.id)
     }
 
   // Each photo once across subjects; the model may only name ids it was shown for that subject.

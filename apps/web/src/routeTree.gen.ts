@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiBuildRouteImport } from './routes/api/build'
+import { Route as ApiPhotosRouteImport } from './routes/api/photos'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -22,31 +23,40 @@ const ApiBuildRoute = ApiBuildRouteImport.update({
   path: '/api/build',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPhotosRoute = ApiPhotosRouteImport.update({
+  id: '/api/photos',
+  path: '/api/photos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/api/build': typeof ApiBuildRoute
+  '/api/photos': typeof ApiPhotosRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/api/build': typeof ApiBuildRoute
+  '/api/photos': typeof ApiPhotosRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/api/build': typeof ApiBuildRoute
+  '/api/photos': typeof ApiPhotosRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/api/build'
+  fullPaths: '/' | '/api/build' | '/api/photos'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/api/build'
-  id: '__root__' | '/' | '/api/build'
+  to: '/' | '/api/build' | '/api/photos'
+  id: '__root__' | '/' | '/api/build' | '/api/photos'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ApiBuildRoute: typeof ApiBuildRoute
+  ApiPhotosRoute: typeof ApiPhotosRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -65,12 +75,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiBuildRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/photos': {
+      id: '/api/photos'
+      path: '/api/photos'
+      fullPath: '/api/photos'
+      preLoaderRoute: typeof ApiPhotosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ApiBuildRoute: ApiBuildRoute,
+  ApiPhotosRoute: ApiPhotosRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
