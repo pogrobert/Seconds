@@ -2,7 +2,6 @@
 // page's server function (build.ts) and by POST /api/build (tools/bench).
 import { SAMPLES } from '@repo/eval/businesses'
 import {
-  ATMOSPHERIC,
   design,
   OPEN,
   type Pick,
@@ -197,15 +196,14 @@ export async function build(messages: string[]): Promise<BuildResult> {
   const tr = performance.now()
   const cache = ruleProfiles as RuleCache
   const seed = seedOf(words)
-  const atmos = pickDesigns(
-    weigh(reading.profile, reading.direct, cache, content, ATMOSPHERIC),
+  // Three of Jev's free picks (the open direction). The dark, low-key atmospheric direction from
+  // Robert's reference picks lost every time on real briefs: "blocks 3 were better on each run"
+  // (2026-11-17), and Blocks 3 was the only free pick (light and natural photos, 28 of 30).
+  const themes = pickDesigns(
+    weigh(reading.profile, reading.direct, cache, content, OPEN),
     seed,
     3,
-  )
-  const open = pickDesigns(weigh(reading.profile, reading.direct, cache, content, OPEN), seed, 1)
-  // The block library (docs/m0/16-block-library.md): the same colours, fonts and photo
-  // treatment Jev chose, on blocks from the whole library, so the comparison is about the blocks.
-  const themes = [atmos[0], atmos[1], open[0]].filter((p): p is Pick => !!p)
+  ).filter((p): p is Pick => !!p)
   const layouts = plans(seed, themes.length, content, { photos: !noPhotos })
   const blocks: BuiltSite[] = themes.map((p, i) => {
     const d = design(p)

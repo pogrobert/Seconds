@@ -95,3 +95,15 @@ history), and blocks built around dashboards or charts.
 - **Fewer choices.** The question that made Jev pick a brand colour is gone.
 - **Old looks removed.** The "Rules" looks are gone from the build page. Robert: "it's really
   bad". The rules engine still picks the type and the photo treatment for the three block versions.
+
+## Three free picks instead of two dark ones (2026-11-17)
+
+- **Robert's verdict on real briefs:** "blocks 3 were better on each run".
+- **What differed:** in the 30-brief core run, Blocks 1 and 2 were forced into the dark,
+  atmospheric direction from his reference picks (dark 30 of 30, darkened photos 30 of 30).
+  Blocks 3 was Jev's free pick: light 28 of 30, natural photos 27 of 30.
+- **Change:** all three versions are now Jev's free picks (`pickDesigns` on the open direction).
+- **Check (6 briefs):**
+  - Light with natural photos for the café, dentist, council, law firm and B&B.
+  - Dark with darkened photos for the tattoo studio, where Jev chose it.
+  - The three versions differ mainly by blocks: Jev often picks the same typeface for all three.
