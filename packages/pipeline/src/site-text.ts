@@ -162,7 +162,7 @@ function prompt(words: string): string {
     `- statement: one or two sentences in the organisation's own voice, set large on the page: what it stands for, drawn from the owner's words (at most ${L.statement}). No slogans, no claims to be the best.`,
     `- steps: how working with them goes. title such as "How it works", "Your first visit" or "How to book" (at most ${L.sectionTitle}); 3 or 4 steps, each a short title and one sentence. Only steps that follow from the owner's words or that every such organisation shares; no promises (no "free quote", "same day", "within 24 hours") unless the owner said so.`,
     `- faq: 4 to 6 questions visitors ask such an organisation (question at most ${L.question}, answer at most ${L.answer}). Prefer questions the owner's words answer. Any answer about THIS organisation (what it does or does not do, who it serves, opening times, prices, parking, bookings, menus, policies) must come from the owner's words; if they do not say, answer only "Get in touch and we will tell you." or a close variant. General answers about the kind of service (what to bring, how long a treatment usually takes) are fine if true everywhere. Never send visitors to a website, page, section, form or document. Example: a vet asked "Do you offer emergency care?" without the owner saying → "Get in touch and we will tell you."`,
-    `- audience: who it is for. title such as "Who we help" or "Who comes here" (at most ${L.sectionTitle}); 3 or 4 groups, each a short title and one sentence, drawn from the owner's words and the kind of organisation.`,
+    `- audience: who it is for, described by what people need, never by guessed kinds of people. title such as "Who we help" or "When to call us" (at most ${L.sectionTitle}); 3 or 4 needs, each a short title and one sentence, that follow from the owner's words or that every such organisation meets. Examples: a plumber → "A burst pipe or leak", "No heating or hot water"; a cat vet → "A first check-up for a new kitten". Never a group the owner did not name (no "landlords", "couples", "senior cats", "small businesses").`,
     `- photos: three short English stock-photo searches (2 to 4 words, at most ${L.photo} characters) for things a camera can see in this organisation's own world. No place names, no brand names, no abstract words (not "community", "information", "quality"): place = the room or setting where it works, such as "bakery counter" or "dental surgery"; people = someone doing its work, such as "baker kneading dough"; detail = a close-up object or material, such as "sourdough loaf".`,
     'Count characters carefully: every limit is a hard limit.',
   ].join('\n')
@@ -330,7 +330,8 @@ export async function writeSiteCopy(o: {
     problems.every((x) => / characters; the limit is |^remove "/.test(x))
   ) {
     copy = fitLengths(copy)
-    problems = checkSiteCopy(copy).filter((x) => !/^(name|headline) is /.test(x))
+    // "remove …" problems are wording, never a reason to lose the business: keep the words.
+    problems = checkSiteCopy(copy).filter((x) => !/^(name|headline) is |^remove "/.test(x))
   }
   return {
     copy: problems.length ? null : copy,
@@ -347,26 +348,44 @@ const ASK = 'Get in touch and we will tell you.'
  * still let made-up answers through ("We do not charge an adoption fee"). Jev judges each answer
  * against the owner's words; one that adds anything about this organisation becomes "Get in
  * touch", and at most two such answers stay (a list of "get in touch" reads as empty). With fewer
- * than two real answers left, the page has no questions section.
+ * than two real answers left, the page has no questions section. Checking "who we help" and the
+ * statement the same way failed: Jev's scores did not separate guesses from fair lines (the
+ * restaurant's "couples" 0.72, the plumber's "landlords" 0.68), so those are written by need.
  */
 export async function groundAnswers(
   port: DecisionPort,
   words: string,
   copy: SiteCopy,
-): Promise<{ copy: SiteCopy; replaced: number; dropped: number; calls: DecisionCall[] }> {
-  if (!copy.faq.length) return { copy, replaced: 0, dropped: 0, calls: [] }
-  const res = await port.decide(
-    { owner_words: words },
-    copy.faq.map((f, i) => ({
+): Promise<{
+  copy: SiteCopy
+  replaced: number
+  dropped: number
+  /** Jev's probability that each item is a guess, by id (faq0…, aud0…, statement). */
+  scores: Record<string, number>
+  calls: DecisionCall[]
+}> {
+  const questions = [
+    ...copy.faq.map((f, i) => ({
       kind: 'bool' as const,
       id: `faq${i}`,
       prompt: `The owner of an organisation described it only in \`owner_words\`. A website answers a visitor's question. Does the answer state anything specific about this organisation that \`owner_words\` do not say: what it does or does not offer, who it serves, fees or prices, times, forms, programmes, policies or promises? General facts true of any such organisation do not count. Question: "${f.q}" Answer: "${f.a}"`,
     })),
-  )
+  ]
+  if (!questions.length)
+    return {
+      copy,
+      replaced: 0,
+      dropped: 0,
+      scores: {},
+      calls: [],
+    }
+  const res = await port.decide({ owner_words: words }, questions)
+  const scores: Record<string, number> = {}
+  for (const [id, a] of res.answers) if (a.kind === 'bool') scores[id] = a.pTrue
+  const guess = (id: string) => (scores[id] ?? 0) > 0.5
   let replaced = 0
   const judged = copy.faq.map((f, i) => {
-    const a = res.answers.get(`faq${i}`)
-    if (a?.kind === 'bool' && a.pTrue > 0.5 && f.a !== ASK) {
+    if (guess(`faq${i}`) && f.a !== ASK) {
       replaced++
       return { ...f, a: ASK }
     }
@@ -380,6 +399,7 @@ export async function groundAnswers(
     copy: { ...copy, faq },
     replaced,
     dropped: judged.length - faq.length,
+    scores,
     calls: res.calls,
   }
 }

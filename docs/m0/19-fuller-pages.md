@@ -62,3 +62,25 @@ landing page or a website".
 - **Slow photo steps.** In the last run 4 of 30 photo steps took 11–24 s (Gemini refusing, then
   Qwen). The page still showed in about 1.3 s.
 - **Fixed English labels** in the new blocks ("Step 1").
+
+## Checking "who we help" (2026-11-17)
+
+- **Robert: "Yes, check it".** Jev was asked whether each group, and the statement, is a guess. It
+  cannot tell:
+  - the restaurant's "couples" scored 0.72, higher than the plumber's "landlords" at 0.68;
+  - the vet's plain "We are dedicated to the health and wellbeing of cats" scored 0.86.
+  
+  No threshold keeps the fair lines and removes the guesses. For answers the scores do separate:
+  0.04–0.23 for real answers, 0.7–0.9 for made-up ones. So only the answer check stays.
+- **Instead, groups are written by need:** never guessed kinds of people. The plumber's are now
+  boiler breakdown, leak and no hot water; the cat vet's are a new kitten's check-up, an older
+  cat and a dental problem.
+- **Fixed on the way:** a word check that still failed after two tries (Zamość, "on our
+  website") made the build show the sample business. Wording problems now never cost the
+  business its page.
+- **Core bench (30 briefs):**
+  - 311 words and 5,671 px per page (medians); 0 page problems, 0 fact flags; $0.0027 per site.
+  - The page shows in 1.56 s median, 2.7 s for the slowest tenth. The previous run gave 1.33 s;
+    the cause is not measured (a longer prompt, or the provider's speed that hour).
+  - Every site has "who we help" and a statement. Only 5 of 30 keep a questions section: short
+    briefs rarely answer two questions.
