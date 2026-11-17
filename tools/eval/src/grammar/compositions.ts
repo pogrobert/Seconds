@@ -9,13 +9,16 @@ import {
   type Composition,
   type Content,
   contact,
+  contactLine,
   esc,
   fit,
+  hasVisit,
   headline,
   hoursList,
   img,
   nav,
   priceRows,
+  statement,
 } from './page.ts'
 
 const reasons = (c: Content) =>
@@ -73,13 +76,13 @@ const monument: Composition = {
     <div><p class="lead">${esc(c.subhead)}</p>${btn(c)}${c.proof ? `<p class="lab muted">${esc(c.proof)}</p>` : ''}</div>
   </div>
 </section><!--/hero-->
-<section class="m-row" id="about"><h2 class="lab">About</h2><div class="body"><p class="st">${esc(c.about)}</p><ul class="m-three">${reasons(c)}</ul></div></section>
+<section class="m-row" id="about"><h2 class="lab">About</h2><div class="body">${statement(c.about)}<ul class="m-three">${reasons(c)}</ul></div></section>
 <div class="m-pair"><figure>${img(c.photos.d1, 'cover')}</figure><figure>${img(c.photos.d2, 'cover')}</figure></div>
-<section class="m-row" id="prices"><h2 class="lab">Prices</h2><div class="body">${priceRows(c)}</div></section>
-<section class="m-row" id="visit"><h2 class="lab">Visit</h2><div class="body m-visit"><div>${hoursList(c)}</div><div>${addressBlock(c)}<p class="muted">${esc(c.visit)}</p>${contact(c)}</div></div></section>
-<section class="m-row"><h2 class="lab">Book</h2><div class="body m-cta cq">${fit('p', 'd2', c.cta.headline)}<p class="lead">${esc(c.cta.subhead)}</p>${btn(c)}</div></section>
+<section class="m-row" id="prices"><h2 class="lab">${esc(c.offerTitle)}</h2><div class="body">${priceRows(c)}</div></section>
+${hasVisit(c) ? `<section class="m-row" id="visit"><h2 class="lab">Visit</h2><div class="body m-visit"><div>${hoursList(c)}</div><div>${addressBlock(c)}${c.visit ? `<p class="muted">${esc(c.visit)}</p>` : ''}${contact(c)}</div></div></section>` : ''}
+<section class="m-row"><h2 class="lab">${esc(c.cta.label)}</h2><div class="body m-cta cq">${fit('p', 'd2', c.cta.headline)}<p class="lead">${esc(c.cta.subhead)}</p>${btn(c)}</div></section>
 </main>
-<footer class="m-foot cq">${fit('p', 'name', c.name, ' aria-hidden="true"')}<div class="row">${foot(c)}<span>${esc(c.phone)} · ${esc(c.email)}</span></div></footer>
+<footer class="m-foot cq">${fit('p', 'name', c.name, ' aria-hidden="true"')}<div class="row">${foot(c)}<span>${esc(contactLine(c))}</span></div></footer>
 `,
 }
 
@@ -137,13 +140,13 @@ const split: Composition = {
   </div>
   <figure class="has-slot">${img(c.photos.hero, 'cover', true)}${slot}</figure>
 </section><!--/hero-->
-<section class="s-half" id="about"><figure>${img(c.photos.about, 'cover')}</figure><div class="text cq"><h2 class="lab">About</h2><p class="st">${esc(c.about)}</p></div></section>
-<section class="s-half flip s-tint"><figure>${img(c.photos.d1, 'cover')}</figure><div class="text cq">${fit('h2', 'd2', 'Why people stay')}<ul class="s-reasons">${reasons(c)}</ul></div></section>
-<section class="s-prices" id="prices"><div class="head cq">${fit('h2', 'd2', 'Prices')}<p class="muted">${esc(c.subhead)}</p>${btn(c)}</div><div>${priceRows(c)}</div></section>
-<section class="s-half s-brand" id="visit"><figure>${img(c.photos.cta, 'cover')}</figure><div class="text cq">${fit('h2', 'd2', 'Visit')}${hoursList(c)}${addressBlock(c)}<p>${esc(c.visit)}</p>${contact(c)}</div></section>
+<section class="s-half" id="about"><figure>${img(c.photos.about, 'cover')}</figure><div class="text cq"><h2 class="lab">About</h2>${statement(c.about)}</div></section>
+<section class="s-half flip s-tint"><figure>${img(c.photos.d1, 'cover')}</figure><div class="text cq">${fit('h2', 'd2', c.reasonsTitle)}<ul class="s-reasons">${reasons(c)}</ul></div></section>
+<section class="s-prices" id="prices"><div class="head cq">${fit('h2', 'd2', c.offerTitle)}<p class="muted">${esc(c.subhead)}</p>${btn(c)}</div><div>${priceRows(c)}</div></section>
+${hasVisit(c) ? `<section class="s-half s-brand" id="visit"><figure>${img(c.photos.cta, 'cover')}</figure><div class="text cq">${fit('h2', 'd2', 'Visit')}${hoursList(c)}${addressBlock(c)}${c.visit ? `<p>${esc(c.visit)}</p>` : ''}${contact(c)}</div></section>` : ''}
 <section class="s-half flip"><figure>${img(c.photos.d2, 'cover')}</figure><div class="text cq">${fit('h2', 'd2', c.cta.headline)}<p class="lead">${esc(c.cta.subhead)}</p><p>${btn(c)}</p></div></section>
 </main>
-<footer class="s-foot">${foot(c)}<span>${esc(c.phone)} · ${esc(c.email)}</span></footer>
+<footer class="s-foot">${foot(c)}<span>${esc(contactLine(c))}</span></footer>
 `,
 }
 
@@ -190,13 +193,13 @@ const column: Composition = {
 <!--top--><header class="e-top"><p class="name">${esc(c.name)}</p>${nav(c)}</header><!--/top-->
 <main>
 <!--hero--><section class="e-sec e-hero cq"><p class="lab side">${esc(c.tagline)}</p>${headline('h1', 'd1', c.headline)}<p class="lead">${esc(c.subhead)}</p><div class="act">${btn(c)}${c.proof ? `<span class="lab muted">${esc(c.proof)}</span>` : ''}</div><figure class="bleed has-slot">${img(c.photos.hero, 'cover', true)}${slot}</figure></section><!--/hero-->
-<section class="e-sec" id="about"><h2 class="lab side">About</h2><p class="st">${esc(c.about)}</p><ul class="e-reasons">${reasons(c)}</ul></section>
+<section class="e-sec" id="about"><h2 class="lab side">About</h2>${statement(c.about)}<ul class="e-reasons">${reasons(c)}</ul></section>
 <div class="e-sec"><div class="e-pair wide"><figure>${img(c.photos.about, 'cover')}</figure><figure>${img(c.photos.d1, 'cover')}</figure></div></div>
-<section class="e-sec" id="prices"><h2 class="lab side">Prices</h2>${priceRows(c, true)}</section>
-<section class="e-sec" id="visit"><h2 class="lab side">Visit</h2><div class="e-visit"><div>${hoursList(c)}</div><div>${addressBlock(c)}<p class="muted">${esc(c.visit)}</p>${contact(c)}</div></div></section>
-<section class="e-sec e-cta cq"><h2 class="lab side">Book</h2>${fit('p', 'd2', c.cta.headline)}<p class="lead">${esc(c.cta.subhead)}</p><div class="act">${btn(c)}</div></section>
+<section class="e-sec" id="prices"><h2 class="lab side">${esc(c.offerTitle)}</h2>${priceRows(c, true)}</section>
+${hasVisit(c) ? `<section class="e-sec" id="visit"><h2 class="lab side">Visit</h2><div class="e-visit"><div>${hoursList(c)}</div><div>${addressBlock(c)}${c.visit ? `<p class="muted">${esc(c.visit)}</p>` : ''}${contact(c)}</div></div></section>` : ''}
+<section class="e-sec e-cta cq"><h2 class="lab side">${esc(c.cta.label)}</h2>${fit('p', 'd2', c.cta.headline)}<p class="lead">${esc(c.cta.subhead)}</p><div class="act">${btn(c)}</div></section>
 </main>
-<footer class="e-foot">${foot(c)}<span>${esc(c.phone)} · ${esc(c.email)}</span></footer>
+<footer class="e-foot">${foot(c)}<span>${esc(contactLine(c))}</span></footer>
 `,
 }
 
@@ -248,15 +251,15 @@ const bands: Composition = {
   <div class="copy cq">${headline('h1', 'd1', c.headline)}<p class="lead">${esc(c.subhead)}</p>${btn(c)}</div>
   <div class="b-slot">${slot}</div>
 </section><!--/hero-->
-<section class="b-band b-center cq" id="about"><h2 class="lab muted">About</h2><p class="st">${esc(c.about)}</p>${c.proof ? `<p class="lab muted">${esc(c.proof)}</p>` : ''}</section>
+<section class="b-band b-center cq" id="about"><h2 class="lab muted">About</h2>${statement(c.about)}${c.proof ? `<p class="lab muted">${esc(c.proof)}</p>` : ''}</section>
 <figure class="b-photo">${img(c.photos.about, 'cover')}</figure>
-<section class="b-band b-brand cq">${fit('h2', 'd2', 'Why people stay')}<ul class="b-three">${reasons(c)}</ul></section>
-<section class="b-band" id="prices"><div class="b-prices"><div class="cq">${fit('h2', 'd2', 'Prices')}</div><div>${priceRows(c)}</div></div></section>
+<section class="b-band b-brand cq">${fit('h2', 'd2', c.reasonsTitle)}<ul class="b-three">${reasons(c)}</ul></section>
+<section class="b-band" id="prices"><div class="b-prices"><div class="cq">${fit('h2', 'd2', c.offerTitle)}</div><div>${priceRows(c)}</div></div></section>
 <div class="b-duo"><figure>${img(c.photos.d1, 'cover')}</figure><figure>${img(c.photos.d2, 'cover')}</figure></div>
-<section class="b-band b-tint" id="visit"><div class="b-visit"><div class="cq">${fit('h2', 'd2', 'Visit')}</div><div>${hoursList(c)}</div><div>${addressBlock(c)}<p class="muted">${esc(c.visit)}</p>${contact(c)}</div></div></section>
+${hasVisit(c) ? `<section class="b-band b-tint" id="visit"><div class="b-visit"><div class="cq">${fit('h2', 'd2', 'Visit')}</div><div>${hoursList(c)}</div><div>${addressBlock(c)}${c.visit ? `<p class="muted">${esc(c.visit)}</p>` : ''}${contact(c)}</div></div></section>` : ''}
 <section class="b-band b-brand b-center cq">${fit('h2', 'd2', c.cta.headline)}<p class="lead">${esc(c.cta.subhead)}</p>${btn(c)}</section>
 </main>
-<footer class="b-foot">${foot(c)}<span>${esc(c.phone)} · ${esc(c.email)}</span></footer>
+<footer class="b-foot">${foot(c)}<span>${esc(contactLine(c))}</span></footer>
 `,
 }
 
@@ -318,10 +321,10 @@ const index: Composition = {
     <figure><div class="ph">${img(c.photos.d1, 'cover')}</div><figcaption class="lab muted">The work</figcaption></figure>
   </div>
 </section><!--/hero-->
-<section class="x-row" id="about"><h2 class="lab head">About</h2><div class="body"><p class="st">${esc(c.about)}</p><ul class="x-table">${c.reasons.map((r) => `<li><h3>${esc(r.title)}</h3><p>${esc(r.body)}</p></li>`).join('')}</ul></div></section>
-<section class="x-row" id="prices"><h2 class="lab head">Prices</h2><div class="body">${priceRows(c)}</div></section>
-<section class="x-row" id="visit"><h2 class="lab head">Visit</h2><div class="body x-visit"><div>${hoursList(c)}</div><div>${addressBlock(c)}<p class="muted">${esc(c.visit)}</p>${contact(c)}</div></div></section>
-<section class="x-row"><h2 class="lab head">Book</h2><div class="body"><div class="x-cta cq">${fit('p', 'd2', c.cta.headline)}${btn(c)}</div><p class="muted">${esc(c.cta.subhead)}</p></div></section>
+<section class="x-row" id="about"><h2 class="lab head">About</h2><div class="body">${statement(c.about)}<ul class="x-table">${c.reasons.map((r) => `<li><h3>${esc(r.title)}</h3><p>${esc(r.body)}</p></li>`).join('')}</ul></div></section>
+<section class="x-row" id="prices"><h2 class="lab head">${esc(c.offerTitle)}</h2><div class="body">${priceRows(c)}</div></section>
+${hasVisit(c) ? `<section class="x-row" id="visit"><h2 class="lab head">Visit</h2><div class="body x-visit"><div>${hoursList(c)}</div><div>${addressBlock(c)}${c.visit ? `<p class="muted">${esc(c.visit)}</p>` : ''}${contact(c)}</div></div></section>` : ''}
+<section class="x-row"><h2 class="lab head">${esc(c.cta.label)}</h2><div class="body"><div class="x-cta cq">${fit('p', 'd2', c.cta.headline)}${btn(c)}</div><p class="muted">${esc(c.cta.subhead)}</p></div></section>
 </main>
 <footer class="x-foot"><p>${esc(c.name)}</p><p class="muted">${esc(c.tagline)}</p><p>${esc(c.phone)}</p><p>${esc(c.email)}</p></footer>
 `,
@@ -366,7 +369,7 @@ const framed: Composition = {
 <main>
 <!--hero--><section class="f-wrap cq">${headline('h1', 'd1', c.headline)}<p class="lead">${esc(c.subhead)}</p>${btn(c)}<figure class="f-arch has-slot">${img(c.photos.hero, 'cover', true)}${slot}</figure>${c.proof ? `<p class="lab muted">${esc(c.proof)}</p>` : ''}</section><!--/hero-->
 <div class="f-orn" aria-hidden="true"><span></span></div>
-<section class="f-wrap cq" id="about"><h2 class="lab muted">About</h2><p class="st">${esc(c.about)}</p>
+<section class="f-wrap cq" id="about"><h2 class="lab muted">About</h2>${statement(c.about)}
   <ul class="f-three">${c.reasons
     .map((r, i) => {
       const p = [c.photos.about, c.photos.d1, c.photos.d2][i] ?? c.photos.about
@@ -374,13 +377,13 @@ const framed: Composition = {
     })
     .join('')}</ul></section>
 <div class="f-orn" aria-hidden="true"><span></span></div>
-<section class="f-wrap cq" id="prices">${fit('h2', 'd2', 'Prices')}<div class="f-prices">${priceRows(c, true)}</div></section>
+<section class="f-wrap cq" id="prices">${fit('h2', 'd2', c.offerTitle)}<div class="f-prices">${priceRows(c, true)}</div></section>
 <div class="f-wrap"><div class="f-arches"><figure>${img(c.photos.cta, 'cover')}</figure><figure>${img(c.photos.d2, 'cover')}</figure></div></div>
 <div class="f-orn" aria-hidden="true"><span></span></div>
-<section class="f-wrap cq" id="visit">${fit('h2', 'd2', 'Visit')}<div class="f-visit"><div>${hoursList(c)}</div><div>${addressBlock(c)}<p class="muted">${esc(c.visit)}</p>${contact(c)}</div></div></section>
+${hasVisit(c) ? `<section class="f-wrap cq" id="visit">${fit('h2', 'd2', 'Visit')}<div class="f-visit"><div>${hoursList(c)}</div><div>${addressBlock(c)}${c.visit ? `<p class="muted">${esc(c.visit)}</p>` : ''}${contact(c)}</div></div></section>` : ''}
 <section class="f-wrap cq"><div class="f-frame cq">${fit('p', 'd2', c.cta.headline)}<p class="lead">${esc(c.cta.subhead)}</p>${btn(c)}</div></section>
 </main>
-<footer class="f-foot"><p>${esc(c.name)}</p>${foot(c)}<p>${esc(c.phone)} · ${esc(c.email)}</p></footer>
+<footer class="f-foot"><p>${esc(c.name)}</p>${foot(c)}<p>${esc(contactLine(c))}</p></footer>
 `,
 }
 

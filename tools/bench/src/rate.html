@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Blind rating</title>
+<style>
+  :root { --bg: #f4f4f4; --fg: #111; --muted: #666; --line: #ddd; --card: #fff; --accent: #111 }
+  * { box-sizing: border-box }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 14px/1.4 system-ui, sans-serif; height: 100vh; display: flex; flex-direction: column }
+  header { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; padding: 10px 16px; border-bottom: 1px solid var(--line); background: var(--card) }
+  header b { font-size: 15px }
+  select, button { font: inherit; padding: 5px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--card); color: var(--fg) }
+  button { cursor: pointer }
+  .grow { flex: 1 }
+  .muted { color: var(--muted) }
+  main { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 10px 16px; min-height: 0 }
+  .pane { position: relative; overflow: hidden; border: 2px solid var(--line); border-radius: 8px; background: #fff }
+  .pane.pick { border-color: var(--accent) }
+  .pane iframe { position: absolute; top: 0; left: 0; border: 0; width: 1280px; transform-origin: 0 0 }
+  .tag { position: absolute; z-index: 2; left: 8px; bottom: 8px; background: var(--accent); color: #fff; padding: 2px 8px; border-radius: 4px; font-weight: 600 }
+  footer { padding: 8px 16px 12px; display: flex; flex-wrap: wrap; gap: 14px; align-items: center; border-top: 1px solid var(--line); background: var(--card) }
+  kbd { border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 4px; padding: 0 5px; font-size: 12px }
+  #tally { max-height: 40vh; overflow: auto; font-size: 12px; display: none; padding: 10px 16px; background: var(--card); border-top: 1px solid var(--line) }
+  #tally table { border-collapse: collapse } #tally td, #tally th { padding: 2px 10px 2px 0; text-align: left }
+  .empty { grid-column: 1 / -1; display: grid; place-items: center; color: var(--muted) }
+</style>
+<header>
+  <b>Blind rating</b>
+  <label>Run <select id="ra"></select></label>
+  <label>against <select id="rb"></select></label>
+  <span class="grow"></span>
+  <span id="where" class="muted"></span>
+  <button type="button" id="showTally">Results</button>
+</header>
+<main id="main"></main>
+<div id="tally"></div>
+<footer>
+  <span>Which site is better?</span>
+  <span><kbd>←</kbd> left</span><span><kbd>→</kbd> right</span><span><kbd>↓</kbd> about the same</span><span><kbd>⌫</kbd> back</span>
+  <span class="grow"></span>
+  <span id="progress" class="muted"></span>
+</footer>
+<script>
+  // Pairs: the same brief and the same version number (b1, b2, b3) from two runs, shown in random
+  // order so the run is hidden. Ratings go to tools/bench/ratings.json through the bench server.
+  let RUNS = [], RATINGS = [], queue = [], at = 0
+  const $ = (id) => document.getElementById(id)
+  const key = (r) => `${r.a}|${r.b}|${r.brief}|${r.site}`
+
+  async function load() {
+    RUNS = await (await fetch('/api/runs')).json()
+    RATINGS = await (await fetch('/api/ratings')).json()
+    for (const sel of [$('ra'), $('rb')])
+      sel.innerHTML = RUNS.map((r) => `<option>${r.summary.runId}</option>`).join('')
+    // Against: the fullest older run (a quick run of a few briefs is rarely the baseline).
+    const older = RUNS.slice(1).sort((x, y) => y.summary.built - x.summary.built)[0]
+    if (older) $('rb').value = older.summary.runId
+    $('ra').onchange = build
+    $('rb').onchange = build
+    build()
+  }
+
+  function build() {
+    const A = RUNS.find((r) => r.summary.runId === $('ra').value)
+    const B = RUNS.find((r) => r.summary.runId === $('rb').value)
+    queue = []
+    if (A && B && A !== B)
+      for (const ra of A.records) {
+        const rb = B.records.find((x) => x.brief === ra.brief)
+        if (!ra.ok || !rb?.ok) continue
+        for (const s of ra.sites)
+          if (rb.sites.some((t) => t.id === s.id))
+            queue.push({ a: A.summary.runId, b: B.summary.runId, brief: ra.brief, site: s.id, flip: Math.random() < 0.5 })
+      }
+    // Unrated first, so a session picks up where the last one stopped.
+    const done = new Set(RATINGS.map(key))
+    queue.sort((x, y) => done.has(key(x)) - done.has(key(y)))
+    at = 0
+    show()
+  }
+
+  function show() {
+    const main = $('main')
+    const done = new Set(RATINGS.map(key))
+    $('progress').textContent = `${queue.filter((q) => done.has(key(q))).length} of ${queue.length} rated`
+    const q = queue[at]
+    if (!q) {
+      main.innerHTML = `<div class="empty">${RUNS.length < 2 ? 'Needs two runs: make another with pnpm --filter @repo/bench bench --label …' : queue.length ? 'All pairs rated. Open Results.' : 'Pick two different runs.'}</div>`
+      $('where').textContent = ''
+      return
+    }
+    $('where').textContent = `${q.brief} · ${q.site}`
+    const [L, R] = q.flip ? [q.b, q.a] : [q.a, q.b]
+    main.innerHTML = [L, R]
+      .map((run, i) => `<div class="pane" id="p${i}"><span class="tag">${i ? 'Right' : 'Left'}</span><iframe src="/runs/${run}/${q.brief}/${q.site}.html"></iframe></div>`)
+      .join('')
+    fit()
+  }
+
+  function fit() {
+    for (const p of document.querySelectorAll('.pane')) {
+      const f = p.querySelector('iframe'), s = p.clientWidth / 1280
+      f.style.transform = `scale(${s})`
+      f.style.height = `${p.clientHeight / s}px`
+    }
+  }
+  addEventListener('resize', fit)
+
+  async function rate(side) {
+    const q = queue[at]
+    if (!q) return
+    const winner = side === 'tie' ? 'tie' : (side === 'left') !== q.flip ? 'a' : 'b'
+    $(side === 'right' ? 'p1' : 'p0')?.classList.add('pick')
+    const r = { a: q.a, b: q.b, brief: q.brief, site: q.site, winner }
+    RATINGS = RATINGS.filter((x) => key(x) !== key(r)).concat(r)
+    fetch('/api/ratings', { method: 'POST', body: JSON.stringify(r) })
+    setTimeout(() => { at++; show() }, 150)
+  }
+
+  addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') rate('left')
+    else if (e.key === 'ArrowRight') rate('right')
+    else if (e.key === 'ArrowDown') rate('tie')
+    else if (e.key === 'Backspace' && at > 0) { at--; show() }
+    else return
+    e.preventDefault()
+  })
+
+  // Results: how often each run wins, and how often each block wins when it differs.
+  $('showTally').onclick = () => {
+    const t = $('tally')
+    if (t.style.display === 'block') {
+      t.style.display = 'none'
+      return
+    }
+    const runs = {}, blocks = {}
+    const sites = (run, brief, site) =>
+      RUNS.find((r) => r.summary.runId === run)?.records.find((x) => x.brief === brief)?.sites.find((s) => s.id === site)
+    for (const r of RATINGS) {
+      const pair = `${r.a} vs ${r.b}`
+      runs[pair] ??= { a: 0, b: 0, tie: 0 }
+      runs[pair][r.winner]++
+      if (r.winner === 'tie') continue
+      const w = sites(r.winner === 'a' ? r.a : r.b, r.brief, r.site)?.blocks ?? []
+      const l = sites(r.winner === 'a' ? r.b : r.a, r.brief, r.site)?.blocks ?? []
+      const tally = (b) => {
+        blocks[b] ??= { w: 0, l: 0 }
+        return blocks[b]
+      }
+      for (const b of w) if (!l.includes(b)) tally(b).w++
+      for (const b of l) if (!w.includes(b)) tally(b).l++
+    }
+    const runRows = Object.entries(runs)
+      .map(([p, v]) => `<tr><td>${p}</td><td>first wins ${v.a}</td><td>second wins ${v.b}</td><td>same ${v.tie}</td></tr>`)
+      .join('')
+    const blockRows = Object.entries(blocks)
+      .map(([b, v]) => ({ b, ...v, n: v.w + v.l }))
+      .sort((x, y) => y.w / y.n - x.w / x.n || y.n - x.n)
+      .map((x) => `<tr><td>${x.b}</td><td>${x.w} of ${x.n}</td><td>${Math.round((100 * x.w) / x.n)}%</td></tr>`)
+      .join('')
+    t.innerHTML = `<b>Runs</b><table>${runRows || '<tr><td>No ratings yet.</td></tr>'}</table><br><b>Blocks</b> (wins when the two sites used different blocks; few ratings mean little)<table>${blockRows}</table>`
+    t.style.display = 'block'
+  }
+
+  load()
+</script>
+</html>

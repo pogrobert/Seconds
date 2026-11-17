@@ -25,6 +25,9 @@ The reason to build it: code-writing builders (Lovable, v0, Bolt, Replit) take m
 - **Reach (2026-11-14):** websites now. The design must leave room for apps (logins, databases, payments) later without a rewrite.
 - **Where it runs (2026-11-14):** the first version is Robert's hosted copy only. Self-hosting is out of the first version; do not build a Docker image, self-host drivers or self-host docs. Keep it possible later by following the two cheap rules in `docs/technical/README.md` (only `env.ts` touches Cloudflare; the pipeline stays pure).
 - **Who site code is for (2026-11-14):** people who never open code. Published pages should be as fast and light as possible. When code is exported, its reader is an LLM coding agent, not a human.
+- **A hobby project (2026-11-17):** Builder is Robert's side project, not a startup. There are no customers to plan for; favour what makes the sites better and the work faster over scale, cost at volume and production polish.
+- **React on published pages is allowed (2026-11-17):** Robert: "we can use react. the difference of speed isn't that much". Blocks may use React in the browser where they need it. This replaces the earlier rule of no React in the browser.
+- **Block library from free MIT sources (2026-11-17):** use free blocks from the public GitHub repositories of Tailark (tailark/blocks) and Shadcn Space (shadcnspace/shadcnspace), plus shadcn/ui, themed by our colour and type rules. Never take from their paid Pro sets or from their websites, where free and Pro sit side by side. Record each block's source and keep its MIT notice. Our own hand-made layouts look generic too, so they can be dropped where a better block exists.
 - **Stack (2026-11-14):** fixed. pnpm, TypeScript, React, TanStack Start, Tailwind v4, with Cloudflare as the default host for Robert's copy. Design around its limits; do not propose replacing a part without asking.
 - **Published sites (2026-11-14):** stay frozen when a block improves, until the owner republishes.
 - **Custom code (2026-11-14):** allowed only inside a sandbox. Not part of the first milestones.
@@ -131,7 +134,7 @@ Keep the questions to the decision model provider-neutral so the provider can be
   - Test content for the shortest, longest and right-to-left cases is written once per section type, and every block is tested against it.
 - **Licences.** Take blocks only from MIT, Apache-2.0, ISC or BSD sources, and keep their notices. Never copy from Tailwind Plus, Aceternity, shadcnblocks, Relume, Untitled UI Pro, Flowbite Pro, Magic UI Pro, React Bits or Monet.Design. Avoid Webstudio and Plasmic's platform code (AGPL), tldraw (licence key) and WebContainers (commercial licence).
 - **json-render** is not used. The spec is our own format. If code is ever copied from it, that code stays Apache-2.0 with its notices.
-- **No React in the browser on published pages.** Blocks are pure functions with no hooks or state. Interactivity comes from native HTML and a small set of named behaviors.
+- **React on published pages is allowed** (decided 2026-11-17, see above). Prefer blocks that render well on the server; ship browser code only where a block needs it.
 - **Numbers.** Label every speed, cost or quality figure as measured or estimated. All figures in this file and in the research are estimates until M0 measures them.
 - **Secrets.** Keys live in environment variables, never in code, commits or chat.
 - **Design choices are Robert's.** Show visual options for him to pick from. Do not lock a look without asking.

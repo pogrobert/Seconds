@@ -1,0 +1,14 @@
+{
+  "name": "@repo/bench",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "bench": "node --env-file-if-exists=../../.env src/run.ts",
+    "serve": "node src/serve.ts"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "playwright": "catalog:"
+  }
+}

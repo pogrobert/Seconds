@@ -23,3 +23,6 @@ tools/eval/photos/*/
 # Made by apps/web/scripts/prepare.ts
 apps/web/src/generated/
 apps/web/public/photos/
+
+# Benchmark runs (tools/bench): built pages, screenshots, results. tools/bench/ratings.json is kept.
+tools/bench/runs/*/

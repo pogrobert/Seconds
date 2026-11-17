@@ -12,7 +12,8 @@
     "./photos": "./src/photos.ts",
     "./grammar/choose": "./src/grammar/choose.ts",
     "./grammar/page": "./src/grammar/page.ts",
-    "./grammar/rule-profiles.json": "./src/grammar/rule-profiles.json"
+    "./grammar/rule-profiles.json": "./src/grammar/rule-profiles.json",
+    "./grammar/colour-rules": "./src/grammar/colour-rules.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

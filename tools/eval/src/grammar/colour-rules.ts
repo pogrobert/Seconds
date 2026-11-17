@@ -100,7 +100,13 @@ export const COLOUR_RULES: ColourRule[] = [
     key: 'deep',
     label: 'Deep',
     text: 'The whole page in a deep, dark version of the brand colour with cream text: rich, moody and luxurious, like an evening venue',
-    fits: () => true,
+    // Oranges, browns and yellows turn to mud when taken this dark (Robert, 2026-11-17: "the bg
+    // colour ... is awful", a deep brown). They get night or brand ink instead.
+    fits: (brand) => {
+      const b = lch(brand)
+      const h = b.h ?? 0
+      return (b.c ?? 0) >= 0.05 && !(h >= 30 && h <= 105)
+    },
     palette: (brand) => {
       const ground = at(brand, 0.26, brandC(brand, 0.08))
       const cream = at(brand, 0.95, 0.02)
@@ -180,3 +186,42 @@ export function palettePairs(p: Palette): Record<string, number> {
     night: pair('--on-night', '--night'),
   }
 }
+
+/**
+ * Brand colours by name, for any business (docs/m0/15-any-business.md). The decision model reads
+ * names and moods, never hex codes (it is weak with those); code holds the values.
+ */
+export const NAMED_COLOURS: { key: string; hex: string; mood: string }[] = [
+  { key: 'oxblood', hex: '#6b1e2a', mood: 'deep red-brown; old, rich, serious' },
+  { key: 'burgundy', hex: '#7a2238', mood: 'wine red; luxurious, romantic' },
+  { key: 'claret', hex: '#8f1d36', mood: 'bright wine; confident, festive' },
+  { key: 'cherry', hex: '#b3122e', mood: 'clear red; bold, energetic' },
+  { key: 'terracotta', hex: '#b5532f', mood: 'baked clay; warm, earthy, Mediterranean' },
+  { key: 'rust', hex: '#a4442a', mood: 'weathered orange-red; crafted, rugged' },
+  { key: 'tangerine', hex: '#e8762d', mood: 'bright orange; cheerful, playful' },
+  { key: 'saffron', hex: '#d99a1e', mood: 'golden yellow; sunny, generous' },
+  { key: 'mustard', hex: '#c9a227', mood: 'muted yellow; retro, friendly' },
+  { key: 'olive', hex: '#6b7034', mood: 'olive green; natural, grown-up' },
+  { key: 'moss', hex: '#4f6b3a', mood: 'moss green; outdoors, calm' },
+  { key: 'sage', hex: '#7d9473', mood: 'soft grey-green; gentle, wellbeing' },
+  { key: 'forest', hex: '#1f4d3a', mood: 'deep green; established, trustworthy, natural' },
+  { key: 'bottle green', hex: '#1d5a45', mood: 'rich green; heritage, quality' },
+  { key: 'teal', hex: '#1f6f78', mood: 'blue-green; fresh, clinical but warm' },
+  { key: 'petrol', hex: '#1d4e5f', mood: 'dark blue-green; calm, modern' },
+  { key: 'ocean', hex: '#1f5f8b', mood: 'sea blue; open, coastal, honest' },
+  { key: 'cobalt', hex: '#2742a8', mood: 'vivid blue; bold, modern, energetic' },
+  { key: 'navy', hex: '#1e2f55', mood: 'dark blue; dependable, formal, civic' },
+  { key: 'ink', hex: '#22314f', mood: 'blue-black; editorial, quiet authority' },
+  { key: 'slate', hex: '#4a5866', mood: 'blue-grey; understated, practical' },
+  { key: 'plum', hex: '#5b2a4f', mood: 'dark purple; indulgent, mysterious' },
+  { key: 'aubergine', hex: '#3f2340', mood: 'near-black purple; moody, night-time' },
+  { key: 'violet', hex: '#5b4a7a', mood: 'muted purple; creative, calm' },
+  { key: 'lavender', hex: '#8f7fb8', mood: 'soft purple; light, soothing' },
+  { key: 'rose', hex: '#b85d72', mood: 'dusky pink; soft, beauty, care' },
+  { key: 'hot pink', hex: '#d63b7a', mood: 'loud pink; fun, fearless' },
+  { key: 'coral', hex: '#e0725c', mood: 'pink-orange; warm, sociable' },
+  { key: 'sand', hex: '#b49a74', mood: 'warm beige; relaxed, natural' },
+  { key: 'espresso', hex: '#4a3226', mood: 'dark brown; coffee, craft, warmth' },
+  { key: 'charcoal', hex: '#2b2b2b', mood: 'near black; minimal, strong' },
+  { key: 'black', hex: '#141414', mood: 'black; sharp, exclusive, stark' },
+]

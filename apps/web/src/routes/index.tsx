@@ -30,6 +30,7 @@ function Build() {
   const [look, setLook] = useState<string | null>(null)
   const [device, setDevice] = useState<'desktop' | 'phone'>('desktop')
   const scroller = useRef<HTMLDivElement>(null)
+  const photoUrls = useRef<string[]>([])
 
   useEffect(() => {
     scroller.current?.scrollTo({ top: scroller.current.scrollHeight, behavior: 'smooth' })
@@ -43,17 +44,35 @@ function Build() {
     setDraft('')
     setBusy(true)
     try {
-      const r = await buildSite({
+      const built = await buildSite({
         data: { messages: history.filter((m) => m.role === 'user').map((m) => m.text) },
       })
+      // Photos arrive once as data; every look shares one local link per photo.
+      for (const u of photoUrls.current) URL.revokeObjectURL(u)
+      photoUrls.current = []
+      const links: Record<string, string> = {}
+      await Promise.all(
+        Object.entries(built.images).map(async ([id, data]) => {
+          const url = URL.createObjectURL(await (await fetch(data)).blob())
+          photoUrls.current.push(url)
+          links[id] = url
+        }),
+      )
+      const r: BuildResult = {
+        ...built,
+        images: {},
+        sites: built.sites.map((s) => ({
+          ...s,
+          html: s.html.replace(/__IMG_([A-Za-z0-9]+)__/g, (t, id: string) => links[id] ?? t),
+        })),
+      }
       setResult(r)
       setLook(r.suggested)
-      const label = r.sites.find((s) => s.id === r.suggested)?.label ?? r.suggested
       setMessages((m) => [
         ...m,
         {
           role: 'assistant',
-          text: `Built ${r.name}, a ${r.kindLabel}. ${label} fits it best; the other looks are above the preview. Looks 1 to 3 are the atmospheric direction from your reference picks; Jev's pick uses every rule. Tell me what to change.`,
+          text: `Built ${r.name}, ${/^[aeiou]/i.test(r.kindLabel) ? 'an' : 'a'} ${r.kindLabel}. Blocks 1 to 3 are the block library (blocks from Tailark, Shadcn UI Blocks and Efferd), each a different mix, in neutral black, white and grey with the fonts Jev chose. Tell me what to change.${r.notes.length ? ` Note: ${r.notes.join(' ')}` : ''}`,
           result: r,
         },
       ])
@@ -165,9 +184,14 @@ function Build() {
                         {m.result && (
                           <p className="mt-1.5 text-xs text-stone-500">
                             Ready in {seconds(m.result.ms.total)}: choices{' '}
-                            {seconds(m.result.ms.decide)}, words {seconds(m.result.ms.text)},
-                            drawing {seconds(m.result.ms.render)}. Models cost $
+                            {seconds(m.result.ms.decide)} and words {seconds(m.result.ms.text)} at
+                            once, photos {seconds(m.result.ms.photos)}, drawing{' '}
+                            {seconds(m.result.ms.render)}. Models cost $
                             {m.result.costUsd.toFixed(4)}. Measured on this computer.
+                            {m.result.credits.length > 0 &&
+                              ` Photos from Pixabay by ${m.result.credits.map((c) => c.photographer).join(', ')}.`}
+                            {m.result.photoSearches.length > 0 &&
+                              ` Photo searches: ${m.result.photoSearches.join('; ')}.`}
                           </p>
                         )}
                       </div>

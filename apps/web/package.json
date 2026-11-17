@@ -15,6 +15,7 @@
   "dependencies": {
     "@repo/blocks": "workspace:*",
     "@repo/eval": "workspace:*",
+    "@repo/library": "workspace:*",
     "@repo/pipeline": "workspace:*",
     "@repo/render": "workspace:*",
     "@repo/spec": "workspace:*",

@@ -4,7 +4,7 @@
 // Plain HTML and CSS, no JavaScript in the page. An experiment kept out of the library on purpose:
 // if it works, it moves into the spec and blocks.
 
-import type { Copy } from '@repo/pipeline'
+import type { Copy, SiteCopy } from '@repo/pipeline'
 import type { SampleBusiness } from '../businesses.ts'
 import type { ColourRule } from './colour-rules.ts'
 import type { DetailRule, HeroRule, PhotoRule } from './layers.ts'
@@ -30,6 +30,10 @@ export type Content = {
   email: string
   book: string
   cta: { headline: string; subhead: string; label: string }
+  /** The heading and menu label for what the business offers ("Prices", "Menu", "Services"). */
+  offerTitle: string
+  /** The heading over the three reasons. */
+  reasonsTitle: string
   photos: { hero: Photo; about: Photo; cta: Photo; d1: Photo; d2: Photo }
   /** The business's atmospheric set, for the low-key photo treatment (round 3). */
   lowkey?: { hero: Photo; people: Photo; detail: Photo }
@@ -93,14 +97,24 @@ export const img = (p: Photo, cls = '', eager = false) =>
 export const btn = (c: Content, cls = '') =>
   `<a class="btn ${cls}" data-slot="primaryCta" href="${c.book}">${esc(c.cta.label)}</a>`
 
+/** Whether the business gave anything to show in a visit section: hours, an address or contact. */
+export const hasVisit = (c: Content) => !!(c.hours.length || c.address.length || c.visit)
+
+/** Phone and email, whichever exist, on one line. */
+export const contactLine = (c: Content) => [c.phone, c.email].filter(Boolean).join(' · ')
+
+/** The about paragraph in the statement style, stepped down in size when it runs long. */
+export const statement = (text: string) =>
+  `<p class="st${text.length > 340 ? ' longer' : text.length > 220 ? ' long' : ''}">${esc(text)}</p>`
+
 export const nav = (c: Content, cls = '') =>
-  `<nav class="nav ${cls}" aria-label="Main"><a href="#about">About</a><a href="#prices">Prices</a><a href="#visit">Visit</a>${btn(c, 'small')}</nav>`
+  `<nav class="nav ${cls}" aria-label="Main"><a href="#about">About</a><a href="#prices">${esc(c.offerTitle)}</a>${hasVisit(c) ? '<a href="#visit">Visit</a>' : ''}${btn(c, 'small')}</nav>`
 
 export const priceRows = (c: Content, leaders = false) =>
   c.prices
     .map(
       (g) =>
-        `<div class="pgroup"><h3 class="lab">${esc(g.group)}</h3><ul class="plist${leaders ? ' leaders' : ''}">${g.items
+        `<div class="pgroup">${g.group ? `<h3 class="lab">${esc(g.group)}</h3>` : ''}<ul class="plist${leaders ? ' leaders' : ''}">${g.items
           .map(
             (i) =>
               `<li><span class="pname">${esc(i.name)}${i.detail ? `<small>${esc(i.detail)}</small>` : ''}</span>${leaders ? '<span class="dots" aria-hidden="true"></span>' : ''}${i.time ? `<span class="ptime">${esc(i.time)}</span>` : leaders ? '' : '<span class="ptime"></span>'}<span class="pprice">${esc(i.price)}</span></li>`,
@@ -112,10 +126,16 @@ export const priceRows = (c: Content, leaders = false) =>
 export const hoursList = (c: Content) =>
   `<dl class="hours">${c.hours.map((h) => `<div><dt>${esc(h.days)}</dt><dd>${esc(h.time)}</dd></div>`).join('')}</dl>`
 
-export const addressBlock = (c: Content) => `<address>${c.address.map(esc).join('<br>')}</address>`
+export const addressBlock = (c: Content) =>
+  c.address.length ? `<address>${c.address.map(esc).join('<br>')}</address>` : ''
 
-export const contact = (c: Content) =>
-  `<p class="contact"><a href="tel:${c.phone.replace(/\s/g, '')}">${esc(c.phone)}</a><br><a href="mailto:${c.email}">${esc(c.email)}</a></p>`
+export const contact = (c: Content) => {
+  const parts = [
+    c.phone ? `<a href="tel:${c.phone.replace(/\s/g, '')}">${esc(c.phone)}</a>` : '',
+    c.email ? `<a href="mailto:${esc(c.email)}">${esc(c.email)}</a>` : '',
+  ].filter(Boolean)
+  return parts.length ? `<p class="contact">${parts.join('<br>')}</p>` : ''
+}
 
 /* ------------------------------------------------------------------ base CSS */
 
@@ -139,6 +159,8 @@ header .name,.bar .name{white-space:nowrap}
 .h-bar{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:22px var(--g)}
 .slot{position:absolute;right:clamp(14px,2vw,28px);bottom:clamp(14px,2vw,28px);z-index:2}
 .st{font-family:var(--f-st);font-weight:var(--w-st);letter-spacing:var(--t-st,-0.01em);font-size:var(--st);line-height:1.28;text-wrap:pretty}
+.st.long{font-size:calc(var(--st) * 0.78)}
+.st.longer{font-size:calc(var(--st) * 0.66)}
 .lead{font-size:var(--lead);line-height:1.5;text-wrap:pretty}
 .lab{font-family:var(--f-l);font-weight:var(--w-l);letter-spacing:var(--t-l);text-transform:var(--c-l);font-variant-caps:var(--var-l,normal);font-size:var(--size-l);line-height:1.3}
 .muted{color:var(--muted)}
@@ -327,6 +349,8 @@ export function contentOf(
     email: b.email ?? '',
     book: b.bookingUrl ?? '#',
     cta: w.cta,
+    offerTitle: 'Prices',
+    reasonsTitle: 'Why people stay',
     photos: {
       hero: ph('hero'),
       about: ph('about'),
@@ -352,5 +376,48 @@ export function contentOf(
       ...(late ? { late } : {}),
       ...(openDays ? { openDays } : {}),
     },
+  }
+}
+
+/**
+ * Content for any business, from the words the owner gave (docs/m0/15-any-business.md): nothing is
+ * taken from a sample. Hours, address, phone and email appear only if the owner gave them.
+ */
+export function contentFromCopy(
+  w: SiteCopy,
+  photos: Content['photos'],
+  o: { brand: string; lowkey?: Content['lowkey']; book?: string },
+): Content {
+  const k = w.contact
+  return {
+    name: w.name,
+    tagline: w.tagline,
+    headline: w.headline,
+    subhead: w.subhead,
+    about: w.about,
+    reasons: w.reasons,
+    prices: [
+      {
+        group: '',
+        items: w.offer.items.map((i) => ({
+          name: i.name,
+          ...(i.detail ? { detail: i.detail } : {}),
+          price: i.price,
+        })),
+      },
+    ],
+    hours: k.hours ? [{ days: k.hours, time: '' }] : [],
+    address: k.address ? [k.address] : [],
+    visit: '',
+    phone: k.phone,
+    email: k.email,
+    book: o.book ?? '#',
+    cta: w.cta,
+    offerTitle: w.offer.title || 'What we do',
+    reasonsTitle: w.reasonsTitle || 'Why choose us',
+    photos,
+    ...(o.lowkey ? { lowkey: o.lowkey } : {}),
+    brand: o.brand,
+    facts: { area: k.place },
   }
 }
