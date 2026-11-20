@@ -9,3 +9,8 @@
     transform: translateX(300%);
   }
 }
+
+/* The build page's type (docs: Robert picked the neutral, v0-like look, 2026-11-20). */
+@theme {
+  --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+}

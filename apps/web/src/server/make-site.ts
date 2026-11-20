@@ -18,13 +18,13 @@ import photoManifest from '@repo/eval/photos/manifest.json'
 import {
   blockText,
   describePlan,
+  LIVE,
   type Plan,
   plans,
   REGISTRY,
   renderSite,
   renderTemplate,
   type Kind as SectionKind,
-  LIVE,
   theme,
 } from '@repo/library'
 import {
@@ -292,7 +292,13 @@ const darkTokens = (html: string, dark: boolean) =>
   dark ? html.replace(/__IMG_([A-Za-z0-9]+)__/g, '__IMG_$1dk__') : html
 
 /** One build from the owner's messages. Used by the build page and by /api/build (tools/bench). */
-export async function build(messages: string[]): Promise<BuildResult> {
+/** A step of the build finishing, for the build page's live progress (routes/api/build-stream.ts). */
+export type BuildStep = { step: 'choices' | 'words' | 'check'; ms: number }
+
+export async function build(
+  messages: string[],
+  onStep: (s: BuildStep) => void = () => {},
+): Promise<BuildResult> {
   const t0 = performance.now()
   const env = getEnv()
   const words = messages.join('\n')
@@ -309,15 +315,24 @@ export async function build(messages: string[]): Promise<BuildResult> {
     nearestKind(decide, words),
     pickArt(decide, words),
     pickParts(decide, words),
-  ]).then((r) => ({ r, ms: Math.round(performance.now() - td) }))
-  const written = env.OPENROUTER_API_KEY
-    ? writeSiteCopy({ apiKey: env.OPENROUTER_API_KEY, words })
-    : Promise.resolve({
-        copy: null as SiteCopy | null,
-        problems: ['no OPENROUTER_API_KEY'],
-        ms: 0,
-        costUsd: 0,
-      })
+  ]).then((r) => {
+    const ms = Math.round(performance.now() - td)
+    onStep({ step: 'choices', ms })
+    return { r, ms }
+  })
+  const written = (
+    env.OPENROUTER_API_KEY
+      ? writeSiteCopy({ apiKey: env.OPENROUTER_API_KEY, words })
+      : Promise.resolve({
+          copy: null as SiteCopy | null,
+          problems: ['no OPENROUTER_API_KEY'],
+          ms: 0,
+          costUsd: 0,
+        })
+  ).then((w) => {
+    onStep({ step: 'words', ms: w.ms })
+    return w
+  })
   const [{ r, ms: decideMs }, w] = await Promise.all([decided, written])
   const [reading, kind, art, parts] = r
   // Jev checks each answer against the owner's words (docs/m0/19-fuller-pages.md).
@@ -325,6 +340,7 @@ export async function build(messages: string[]): Promise<BuildResult> {
   const grounded = w.copy ? await groundAnswers(decide, words, w.copy) : null
   if (grounded) w.copy = grounded.copy
   const groundMs = Math.round(performance.now() - tg)
+  onStep({ step: 'check', ms: groundMs })
   if (!w.copy)
     notes.push(
       `The words could not be written (${w.problems.join('; ')}); showing a sample business instead.`,
