@@ -12,11 +12,13 @@ async function streamBuild(
   messages: string[],
   onStep: (p: Progress) => void,
   onPhotos: (p: PhotoResult | null) => void,
+  /** The site so far: the last message is then an edit of it (docs/m0/27-editing.md). */
+  state: BuildResult['state'] = null,
 ): Promise<BuildResult> {
   const res = await fetch('/api/build-stream', {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ messages }),
+    body: JSON.stringify({ messages, state }),
   })
   if (!res.ok || !res.body) {
     const e = (await res.json().catch(() => null)) as { error?: string } | null
@@ -207,22 +209,37 @@ function Build() {
         history.filter((m) => m.role === 'user').map((m) => m.text),
         setProgress,
         (p) => photos(p),
+        result?.state ?? null,
       )
-      const mine = ++generation.current
-      for (const u of photoUrls.current) URL.revokeObjectURL(u)
-      photoUrls.current = []
-      setLinks({})
+      // An edit that keeps the photos keeps their links; a new site or new photos starts afresh.
+      const edited = !!built.changed
+      const mine = edited && !built.photoJob ? generation.current : ++generation.current
+      if (!edited || built.photoJob) {
+        for (const u of photoUrls.current) URL.revokeObjectURL(u)
+        photoUrls.current = []
+        setLinks({})
+      }
       const r: BuildResult = {
         ...built,
         sites: built.sites.map((x) => ({ ...x, html: withSpaces(x.html) })),
       }
+      // After an edit, stay on the design being looked at when it is still one of the three.
+      const was = result?.sites.find((x) => x.id === look)?.label
+      const same = edited ? r.sites.find((x) => x.label === was) : undefined
       setResult(r)
-      setLook(r.suggested)
+      setLook(same?.id ?? r.suggested)
+      const changes = r.changed ?? []
       setMessages((m) => [
         ...m,
         {
           role: 'assistant',
-          text: `Here is ${r.name}, ${/^[aeiou]/i.test(r.kindLabel) ? 'an' : 'a'} ${r.kindLabel}, in three versions to compare. Tell me what to change.`,
+          text: edited
+            ? changes.length
+              ? `Changed ${changes.length > 1 ? `${changes.slice(0, -1).join(', ')} and ${changes[changes.length - 1]}` : changes[0]}. Anything else?`
+              : r.already?.length
+                ? `Nothing to change: ${r.already.join('; ')}.`
+                : 'Nothing changed: I could not tell which part you meant. Try naming it: the headline, the colour, the photos, the design.'
+            : `Here is ${r.name}, ${/^[aeiou]/i.test(r.kindLabel) ? 'an' : 'a'} ${r.kindLabel}, in three versions to compare. Tell me what to change.`,
           result: r,
           ...(r.photoJob ? { photos: 'waiting' as const } : {}),
         },
@@ -720,8 +737,12 @@ function Reply({
           <div className="mt-2">
             <Steps
               steps={[
-                { label: 'Words', state: 'done', note: seconds(r.ms.text) },
-                { label: 'Page', state: 'done', note: seconds(r.ms.total) },
+                ...(r.changed
+                  ? [{ label: 'Edit', state: 'done' as const, note: seconds(r.ms.total) }]
+                  : [
+                      { label: 'Words', state: 'done' as const, note: seconds(r.ms.text) },
+                      { label: 'Page', state: 'done' as const, note: seconds(r.ms.total) },
+                    ]),
                 ...(r.photoJob
                   ? [
                       p

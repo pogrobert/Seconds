@@ -261,6 +261,24 @@ export function checkSiteCopy(c: SiteCopy, words = ''): string[] {
   return p
 }
 
+/**
+ * Items the writer left blank. The schema asks for at least four questions and three steps, so
+ * when it has nothing true to put there (an edit of a site whose questions the check removed),
+ * it fills them with empty strings; those must never reach the page (docs/m0/27-editing.md).
+ */
+export function dropEmpty(c: SiteCopy): SiteCopy {
+  const has = (...xs: (string | undefined)[]) => xs.every((x) => !!x?.trim())
+  return {
+    ...c,
+    faq: c.faq.filter((f) => has(f.q, f.a)),
+    reasons: c.reasons.filter((r) => has(r.title, r.body)),
+    offer: { ...c.offer, items: c.offer.items.filter((i) => has(i.name)) },
+    steps: { ...c.steps, items: c.steps.items.filter((i) => has(i.title, i.body)) },
+    audience: { ...c.audience, items: c.audience.items.filter((i) => has(i.title, i.body)) },
+    categories: (c.categories ?? []).filter((k) => has(k.name)),
+  }
+}
+
 /** OpenRouter with a strict JSON schema, one retry when the words break a limit. */
 /**
  * The schema's length cap can stop the model mid-word ("a warm,-f"). A paragraph that does not end
@@ -310,6 +328,11 @@ export async function writeSiteCopy(o: {
    * medium, most of medium's output being hidden thinking.
    */
   effort?: 'low' | 'medium' | 'high'
+  /**
+   * An edit (docs/m0/27-editing.md): the site's current words and the owner's new request. The
+   * writer sees its earlier answer and changes only what the request asks for.
+   */
+  edit?: { copy: SiteCopy; request: string }
   fetch?: typeof fetch
   signal?: AbortSignal
 }): Promise<{ copy: SiteCopy | null; problems: string[]; ms: number; costUsd: number }> {
@@ -322,6 +345,20 @@ export async function writeSiteCopy(o: {
         'You write short, specific website copy for any kind of organisation. You answer with JSON only.',
     },
     { role: 'user', content: prompt(o.words) },
+    ...(o.edit
+      ? [
+          { role: 'assistant' as const, content: JSON.stringify(o.edit.copy) },
+          {
+            role: 'user' as const,
+            content: [
+              'The owner has seen the website and now asks:',
+              o.edit.request,
+              '',
+              'Answer with the whole JSON again, changed only as this asks. Keep every other field exactly as it is, word for word. All the rules above still apply, with one exception: what the owner states in this request is theirs to promise and must be used, even where the rules above forbid it unasked (delivery, online booking, an area served, hours, prices, an address, a name). Put it where a visitor will see it: the subhead, the introduction, the offer or the contact details. If the request does not concern the words at all, return them unchanged.',
+            ].join('\n'),
+          },
+        ]
+      : []),
   ]
   const t0 = performance.now()
   let copy: SiteCopy | null = null
@@ -361,7 +398,7 @@ export async function writeSiteCopy(o: {
         continue
       }
       text = body?.choices?.[0]?.message?.content ?? ''
-      copy = wholeSentences(tidy(JSON.parse(text) as SiteCopy))
+      copy = dropEmpty(wholeSentences(tidy(JSON.parse(text) as SiteCopy)))
       problems = checkSiteCopy(copy, o.words)
     } catch (e) {
       problems = [e instanceof Error ? e.message : String(e)]
@@ -426,6 +463,17 @@ export async function groundAnswers(
     offerTitle: [copy.offer.title, ...(copy.more?.offerTitles ?? [])],
   }
   const distinct = (xs: string[]) => [...new Set(xs.map((x) => x.trim()).filter(Boolean))]
+  // A name that only restates the brief ("Physiotherapy clinic for runners in Edinburgh") is no
+  // name: when the owner gave none (the writer's three differ), those options are left out.
+  const owner = new Set(words.toLowerCase().match(/\p{L}{3,}/gu) ?? [])
+  const restates = (n: string) => {
+    const ws = n.toLowerCase().match(/\p{L}{3,}/gu) ?? []
+    return ws.length >= 3 && ws.filter((w) => owner.has(w)).length / ws.length >= 0.6
+  }
+  if (distinct(options.name).length > 1) {
+    const named = options.name.filter((n) => !restates(n))
+    if (named.length) options.name = named
+  }
   const WHAT = {
     name: 'name for it, if the owner gave none: the one an owner would really choose, distinctive and fitting',
     headline: "headline: the most specific and memorable, true to the owner's words, never generic",
@@ -525,8 +573,14 @@ export async function groundAnswers(
       .split(/[^a-z]+/)
       .filter((w) => w.length >= 4)
       .some((w) => !stems.has(w.slice(0, 4)))
+  // Placeholders the writer fills a list with ("DJ A", "Artist 1", "Package B") are made up too.
+  const placeholder = (n: string) =>
+    /^(dj|artist|band|act|guest|item|service|product|option|package|class|course|room|speaker|tutor|stylist)\s+([a-z]|\d+)$/i.test(
+      n.trim(),
+    )
   const invented = (i: number) =>
-    (scores[`named${i}`] ?? 0) > 0.6 && unsaid(copy.offer.items[i]?.name ?? '')
+    placeholder(copy.offer.items[i]?.name ?? '') ||
+    ((scores[`named${i}`] ?? 0) > 0.6 && unsaid(copy.offer.items[i]?.name ?? ''))
   const genuine = copy.offer.items
     .map((it, i) => ({ it: guess(`detail${i}`) ? { ...it, detail: '' } : it, i }))
     .filter((x) => !invented(x.i))

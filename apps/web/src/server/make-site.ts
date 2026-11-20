@@ -14,6 +14,7 @@ import {
 import { COLOUR_RULES, NAMED_COLOURS } from '@repo/eval/grammar/colour-rules'
 import { type Content, contentFromCopy, contentOf } from '@repo/eval/grammar/page'
 import ruleProfiles from '@repo/eval/grammar/rule-profiles.json'
+import { TYPE_RULES } from '@repo/eval/grammar/type-rules'
 import photoManifest from '@repo/eval/photos/manifest.json'
 import {
   blockText,
@@ -78,6 +79,12 @@ export type PhotoResult = {
   art: number
 }
 export type BuildResult = {
+  /** What the site was made from, for editing it (docs/m0/27-editing.md); null for the sample. */
+  state: SiteState | null
+  /** On an edit: what was changed, in plain words. */
+  changed?: string[]
+  /** On an edit: what was asked for but already so ("the colour is already navy"). */
+  already?: string[]
   name: string
   kindLabel: string
   suggested: string
@@ -292,6 +299,68 @@ function sampleContent(kind: Kind, brand: string, copy: SiteCopy | null): Conten
 const darkTokens = (html: string, dark: boolean) =>
   dark ? html.replace(/__IMG_([A-Za-z0-9]+)__/g, '__IMG_$1dk__') : html
 
+/**
+ * The page's content from the words, with a token in each photo space; the photo step (or photos
+ * already found, on an edit) fills them by slot.
+ */
+export function contentFor(copy: SiteCopy, brand: string): Content {
+  const q = copy.photos
+  const slot = (id: string, alt: string) => ({ src: `__IMG_${id}__`, alt, w: 1280, h: 853 })
+  return contentFromCopy(
+    copy,
+    {
+      hero: slot('hero', q.place),
+      about: slot('about', q.people),
+      cta: slot('cta', q.place),
+      d1: slot('d1', q.detail),
+      d2: slot('d2', q.detail),
+    },
+    {
+      brand,
+      lowkey: {
+        hero: slot('lkhero', q.place),
+        people: slot('lkpeople', q.people),
+        detail: slot('lkdetail', q.detail),
+      },
+    },
+  )
+}
+
+/** Everything a site was made from, so an edit can change one part and keep the rest. */
+export type SiteState = {
+  /** The owner's messages so far. */
+  words: string
+  copy: SiteCopy
+  brand: string
+  brandName: string
+  /** The type rule's key. */
+  type: string
+  /** The three templates shown, best first. */
+  templates: string[]
+  extras: Extra[]
+  art: { style: ArtStyle; strength: ArtStrength }
+  seed: string
+}
+
+/** The three versions: one template each, in the site's type and colour. */
+export function drawTemplates(
+  state: SiteState,
+  content = contentFor(state.copy, state.brand),
+): BuiltSite[] {
+  const type =
+    TYPE_RULES.find((t) => t.key === state.type) ?? (TYPE_RULES[0] as (typeof TYPE_RULES)[number])
+  const t = theme(COLOUR_CREAM.palette(content.brand), type)
+  return state.templates
+    .map((id) => LIVE.find((x) => x.id === id))
+    .filter((x): x is (typeof LIVE)[number] => !!x)
+    .map((tpl, i) => ({
+      id: `b${i + 1}`,
+      label: tpl.label,
+      rules: `${tpl.label} template · ${type.label} type · ${state.brandName || 'neutral'} · ${state.extras.join(', ') || 'no extras'}${tpl.dark ? ' · night ·' : ''}`,
+      html: darkTokens(renderTemplate(content, tpl.id, t, state.extras), tpl.dark),
+    }))
+}
+
 /** One build from the owner's messages. Used by the build page and by /api/build (tools/bench). */
 /** A step of the build finishing, for the build page's live progress (routes/api/build-stream.ts). */
 export type BuildStep = { step: 'choices' | 'words' | 'check'; ms: number }
@@ -404,25 +473,7 @@ export async function build(
   let photoJob: PhotoJob | null = null
   if (w.copy) {
     const q = w.copy.photos
-    const slot = (id: string, alt: string) => ({ src: `__IMG_${id}__`, alt, w: 1280, h: 853 })
-    content = contentFromCopy(
-      w.copy,
-      {
-        hero: slot('hero', q.place),
-        about: slot('about', q.people),
-        cta: slot('cta', q.place),
-        d1: slot('d1', q.detail),
-        d2: slot('d2', q.detail),
-      },
-      {
-        brand: art.brand,
-        lowkey: {
-          hero: slot('lkhero', q.place),
-          people: slot('lkpeople', q.people),
-          detail: slot('lkdetail', q.detail),
-        },
-      },
-    )
+    content = contentFor(w.copy, art.brand)
     photoJob = {
       queries: q,
       about: { name: w.copy.name, kind: w.copy.kind, town: w.copy.contact.place },
@@ -461,12 +512,27 @@ export async function build(
     .slice(0, 3)
     .map((id) => LIVE.find((t) => t.id === id))
     .filter((t): t is (typeof LIVE)[number] => !!t)
-  const fromTemplates: BuiltSite[] = chosenTemplates.map((tpl, i) => ({
-    id: `b${i + 1}`,
-    label: tpl.label,
-    rules: `${tpl.label} template · ${best.type.label} type · ${art.brandName || 'neutral'} · ${extrasOf.join(', ') || 'no extras'}${tpl.dark ? ' · night ·' : ''}`,
-    html: darkTokens(renderTemplate(content, tpl.id, tplTheme, extrasOf), tpl.dark),
-  }))
+  const state: SiteState | null = w.copy
+    ? {
+        words,
+        copy: w.copy,
+        brand: art.brand,
+        brandName: art.brandName,
+        type: best.type.key,
+        templates: chosenTemplates.map((t) => t.id),
+        extras: extrasOf,
+        art: { style: art.style, strength: art.strength },
+        seed,
+      }
+    : null
+  const fromTemplates: BuiltSite[] = state
+    ? drawTemplates(state, content)
+    : chosenTemplates.map((tpl, i) => ({
+        id: `b${i + 1}`,
+        label: tpl.label,
+        rules: `${tpl.label} template · ${best.type.label} type · neutral · ${extrasOf.join(', ') || 'no extras'}${tpl.dark ? ' · night ·' : ''}`,
+        html: darkTokens(renderTemplate(content, tpl.id, tplTheme, extrasOf), tpl.dark),
+      }))
   const fromBlocks: BuiltSite[] = themes.map((p, i) => {
     const d = design(p)
     const plan = layouts[i] as Plan
@@ -541,6 +607,7 @@ export async function build(
     parts.costUsd +
     first.costUsd
   return {
+    state,
     name: content.name,
     kindLabel: w.copy?.kind || KIND_LABEL[kind],
     suggested: sites[0]?.id ?? 'b1',

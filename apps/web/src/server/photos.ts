@@ -74,6 +74,14 @@ const words = (s: string) =>
     .filter((w) => w.length > 2 && !STOP.has(w))
 
 /** Hits whose tags share a word with the subject, best match first (Pixabay ranks by popularity). */
+/**
+ * Tags that mark an image as drawn or generated rather than photographed. Pixabay files some
+ * AI-made images as photos (a cartoon groomer reached a dog groomer's page, 2026-11-20); Robert's
+ * rule is no AI pictures.
+ */
+const MADE =
+  /\b(ai[- ]?generated|generated|ai|artificial intelligence|midjourney|stable diffusion|illustration|cartoon|drawing|render|3d|clipart|vector|digital art|painting)\b/i
+
 function relevant(hits: Hit[], subject: string): Hit[] {
   const want = words(subject)
   const stem = (w: string) => w.replace(/(ing|ers|er|es|s)$/, '')
@@ -82,6 +90,7 @@ function relevant(hits: Hit[], subject: string): Hit[] {
     return want.filter((w) => tags.some((t) => t === stem(w) || t.includes(stem(w)))).length
   }
   return hits
+    .filter((h) => !MADE.test(h.tags))
     .map((h) => ({ h, s: score(h) }))
     .filter((x) => x.s > 0)
     .sort((a, b) => b.s - a.s)
@@ -255,7 +264,7 @@ async function judge(
       text: [
         `Photos for the website of ${about.name}, a ${about.kind}${about.town ? ` in ${about.town}` : ''}.`,
         'Each photo below has an id. For each subject, list the ids of photos that clearly fit this organisation, best first, at most 3. Leave a list empty rather than include a photo that does not fit.',
-        'Reject: the wrong trade or setting, a different country or city than the one named, staged or cheesy stock, text or watermarks, people in poor taste, blurry or dull pictures.',
+        'Reject: anything that is not a real photograph (illustrations, cartoons, 3D renders, AI-generated images with their too-smooth, too-perfect look), the wrong trade or setting, a different country or city than the one named, staged or cheesy stock, text or watermarks, people in poor taste, blurry or dull pictures.',
         'place = the room or setting where it works; people = people doing its kind of work or being served; detail = a close-up object or material typical of it.',
         `townFits: true only if a photo of ${about.town || 'the town'} itself (its streets, square or buildings) would suit this organisation's home page, as for a council, a civic or tourist body, or a museum. False for a shop, clinic, studio, trade, firm or restaurant.`,
         'dark: for each subject, the id of one fitting photo that is dark and moody (mostly deep shadows), or "" if none.',

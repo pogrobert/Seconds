@@ -4,13 +4,18 @@
 // photo step starts early on the server, docs/m0/26-speed.md), or {"type":"error","message":…}. The build page reads it
 // to show live progress; /api/build (the bench) and the server function still answer once.
 import { createFileRoute } from '@tanstack/react-router'
-import { build } from '../../server/make-site'
+import { edit } from '../../server/edit'
+import { build, type SiteState } from '../../server/make-site'
 
 export const Route = createFileRoute('/api/build-stream')({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const body = (await request.json().catch(() => null)) as { messages?: unknown } | null
+        const body = (await request.json().catch(() => null)) as {
+          messages?: unknown
+          /** The site so far: the last message is then an edit of it (docs/m0/27-editing.md). */
+          state?: SiteState | null
+        } | null
         const messages = (Array.isArray(body?.messages) ? body.messages : [])
           .map(String)
           .filter(Boolean)
@@ -28,9 +33,17 @@ export const Route = createFileRoute('/api/build-stream')({
               const photosReady = new Promise((ok) => {
                 photos = ok
               })
-              const result = await build(messages, (s) => send({ type: 'step', ...s }), {
-                onPhotos: (p) => photos(p),
-              })
+              const step = (s: unknown) => send({ type: 'step', ...(s as object) })
+              const edited =
+                body?.state?.copy && messages.length > 1
+                  ? await edit(body.state, messages[messages.length - 1] ?? '', step, (p) =>
+                      photos(p),
+                    )
+                  : null
+              const result =
+                edited && !edited.restart
+                  ? edited.result
+                  : await build(messages, step, { onPhotos: (p) => photos(p) })
               send({ type: 'result', result })
               if (result.photoJob) send({ type: 'photos', photos: await photosReady })
             } catch (e) {
