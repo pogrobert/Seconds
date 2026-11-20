@@ -1,6 +1,7 @@
 // POST /api/build-stream {"messages": [...]} → the build as it happens, one JSON object a line:
 // {"type":"step","step":"choices"|"words"|"check","ms":…} as each part finishes, then
-// {"type":"result","result":BuildResult} or {"type":"error","message":…}. The build page reads it
+// {"type":"result","result":BuildResult}, then {"type":"photos","photos":PhotoResult|null} (the
+// photo step starts early on the server, docs/m0/26-speed.md), or {"type":"error","message":…}. The build page reads it
 // to show live progress; /api/build (the bench) and the server function still answer once.
 import { createFileRoute } from '@tanstack/react-router'
 import { build } from '../../server/make-site'
@@ -22,8 +23,16 @@ export const Route = createFileRoute('/api/build-stream')({
           async start(c) {
             const send = (o: unknown) => c.enqueue(enc.encode(`${JSON.stringify(o)}\n`))
             try {
-              const result = await build(messages, (s) => send({ type: 'step', ...s }))
+              // The photos may be found before or after the page; they are sent after it.
+              let photos: (p: unknown) => void = () => {}
+              const photosReady = new Promise((ok) => {
+                photos = ok
+              })
+              const result = await build(messages, (s) => send({ type: 'step', ...s }), {
+                onPhotos: (p) => photos(p),
+              })
               send({ type: 'result', result })
+              if (result.photoJob) send({ type: 'photos', photos: await photosReady })
             } catch (e) {
               send({ type: 'error', message: e instanceof Error ? e.message : String(e) })
             }

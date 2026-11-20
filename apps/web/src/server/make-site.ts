@@ -39,6 +39,7 @@ import {
   randomDecisions,
   type SiteCopy,
   typesafeDecisions,
+  writePhotoQueries,
   writeSiteCopy,
 } from '@repo/pipeline'
 import libraryCss from '../generated/library.css?raw'
@@ -298,6 +299,15 @@ export type BuildStep = { step: 'choices' | 'words' | 'check'; ms: number }
 export async function build(
   messages: string[],
   onStep: (s: BuildStep) => void = () => {},
+  opts: {
+    /**
+     * When given, the photo step starts here as soon as the photo searches are known (about 1 s
+     * in, docs/m0/26-speed.md), runs alongside the words, and its result is handed over when ready
+     * (null if it failed). Its `ms` is then the time since the build began. Without it (the bench,
+     * the server function) the caller runs the photo step after the page, as before.
+     */
+    onPhotos?: (p: PhotoResult | null) => void
+  } = {},
 ): Promise<BuildResult> {
   const t0 = performance.now()
   const env = getEnv()
@@ -333,6 +343,48 @@ export async function build(
     onStep({ step: 'words', ms: w.ms })
     return w
   })
+  // The photo step, started early: a small call for the searches alone runs at the start; with
+  // Jev's art pick (about 0.35 s) the photo step begins without waiting for the words. If that
+  // call fails, it starts from the words' own searches instead.
+  if (opts.onPhotos) {
+    const onPhotos = opts.onPhotos
+    const early = env.OPENROUTER_API_KEY
+      ? writePhotoQueries({ apiKey: env.OPENROUTER_API_KEY, words }).catch(() => null)
+      : Promise.resolve(null)
+    Promise.all([early, decided])
+      .then(async ([e, d]) => {
+        const a = d.r[2]
+        const style = { style: a.style, strength: a.strength }
+        const job: PhotoJob | null = e
+          ? {
+              queries: e.queries,
+              about: { name: 'this organisation', kind: e.kind, town: e.town },
+              seed: seedOf(words),
+              art: style,
+            }
+          : await written.then((x) =>
+              x.copy
+                ? {
+                    queries: x.copy.photos,
+                    about: { name: x.copy.name, kind: x.copy.kind, town: x.copy.contact.place },
+                    seed: seedOf(words),
+                    art: style,
+                  }
+                : null,
+            )
+        if (!job) return null
+        const p = await sitePhotos(job)
+        return {
+          ...p,
+          ms: Math.round(performance.now() - t0),
+          costUsd: p.costUsd + (e?.costUsd ?? 0),
+        }
+      })
+      .then(
+        (p) => onPhotos(p),
+        () => onPhotos(null),
+      )
+  }
   const [{ r, ms: decideMs }, w] = await Promise.all([decided, written])
   const [reading, kind, art, parts] = r
   // Jev checks each answer against the owner's words (docs/m0/19-fuller-pages.md).

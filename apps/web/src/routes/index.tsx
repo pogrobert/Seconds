@@ -11,6 +11,7 @@ type Progress = { choices?: number; words?: number; check?: number }
 async function streamBuild(
   messages: string[],
   onStep: (p: Progress) => void,
+  onPhotos: (p: PhotoResult | null) => void,
 ): Promise<BuildResult> {
   const res = await fetch('/api/build-stream', {
     method: 'POST',
@@ -23,29 +24,47 @@ async function streamBuild(
   }
   const reader = res.body.getReader()
   const dec = new TextDecoder()
-  let buf = ''
   const done: Progress = {}
-  for (;;) {
-    const { value, done: end } = await reader.read()
-    if (value) buf += dec.decode(value, { stream: true })
-    let nl = buf.indexOf('\n')
-    while (nl >= 0) {
-      const line = buf.slice(0, nl).trim()
-      buf = buf.slice(nl + 1)
-      nl = buf.indexOf('\n')
-      if (!line) continue
-      const ev = JSON.parse(line) as
-        | { type: 'step'; step: keyof Progress; ms: number }
-        | { type: 'result'; result: BuildResult }
-        | { type: 'error'; message: string }
-      if (ev.type === 'step') {
-        done[ev.step] = ev.ms
-        onStep({ ...done })
-      } else if (ev.type === 'result') return ev.result
-      else throw new Error(ev.message)
+  let resolve: (r: BuildResult) => void = () => {}
+  let reject: (e: Error) => void = () => {}
+  const result = new Promise<BuildResult>((ok, no) => {
+    resolve = ok
+    reject = no
+  })
+  // Read to the end: the page comes first, the photos (started early on the server) after it.
+  ;(async () => {
+    let buf = ''
+    let got = false
+    for (;;) {
+      const { value, done: end } = await reader.read()
+      if (value) buf += dec.decode(value, { stream: true })
+      let nl = buf.indexOf('\n')
+      while (nl >= 0) {
+        const line = buf.slice(0, nl).trim()
+        buf = buf.slice(nl + 1)
+        nl = buf.indexOf('\n')
+        if (!line) continue
+        const ev = JSON.parse(line) as
+          | { type: 'step'; step: keyof Progress; ms: number }
+          | { type: 'result'; result: BuildResult }
+          | { type: 'photos'; photos: PhotoResult | null }
+          | { type: 'error'; message: string }
+        if (ev.type === 'step') {
+          done[ev.step] = ev.ms
+          onStep({ ...done })
+        } else if (ev.type === 'result') {
+          got = true
+          resolve(ev.result)
+        } else if (ev.type === 'photos') onPhotos(ev.photos)
+        else reject(new Error(ev.message))
+      }
+      if (end) {
+        if (!got) reject(new Error('The build stopped before it finished.'))
+        return
+      }
     }
-    if (end) throw new Error('The build stopped before it finished.')
-  }
+  })().catch((e) => reject(e instanceof Error ? e : new Error(String(e))))
+  return result
 }
 
 // The build page: chat on the left, the live site on the right (like Lovable or Meerlume's
@@ -79,6 +98,30 @@ const withSpaces = (html: string) =>
     .replace('</head>', `${WAITING_CSS}</head>`)
 
 /** Puts the photos into a page already showing: each space gets its photo and fades in. */
+/**
+ * Links inside the preview. The page is drawn from a string, so "#visit" would resolve against
+ * the builder's own address and load the builder inside the frame. Section links scroll the
+ * preview instead; links to other places open in a new tab; phone and email links are left alone.
+ */
+function wireLinks(doc: Document | null | undefined) {
+  if (!doc || doc.documentElement.dataset.wired) return
+  doc.documentElement.dataset.wired = '1'
+  doc.addEventListener('click', (e) => {
+    const a = (e.target as Element | null)?.closest?.('a[href]') as HTMLAnchorElement | null
+    if (!a) return
+    const href = a.getAttribute('href') ?? ''
+    if (/^(tel|mailto|sms):/i.test(href)) return
+    e.preventDefault()
+    if (href.startsWith('#')) {
+      const id = decodeURIComponent(href.slice(1))
+      const target = id ? doc.getElementById(id) : doc.body
+      target?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      return
+    }
+    if (/^https?:/i.test(href)) window.open(href, '_blank', 'noopener')
+  })
+}
+
 function fillSpaces(doc: Document | null | undefined, links: Record<string, string>) {
   // Slots that got drawn art are listed under "art:<slot>"; templates hide some of those.
   if (!doc) return
@@ -113,7 +156,6 @@ function Build() {
   const [links, setLinks] = useState<Record<string, string>>({})
   const [started, setStarted] = useState(0)
   const [progress, setProgress] = useState<Progress>({})
-  const [photoStart, setPhotoStart] = useState(0)
   const [now, setNow] = useState(0)
   const linksRef = useRef(links)
   linksRef.current = links
@@ -156,9 +198,15 @@ function Build() {
     setNow(performance.now())
     setProgress({})
     try {
+      // Photos arrive on the same stream once found; they wait here until the page is in.
+      let photos: (p: PhotoResult | null) => void = () => {}
+      const photosIn = new Promise<PhotoResult | null>((ok) => {
+        photos = ok
+      })
       const built = await streamBuild(
         history.filter((m) => m.role === 'user').map((m) => m.text),
         setProgress,
+        (p) => photos(p),
       )
       const mine = ++generation.current
       for (const u of photoUrls.current) URL.revokeObjectURL(u)
@@ -182,9 +230,10 @@ function Build() {
       setBusy(false)
       // The photo step: the page is already showing; photos fill its spaces as they come.
       if (r.photoJob) {
-        setPhotoStart(performance.now())
-        const p = await findSitePhotos({ data: r.photoJob })
+        const found = await photosIn
         if (mine !== generation.current) return
+        // The early photo step failed: ask for it now, the old way.
+        const p = found ?? (await findSitePhotos({ data: r.photoJob }))
         const byId: Record<string, string> = {}
         await Promise.all(
           Object.entries(p.images).map(async ([id, data]) => {
@@ -303,9 +352,7 @@ function Build() {
                   </p>
                 </div>
                 <div className="flex flex-col gap-2">
-                  <p className="px-1 text-xs font-medium text-zinc-500">
-                    Try one
-                  </p>
+                  <p className="px-1 text-xs font-medium text-zinc-500">Try one</p>
                   {EXAMPLES.map((ex) => (
                     <button
                       key={ex}
@@ -339,7 +386,7 @@ function Build() {
                         m={m}
                         photosFor={
                           m === lastReply && m.photos === 'waiting'
-                            ? seconds(Math.max(0, now - photoStart))
+                            ? seconds(Math.max(0, now - started))
                             : undefined
                         }
                       />
@@ -481,7 +528,10 @@ function Build() {
             {site ? (
               <iframe
                 ref={frame}
-                onLoad={() => fillSpaces(frame.current?.contentDocument, linksRef.current)}
+                onLoad={() => {
+                  wireLinks(frame.current?.contentDocument)
+                  fillSpaces(frame.current?.contentDocument, linksRef.current)
+                }}
                 key={`${site.id}-${result?.name}-${reloads}`}
                 title={`${result?.name}, version ${site.id.slice(1)}`}
                 srcDoc={site.html}
@@ -655,7 +705,7 @@ function Reply({
   photosFor,
 }: {
   m: Extract<Message, { role: 'assistant' }>
-  /** How long the photo step has been running, while it runs. */
+  /** Time since the build began, while the photos are still coming. */
   photosFor?: string | undefined
 }) {
   const r = m.result
@@ -675,7 +725,7 @@ function Reply({
                 ...(r.photoJob
                   ? [
                       p
-                        ? { label: 'Photos', state: 'done' as const, note: `+${seconds(p.ms)}` }
+                        ? { label: 'Photos', state: 'done' as const, note: seconds(p.ms) }
                         : {
                             label: 'Photos',
                             state: 'active' as const,

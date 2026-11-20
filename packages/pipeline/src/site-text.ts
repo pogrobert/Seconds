@@ -305,6 +305,11 @@ export async function writeSiteCopy(o: {
   apiKey: string
   words: string
   model?: string
+  /**
+   * The writer's reasoning effort. Low since docs/m0/26-speed.md: 1.5–1.7 s against 2.0–3.7 s at
+   * medium, most of medium's output being hidden thinking.
+   */
+  effort?: 'low' | 'medium' | 'high'
   fetch?: typeof fetch
   signal?: AbortSignal
 }): Promise<{ copy: SiteCopy | null; problems: string[]; ms: number; costUsd: number }> {
@@ -322,7 +327,11 @@ export async function writeSiteCopy(o: {
   let copy: SiteCopy | null = null
   let problems: string[] = ['not written']
   let costUsd = 0
-  for (let attempt = 0; attempt < 2 && problems.length; attempt++) {
+  // A second try only for answers that cannot be used: no answer, broken JSON, or an empty name
+  // or headline. Wording and length problems are fixed below without asking again: a second call
+  // costs about 1.2 s (measured 2026-11-20, docs/m0/26-speed.md).
+  const hard = (ps: string[]) => ps.some((x) => !/ characters; the limit is |^remove "/.test(x))
+  for (let attempt = 0; attempt < 2 && hard(problems); attempt++) {
     let text = ''
     try {
       const res = await doFetch('https://openrouter.ai/api/v1/chat/completions', {
@@ -332,7 +341,7 @@ export async function writeSiteCopy(o: {
           model,
           messages,
           temperature: 0.7,
-          reasoning: { effort: 'medium' },
+          reasoning: { effort: o.effort ?? 'low' },
           provider: { order: ['cerebras', 'groq'], allow_fallbacks: true },
           response_format: {
             type: 'json_schema',
@@ -366,8 +375,8 @@ export async function writeSiteCopy(o: {
         },
       )
   }
-  // Still too long after a second try: cut the long paragraphs at a sentence rather than lose the
-  // business (the bench found the sample restaurant shown for a library).
+  // Too long: cut the long paragraphs at a sentence rather than lose the business (the bench found
+  // the sample restaurant shown for a library).
   if (
     copy &&
     problems.length &&
@@ -554,5 +563,83 @@ export async function groundAnswers(
     dropped,
     scores,
     calls: res.calls,
+  }
+}
+
+/**
+ * The photo searches alone, asked at the start in parallel with the words, so the photo step can
+ * begin about 1 s in instead of after the page (docs/m0/26-speed.md). Same rules as the writer's
+ * own photos field; also the kind of business and the town, which the photo check reads.
+ */
+export async function writePhotoQueries(o: {
+  apiKey: string
+  words: string
+  fetch?: typeof fetch
+}): Promise<{
+  queries: { place: string; people: string; detail: string }
+  kind: string
+  town: string
+  ms: number
+  costUsd: number
+} | null> {
+  const t0 = performance.now()
+  const L = SITE_LIMITS
+  const res = await (o.fetch ?? fetch)('https://openrouter.ai/api/v1/chat/completions', {
+    method: 'POST',
+    headers: { authorization: `Bearer ${o.apiKey}`, 'content-type': 'application/json' },
+    body: JSON.stringify({
+      model: 'openai/gpt-oss-120b',
+      messages: [
+        { role: 'system', content: 'You answer with JSON only.' },
+        {
+          role: 'user',
+          content: [
+            "An organisation's owner described it:",
+            o.words,
+            '',
+            `kind: what it is in a few plain words, such as "tattoo studio" or "county council" (at most ${L.kind}).`,
+            'town: the town or city the owner names, also when it is only part of the name, else "".',
+            `photos: three short English stock-photo searches (2 to 4 words, at most ${L.photo} characters) for things a camera can see in this organisation's own world. No place names, no brand names, no abstract words (not "community", "information", "quality"): place = the room or setting where it works, such as "bakery counter" or "dental surgery"; people = someone doing its work, such as "baker kneading dough"; detail = a close-up object or material, such as "sourdough loaf".`,
+          ].join('\n'),
+        },
+      ],
+      temperature: 0.4,
+      reasoning: { effort: 'low' },
+      provider: { order: ['cerebras', 'groq'], allow_fallbacks: true },
+      response_format: {
+        type: 'json_schema',
+        json_schema: {
+          name: 'photos',
+          strict: true,
+          schema: obj({
+            kind: str(L.kind),
+            town: str(60),
+            photos: obj({ place: str(L.photo), people: str(L.photo), detail: str(L.photo) }),
+          }),
+        },
+      },
+      usage: { include: true },
+    }),
+  }).catch(() => null)
+  const body = (await res?.json().catch(() => null)) as {
+    choices?: { message?: { content?: string } }[]
+    usage?: { cost?: number }
+  } | null
+  try {
+    const a = JSON.parse(body?.choices?.[0]?.message?.content ?? '') as {
+      kind: string
+      town: string
+      photos: { place: string; people: string; detail: string }
+    }
+    if (!a.photos?.place) return null
+    return {
+      queries: a.photos,
+      kind: a.kind,
+      town: a.town,
+      ms: Math.round(performance.now() - t0),
+      costUsd: body?.usage?.cost ?? 0,
+    }
+  } catch {
+    return null
   }
 }
