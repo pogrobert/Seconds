@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Three-way blind rating</title>
+<style>
+  :root { --bg: #f4f4f4; --fg: #111; --muted: #666; --line: #ddd; --card: #fff; --accent: #111; --good: #1d7a46; --bad: #b3261e }
+  * { box-sizing: border-box }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 14px/1.4 system-ui, sans-serif; height: 100vh; display: flex; flex-direction: column }
+  header, footer { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; padding: 10px 16px; background: var(--card) }
+  header { border-bottom: 1px solid var(--line) }
+  footer { border-top: 1px solid var(--line) }
+  header b { font-size: 15px }
+  .brief { color: var(--muted); max-width: 70ch }
+  .grow { flex: 1 }
+  button { font: inherit; padding: 5px 12px; border: 1px solid var(--line); border-radius: 6px; background: var(--card); color: var(--fg); cursor: pointer }
+  button.on { background: var(--accent); color: #fff; border-color: var(--accent) }
+  button.best.on { background: var(--good); border-color: var(--good) }
+  button.worst.on { background: var(--bad); border-color: var(--bad) }
+  button:disabled { opacity: .4; cursor: default }
+  main { flex: 1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; padding: 10px 16px; min-height: 0 }
+  main.one { grid-template-columns: 1fr }
+  main.one .col:not(.open) { display: none }
+  .col { position: relative; overflow: auto; border: 2px solid var(--line); border-radius: 8px; background: #fff; min-width: 0 }
+  .col img { display: block; width: 100% }
+  .tag { position: sticky; top: 8px; margin: 8px; float: left; z-index: 2; background: var(--accent); color: #fff; padding: 2px 10px; border-radius: 4px; font-weight: 600; cursor: pointer }
+  .group { display: flex; gap: 6px; align-items: center }
+  kbd { border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 4px; padding: 0 5px; font-size: 12px }
+  #results { display: none; padding: 16px; overflow: auto } #results table { border-collapse: collapse; background: var(--card) }
+  #results td, #results th { padding: 4px 14px 4px 0; text-align: left }
+</style>
+<header>
+  <b>Which site is best?</b>
+  <span id="brief" class="brief"></span>
+  <span class="grow"></span>
+  <span id="progress" class="muted"></span>
+  <button type="button" id="prev">← Back</button>
+  <button type="button" id="next">Skip →</button>
+</header>
+<main id="main"></main>
+<div id="results"></div>
+<footer>
+  <div class="group">Best <span id="best"></span></div>
+  <div class="group">Worst <span id="worst"></span></div>
+  <button type="button" id="save" disabled>Save and next</button>
+  <span class="grow"></span>
+  <span class="muted">Click a letter to see one site full width, <kbd>Esc</kbd> for all three. Same width, whole page, no tool names.</span>
+</footer>
+<script>
+  // One brief at a time: Builder, Lovable and v0's whole pages in a shuffled order, so the tool is
+  // hidden. Robert picks the best and the worst; the middle one follows. Totals appear only once
+  // every brief is rated (docs/m0/21-vs-lovable-v0.md).
+  const WORDS = {
+    'cafe-short': 'A café in Leith',
+    'restaurant-full': 'Osteria Nonna, a family Italian restaurant in Bath. Handmade pasta, wood-fired oven, Sunday lunch. Open Tue–Sun 12–10. 14 Walcot Street, BA1 5BG. Book on 01225 555 012. Mains £14–£22.',
+    'barber-full': 'Old-school barber in Shoreditch called Fade & Co. Skin fades £25, beard trim £15, hot towel shave £30. Walk-ins welcome, open 9–7 every day except Monday.',
+    dentist: 'A small dental clinic in Leeds, family dentistry and implants, open weekdays 8 to 6',
+    plumber: 'An emergency plumber in Bristol, boilers and leaks, 24 hours',
+    yoga: 'A calm yoga studio in Brighton with small morning classes and a sauna',
+    'zamosc-council': 'Zamość city council website',
+    tattoo: 'A tattoo studio in Glasgow, fine line and blackwork, by appointment',
+    'law-firm': 'Employment law firm in Birmingham for workers, not companies',
+    'b-and-b': 'B&B in a farmhouse on the Isle of Skye, three rooms, breakfast with eggs from our hens',
+  }
+  const TOOLS = ['builder', 'lovable', 'v0']
+  const LETTERS = ['A', 'B', 'C']
+  const $ = (id) => document.getElementById(id)
+  // ?set=vs2 is the second round (new Builder against the same Lovable and v0 pages).
+  const SET = (location.search.match(/set=(vs\d)/) || [])[1] ? `?set=${location.search.match(/set=(vs\d)/)[1]}` : ''
+  let BRIEFS = [], RATINGS = [], at = 0, pick = { best: null, worst: null }, BASE = 'vs'
+
+  // The same shuffle every time for a brief, so going back shows the same letters.
+  function order(brief) {
+    let h = 2166136261
+    for (const ch of `${SET ? SET.slice(5) : 'vs'}:${brief}`) h = Math.imul(h ^ ch.charCodeAt(0), 16777619) >>> 0
+    const xs = [...TOOLS]
+    for (let i = xs.length - 1; i > 0; i--) {
+      h = Math.imul(h ^ (h >>> 15), 2246822507) >>> 0
+      const j = h % (i + 1)
+      ;[xs[i], xs[j]] = [xs[j], xs[i]]
+    }
+    return xs
+  }
+
+  async function load() {
+    const r = await (await fetch(`/api/vs${SET}`)).json()
+    BASE = r.base
+    BRIEFS = r.briefs.sort((a, b) => Object.keys(WORDS).indexOf(a) - Object.keys(WORDS).indexOf(b))
+    RATINGS = r.ratings
+    at = Math.max(0, BRIEFS.findIndex((b) => !RATINGS.some((x) => x.brief === b)))
+    show()
+  }
+
+  function show() {
+    const brief = BRIEFS[at]
+    if (!brief) return
+    const tools = order(brief)
+    const saved = RATINGS.find((x) => x.brief === brief)
+    pick = saved ? { best: LETTERS[tools.indexOf(saved.best)], worst: LETTERS[tools.indexOf(saved.worst)] } : { best: null, worst: null }
+    $('brief').textContent = `“${WORDS[brief] ?? brief}”`
+    $('progress').textContent = `${at + 1} of ${BRIEFS.length} · ${RATINGS.length} rated`
+    $('main').className = ''
+    $('main').innerHTML = tools
+      .map((t, i) => `<div class="col" data-l="${LETTERS[i]}"><span class="tag">${LETTERS[i]}</span><img alt="Site ${LETTERS[i]}" src="/${BASE}/${brief}/${t}.png"></div>`)
+      .join('')
+    for (const col of document.querySelectorAll('.col'))
+      col.querySelector('.tag').onclick = () => focus(col.dataset.l)
+    buttons()
+    showResults()
+  }
+
+  function focus(l) {
+    const one = $('main').classList.contains('one') && document.querySelector('.col.open')?.dataset.l === l
+    $('main').classList.toggle('one', !one)
+    for (const c of document.querySelectorAll('.col')) c.classList.toggle('open', !one && c.dataset.l === l)
+  }
+
+  function buttons() {
+    for (const kind of ['best', 'worst'])
+      $(kind).innerHTML = LETTERS.map((l) => `<button type="button" class="${kind}${pick[kind] === l ? ' on' : ''}" data-l="${l}">${l}</button>`).join(' ')
+    for (const b of document.querySelectorAll('#best button, #worst button'))
+      b.onclick = () => {
+        const kind = b.classList.contains('best') ? 'best' : 'worst'
+        pick[kind] = pick[kind] === b.dataset.l ? null : b.dataset.l
+        const other = kind === 'best' ? 'worst' : 'best'
+        if (pick[other] === pick[kind]) pick[other] = null
+        buttons()
+      }
+    $('save').disabled = !(pick.best && pick.worst)
+  }
+
+  $('save').onclick = async () => {
+    const brief = BRIEFS[at], tools = order(brief)
+    const best = tools[LETTERS.indexOf(pick.best)], worst = tools[LETTERS.indexOf(pick.worst)]
+    const middle = tools.find((t) => t !== best && t !== worst)
+    const r = { brief, best, middle, worst }
+    await fetch(`/api/vs${SET}`, { method: 'POST', body: JSON.stringify(r) })
+    RATINGS = RATINGS.filter((x) => x.brief !== brief).concat(r)
+    if (at < BRIEFS.length - 1) at++
+    show()
+  }
+  $('next').onclick = () => { if (at < BRIEFS.length - 1) { at++; show() } }
+  $('prev').onclick = () => { if (at > 0) { at--; show() } }
+  addEventListener('keydown', (e) => { if (e.key === 'Escape') { $('main').classList.remove('one'); for (const c of document.querySelectorAll('.col')) c.classList.remove('open') } })
+
+  // Totals only when every brief with three sites is rated, so they can't sway the rest.
+  function showResults() {
+    // Eight briefs have all three tools: Lovable's free credits ran out before the law firm and
+    // the B&B, and Robert judged eight enough (2026-11-19).
+    const done = BRIEFS.length > 0 && BRIEFS.every((b) => RATINGS.some((x) => x.brief === b))
+    $('results').style.display = done ? 'block' : 'none'
+    if (!done) return
+    const rows = TOOLS.map((t) => {
+      const best = RATINGS.filter((r) => r.best === t).length
+      const worst = RATINGS.filter((r) => r.worst === t).length
+      const beats = (o) => RATINGS.filter((r) => ['best', 'middle', 'worst'].indexOf(Object.keys(r).find((k) => r[k] === t)) < ['best', 'middle', 'worst'].indexOf(Object.keys(r).find((k) => r[k] === o))).length
+      return `<tr><td>${t}</td><td>${best}</td><td>${RATINGS.length - best - worst}</td><td>${worst}</td><td>${TOOLS.filter((o) => o !== t).map((o) => `${beats(o)}–${RATINGS.length - beats(o)} v ${o}`).join(', ')}</td></tr>`
+    }).join('')
+    $('results').innerHTML = `<table><tr><th>Tool</th><th>Best</th><th>Middle</th><th>Worst</th><th>Head to head</th></tr>${rows}</table>`
+  }
+  load()
+</script>
+</html>

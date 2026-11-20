@@ -6,6 +6,7 @@ import { core } from './blocks/core/index.ts'
 import { efferd } from './blocks/efferd/index.ts'
 import { shadcnui } from './blocks/shadcnui/index.ts'
 import { tailark } from './blocks/tailark/index.ts'
+import descriptions from './descriptions.json' with { type: 'json' }
 import type { BlockProps, SiteContent } from './ui.tsx'
 
 /** The kinds of section a page is made of, in page order. */
@@ -85,3 +86,10 @@ export const fits = (e: Entry, c: SiteContent) =>
     const v = c[k]
     return Array.isArray(v) ? v.length > 0 : typeof v === 'object' && v ? v.items.length > 0 : !!v
   }) && !(e.showsItems && c.prices.flatMap((g) => g.items).length > e.showsItems)
+
+/**
+ * A block's look in one line, from the comment above its component (scripts/describe.py), for Jev
+ * to read when it picks blocks (docs/m0/23-jev-does-more.md).
+ */
+export const blockText = (e: Entry): string =>
+  (descriptions as Record<string, string>)[e.component.name] ?? e.id

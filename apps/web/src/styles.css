@@ -1,1 +1,11 @@
 @import "tailwindcss";
+
+/* The thin bar that runs along the top of the preview while a new version is made. */
+@keyframes slide {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(300%);
+  }
+}

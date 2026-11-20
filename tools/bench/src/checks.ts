@@ -19,6 +19,8 @@ export const pageChecks = async () => {
     if (!img.complete || img.naturalWidth === 0) found.push(`photo did not load: ${img.alt}`)
   if (/__IMG_/.test(document.documentElement.innerHTML)) found.push('a photo token was left in')
   for (const s of Array.from(document.querySelectorAll('main > *, body > section'))) {
+    // A section a template hides on purpose (no photo left for it) is not an empty one.
+    if (getComputedStyle(s).display === 'none') continue
     const r = s.getBoundingClientRect()
     if (r.height < 48) found.push(`section ${s.id || s.tagName.toLowerCase()} is nearly empty`)
   }

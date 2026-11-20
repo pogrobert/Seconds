@@ -1,0 +1,158 @@
+{
+ "note": "Start = Date.now() just before Enter, in Chrome. Done = the tool's own 'Worked for' figure where it shows one, else the first check at which the preview was complete.",
+ "cafe-short": {
+  "lovable": {
+   "start": 1795029639913,
+   "doneBy": 1795029749844
+  },
+  "v0": {
+   "start": 1795029678615,
+   "workedSeconds": 64,
+   "note": "a quick standalone page; its photo is broken in v0s own preview too"
+  },
+  "builder": {
+   "pageMs": 2644,
+   "totalMs": 6379,
+   "costUsd": 0.00229
+  }
+ },
+ "restaurant-full": {
+  "lovable": {
+   "start": 1795030136786,
+   "doneBy": 1795030240623
+  },
+  "v0": {
+   "start": 1795030139182,
+   "workedSeconds": 139
+  },
+  "builder": {
+   "pageMs": 1524,
+   "totalMs": 4571,
+   "costUsd": 0.00249
+  }
+ },
+ "barber-full": {
+  "lovable": {
+   "start": 1795030350345,
+   "doneBy": 1795030404302
+  },
+  "v0": {
+   "start": 1795030351630,
+   "workedSeconds": 99
+  },
+  "builder": {
+   "pageMs": 1507,
+   "totalMs": 4207,
+   "costUsd": 0.00233
+  }
+ },
+ "dentist": {
+  "lovable": {
+   "start": 1795030510029,
+   "doneBy": 1795030560319
+  },
+  "v0": {
+   "start": 1795030510568,
+   "workedSeconds": 108
+  },
+  "builder": {
+   "pageMs": 1542,
+   "totalMs": 5077,
+   "costUsd": 0.00243
+  }
+ },
+ "plumber": {
+  "lovable": {
+   "start": 1795030666527,
+   "doneBy": 1795030712026,
+   "note": "claims 60 min typical arrival and Gas Safe registration, not in the brief"
+  },
+  "v0": {
+   "start": 1795030667208,
+   "workedSeconds": 144
+  },
+  "builder": {
+   "pageMs": 1646,
+   "totalMs": 4748,
+   "costUsd": 0.00297
+  }
+ },
+ "yoga": {
+  "v0": {
+   "start": 1795030868780,
+   "workedSeconds": 241
+  },
+  "builder": {
+   "pageMs": 1428,
+   "totalMs": 9287,
+   "costUsd": 0.00241
+  },
+  "lovable": {
+   "start": 1795076139806,
+   "doneBy": 1795076198492,
+   "note": "checked every second; done between 08:16:26 and 08:16:38"
+  }
+ },
+ "zamosc-council": {
+  "v0": {
+   "start": 1795031154625,
+   "workedSeconds": 178,
+   "note": "written in Polish"
+  },
+  "builder": {
+   "pageMs": 2565,
+   "totalMs": 5885,
+   "costUsd": 0.00369
+  },
+  "lovable": {
+   "start": 1795076278423,
+   "doneBy": 1795076542543,
+   "note": "written in Polish, like v0"
+  }
+ },
+ "tattoo": {
+  "v0": {
+   "start": 1795031371911,
+   "workedSeconds": 142,
+   "note": "portfolio photos are unrelated stock (a crowd, a road, a field)"
+  },
+  "builder": {
+   "pageMs": 1180,
+   "totalMs": 6497,
+   "costUsd": 0.00217
+  },
+  "lovable": {
+   "start": 1795076593505,
+   "doneBy": 1795076637571,
+   "note": "done between 08:23:54 and 08:23:58"
+  }
+ },
+ "law-firm": {
+  "v0": {
+   "start": 1795031568696,
+   "workedSeconds": 200,
+   "note": "placed the firm in Birmingham, Alabama, with a (205) phone number"
+  },
+  "builder": {
+   "pageMs": 2279,
+   "totalMs": 5085,
+   "costUsd": 0.00418
+  },
+  "lovable": {
+   "start": 1795076681937,
+   "note": "asked whether to build the site or research firms; I submitted its preselected answer (build) at 08:28:17. Paused at about 08:30 because the free credits ran out; not finished, not captured."
+  }
+ },
+ "b-and-b": {
+  "builder": {
+   "pageMs": 1634,
+   "totalMs": 4960,
+   "costUsd": 0.00238
+  },
+  "v0": {
+   "start": 1795031813248,
+   "workedSeconds": 41,
+   "note": "a quick standalone page; its photos are broken in v0s own preview too"
+  }
+ }
+}

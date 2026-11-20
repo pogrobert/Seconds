@@ -15,6 +15,7 @@ const TYPES: Record<string, string> = {
   '.html': 'text/html; charset=utf-8',
   '.json': 'application/json',
   '.jpg': 'image/jpeg',
+  '.png': 'image/png',
   '.js': 'text/javascript',
 }
 
@@ -26,6 +27,14 @@ type Rating = {
   winner: 'a' | 'b' | 'tie'
   at: string
 }
+// Rounds of the comparison: vs (2026-11-18/19), vs2 (the concept step) and vs3 (Jev does more),
+// both 2026-11-20.
+const vsDir = (set: string | null) => join(root, set && /^vs\d$/.test(set) ? set : 'vs')
+const vsFileOf = (set: string | null) => join(vsDir(set), 'ratings.json')
+const readVs = (set: string | null): { brief: string; at?: string }[] =>
+  existsSync(vsFileOf(set))
+    ? (JSON.parse(readFileSync(vsFileOf(set), 'utf8')) as { brief: string; at?: string }[])
+    : []
 const readRatings = (): Rating[] =>
   existsSync(ratingsFile) ? (JSON.parse(readFileSync(ratingsFile, 'utf8')) as Rating[]) : []
 
@@ -76,6 +85,38 @@ createServer((req, res) => {
   if (url.pathname === '/api/ratings')
     return send(200, JSON.stringify(readRatings()), TYPES['.json'])
 
+  // The comparison with Lovable and v0 (docs/m0/21-vs-lovable-v0.md): which briefs have all three
+  // screenshots, and Robert's blind rankings, kept in vs/ratings.json.
+  if (url.pathname === '/api/vs' && req.method === 'POST') {
+    let body = ''
+    req.on('data', (d) => {
+      body += d
+    })
+    req.on('end', () => {
+      const r = JSON.parse(body) as { brief: string }
+      const set = url.searchParams.get('set')
+      const all = readVs(set).filter((x) => x.brief !== r.brief)
+      all.push({ ...r, at: new Date().toISOString() })
+      writeFileSync(vsFileOf(set), JSON.stringify(all, null, 1))
+      send(200, JSON.stringify({ saved: all.length }), TYPES['.json'])
+    })
+    return
+  }
+  if (url.pathname === '/api/vs') {
+    const set = url.searchParams.get('set')
+    const dir = vsDir(set)
+    const briefs = existsSync(dir)
+      ? readdirSync(dir).filter((b) =>
+          ['builder', 'lovable', 'v0'].every((t) => existsSync(join(dir, b, `${t}.png`))),
+        )
+      : []
+    return send(
+      200,
+      JSON.stringify({ briefs, ratings: readVs(set), base: set && /^vs\d$/.test(set) ? set : 'vs' }),
+      TYPES['.json'],
+    )
+  }
+
   // Static files: / → the newest report, /rate.html, /runs/…
   let path = url.pathname
   if (path === '/') {
@@ -89,6 +130,7 @@ createServer((req, res) => {
     return res.end()
   }
   if (path === '/rate.html') path = '/src/rate.html'
+  if (path === '/vs.html') path = '/src/vs.html'
   const file = normalize(join(root, decodeURIComponent(path)))
   if (!file.startsWith(root) || !existsSync(file) || !statSync(file).isFile())
     return send(404, 'not found')

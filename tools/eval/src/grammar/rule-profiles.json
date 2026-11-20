@@ -308,5 +308,15 @@
       "era": 0.79,
       "texture": 0.1475
     }
+  },
+  "colour/cream": {
+    "text": "A warm cream page with near-black text, the brand colour on buttons, small accents and one deep colour band: calm, warm and quietly expensive",
+    "profile": {
+      "energy": 0.03,
+      "price": 0.77,
+      "warmth": 0.78,
+      "era": 0.3325,
+      "texture": 0.2125
+    }
   }
 }

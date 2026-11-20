@@ -51,9 +51,30 @@ const NEUTRAL = {
   },
 }
 
-export function theme(p: Palette, t: TypeSystem): Theme {
+/**
+ * The colour rule's palette as tokens (Robert, 2026-11-19: "leave the colour choices to Jev").
+ * Jev picks a named colour and one of the quiet colour rules (a warm off-white page with the colour
+ * as accent and bands, or a near-black page); the loud rules stay out (make-site.ts).
+ */
+function coloured(p: Palette): Record<string, string> {
+  const g = (k: string, d: string) => p[k] ?? d
+  return {
+    '--background': g('--ground', '#ffffff'),
+    '--foreground': g('--ink', '#0a0a0a'),
+    '--card': g('--ground', '#ffffff'),
+    '--muted': g('--tint', '#f5f5f5'),
+    '--muted-foreground': g('--muted', '#737373'),
+    '--border': g('--line', '#e5e5e5'),
+    '--primary': g('--btn', '#0a0a0a'),
+    '--primary-foreground': g('--on-btn', '#fafafa'),
+    '--band': g('--band', '#0a0a0a'),
+    '--band-foreground': g('--on-band', '#fafafa'),
+  }
+}
+
+export function theme(p: Palette, t: TypeSystem, o: { neutral?: boolean } = {}): Theme {
   const dark = luminance(p['--ground'] ?? '#ffffff') < 0.2
-  const n = dark ? NEUTRAL.dark : NEUTRAL.light
+  const n = o.neutral || !p['--ground'] ? (dark ? NEUTRAL.dark : NEUTRAL.light) : coloured(p)
   const pill = (t.vars['--radius'] ?? '') === '999px'
   const radius = pill ? '1rem' : (t.vars['--radius'] ?? '0.5rem')
   const tokens: Record<string, string> = {

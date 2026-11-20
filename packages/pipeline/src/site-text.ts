@@ -4,10 +4,21 @@
 // reasons, a call to action, and three photo searches for its own subject. It never invents facts:
 // prices, hours, addresses, phone numbers and emails appear only if the owner gave them.
 
-import type { DecisionCall, DecisionPort } from './decide.ts'
+import type { DecisionCall, DecisionPort, Question } from './decide.ts'
 import { tidy } from './text.ts'
 
+/** Sections a page may add to its core (hero, about, offer, closing); Jev picks one or two. */
+export const EXTRAS = ['reasons', 'steps', 'audience', 'faq', 'statement', 'gallery'] as const
+export type Extra = (typeof EXTRAS)[number]
+
 export type SiteCopy = {
+  /**
+   * The concept, written first so every other field follows it (docs/m0/22-concept.md): the one
+   * thought the page is built around, in a short phrase ("slow mornings by the sea").
+   */
+  idea: string
+  /** How the words sound, in three plain adjectives ("unhurried, warm, exact"). */
+  voice: string
   name: string
   /** What the business is, in a few plain words: "tattoo studio", "county council". */
   kind: string
@@ -32,16 +43,25 @@ export type SiteCopy = {
   audience: { title: string; items: { title: string; body: string }[] }
   /** Stock photo searches for this business's own subject, in English. */
   photos: { place: string; people: string; detail: string }
+  /**
+   * Broad kinds of thing it offers, drawn only from the owner's words; the offer falls back to
+   * these when the checks drop its made-up items (docs/m0/24-templates.md, round 4).
+   */
+  categories: { name: string; detail: string }[]
+  /** Two more of each, for Jev to choose from (docs/m0/23-jev-does-more.md). */
+  more: { names: string[]; headlines: string[]; offerTitles: string[] }
 }
 
 export const SITE_LIMITS = {
+  idea: 80,
+  voice: 60,
   // Long enough for a society's full name (edge bench: 125 characters were cut to 40).
   name: 130,
   kind: 40,
   tagline: 40,
   headline: 48,
   subhead: 120,
-  about: 560,
+  about: 360,
   reasonsTitle: 28,
   itemTitle: 32,
   itemBody: 120,
@@ -73,6 +93,8 @@ const obj = (props: Record<string, unknown>) => ({
 function schema() {
   const L = SITE_LIMITS
   return obj({
+    idea: str(L.idea),
+    voice: str(L.voice),
     name: str(L.name),
     kind: str(L.kind),
     tagline: str(L.tagline),
@@ -121,6 +143,17 @@ function schema() {
       maxItems: 6,
       items: obj({ q: str(L.question), a: str(L.answer) }),
     },
+    categories: {
+      type: 'array',
+      minItems: 2,
+      maxItems: 5,
+      items: obj({ name: str(L.offerName), detail: str(L.offerDetail) }),
+    },
+    more: obj({
+      names: { type: 'array', minItems: 2, maxItems: 2, items: str(L.name) },
+      headlines: { type: 'array', minItems: 2, maxItems: 2, items: str(L.headline) },
+      offerTitles: { type: 'array', minItems: 2, maxItems: 2, items: str(L.offerTitle) },
+    }),
     audience: obj({
       title: str(L.sectionTitle),
       items: {
@@ -148,22 +181,33 @@ function prompt(words: string): string {
     '- Promise nothing the owner did not: no delivery, shipping, online shop or checkout, online booking, parking, guarantees or opening times of your own. If the owner asks for something a simple website cannot do (such as taking payments), leave it out.',
     "- If the owner's words contradict each other, leave out everything they contradict, and do not mention the contradiction. Example: 'closed every day and open 24 hours' → say nothing about opening times; 'quiet, very loud' → describe neither.",
     '- Never claim to be the best, finest, number one or leading, even if the owner does: say what they actually do instead.',
-    `- name: the name exactly as given, never shortened; if none, a short, plausible, ordinary name.`,
+    'First decide the concept; every other field follows it.',
+    `- idea: the one thought this page is built around, in a short phrase drawn from the owner's words and the feel of the place, never a description of the business. A bakery that opens at dawn → "bread while the town sleeps"; a family vet → "the vet your dog doesn't mind" (at most ${L.idea}).`,
+    `- voice: how the words sound, in three plain adjectives that fit this organisation, such as "unhurried, warm, exact" or "straight, quick, reassuring" (at most ${L.voice}). Write every other field in this voice.`,
+    '',
+    'Then the words. Every heading says something specific to this organisation in its voice. Never use stock headings such as "Welcome", "About us", "Our services", "Why choose us", "What we do", "Who we help", "How it works", "Get in touch" or "Contact us", nor a heading that only names the section. Show, do not describe: concrete things a visitor would see, hear or get, never adjectives about the business ("calm environment", "high-quality service", "friendly team").',
+    `- name: the name exactly as given, never shortened. If none is given, a short, distinctive name an owner might really choose, one or two words that suit the idea, such as "Low Tide", "Hearth" or "Marrow & Vine"; never a description such as "Calm Yoga Studio" or "Bristol Emergency Plumbing".`,
     `- kind: what it is, in a few plain words, such as "tattoo studio" or "county council" (at most ${L.kind}).`,
     `- tagline: a short label such as "Tattoo studio in Leeds" or just "Tattoo studio" when no place is given (at most ${L.tagline}).`,
-    `- headline: the main promise, short and memorable (at most ${L.headline}).`,
-    `- subhead: one sentence under the headline (at most ${L.subhead}).`,
-    `- about: a full paragraph in the organisation's own voice ("we"): what it does, for whom, and how it works; at least 300 characters, at most ${L.about}.`,
-    `- reasonsTitle and reasons: a short heading such as "Why choose us" that suits this organisation, and three reasons; title at most ${L.itemTitle}, body at most ${L.itemBody}.`,
-    `- offer: what it offers. title is the section name people would expect here, such as "Services", "Menu", "Treatments", "What we do" (at most ${L.offerTitle}); items: every item the owner lists, in their order, with names and prices exactly as written (up to 30). If the owner lists none, 3 to 6 general kinds of thing such an organisation offers, as categories ("Scented candles", "Boiler repairs"), never invented product names, flavours or features. detail: one or two plain sentences on what it is and who it is for (at most ${L.offerDetail}), never inventing facts about this business; for an item the owner listed without describing it, a plain description of what such an item is. price: only if the owner gave it, else "".`,
+    `- headline: the idea in a few words with feeling, the line a visitor remembers; never the kind of business plus an adjective ("Gentle family dentistry"), never the owner's sentence repeated (at most ${L.headline}).`,
+    `- subhead: one sentence under the headline that says plainly what and where, with one concrete detail from the owner's words (at most ${L.subhead}).`,
+    `- about: a short paragraph in the organisation's own voice ("we"), two to four sentences: what a visitor finds here, told through concrete things, never a list of the brief's words; at least 160 characters, at most ${L.about}.`,
+    `- reasonsTitle and reasons: a heading in the voice (not "Why choose us") and three reasons, each a concrete thing rather than a virtue; title at most ${L.itemTitle}, body at most ${L.itemBody}.`,
+    `- offer: what it offers. title is a short heading in the voice that people would still recognise, such as "Mornings at the studio", "On the pass tonight" or "Boilers, leaks and pipes" (at most ${L.offerTitle}); items: every item the owner lists, in their order, with names and prices exactly as written (up to 30). If the owner lists none, 3 to 6 general kinds of thing such an organisation offers, as categories ("Scented candles", "Boiler repairs"), never invented product names, flavours or features. detail: one or two plain sentences on what it is and who it is for (at most ${L.offerDetail}), never inventing facts about this business; for an item the owner listed without describing it, a plain description of what such an item is. price: only if the owner gave it, else "".`,
     '- contact: address, hours, phone, email exactly as the owner gave them, else "". place: the town or city the owner names, also when it is only part of the name ("Zamość City Council" → "Zamość"), else "".',
     `- cta: a closing call to action that fits (book, visit, call, get in touch, donate, enquire); headline at most ${L.ctaHeadline}, subhead at most ${L.ctaSubhead}, button label at most ${L.ctaLabel}.`,
     '- Never mention a phone number, email or address the owner did not give (no "call the number on the site"); say "get in touch" instead. Steps and answers are about the organisation, never about using this website.',
-    `- statement: one or two sentences in the organisation's own voice, set large on the page: what it stands for, drawn from the owner's words (at most ${L.statement}). No slogans, no claims to be the best.`,
-    `- steps: how working with them goes. title such as "How it works", "Your first visit" or "How to book" (at most ${L.sectionTitle}); 3 or 4 steps, each a short title and one sentence. Only steps that follow from the owner's words or that every such organisation shares; no promises (no "free quote", "same day", "within 24 hours") unless the owner said so.`,
+    `- statement: one or two sentences in the organisation's own voice, set large on the page: what it stands for, drawn from the owner's words and the idea (at most ${L.statement}). No slogans, no claims to be the best.`,
+    `- steps: how working with them goes. title in the voice, such as "Your first morning" or "From call to fixed" (at most ${L.sectionTitle}); 3 or 4 steps, each a short title and one sentence. Only steps that follow from the owner's words or that every such organisation shares; no promises (no "free quote", "same day", "within 24 hours") unless the owner said so.`,
     `- faq: 4 to 6 questions visitors ask such an organisation (question at most ${L.question}, answer at most ${L.answer}). Prefer questions the owner's words answer. Any answer about THIS organisation (what it does or does not do, who it serves, opening times, prices, parking, bookings, menus, policies) must come from the owner's words; if they do not say, answer only "Get in touch and we will tell you." or a close variant. General answers about the kind of service (what to bring, how long a treatment usually takes) are fine if true everywhere. Never send visitors to a website, page, section, form or document. Example: a vet asked "Do you offer emergency care?" without the owner saying → "Get in touch and we will tell you."`,
-    `- audience: who it is for, described by what people need, never by guessed kinds of people. title such as "Who we help" or "When to call us" (at most ${L.sectionTitle}); 3 or 4 needs, each a short title and one sentence, that follow from the owner's words or that every such organisation meets. Examples: a plumber → "A burst pipe or leak", "No heating or hot water"; a cat vet → "A first check-up for a new kitten". Never a group the owner did not name (no "landlords", "couples", "senior cats", "small businesses").`,
+    `- audience: who it is for, described by what people need, never by guessed kinds of people. title in the voice, such as "When to ring us" (at most ${L.sectionTitle}); 3 or 4 needs, each a short title and one sentence, that follow from the owner's words or that every such organisation meets. Examples: a plumber → "A burst pipe or leak", "No heating or hot water"; a cat vet → "A first check-up for a new kitten". Never a group the owner did not name (no "landlords", "couples", "senior cats", "small businesses").`,
     `- photos: three short English stock-photo searches (2 to 4 words, at most ${L.photo} characters) for things a camera can see in this organisation's own world. No place names, no brand names, no abstract words (not "community", "information", "quality"): place = the room or setting where it works, such as "bakery counter" or "dental surgery"; people = someone doing its work, such as "baker kneading dough"; detail = a close-up object or material, such as "sourdough loaf".`,
+    '',
+    'An example of the quality wanted, for a different organisation (never reuse its words). Owner: "fishmonger in Whitstable, we buy off the boats every morning, closed Mondays".',
+    'idea: "this morning\'s boats, on ice by nine". voice: "salty, direct, generous". name: "Tideline". headline: "Off the boat, on the ice by nine". subhead: "A fishmonger on Whitstable harbour, buying from the day boats every morning except Monday." about: "We meet the boats at first light and buy what came up: plaice, crab, sometimes a turbot worth ringing your friends about. What is on the ice depends on the sea. Tell us what you are cooking and we will clean, fillet and wrap it while you wait." offer title: "On the ice". reasonsTitle: "Why the queue forms early". A reason: "Filleted while you wait" / "Bones out, skin on or off, the way your recipe wants it."',
+    'Note what it does: one idea carried through, concrete things a visitor would see, no invented times, prices or claims, no stock headings.',
+    `- categories: 2 to 5 broad kinds of thing it offers, taken only from the owner's words, such as "Handmade pasta", "From the wood-fired oven" and "Sunday lunch" for a restaurant that said those; never a named dish, product, class or package. detail: one plain sentence that adds no fact the owner did not give (at most ${L.offerDetail}).`,
+    '- more: two other names, two other headlines and two other offer titles, each as good as the first and different from it in approach, following the same rules. If the owner gave a name, both names repeat it exactly.',
     'Count characters carefully: every limit is a hard limit.',
   ].join('\n')
 }
@@ -288,7 +332,7 @@ export async function writeSiteCopy(o: {
           model,
           messages,
           temperature: 0.7,
-          reasoning: { effort: 'low' },
+          reasoning: { effort: 'medium' },
           provider: { order: ['cerebras', 'groq'], allow_fallbacks: true },
           response_format: {
             type: 'json_schema',
@@ -360,29 +404,76 @@ export async function groundAnswers(
   copy: SiteCopy
   replaced: number
   dropped: number
-  /** Jev's probability that each item is a guess, by id (faq0…, aud0…, statement). */
+  /** Jev's probability that each item is a guess, by id (faq0…, item0…, detail0…, reason0…). */
   scores: Record<string, number>
   calls: DecisionCall[]
 }> {
-  const questions = [
+  const said =
+    'The owner of an organisation described it only in `owner_words`. A website was written from them.'
+  // Best of three (docs/m0/23-jev-does-more.md): the writer's first choice and its two others.
+  const options = {
+    name: [copy.name, ...(copy.more?.names ?? [])],
+    headline: [copy.headline, ...(copy.more?.headlines ?? [])],
+    offerTitle: [copy.offer.title, ...(copy.more?.offerTitles ?? [])],
+  }
+  const distinct = (xs: string[]) => [...new Set(xs.map((x) => x.trim()).filter(Boolean))]
+  const WHAT = {
+    name: 'name for it, if the owner gave none: the one an owner would really choose, distinctive and fitting',
+    headline: "headline: the most specific and memorable, true to the owner's words, never generic",
+    offerTitle:
+      'heading for the list of what it offers: specific to it and in its voice, yet clear',
+  }
+  const questions: Question[] = [
     ...copy.faq.map((f, i) => ({
       kind: 'bool' as const,
       id: `faq${i}`,
       prompt: `The owner of an organisation described it only in \`owner_words\`. A website answers a visitor's question. Does the answer state anything specific about this organisation that \`owner_words\` do not say: what it does or does not offer, who it serves, fees or prices, times, forms, programmes, policies or promises? General facts true of any such organisation do not count. Question: "${f.q}" Answer: "${f.a}"`,
     })),
+    // Made-up offer items and details: the bench found a "Private session", an "Evening class"
+    // and a "15-minute" sauna that no owner mentioned.
+    ...copy.offer.items.map((it, i) => ({
+      kind: 'bool' as const,
+      id: `item${i}`,
+      prompt: `${said} Is this item of its offer a specific service, product, session or class that \`owner_words\` do not mention, rather than something the owner named or a general kind of thing every such organisation offers? Item: "${it.name}"`,
+    })),
+    // Named dishes and products the owner never wrote (round 4: "Spaghetti Bolognese" and
+    // "Risotto ai Funghi" for a restaurant that named none); code checks the words themselves.
+    ...copy.offer.items.map((it, i) => ({
+      kind: 'bool' as const,
+      id: `named${i}`,
+      prompt: `Is "${it.name}" a specific named item, such as a particular dish, drink, product, treatment, class or package, rather than a broad category such as "Pasta", "Coffee", "Haircuts", "Boiler repair" or "Family dentistry"?`,
+    })),
+    ...copy.offer.items.map((it, i) => ({
+      kind: 'bool' as const,
+      id: `detail${i}`,
+      prompt: `${said} Does this description state a specific fact about this organisation that \`owner_words\` do not give, such as a length of time, a time of day, a number, a size, a price, a method, a guarantee or who it is for? Description of "${it.name}": "${it.detail}"`,
+    })),
+    ...copy.reasons.map((r, i) => ({
+      kind: 'bool' as const,
+      id: `reason${i}`,
+      prompt: `${said} Does this reason to choose it claim something specific about this organisation that \`owner_words\` do not say or clearly imply? Reason: "${r.title}: ${r.body}"`,
+    })),
+    ...copy.steps.items.map((st, i) => ({
+      kind: 'bool' as const,
+      id: `step${i}`,
+      prompt: `${said} Does this step state a specific fact about this organisation that \`owner_words\` do not give, such as a length of time, a time of day, a number, a price, a form or a promise? General steps true of any such organisation do not count. Step: "${st.title}: ${st.body}"`,
+    })),
+    ...(Object.keys(options) as (keyof typeof options)[])
+      .filter((k) => distinct(options[k]).length > 1)
+      .map((k) => ({
+        kind: 'choice' as const,
+        id: `best:${k}`,
+        prompt: `${said} Which ${WHAT[k]}?`,
+        options: distinct(options[k]).map((t, i) => ({ key: String(i), text: t })),
+      })),
   ]
-  if (!questions.length)
-    return {
-      copy,
-      replaced: 0,
-      dropped: 0,
-      scores: {},
-      calls: [],
-    }
   const res = await port.decide({ owner_words: words }, questions)
   const scores: Record<string, number> = {}
   for (const [id, a] of res.answers) if (a.kind === 'bool') scores[id] = a.pTrue
-  const guess = (id: string) => (scores[id] ?? 0) > 0.5
+  // The FAQ check keeps its 0.5 (docs/m0/19). For items, details, reasons and steps 0.5 dropped
+  // general things every such place offers ("Filter coffee", a plumber's "Leak detection"
+  // description) and left the offer bare (round 3, docs/m0/23): those need Jev to be surer.
+  const guess = (id: string) => (scores[id] ?? 0) > (id.startsWith('faq') ? 0.5 : 0.75)
   let replaced = 0
   const judged = copy.faq.map((f, i) => {
     if (guess(`faq${i}`) && f.a !== ASK) {
@@ -395,10 +486,72 @@ export async function groundAnswers(
   const real = judged.filter((f) => f.a !== ASK)
   // Fewer than two real answers: no questions section at all.
   const faq = real.length >= 2 ? [...real, ...asks.slice(0, 2)] : []
+  /** Keeps the items Jev does not take for guesses, and at least `min` (the least likely guesses). */
+  const keep = <T>(xs: T[], prefix: string, min: number): T[] => {
+    const ok = xs.filter((_, i) => !guess(`${prefix}${i}`))
+    if (ok.length >= min) return ok
+    return xs
+      .map((x, i) => ({ x, i, p: scores[`${prefix}${i}`] ?? 0 }))
+      .sort((a, b) => a.p - b.p)
+      .slice(0, Math.min(min, xs.length))
+      .sort((a, b) => a.i - b.i)
+      .map((y) => y.x)
+  }
+  // A specific named item counts as made up when its words are not in the owner's (stems of four
+  // letters, so "fades" matches "fade"). Those go first; then Jev's general check.
+  const stems = new Set(
+    words
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .split(/[^a-z]+/)
+      .filter((w) => w.length >= 4)
+      .map((w) => w.slice(0, 4)),
+  )
+  const unsaid = (name: string) =>
+    name
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .split(/[^a-z]+/)
+      .filter((w) => w.length >= 4)
+      .some((w) => !stems.has(w.slice(0, 4)))
+  const invented = (i: number) =>
+    (scores[`named${i}`] ?? 0) > 0.6 && unsaid(copy.offer.items[i]?.name ?? '')
+  const genuine = copy.offer.items
+    .map((it, i) => ({ it: guess(`detail${i}`) ? { ...it, detail: '' } : it, i }))
+    .filter((x) => !invented(x.i))
+  // Fewer than two real items: the owner's own broad categories instead of made-up names.
+  const fallback = (copy.categories ?? []).map((k) => ({
+    name: k.name,
+    detail: k.detail,
+    price: '',
+  }))
+  const ok = genuine.filter((x) => !guess(`item${x.i}`)).map((x) => x.it)
+  const items =
+    ok.length >= 2 ? ok : fallback.length >= 2 ? fallback : keep(copy.offer.items, 'item', 2)
+  const reasons = keep(copy.reasons, 'reason', 2)
+  // A step with a made-up fact goes; with fewer than three left, the section goes (Jev picks
+  // another extra only at the next build, so the page simply has one section fewer).
+  const steps = copy.steps.items.filter((_, i) => !guess(`step${i}`))
+  const best = (k: keyof typeof options) => {
+    const a = res.answers.get(`best:${k}`)
+    const xs = distinct(options[k])
+    return a?.kind === 'choice' ? (xs[Number(a.top)] ?? xs[0] ?? '') : (xs[0] ?? '')
+  }
+  const dropped = judged.length - faq.length + copy.offer.items.length - items.length
   return {
-    copy: { ...copy, faq },
+    copy: {
+      ...copy,
+      faq,
+      name: best('name'),
+      headline: best('headline'),
+      offer: { ...copy.offer, title: best('offerTitle'), items },
+      reasons,
+      steps: { ...copy.steps, items: steps.length >= 3 ? steps : [] },
+    },
     replaced,
-    dropped: judged.length - faq.length,
+    dropped,
     scores,
     calls: res.calls,
   }

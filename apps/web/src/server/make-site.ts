@@ -5,19 +5,33 @@ import { catalog, generate, toSvg } from '@pogrobert/surfaces'
 import { SAMPLES } from '@repo/eval/businesses'
 import {
   design,
-  OPEN,
   type Pick,
   pickDesigns,
   type RuleCache,
   readBrief,
   weigh,
 } from '@repo/eval/grammar/choose'
+import { COLOUR_RULES, NAMED_COLOURS } from '@repo/eval/grammar/colour-rules'
 import { type Content, contentFromCopy, contentOf } from '@repo/eval/grammar/page'
 import ruleProfiles from '@repo/eval/grammar/rule-profiles.json'
 import photoManifest from '@repo/eval/photos/manifest.json'
-import { describePlan, type Plan, plans, renderSite, theme } from '@repo/library'
+import {
+  blockText,
+  describePlan,
+  type Plan,
+  plans,
+  REGISTRY,
+  renderSite,
+  renderTemplate,
+  type Kind as SectionKind,
+  LIVE,
+  theme,
+} from '@repo/library'
 import {
   type DecisionPort,
+  type Dist,
+  EXTRAS,
+  type Extra,
   groundAnswers,
   KIND_LABEL,
   KINDS,
@@ -79,6 +93,8 @@ export type BuildResult = {
     check: number
     photos: number
     render: number
+    /** Jev picking which version shows first. */
+    order: number
     total: number
   }
   costUsd: number
@@ -87,8 +103,14 @@ export type BuildResult = {
   photoJob: PhotoJob | null
 }
 
-/** Jev matches drawn art to the business: a style and how much colour (one call, two questions). */
-async function pickArt(port: DecisionPort, words: string): Promise<PhotoJob['art']> {
+/**
+ * Jev matches drawn art and the site's colour to the business (one call, three questions). The
+ * colour is a name with a mood (Jev reads names, never hex codes); code holds the values.
+ */
+async function pickArt(
+  port: DecisionPort,
+  words: string,
+): Promise<PhotoJob['art'] & { brand: string; brandName: string }> {
   const looks = (st: string) => catalog.find((c) => c.style === st)?.looks ?? ''
   const res = await port.decide({ brief: words }, [
     {
@@ -109,6 +131,13 @@ async function pickArt(port: DecisionPort, words: string): Promise<PhotoJob['art
         { key: 'clear', text: 'Clear colour: bright, lively or playful.' },
       ],
     },
+    {
+      kind: 'choice',
+      id: 'brand',
+      prompt:
+        "Which one colour should this organisation's website use for its buttons, accents and colour bands, to suit its world, its mood and its visitors?",
+      options: NAMED_COLOURS.map((c) => ({ key: c.key, text: `${c.key}: ${c.mood}` })),
+    },
   ])
   const top = (id: string) => {
     const a = res.answers.get(id)
@@ -118,7 +147,97 @@ async function pickArt(port: DecisionPort, words: string): Promise<PhotoJob['art
     ? (top('art') as ArtStyle)
     : 'underpaint'
   const strength = top('artColour') in ART_STRENGTHS ? (top('artColour') as ArtStrength) : 'muted'
-  return { style, strength }
+  const named =
+    NAMED_COLOURS.find((c) => c.key === top('brand')) ??
+    NAMED_COLOURS.find((c) => c.key === 'forest')
+  return { style, strength, brand: named?.hex ?? NEUTRAL_BRAND, brandName: named?.key ?? '' }
+}
+
+/** What each section kind is, for Jev's question about its blocks. */
+const SECTION_NAMES: Partial<Record<SectionKind, string>> = {
+  header: 'the menu bar at the top',
+  hero: 'the opening screen',
+  about: 'the introduction',
+  offer: 'the list of what it offers',
+  reasons: 'the reasons to choose it',
+  gallery: 'the photo gallery',
+  statement: 'the one large line of what it stands for',
+  steps: 'how a first visit or a job goes, step by step',
+  audience: 'the needs it meets',
+  faq: 'the questions people ask',
+  contact: 'the hours, address and contact details',
+  cta: 'the closing call to action',
+  footer: 'the footer',
+}
+
+const EXTRA_TEXT: Record<Extra, string> = {
+  reasons: 'Reasons to choose it, three short points.',
+  steps: 'How a first visit or a job goes, in three or four steps.',
+  audience: 'The needs it meets, three or four of them.',
+  faq: 'Questions visitors ask, with short answers.',
+  statement: 'One large line of what it stands for.',
+  gallery: 'A gallery of photos of its world.',
+}
+
+/**
+ * Jev picks the page's parts from the brief alone, in one request alongside the words
+ * (docs/m0/23-jev-does-more.md): the block for every section (it reads each block's one-line
+ * look) and the one or two extra sections visitors need most.
+ */
+async function pickParts(
+  port: DecisionPort,
+  words: string,
+): Promise<{
+  weights: Partial<Record<SectionKind, Dist>>
+  extras: Extra[]
+  /** Template ids, best fit first (docs/m0/24-templates.md). */
+  templates: string[]
+  costUsd: number
+}> {
+  const kinds = Object.keys(SECTION_NAMES) as SectionKind[]
+  const res = await port.decide({ brief: words }, [
+    ...kinds.map((k) => ({
+      kind: 'choice' as const,
+      id: `block:${k}`,
+      prompt: `On this organisation's website, which design for ${SECTION_NAMES[k]} would suit it, its mood and its visitors best?`,
+      options: REGISTRY.filter((e) => e.kind === k).map((e) => ({ key: e.id, text: blockText(e) })),
+    })),
+    {
+      kind: 'choice' as const,
+      id: 'template',
+      prompt:
+        "Which design for this organisation's whole website would its owner and its visitors like best?",
+      options: LIVE.map((t) => ({ key: t.id, text: t.text })),
+    },
+    {
+      kind: 'choice' as const,
+      id: 'extras',
+      prompt:
+        "Besides the opening, introduction, offer and closing, which extra section would this organisation's visitors need most?",
+      options: EXTRAS.map((x) => ({ key: x, text: EXTRA_TEXT[x] })),
+    },
+  ])
+  const weights: Partial<Record<SectionKind, Dist>> = {}
+  for (const k of kinds) {
+    const a = res.answers.get(`block:${k}`)
+    if (a?.kind === 'choice') weights[k] = a.dist ?? { [a.top]: 1 }
+  }
+  const x = res.answers.get('extras')
+  const ranked =
+    x?.kind === 'choice' ? Object.entries(x.dist ?? { [x.top]: 1 }).sort((a, b) => b[1] - a[1]) : []
+  // The top extra always; the second only when Jev rates it close.
+  const extras = ranked
+    .filter(([, p], i) => i === 0 || (i === 1 && p >= 0.2))
+    .map(([key]) => key as Extra)
+  const t = res.answers.get('template')
+  const tdist = t?.kind === 'choice' ? (t.dist ?? { [t.top]: 1 }) : {}
+  const templates = LIVE.map((x) => x.id).sort((a, b) => (tdist[b] ?? 0) - (tdist[a] ?? 0))
+  return {
+    weights,
+    extras,
+    templates,
+    costUsd: res.calls.reduce((s, c) => s + (c.costUsd ?? 0), 0),
+  }
 }
 
 /** The nearest of the sample kinds, only for falling back to sample photos and words. */
@@ -136,8 +255,18 @@ async function nearestKind(port: DecisionPort, words: string): Promise<Kind> {
   return (KINDS as readonly string[]).includes(top) ? (top as Kind) : 'salon'
 }
 
-/** Sites are neutral (theme.ts); the rules still want a brand colour, so they get near-black. */
+/** The fallback brand colour, when Jev picks none (and for the sample business). */
 const NEUTRAL_BRAND = '#171717'
+
+/**
+ * The quiet colour rules only (Robert, 2026-11-17: tinted grounds and loud brand colours looked
+ * cheap): a warm cream page with the colour on buttons and bands, or a near-black page.
+ */
+/** Whole-page templates instead of pages drawn block by block (docs/m0/24-templates.md). */
+const USE_TEMPLATES = true
+const COLOUR_CREAM = COLOUR_RULES.find((r) => r.key === 'cream') as (typeof COLOUR_RULES)[number]
+
+const QUIET = { id: 'quiet', label: 'Quiet colour', only: { colour: ['cream', 'night'] } }
 
 const seedOf = (s: string) => {
   let h = 0
@@ -179,6 +308,7 @@ export async function build(messages: string[]): Promise<BuildResult> {
     readBrief(decide, { business: 'organisation', name: '', place: '', words }),
     nearestKind(decide, words),
     pickArt(decide, words),
+    pickParts(decide, words),
   ]).then((r) => ({ r, ms: Math.round(performance.now() - td) }))
   const written = env.OPENROUTER_API_KEY
     ? writeSiteCopy({ apiKey: env.OPENROUTER_API_KEY, words })
@@ -189,7 +319,7 @@ export async function build(messages: string[]): Promise<BuildResult> {
         costUsd: 0,
       })
   const [{ r, ms: decideMs }, w] = await Promise.all([decided, written])
-  const [reading, kind, art] = r
+  const [reading, kind, art, parts] = r
   // Jev checks each answer against the owner's words (docs/m0/19-fuller-pages.md).
   const tg = performance.now()
   const grounded = w.copy ? await groundAnswers(decide, words, w.copy) : null
@@ -217,7 +347,7 @@ export async function build(messages: string[]): Promise<BuildResult> {
         d2: slot('d2', q.detail),
       },
       {
-        brand: NEUTRAL_BRAND,
+        brand: art.brand,
         lowkey: {
           hero: slot('lkhero', q.place),
           people: slot('lkpeople', q.people),
@@ -229,7 +359,7 @@ export async function build(messages: string[]): Promise<BuildResult> {
       queries: q,
       about: { name: w.copy.name, kind: w.copy.kind, town: w.copy.contact.place },
       seed: seedOf(words),
-      art,
+      art: { style: art.style, strength: art.strength },
     }
   } else {
     // No words were written: the sample business, with its own photos.
@@ -244,12 +374,32 @@ export async function build(messages: string[]): Promise<BuildResult> {
   // Robert's reference picks lost every time on real briefs: "blocks 3 were better on each run"
   // (2026-11-17), and Blocks 3 was the only free pick (light and natural photos, 28 of 30).
   const themes = pickDesigns(
-    weigh(reading.profile, reading.direct, cache, content, OPEN),
+    weigh(reading.profile, reading.direct, cache, content, QUIET),
     seed,
     3,
   ).filter((p): p is Pick => !!p)
-  const layouts = plans(seed, themes.length, content)
-  const blocks: BuiltSite[] = themes.map((p, i) => {
+  // Jev's blocks and the one or two extra sections it picked (docs/m0/23-jev-does-more.md).
+  const layouts = plans(seed, themes.length, content, {
+    weights: parts.weights,
+    ...(parts.extras.length ? { extras: parts.extras as SectionKind[] } : {}),
+  })
+  // Whole-page templates (docs/m0/24-templates.md): each version is one template, in Jev's type
+  // and colour, with Jev's extra sections. The block-by-block pages remain below, unused.
+  const best = design(themes[0] as Pick)
+  const tplTheme = theme(COLOUR_CREAM.palette(content.brand), best.type)
+  const extrasOf = parts.extras
+  // The three templates Jev rates best for this business, best first.
+  const chosenTemplates = parts.templates
+    .slice(0, 3)
+    .map((id) => LIVE.find((t) => t.id === id))
+    .filter((t): t is (typeof LIVE)[number] => !!t)
+  const fromTemplates: BuiltSite[] = chosenTemplates.map((tpl, i) => ({
+    id: `b${i + 1}`,
+    label: tpl.label,
+    rules: `${tpl.label} template · ${best.type.label} type · ${art.brandName || 'neutral'} · ${extrasOf.join(', ') || 'no extras'}${tpl.dark ? ' · night ·' : ''}`,
+    html: darkTokens(renderTemplate(content, tpl.id, tplTheme, extrasOf), tpl.dark),
+  }))
+  const fromBlocks: BuiltSite[] = themes.map((p, i) => {
     const d = design(p)
     const plan = layouts[i] as Plan
     const k = d.photo?.lowkey ? content.lowkey : undefined
@@ -265,7 +415,7 @@ export async function build(messages: string[]): Promise<BuildResult> {
     return {
       id: `b${i + 1}`,
       label: `Blocks ${i + 1}`,
-      rules: `${describePlan(plan)} · ${d.type.label} type · neutral ${theme(d.colour.palette(content.brand), d.type).dark ? 'dark' : 'light'} · ${d.photo?.label ?? 'Natural'} photos`,
+      rules: `${describePlan(plan)} · ${d.type.label} type · ${art.brandName || 'neutral'} ${d.colour.label.toLowerCase()} · ${d.photo?.label ?? 'Natural'} photos`,
       // A dark version gets its own photo tokens, so drawn art comes in Surfaces' dark theme there.
       html: darkTokens(
         renderSite(c, plan, theme(d.colour.palette(content.brand), d.type), {
@@ -276,12 +426,52 @@ export async function build(messages: string[]): Promise<BuildResult> {
       ),
     }
   })
-  const sites = blocks
+  const blocks = USE_TEMPLATES ? fromTemplates : fromBlocks
   const renderMs = Math.round(performance.now() - tr)
-  const jevUsd = [...reading.calls, ...(grounded?.calls ?? [])].reduce(
-    (s, c) => s + (c.costUsd ?? 0),
-    0,
+  // Jev picks the version to show first from what makes each one look different: its opening,
+  // type and colour (docs/m0/23-jev-does-more.md). The others keep their order.
+  const to = performance.now()
+  const looks = (USE_TEMPLATES ? [] : themes).map((p, i) => {
+    const d = design(p)
+    const hero = REGISTRY.find((e) => e.id === layouts[i]?.hero)
+    return `Opening: ${hero ? blockText(hero) : 'plain'}. Type: ${d.type.text}. Colour: ${art.brandName} on ${d.colour.text}.`
+  })
+  const first = USE_TEMPLATES
+    ? { i: 0, costUsd: 0 }
+    : await decide
+        .decide({ brief: words }, [
+          {
+            kind: 'choice',
+            id: 'first',
+            prompt:
+              "Three versions of this organisation's website were made. Which would its owner and its visitors like best?",
+            options: (USE_TEMPLATES ? LIVE.map((t) => t.text) : looks).map((text, i) => ({
+              key: String(i),
+              text,
+            })),
+          },
+        ])
+        .then((r) => {
+          const a = r.answers.get('first')
+          return {
+            i: a?.kind === 'choice' ? Number(a.top) || 0 : 0,
+            costUsd: r.calls.reduce((t, c) => t + (c.costUsd ?? 0), 0),
+          }
+        })
+        .catch(() => ({ i: 0, costUsd: 0 }))
+  const ordered = [blocks[first.i], ...blocks.filter((_, i) => i !== first.i)].filter(
+    (x): x is BuiltSite => !!x,
   )
+  const sites = ordered.map((x, i) => ({
+    ...x,
+    id: `b${i + 1}`,
+    label: x.label.startsWith('Blocks') ? `Blocks ${i + 1}` : x.label,
+  }))
+  const orderMs = Math.round(performance.now() - to)
+  const jevUsd =
+    [...reading.calls, ...(grounded?.calls ?? [])].reduce((s, c) => s + (c.costUsd ?? 0), 0) +
+    parts.costUsd +
+    first.costUsd
   return {
     name: content.name,
     kindLabel: w.copy?.kind || KIND_LABEL[kind],
@@ -296,6 +486,7 @@ export async function build(messages: string[]): Promise<BuildResult> {
       text: w.ms,
       photos: 0,
       render: renderMs,
+      order: orderMs,
       total: Math.round(performance.now() - t0),
     },
     costUsd: jevUsd + w.costUsd,
@@ -349,16 +540,25 @@ export async function sitePhotos(job: PhotoJob): Promise<PhotoResult> {
   )
   const n = found.natural
   const k = found.lowkey
-  const pick = (...xs: (FoundPhoto | undefined)[]) => xs.find(Boolean)
+  // Each space a photo no other space shows (Robert, 2026-11-20: "repeating images"); a space
+  // with no fresh photo left gets its own drawn art. The low-key spaces may repeat: a page shows
+  // either those or the natural ones.
+  const taken = new Set<string>()
+  const pick = (...xs: (FoundPhoto | undefined)[]) => {
+    const p = xs.find((x) => x && !taken.has(x.id))
+    if (p) taken.add(p.id)
+    return p
+  }
+  const any = (...xs: (FoundPhoto | undefined)[]) => xs.find(Boolean)
   const chosen: Record<keyof typeof SLOTS, FoundPhoto | undefined> = {
-    hero: pick(n.place[0], k.place[0], n.people[0]),
-    about: pick(n.people[0], n.place[1], k.people[0], n.place[0]),
-    cta: pick(n.place[1], n.place[0], k.place[0], n.people[1]),
-    d1: pick(n.detail[0], k.detail[0], n.people[1], n.detail[1]),
-    d2: pick(n.detail[1], n.people[1], n.detail[0]),
-    lkhero: pick(k.place[0], n.place[0]),
-    lkpeople: pick(k.people[0], n.people[0]),
-    lkdetail: pick(k.detail[0], n.detail[0]),
+    hero: pick(n.place[0], k.place[0], n.people[0], ...n.place),
+    about: pick(n.people[0], n.place[1], k.people[0], ...n.people, ...n.place),
+    d1: pick(n.detail[0], k.detail[0], n.detail[1], ...n.detail, ...n.people),
+    d2: pick(n.detail[1], n.people[1], n.detail[2], ...n.detail, ...n.people, ...n.place),
+    cta: pick(n.place[1], n.place[2], k.place[1], n.people[2], ...n.place, ...n.people),
+    lkhero: any(k.place[0], n.place[0]),
+    lkpeople: any(k.people[0], n.people[0]),
+    lkdetail: any(k.detail[0], n.detail[0]),
   }
   const slots: Record<string, string> = {}
   const images: Record<string, string> = {}
@@ -375,12 +575,13 @@ export async function sitePhotos(job: PhotoJob): Promise<PhotoResult> {
     // Drawn art in Jev's style and colour strength, in each version's own theme; the same for
     // the same business every time.
     for (const dark of [false, true]) {
-      const id = `art${subject}${dark ? 'dk' : ''}`
+      // One drawing per space, so two spaces never show the same art.
+      const id = `art${slot}${dark ? 'dk' : ''}`
       if (!images[id]) {
         const svg = toSvg(
           generate({
             style: job.art.style,
-            seed: `${job.seed}-${subject}`,
+            seed: `${job.seed}-${slot}`,
             color: artColour(job.seed, ART_STRENGTHS[job.art.strength]),
             width: 1200,
             height: 800,

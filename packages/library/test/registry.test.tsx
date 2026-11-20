@@ -1,6 +1,6 @@
 import { renderToStaticMarkup } from 'react-dom/server'
 import { describe, expect, it } from 'vitest'
-import { fits, KINDS, REGISTRY } from '../src/registry.ts'
+import { blockText, fits, KINDS, REGISTRY } from '../src/registry.ts'
 import { full, minimal, rtl } from './fixtures.ts'
 
 // Words that mean a block still carries its source's demo content.
@@ -8,6 +8,11 @@ const DEMO =
   /lorem|ipsum|acme|tailark|shadcn|efferd|vercel|nextjs|next\.js|github\.com|example\.com|john doe|jane doe|unsplash|placeholder|tailwind ?ui|\$\d+\/mo|startup|saas|dashboard/i
 
 describe('library registry', () => {
+  it('describes every block for Jev (scripts/describe.py)', () => {
+    const missing = REGISTRY.filter((e) => blockText(e) === e.id).map((e) => e.id)
+    expect(missing).toEqual([])
+  })
+
   it('has unique ids that name their library and kind', () => {
     const ids = REGISTRY.map((e) => e.id)
     expect(new Set(ids).size).toBe(ids.length)

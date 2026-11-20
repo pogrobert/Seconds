@@ -173,6 +173,35 @@ COLOUR_RULES.push({
   },
 })
 
+/**
+ * Cream (2026-11-19, docs/m0/22-concept.md): the same warm off-white page for every business, with
+ * the brand colour only on buttons, accents and bands. The rivals' best pages work this way; the
+ * tinted grounds of "paper" (a green-white page for a green brand) read as cheap.
+ */
+COLOUR_RULES.push({
+  key: 'cream',
+  label: 'Cream',
+  text: 'A warm cream page with near-black text, the brand colour on buttons, small accents and one deep colour band: calm, warm and quietly expensive',
+  fits: () => true,
+  palette: (brand) => {
+    const warm = (l: number, c: number) =>
+      formatHex(clampChroma({ mode: 'oklch', l, c, h: 80 }, 'oklch')) ?? '#ffffff'
+    const ground = warm(0.975, 0.012)
+    const band = ensure(at(brand, 0.4, brandC(brand, 0.12)), ground, 5.5)
+    return {
+      ...text(ground, warm(0.22, 0.012), warm(0.47, 0.02), warm(0.88, 0.02)),
+      '--tint': warm(0.945, 0.018),
+      '--accent': band,
+      '--btn': band,
+      '--on-btn': ground,
+      '--band': band,
+      '--on-band': ensure(ground, band, 7),
+      '--night': warm(0.2, 0.012),
+      '--on-night': ground,
+    }
+  },
+})
+
 /** Contrast of every text pair in a palette, for the report. */
 export function palettePairs(p: Palette): Record<string, number> {
   const pair = (a: string, b: string) =>
