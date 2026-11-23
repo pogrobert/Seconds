@@ -26,16 +26,22 @@ import { hang } from './hang.tsx'
 import { heritage } from './heritage.tsx'
 import { hours } from './hours.tsx'
 import { hub } from './hub.tsx'
+import { ink } from './ink.tsx'
 import { label } from './label.tsx'
 import { ledger } from './ledger.tsx'
 import { listing } from './listing.tsx'
 import { lowlight } from './lowlight.tsx'
+import { luxe } from './luxe.tsx'
 import { market } from './market.tsx'
+import { neon } from './neon.tsx'
 import { noticeboard } from './noticeboard.tsx'
 import { numbered } from './numbered.tsx'
+import { outdoors } from './outdoors.tsx'
 import { panels } from './panels.tsx'
+import { person } from './person.tsx'
 import { postcard } from './postcard.tsx'
 import { poster } from './poster.tsx'
+import { product } from './product.tsx'
 import { programme } from './programme.tsx'
 import { repair } from './repair.tsx'
 import { type Extra, spacingVariants, type Template, type Variant } from './shared.tsx'
@@ -51,6 +57,7 @@ import { tiles } from './tiles.tsx'
 import { timetable } from './timetable.tsx'
 import { bigType } from './type.tsx'
 import { units } from './units.tsx'
+import { velvet } from './velvet.tsx'
 import { workshop } from './workshop.tsx'
 
 export type { Extra, Template, Variant } from './shared.tsx'
@@ -103,6 +110,13 @@ export const TEMPLATES: Template[] = [
   listing,
   care,
   atelier,
+  neon,
+  velvet,
+  ink,
+  product,
+  person,
+  luxe,
+  outdoors,
 ]
 export const LIVE = TEMPLATES.filter((t) => !t.draft)
 
