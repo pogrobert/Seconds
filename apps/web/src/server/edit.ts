@@ -782,23 +782,29 @@ export async function edit(
         () => onPhotos(null),
       )
   } else if (yes('asks:photos') && env.OPENROUTER_API_KEY) {
-    const q = await writePhotoQueries({
-      apiKey: env.OPENROUTER_API_KEY,
-      words: `${next.words}\nPhotos wanted now: ${request}`,
-    })
-    if (q) {
-      next.copy = { ...next.copy, photos: q.queries }
-      next.seed = `${state.seed}-${Date.now() % 100000}`
-      photoJob = {
-        queries: q.queries,
-        about: { name: next.copy.name, kind: next.copy.kind, town: next.copy.contact.place },
-        seed: next.seed,
-        art: next.art,
-        avoid: state.shown ?? [],
-      }
-      changed.push('the photos')
-      if (onPhotos)
-        sitePhotos(photoJob, onPhoto).then(
+    // The new searches are written in the background with the photo step, so the page comes back
+    // without waiting for them; the build page keeps them on the site when the photos arrive. If
+    // they cannot be written, the old searches still bring other photos (the shown ones are
+    // avoided).
+    next.seed = `${state.seed}-${Date.now() % 100000}`
+    const job: NonNullable<BuildResult['photoJob']> = {
+      queries: next.copy.photos,
+      about: { name: next.copy.name, kind: next.copy.kind, town: next.copy.contact.place },
+      seed: next.seed,
+      art: next.art,
+      avoid: state.shown ?? [],
+    }
+    photoJob = job
+    changed.push('the photos')
+    if (onPhotos) {
+      const apiKey = env.OPENROUTER_API_KEY
+      writePhotoQueries({ apiKey, words: `${next.words}\nPhotos wanted now: ${request}` })
+        .catch(() => null)
+        .then(async (q) => {
+          const p = await sitePhotos(q ? { ...job, queries: q.queries } : job, onPhoto)
+          return { ...p, costUsd: p.costUsd + (q?.costUsd ?? 0) }
+        })
+        .then(
           (p) => onPhotos({ ...p, ms: Math.round(performance.now() - t0) }),
           () => onPhotos(null),
         )
