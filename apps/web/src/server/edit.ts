@@ -772,7 +772,7 @@ export async function edit(
       art: next.art,
       none: true,
     }
-    changed.push('the photos (drawn art instead)')
+    changed.push('the photos (taken off)')
     if (onPhotos)
       sitePhotos(photoJob).then(
         (p) => onPhotos({ ...p, ms: Math.round(performance.now() - t0) }),

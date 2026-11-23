@@ -761,12 +761,18 @@ export async function sitePhotos(job: PhotoJob): Promise<PhotoResult> {
     .filter((p) => used.has(p.id) && !seen.has(p.id) && seen.add(p.id))
     .map((p) => p.credit)
   if (art && !job.none) {
-    if (!env.PIXABAY_API_KEY) notes.push('No PIXABAY_API_KEY, so the photo spaces show drawn art.')
+    if (!env.PIXABAY_API_KEY) notes.push('No PIXABAY_API_KEY, so the page goes without photos.')
     else if (found.limited)
       notes.push(
-        `Pixabay refused the searches, so ${art} photo spaces show drawn art. Try again in a minute. (${found.limitInfo})`,
+        `The photo search was busy, so ${art} ${art === 1 ? 'spot goes' : 'spots go'} without a photo. Try again in a minute. (${found.limitInfo})`,
       )
-    else notes.push(`No photo fitted ${art} of the photo spaces, so they show drawn art.`)
+    // Most templates close up a spot without a photo (pairs, galleries, strips: shared.tsx RESET);
+    // a few keep a Surfaces pattern there. Said plainly to the owner (Robert, 2026-11-23: the old
+    // "they show drawn art" was not what he saw).
+    else
+      notes.push(
+        `No good photo found for ${art} ${art === 1 ? 'spot' : 'spots'}, so the page does without. Ask for different photos to try again.`,
+      )
   }
   if (credits.length && !found.judged)
     notes.push(

@@ -1,3 +1,4 @@
+import geist from '@fontsource-variable/geist/files/geist-latin-wght-normal.woff2?url'
 import { createRootRoute, HeadContent, Outlet, Scripts } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 import { TooltipProvider } from '@/components/ui/tooltip'
@@ -13,6 +14,9 @@ export const Route = createRootRoute({
     links: [
       // Geist, the build page's own type, comes with the stylesheet (styles.css); the sites it
       // draws load their own fonts.
+      // The font asked for at once, beside the stylesheet: found only through the stylesheet, it
+      // arrived after the first paint and the text shifted when it swapped in (2026-11-23).
+      { rel: 'preload', href: geist, as: 'font', type: 'font/woff2', crossOrigin: 'anonymous' },
       { rel: 'stylesheet', href: appCss },
       {
         rel: 'icon',
