@@ -2,6 +2,8 @@ import {
   ArrowClockwiseIcon,
   ArrowSquareOutIcon,
   ArrowUpIcon,
+  BatteryFullIcon,
+  CellSignalFullIcon,
   CheckIcon,
   CircleIcon,
   DeviceMobileIcon,
@@ -9,10 +11,19 @@ import {
   LayoutIcon,
   MonitorIcon,
   WarningCircleIcon,
+  WifiHighIcon,
 } from '@phosphor-icons/react'
 import { createFileRoute } from '@tanstack/react-router'
 import { AnimatePresence, motion } from 'motion/react'
-import { type FormEvent, type KeyboardEvent, useEffect, useRef, useState } from 'react'
+import {
+  type FormEvent,
+  type KeyboardEvent,
+  type ReactNode,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react'
 import { flushSync } from 'react-dom'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Bubble, BubbleContent } from '@/components/ui/bubble'
@@ -234,6 +245,8 @@ function Build() {
   linksRef.current = links
   const composer = useRef<HTMLTextAreaElement>(null)
   const [reloads, setReloads] = useState(0)
+  /** The page's top colour, for the phone's status bar. */
+  const [tone, setTone] = useState<Tone>(LIGHT)
 
   // The first screen starts with the cursor in the message box.
   const onStart = messages.length === 0
@@ -779,22 +792,28 @@ function Build() {
               className={`relative flex min-h-0 flex-1 items-stretch justify-center ${device === 'phone' ? 'bg-zinc-50' : ''}`}
             >
               {site ? (
-                <TabsContent value={site.id} className="flex min-h-0 flex-1 justify-center">
-                  <iframe
-                    ref={frame}
-                    onLoad={() => {
-                      wireLinks(frame.current?.contentDocument)
-                      fillSpaces(frame.current?.contentDocument, linksRef.current)
-                    }}
-                    key={`${site.id}-${result?.name}-${reloads}`}
-                    title={`${result?.name}, version ${site.id.slice(1)}`}
-                    srcDoc={site.html}
-                    className={
-                      device === 'phone'
-                        ? 'my-6 h-[calc(100%-3rem)] w-[390px] rounded-[36px] bg-white shadow-2xl ring-[10px] ring-zinc-900'
-                        : 'h-full w-full'
-                    }
-                  />
+                <TabsContent
+                  value={site.id}
+                  className="flex min-h-0 flex-1 items-center justify-center"
+                >
+                  {(() => {
+                    const page = (
+                      <iframe
+                        ref={frame}
+                        onLoad={() => {
+                          const doc = frame.current?.contentDocument
+                          wireLinks(doc)
+                          fillSpaces(doc, linksRef.current)
+                          setTone(toneOf(doc))
+                        }}
+                        key={`${site.id}-${result?.name}-${reloads}-${device}`}
+                        title={`${result?.name}, version ${site.id.slice(1)}`}
+                        srcDoc={site.html}
+                        className="h-full w-full bg-white"
+                      />
+                    )
+                    return device === 'phone' ? <Phone tone={tone}>{page}</Phone> : page
+                  })()}
                 </TabsContent>
               ) : busy ? (
                 <div className="flex flex-1 flex-col gap-5 p-8" aria-hidden>
@@ -954,6 +973,104 @@ function Mark() {
     <span aria-hidden className="grid size-6 shrink-0 place-items-center rounded-lg bg-zinc-900">
       <span className="size-2.5 rounded-[3px] bg-white" />
     </span>
+  )
+}
+
+type Tone = { bg: string; dark: boolean }
+const LIGHT: Tone = { bg: '#ffffff', dark: false }
+
+/** The colour along the top edge of a page, and whether it is dark. */
+function toneOf(doc: Document | null | undefined): Tone {
+  const view = doc?.defaultView
+  if (!doc?.body || !view) return LIGHT
+  let el: Element | null = doc.elementFromPoint(view.innerWidth / 2, 1) ?? doc.body
+  for (; el; el = el.parentElement) {
+    const [r = 255, g = 255, b = 255, a = 1] = (
+      view.getComputedStyle(el).backgroundColor.match(/[\d.]+/g) ?? []
+    ).map(Number)
+    if (a === 0) continue
+    return { bg: `rgb(${r} ${g} ${b})`, dark: 0.2126 * r + 0.7152 * g + 0.0722 * b < 140 }
+  }
+  return LIGHT
+}
+
+/**
+ * The phone preview as a real phone (Robert, 2026-11-23): an iPhone-sized screen (393 by 852,
+ * the width sites are laid out at), its bezel, side buttons, Dynamic Island, a status bar in the
+ * page's own top colour, and the home bar. It is scaled down as one piece when the window is
+ * shorter, so the page inside keeps the phone's true width.
+ */
+const SCREEN = { w: 393, h: 852 }
+const BEZEL = 11
+function Phone({ tone, children }: { tone: Tone; children: ReactNode }) {
+  const box = useRef<HTMLDivElement>(null)
+  const [scale, setScale] = useState(1)
+  const W = SCREEN.w + BEZEL * 2
+  const H = SCREEN.h + BEZEL * 2
+  useLayoutEffect(() => {
+    const area = box.current?.parentElement
+    if (!area) return
+    const fit = () =>
+      setScale(
+        Math.max(0.35, Math.min(1, (area.clientHeight - 48) / H, (area.clientWidth - 48) / W)),
+      )
+    fit()
+    const watch = new ResizeObserver(fit)
+    watch.observe(area)
+    return () => watch.disconnect()
+  }, [H, W])
+  const ink = tone.dark ? 'text-white' : 'text-black'
+  return (
+    <div ref={box} className="relative shrink-0" style={{ width: W * scale, height: H * scale }}>
+      <div
+        className="absolute top-0 left-0 origin-top-left rounded-[64px] bg-zinc-950 shadow-[0_0_0_1.5px_#5b5b57,0_0_0_3px_#1c1c1a,0_40px_80px_-30px_rgb(9_9_11/0.45)]"
+        style={{ width: W, height: H, padding: BEZEL, transform: `scale(${scale})` }}
+      >
+        {/* Side buttons: action and volume on the left, power on the right. */}
+        <span
+          aria-hidden
+          className="absolute top-[118px] -left-[4px] h-[34px] w-[4px] rounded-l-sm bg-zinc-800"
+        />
+        <span
+          aria-hidden
+          className="absolute top-[178px] -left-[4px] h-[62px] w-[4px] rounded-l-sm bg-zinc-800"
+        />
+        <span
+          aria-hidden
+          className="absolute top-[254px] -left-[4px] h-[62px] w-[4px] rounded-l-sm bg-zinc-800"
+        />
+        <span
+          aria-hidden
+          className="absolute top-[212px] -right-[4px] h-[96px] w-[4px] rounded-r-sm bg-zinc-800"
+        />
+        <div
+          className="relative size-full overflow-hidden rounded-[53px]"
+          style={{ background: tone.bg }}
+        >
+          <div
+            aria-hidden
+            className={`flex h-[54px] items-center justify-between pr-7 pl-12 text-[16px] font-semibold tracking-tight ${ink}`}
+            style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}
+          >
+            <span>9:41</span>
+            <span className="flex items-center gap-1.5">
+              <CellSignalFullIcon weight="fill" className="size-[17px]" />
+              <WifiHighIcon weight="bold" className="size-[17px]" />
+              <BatteryFullIcon weight="fill" className="size-[25px]" />
+            </span>
+          </div>
+          <span
+            aria-hidden
+            className="absolute top-[11px] left-1/2 h-[36px] w-[124px] -translate-x-1/2 rounded-full bg-black"
+          />
+          <div className="absolute inset-x-0 top-[54px] bottom-0">{children}</div>
+          <span
+            aria-hidden
+            className={`pointer-events-none absolute bottom-2 left-1/2 h-[5px] w-[136px] -translate-x-1/2 rounded-full ${tone.dark ? 'bg-white/90' : 'bg-black/85'}`}
+          />
+        </div>
+      </div>
+    </div>
   )
 }
 
