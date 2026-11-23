@@ -472,7 +472,7 @@ function Build() {
           rows={big ? 3 : 2}
           style={big ? { viewTransitionName: 'prompt' } : undefined}
           placeholder={result ? 'What should change?' : "What's the site for?"}
-          className={`max-h-48 flex-none overflow-y-auto leading-relaxed field-sizing-fixed motion-safe:transition-[height] motion-safe:duration-150 motion-safe:ease-out ${big ? 'h-20 min-h-20 text-base md:text-base' : 'h-12 min-h-12 text-sm'}`}
+          className={`max-h-48 flex-none overflow-y-auto leading-relaxed field-sizing-fixed motion-safe:transition-[height] motion-safe:duration-160 motion-safe:ease-[cubic-bezier(0.23,1,0.32,1)] ${big ? 'h-20 min-h-20 text-base md:text-base' : 'h-12 min-h-12 text-sm'}`}
         />
         <textarea
           ref={mirror}
@@ -536,6 +536,7 @@ function Build() {
             </div>
             {composerBox(true)}
             <TryRow
+              typing={!!draft.trim()}
               onPick={(ex) => {
                 setDraft(ex.prompt)
                 composer.current?.focus()
@@ -801,10 +802,13 @@ function Build() {
  * old names lift away, the new ones settle one after another), paused while the pointer is on
  * the row. A name fills the message box with its detailed prompt; nothing is sent until Enter.
  */
-function TryRow({ onPick }: { onPick: (ex: Example) => void }) {
+function TryRow({ onPick, typing }: { onPick: (ex: Example) => void; typing: boolean }) {
   // The first set is fixed so the server and the browser draw the same page; then random.
   const [shown, setShown] = useState(() => EXAMPLES.slice(0, 4))
   const paused = useRef(false)
+  // Still while the visitor writes: motion under the box pulls the eye away (Emil Kowalski review).
+  const still = useRef(typing)
+  still.current = typing
   useEffect(() => {
     const next = () =>
       setShown((prev) => {
@@ -812,7 +816,7 @@ function TryRow({ onPick }: { onPick: (ex: Example) => void }) {
         return [...pool].sort(() => Math.random() - 0.5).slice(0, 4)
       })
     const t = setInterval(() => {
-      if (!paused.current && !document.hidden) next()
+      if (!paused.current && !still.current && !document.hidden) next()
     }, 5000)
     return () => clearInterval(t)
   }, [])
@@ -845,7 +849,7 @@ function TryRow({ onPick }: { onPick: (ex: Example) => void }) {
         className="-my-1 overflow-hidden py-1"
         initial={false}
         animate={width === null ? {} : { width }}
-        transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 0.28, ease: [0.23, 1, 0.32, 1] }}
       >
         <div ref={names} className="flex w-max">
           <AnimatePresence mode="wait" initial={false}>
@@ -862,7 +866,7 @@ function TryRow({ onPick }: { onPick: (ex: Example) => void }) {
                   opacity: 0,
                   y: -5,
                   filter: 'blur(3px)',
-                  transition: { duration: 0.16, ease: 'easeIn' },
+                  transition: { duration: 0.15, ease: 'easeOut' },
                 },
               }}
             >
@@ -877,7 +881,7 @@ function TryRow({ onPick }: { onPick: (ex: Example) => void }) {
                       opacity: 1,
                       y: 0,
                       filter: 'blur(0px)',
-                      transition: { duration: 0.32, ease: [0.22, 1, 0.36, 1] },
+                      transition: { duration: 0.26, ease: [0.23, 1, 0.32, 1] },
                     },
                   }}
                 >

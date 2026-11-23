@@ -54,8 +54,8 @@
    in it fly up as the first chat message (routes/index.tsx, View Transitions). */
 ::view-transition-group(composer),
 ::view-transition-group(prompt) {
-  animation-duration: 0.55s;
-  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  animation-duration: 0.45s;
+  animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
 }
 ::view-transition-old(prompt),
 ::view-transition-new(prompt) {

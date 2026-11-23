@@ -1,5 +1,6 @@
 import sans from '@fontsource-variable/atkinson-hyperlegible-next/files/atkinson-hyperlegible-next-latin-wght-normal.woff2?url'
 import { createRootRoute, HeadContent, Outlet, Scripts } from '@tanstack/react-router'
+import { MotionConfig } from 'motion/react'
 import type { ReactNode } from 'react'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import appCss from '../styles.css?url'
@@ -35,7 +36,10 @@ function RootDocument({ children }: { children: ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        <TooltipProvider delayDuration={300}>{children}</TooltipProvider>
+        {/* "Reduce motion" keeps Motion's fades and drops its movement. */}
+        <MotionConfig reducedMotion="user">
+          <TooltipProvider delayDuration={300}>{children}</TooltipProvider>
+        </MotionConfig>
         <Scripts />
       </body>
     </html>
