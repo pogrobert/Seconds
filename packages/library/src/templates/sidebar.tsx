@@ -10,10 +10,14 @@
 import { Fragment } from 'react'
 import {
   type Extra,
+  FactRows,
+  FaqDetails,
   facts,
   hasVisit,
+  ListItems,
   links,
   listOf,
+  NavLinks,
   offerItems,
   Pic,
   present,
@@ -105,12 +109,7 @@ function Extras({ c, x }: { c: TemplateProps['c']; x: Extra }) {
     return (
       <section className="sec faq col" id="questions">
         <h2 className="h">Questions</h2>
-        {c.faq?.map((f) => (
-          <details key={f.q}>
-            <summary>{f.q}</summary>
-            <p>{f.a}</p>
-          </details>
-        ))}
+        <FaqDetails faq={c.faq} />
       </section>
     )
   if (x === 'gallery')
@@ -133,13 +132,7 @@ function Extras({ c, x }: { c: TemplateProps['c']; x: Extra }) {
     <section className="sec col" id={x}>
       <h2 className="h">{l.title}</h2>
       <ol className={steps ? 'list num' : 'list'}>
-        {l.items.map((it, i) => (
-          <li key={it.title}>
-            {steps && <span className="n">{i + 1}</span>}
-            <h3>{it.title}</h3>
-            <p>{it.body}</p>
-          </li>
-        ))}
+        <ListItems items={l.items} numbered={steps} />
       </ol>
     </section>
   )
@@ -182,11 +175,7 @@ function Page({ c, extras }: TemplateProps) {
             </nav>
           )}
           <nav className="go">
-            {links(c, extras).map((l) => (
-              <a key={l.href} href={l.href}>
-                {l.label}
-              </a>
-            ))}
+            <NavLinks links={links(c, extras)} />
           </nav>
         </header>
       </div>
@@ -241,12 +230,7 @@ function Page({ c, extras }: TemplateProps) {
             )}
             {hasVisit(c) && (
               <dl>
-                {f.map((x) => (
-                  <div key={x.label}>
-                    <dt>{x.label}</dt>
-                    <dd>{x.href ? <a href={x.href}>{x.value}</a> : x.value}</dd>
-                  </div>
-                ))}
+                <FactRows facts={f} />
               </dl>
             )}
           </section>

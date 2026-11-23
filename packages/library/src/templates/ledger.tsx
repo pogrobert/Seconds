@@ -8,10 +8,13 @@
 import { Fragment, type ReactNode } from 'react'
 import {
   type Extra,
+  FactRows,
+  FaqList,
   facts,
   hasVisit,
   links,
   listOf,
+  NavLinks,
   Pic,
   present,
   RESET,
@@ -102,12 +105,7 @@ function Extras({ c, x }: { c: TemplateProps['c']; x: Extra }) {
     return (
       <Row lab={<h2>Questions</h2>} id="questions">
         <div className="qa">
-          {c.faq?.map((f) => (
-            <div key={f.q}>
-              <h3>{f.q}</h3>
-              <p>{f.a}</p>
-            </div>
-          ))}
+          <FaqList faq={c.faq} />
         </div>
       </Row>
     )
@@ -153,12 +151,7 @@ function Facts({ c }: { c: TemplateProps['c'] }) {
   if (!f.length) return null
   return (
     <dl className="tbl">
-      {f.map((x) => (
-        <div key={x.label}>
-          <dt>{x.label}</dt>
-          <dd>{x.href ? <a href={x.href}>{x.value}</a> : x.value}</dd>
-        </div>
-      ))}
+      <FactRows facts={f} />
     </dl>
   )
 }
@@ -174,11 +167,7 @@ function Page({ c, extras }: TemplateProps) {
         <div className="mast">
           <b>{c.name}</b>
           <nav>
-            {links(c, extras).map((l) => (
-              <a key={l.href} href={l.href}>
-                {l.label}
-              </a>
-            ))}
+            <NavLinks links={links(c, extras)} />
           </nav>
         </div>
       </div>

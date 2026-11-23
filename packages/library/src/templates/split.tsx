@@ -6,10 +6,13 @@
 import { Fragment } from 'react'
 import {
   type Extra,
+  FactRows,
+  FaqDetails,
   facts,
   hasVisit,
   links,
   listOf,
+  NavLinks,
   offerItems,
   Pic,
   present,
@@ -76,12 +79,7 @@ function Extras({ c, x }: { c: TemplateProps['c']; x: Extra }) {
     return (
       <section className="blk faq" id="questions">
         <h2>Questions</h2>
-        {c.faq?.map((f) => (
-          <details key={f.q}>
-            <summary>{f.q}</summary>
-            <p>{f.a}</p>
-          </details>
-        ))}
+        <FaqDetails faq={c.faq} />
       </section>
     )
   if (x === 'gallery')
@@ -133,11 +131,7 @@ function Page({ c, extras }: TemplateProps) {
       </aside>
       <div className="flow">
         <nav>
-          {links(c, extras).map((l) => (
-            <a key={l.href} href={l.href}>
-              {l.label}
-            </a>
-          ))}
+          <NavLinks links={links(c, extras)} />
         </nav>
         <header className="open">
           <p className="tag">{c.tagline}</p>
@@ -182,12 +176,7 @@ function Page({ c, extras }: TemplateProps) {
             )}
             {hasVisit(c) && (
               <dl>
-                {f.map((x) => (
-                  <div key={x.label}>
-                    <dt>{x.label}</dt>
-                    <dd>{x.href ? <a href={x.href}>{x.value}</a> : x.value}</dd>
-                  </div>
-                ))}
+                <FactRows facts={f} />
               </dl>
             )}
           </section>

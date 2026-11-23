@@ -9,10 +9,13 @@ import { Fragment } from 'react'
 import type { Photo } from '../ui.tsx'
 import {
   type Extra,
+  FactRows,
+  FaqList,
   facts,
   hasVisit,
   links,
   listOf,
+  NavLinks,
   offerItems,
   Pic,
   present,
@@ -118,12 +121,7 @@ function Extras({ c, x }: { c: TemplateProps['c']; x: Extra }) {
             <span className="hoop" aria-hidden="true" />
           </div>
           <div className="qa">
-            {c.faq?.map((f) => (
-              <div key={f.q}>
-                <h3>{f.q}</h3>
-                <p>{f.a}</p>
-              </div>
-            ))}
+            <FaqList faq={c.faq} />
           </div>
         </div>
       </section>
@@ -186,11 +184,7 @@ function Page({ c, extras }: TemplateProps) {
             <b>{c.name}</b>
           </span>
           <nav>
-            {links(c, extras).map((l) => (
-              <a key={l.href} href={l.href}>
-                {l.label}
-              </a>
-            ))}
+            <NavLinks links={links(c, extras)} />
           </nav>
         </div>
       </div>
@@ -269,12 +263,7 @@ function Page({ c, extras }: TemplateProps) {
             </div>
             {hasVisit(c) && (
               <dl>
-                {f.map((x) => (
-                  <div key={x.label}>
-                    <dt>{x.label}</dt>
-                    <dd>{x.href ? <a href={x.href}>{x.value}</a> : x.value}</dd>
-                  </div>
-                ))}
+                <FactRows facts={f} />
               </dl>
             )}
           </div>

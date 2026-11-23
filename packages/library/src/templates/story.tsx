@@ -9,10 +9,14 @@
 import { Fragment, type ReactNode } from 'react'
 import {
   type Extra,
+  FactRows,
+  FaqList,
   facts,
   hasVisit,
+  ListItems,
   links,
   listOf,
+  NavLinks,
   offerItems,
   Pic,
   present,
@@ -119,12 +123,7 @@ function Extras({ c, x }: { c: TemplateProps['c']; x: Extra }) {
       <Stop id="questions">
         <h2 className="t">Questions</h2>
         <div className="qa">
-          {c.faq?.map((f) => (
-            <div key={f.q}>
-              <h3>{f.q}</h3>
-              <p>{f.a}</p>
-            </div>
-          ))}
+          <FaqList faq={c.faq} />
         </div>
       </Stop>
     )
@@ -162,12 +161,7 @@ function Extras({ c, x }: { c: TemplateProps['c']; x: Extra }) {
     <Stop>
       <h2 className="t">{l.title}</h2>
       <ul className="list">
-        {l.items.map((it) => (
-          <li key={it.title}>
-            <h3>{it.title}</h3>
-            <p>{it.body}</p>
-          </li>
-        ))}
+        <ListItems items={l.items} />
       </ul>
     </Stop>
   )
@@ -183,11 +177,7 @@ function Page({ c, extras }: TemplateProps) {
       <div className="w bar">
         <b>{c.name}</b>
         <nav>
-          {links(c, extras).map((l) => (
-            <a key={l.href} href={l.href}>
-              {l.label}
-            </a>
-          ))}
+          <NavLinks links={links(c, extras)} />
         </nav>
       </div>
       <div className="w route">
@@ -249,12 +239,7 @@ function Page({ c, extras }: TemplateProps) {
               )}
               {hasVisit(c) && (
                 <dl>
-                  {f.map((x) => (
-                    <div key={x.label}>
-                      <dt>{x.label}</dt>
-                      <dd>{x.href ? <a href={x.href}>{x.value}</a> : x.value}</dd>
-                    </div>
-                  ))}
+                  <FactRows facts={f} />
                 </dl>
               )}
             </div>

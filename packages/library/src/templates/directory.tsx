@@ -9,10 +9,13 @@
 import { Fragment } from 'react'
 import {
   type Extra,
+  FaqList,
   facts,
   hasVisit,
+  ListItems,
   links,
   listOf,
+  NavLinks,
   offerItems,
   Pic,
   present,
@@ -109,12 +112,7 @@ function Extras({ c, x }: { c: TemplateProps['c']; x: Extra }) {
       <section className="sec" id="questions">
         <h2 className="t">Questions</h2>
         <div className="qa">
-          {c.faq?.map((f) => (
-            <div key={f.q}>
-              <h3>{f.q}</h3>
-              <p>{f.a}</p>
-            </div>
-          ))}
+          <FaqList faq={c.faq} />
         </div>
       </section>
     )
@@ -138,13 +136,7 @@ function Extras({ c, x }: { c: TemplateProps['c']; x: Extra }) {
     <section className="sec" id={x}>
       <h2 className="t">{l.title}</h2>
       <ol className={steps ? 'defs num' : 'defs'}>
-        {l.items.map((it, i) => (
-          <li key={it.title}>
-            {steps && <span className="n">{i + 1}</span>}
-            <h3>{it.title}</h3>
-            <p>{it.body}</p>
-          </li>
-        ))}
+        <ListItems items={l.items} numbered={steps} />
       </ol>
     </section>
   )
@@ -173,11 +165,7 @@ function Page({ c, extras }: TemplateProps) {
             <span className="tag">{c.tagline}</span>
           </div>
           <nav>
-            {links(c, extras).map((l) => (
-              <a key={l.href} href={l.href}>
-                {l.label}
-              </a>
-            ))}
+            <NavLinks links={links(c, extras)} />
           </nav>
         </div>
       </header>
@@ -196,11 +184,7 @@ function Page({ c, extras }: TemplateProps) {
                 </a>
               ) : null,
             )}
-          {listed.map((l) => (
-            <a key={l.href} href={l.href}>
-              {l.label}
-            </a>
-          ))}
+          <NavLinks links={listed} />
           <a href="#visit">{c.cta.headline}</a>
         </nav>
         <main>

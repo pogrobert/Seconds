@@ -9,10 +9,14 @@
 import { Fragment } from 'react'
 import {
   type Extra,
+  FactRows,
+  FaqList,
   facts,
   hasVisit,
+  ListItems,
   links,
   listOf,
+  NavLinks,
   offerItems,
   Pic,
   present,
@@ -110,12 +114,7 @@ function Extras({ c, x }: { c: TemplateProps['c']; x: Extra }) {
           <h2>Questions</h2>
         </div>
         <div className="qa">
-          {c.faq?.map((f) => (
-            <div key={f.q}>
-              <h3>{f.q}</h3>
-              <p>{f.a}</p>
-            </div>
-          ))}
+          <FaqList faq={c.faq} />
         </div>
       </section>
     )
@@ -141,13 +140,7 @@ function Extras({ c, x }: { c: TemplateProps['c']; x: Extra }) {
         <h2>{l.title}</h2>
       </div>
       <ol className="cells">
-        {l.items.map((it, i) => (
-          <li key={it.title}>
-            {steps && <span className="n">{i + 1}</span>}
-            <h3>{it.title}</h3>
-            <p>{it.body}</p>
-          </li>
-        ))}
+        <ListItems items={l.items} numbered={steps} />
       </ol>
     </section>
   )
@@ -186,11 +179,7 @@ function Page({ c, extras }: TemplateProps) {
         <div className="w">
           <b>{c.name}</b>
           <nav>
-            {links(c, extras).map((l) => (
-              <a key={l.href} href={l.href}>
-                {l.label}
-              </a>
-            ))}
+            <NavLinks links={links(c, extras)} />
           </nav>
         </div>
       </header>
@@ -259,12 +248,7 @@ function Page({ c, extras }: TemplateProps) {
             </a>
             {hasVisit(c) && (
               <dl>
-                {f.map((x) => (
-                  <div key={x.label}>
-                    <dt>{x.label}</dt>
-                    <dd>{x.href ? <a href={x.href}>{x.value}</a> : x.value}</dd>
-                  </div>
-                ))}
+                <FactRows facts={f} />
               </dl>
             )}
           </div>

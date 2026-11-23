@@ -8,10 +8,12 @@ import { Fragment, type ReactNode } from 'react'
 import type { Photo } from '../ui.tsx'
 import {
   type Extra,
+  FaqDetails,
   facts,
   hasVisit,
   links,
   listOf,
+  NavLinks,
   offerItems,
   Pic,
   present,
@@ -162,12 +164,7 @@ function Extras({ c, x }: { c: TemplateProps['c']; x: Extra }) {
           <h2>Questions</h2>
         </div>
         <div className="t s3 pap qs">
-          {c.faq?.map((f) => (
-            <details key={f.q}>
-              <summary>{f.q}</summary>
-              <p>{f.a}</p>
-            </details>
-          ))}
+          <FaqDetails faq={c.faq} />
         </div>
       </section>
     )
@@ -193,11 +190,7 @@ function Page({ c, extras }: TemplateProps) {
       <div className="w top">
         <b>{c.name}</b>
         <nav>
-          {links(c, extras).map((l) => (
-            <a key={l.href} href={l.href}>
-              {l.label}
-            </a>
-          ))}
+          <NavLinks links={links(c, extras)} />
         </nav>
       </div>
       <header className="w grid hero">

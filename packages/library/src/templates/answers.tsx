@@ -10,10 +10,13 @@
 import { Fragment, type ReactNode } from 'react'
 import {
   type Extra,
+  FactRows,
   facts,
   hasVisit,
+  ListItems,
   links,
   listOf,
+  NavLinks,
   offerItems,
   Pic,
   present,
@@ -168,12 +171,7 @@ function Extras({ c, x }: { c: TemplateProps['c']; x: Extra }) {
   return (
     <Qa title={l.title}>
       <ul className="list">
-        {l.items.map((it) => (
-          <li key={it.title}>
-            <h3>{it.title}</h3>
-            <p>{it.body}</p>
-          </li>
-        ))}
+        <ListItems items={l.items} />
       </ul>
     </Qa>
   )
@@ -191,11 +189,7 @@ function Page({ c, extras }: TemplateProps) {
       <div className="w top">
         <b>{c.name}</b>
         <nav>
-          {links(c, extras).map((l) => (
-            <a key={l.href} href={l.href}>
-              {l.label}
-            </a>
-          ))}
+          <NavLinks links={links(c, extras)} />
         </nav>
       </div>
       <header className="w open">
@@ -266,12 +260,7 @@ function Page({ c, extras }: TemplateProps) {
               )}
               {hasVisit(c) && (
                 <dl>
-                  {f.map((x) => (
-                    <div key={x.label}>
-                      <dt>{x.label}</dt>
-                      <dd>{x.href ? <a href={x.href}>{x.value}</a> : x.value}</dd>
-                    </div>
-                  ))}
+                  <FactRows facts={f} />
                 </dl>
               )}
             </div>

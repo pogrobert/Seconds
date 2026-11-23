@@ -8,6 +8,7 @@
 import { Fragment } from 'react'
 import {
   type Extra,
+  FaqDetails,
   facts,
   hasVisit,
   links,
@@ -111,12 +112,7 @@ function Extras({ c, x }: { c: C; x: Extra }) {
     return (
       <section className="pn faq" id="questions">
         <h2>Questions</h2>
-        {c.faq?.map((f) => (
-          <details key={f.q}>
-            <summary>{f.q}</summary>
-            <p>{f.a}</p>
-          </details>
-        ))}
+        <FaqDetails faq={c.faq} />
       </section>
     )
   if (x === 'gallery')

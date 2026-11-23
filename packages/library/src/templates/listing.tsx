@@ -11,10 +11,13 @@
 import { Fragment } from 'react'
 import {
   type Extra,
+  FactRows,
+  FaqList,
   facts,
   hasVisit,
   links,
   listOf,
+  NavLinks,
   offerItems,
   Pic,
   present,
@@ -118,12 +121,7 @@ type Fact = ReturnType<typeof facts>[number]
 function Facts({ list }: { list: Fact[] }) {
   return (
     <dl className="kf">
-      {list.map((x) => (
-        <div key={x.label}>
-          <dt>{x.label}</dt>
-          <dd>{x.href ? <a href={x.href}>{x.value}</a> : x.value}</dd>
-        </div>
-      ))}
+      <FactRows facts={list} />
     </dl>
   )
 }
@@ -144,12 +142,7 @@ function Extras({ c, x }: { c: TemplateProps['c']; x: Extra }) {
           <h2>Questions</h2>
         </div>
         <div className="qa">
-          {c.faq?.map((f) => (
-            <div key={f.q}>
-              <h3>{f.q}</h3>
-              <p>{f.a}</p>
-            </div>
-          ))}
+          <FaqList faq={c.faq} />
         </div>
       </section>
     )
@@ -232,11 +225,7 @@ function Page({ c, extras }: TemplateProps) {
         <div className="w">
           <b>{c.name}</b>
           <nav>
-            {links(c, extras).map((l) => (
-              <a key={l.href} href={l.href}>
-                {l.label}
-              </a>
-            ))}
+            <NavLinks links={links(c, extras)} />
           </nav>
         </div>
       </header>

@@ -12,6 +12,7 @@ import {
   hasVisit,
   links,
   listOf,
+  NavLinks,
   Pic,
   present,
   RESET,
@@ -140,11 +141,7 @@ function Page({ c, extras }: TemplateProps) {
           <div className="top">
             <b>{c.name}</b>
             <nav>
-              {links(c, extras).map((l) => (
-                <a key={l.href} href={l.href}>
-                  {l.label}
-                </a>
-              ))}
+              <NavLinks links={links(c, extras)} />
             </nav>
           </div>
           <div className="open">

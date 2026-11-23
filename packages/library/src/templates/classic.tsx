@@ -12,8 +12,10 @@ import {
   type Extra,
   facts,
   hasVisit,
+  ListItems,
   links,
   listOf,
+  NavLinks,
   offerItems,
   Pic,
   present,
@@ -150,13 +152,7 @@ function Extras({ c, x }: { c: TemplateProps['c']; x: Extra }) {
       <div className="w">
         <h2 className="t">{l.title}</h2>
         <ol className={steps ? 'cols num' : 'cols'}>
-          {l.items.map((it, i) => (
-            <li key={it.title}>
-              {steps && <span className="n">{i + 1}</span>}
-              <h3>{it.title}</h3>
-              <p>{it.body}</p>
-            </li>
-          ))}
+          <ListItems items={l.items} numbered={steps} />
         </ol>
       </div>
     </section>
@@ -174,11 +170,7 @@ function Page({ c, extras }: TemplateProps) {
         <p className="tag">{c.tagline}</p>
         <b>{c.name}</b>
         <nav>
-          {links(c, extras).map((l) => (
-            <a key={l.href} href={l.href}>
-              {l.label}
-            </a>
-          ))}
+          <NavLinks links={links(c, extras)} />
         </nav>
       </header>
       <div className="w hero c">

@@ -7,10 +7,14 @@
 import { Fragment } from 'react'
 import {
   type Extra,
+  FactRows,
+  FaqDetails,
   facts,
   hasVisit,
+  ListItems,
   links,
   listOf,
+  NavLinks,
   offerItems,
   Pic,
   present,
@@ -80,12 +84,7 @@ function Extras({ c, x }: { c: TemplateProps['c']; x: Extra }) {
       <section className="sec" id="questions">
         <div className="col faq">
           <h2>Questions</h2>
-          {c.faq?.map((f) => (
-            <details key={f.q}>
-              <summary>{f.q}</summary>
-              <p>{f.a}</p>
-            </details>
-          ))}
+          <FaqDetails faq={c.faq} />
         </div>
       </section>
     )
@@ -110,13 +109,7 @@ function Extras({ c, x }: { c: TemplateProps['c']; x: Extra }) {
       <div className="col">
         <h2>{l.title}</h2>
         <ol className="list">
-          {l.items.map((it, i) => (
-            <li key={it.title}>
-              {x === 'steps' && <span className="n">{i + 1}</span>}
-              <h3>{it.title}</h3>
-              <p>{it.body}</p>
-            </li>
-          ))}
+          <ListItems items={l.items} numbered={x === 'steps'} />
         </ol>
       </div>
     </section>
@@ -133,11 +126,7 @@ function Page({ c, extras }: TemplateProps) {
         <div className="top">
           <b>{c.name}</b>
           <nav>
-            {links(c, extras).map((l) => (
-              <a key={l.href} href={l.href}>
-                {l.label}
-              </a>
-            ))}
+            <NavLinks links={links(c, extras)} />
           </nav>
         </div>
         <Pic photo={c.photos.hero} eager />
@@ -202,12 +191,7 @@ function Page({ c, extras }: TemplateProps) {
           )}
           {hasVisit(c) && (
             <dl>
-              {f.map((x) => (
-                <div key={x.label}>
-                  <dt>{x.label}</dt>
-                  <dd>{x.href ? <a href={x.href}>{x.value}</a> : x.value}</dd>
-                </div>
-              ))}
+              <FactRows facts={f} />
             </dl>
           )}
         </div>

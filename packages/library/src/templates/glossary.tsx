@@ -10,10 +10,12 @@
 import { Fragment } from 'react'
 import {
   type Extra,
+  FactRows,
   facts,
   hasVisit,
   links,
   listOf,
+  NavLinks,
   offerItems,
   Pic,
   present,
@@ -164,11 +166,7 @@ function Page({ c, extras }: TemplateProps) {
       <div className="w guide">
         <b>{c.name}</b>
         <nav>
-          {links(c, extras).map((l) => (
-            <a key={l.href} href={l.href}>
-              {l.label}
-            </a>
-          ))}
+          <NavLinks links={links(c, extras)} />
         </nav>
       </div>
       <header className="w entry">
@@ -233,12 +231,7 @@ function Page({ c, extras }: TemplateProps) {
             </div>
             {hasVisit(c) && (
               <dl>
-                {f.map((x) => (
-                  <div key={x.label}>
-                    <dt>{x.label}</dt>
-                    <dd>{x.href ? <a href={x.href}>{x.value}</a> : x.value}</dd>
-                  </div>
-                ))}
+                <FactRows facts={f} />
               </dl>
             )}
           </div>

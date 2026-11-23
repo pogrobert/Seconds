@@ -77,6 +77,88 @@ export function present(c: SiteContent, extras: Extra[]): Extra[] {
   )
 }
 
+/**
+ * Sections' inner parts that read the content the same way in every template. Each draws only its
+ * repeated items, with no wrapper and no class of its own (except the step number's `.n`), so the
+ * template keeps its markup around them and all of its look in its own CSS.
+ */
+
+/** The contact details as `dt`/`dd` pairs, each in a `div`; a phone, email or address is a link. */
+export function FactRows({ facts }: { facts: { label: string; value: string; href?: string }[] }) {
+  return (
+    <>
+      {facts.map((x) => (
+        <div key={x.label}>
+          <dt>{x.label}</dt>
+          <dd>{x.href ? <a href={x.href}>{x.value}</a> : x.value}</dd>
+        </div>
+      ))}
+    </>
+  )
+}
+
+/** The menu's links (see `links`), plain `a` elements. */
+export function NavLinks({ links }: { links: { href: string; label: string }[] }) {
+  return (
+    <>
+      {links.map((l) => (
+        <a key={l.href} href={l.href}>
+          {l.label}
+        </a>
+      ))}
+    </>
+  )
+}
+
+/** Questions as open reading: each a `div` with the question as `h3` and the answer as `p`. */
+export function FaqList({ faq }: { faq?: { q: string; a: string }[] | undefined }) {
+  return (
+    <>
+      {faq?.map((f) => (
+        <div key={f.q}>
+          <h3>{f.q}</h3>
+          <p>{f.a}</p>
+        </div>
+      ))}
+    </>
+  )
+}
+
+/** Questions that open one at a time: `details` with the question as its `summary`. */
+export function FaqDetails({ faq }: { faq?: { q: string; a: string }[] | undefined }) {
+  return (
+    <>
+      {faq?.map((f) => (
+        <details key={f.q}>
+          <summary>{f.q}</summary>
+          <p>{f.a}</p>
+        </details>
+      ))}
+    </>
+  )
+}
+
+/** A list section's items as `li`, title `h3` and body `p`; numbered (`span.n`) for steps. */
+export function ListItems({
+  items,
+  numbered = false,
+}: {
+  items: { title: string; body: string }[]
+  numbered?: boolean
+}) {
+  return (
+    <>
+      {items.map((it, i) => (
+        <li key={it.title}>
+          {numbered && <span className="n">{i + 1}</span>}
+          <h3>{it.title}</h3>
+          <p>{it.body}</p>
+        </li>
+      ))}
+    </>
+  )
+}
+
 export function Pic(p: { photo: Photo; className?: string; eager?: boolean }) {
   return (
     <img

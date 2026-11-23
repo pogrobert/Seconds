@@ -9,10 +9,13 @@
 import { Fragment, type ReactNode } from 'react'
 import {
   type Extra,
+  FaqDetails,
   facts,
   hasVisit,
+  ListItems,
   links,
   listOf,
+  NavLinks,
   offerItems,
   Pic,
   present,
@@ -153,12 +156,7 @@ function Extras({ c, x }: { c: TemplateProps['c']; x: Extra }) {
       <section className="w sec" id="questions">
         <Dim>Questions</Dim>
         <div className="qa">
-          {c.faq?.map((f) => (
-            <details key={f.q}>
-              <summary>{f.q}</summary>
-              <p>{f.a}</p>
-            </details>
-          ))}
+          <FaqDetails faq={c.faq} />
         </div>
       </section>
     )
@@ -181,13 +179,7 @@ function Extras({ c, x }: { c: TemplateProps['c']; x: Extra }) {
     <section className="w sec">
       <Dim>{l.title}</Dim>
       <ol className="cols">
-        {l.items.map((it, i) => (
-          <li key={it.title}>
-            {x === 'steps' && <span className="n">{i + 1}</span>}
-            <h3>{it.title}</h3>
-            <p>{it.body}</p>
-          </li>
-        ))}
+        <ListItems items={l.items} numbered={x === 'steps'} />
       </ol>
     </section>
   )
@@ -215,11 +207,7 @@ function Page({ c, extras }: TemplateProps) {
       <div className="w top">
         <b>{c.name}</b>
         <nav>
-          {links(c, extras).map((l) => (
-            <a key={l.href} href={l.href}>
-              {l.label}
-            </a>
-          ))}
+          <NavLinks links={links(c, extras)} />
         </nav>
       </div>
       <header className="w hero">
