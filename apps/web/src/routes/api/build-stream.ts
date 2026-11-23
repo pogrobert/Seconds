@@ -25,7 +25,7 @@ export const Route = createFileRoute('/api/build-stream')({
           .slice(-12)
           .map((m) => m.slice(0, 1500))
         if (!messages.length)
-          return Response.json({ error: 'Describe the business first.' }, { status: 400 })
+          return Response.json({ error: 'Describe the site first.' }, { status: 400 })
         const enc = new TextEncoder()
         const stream = new ReadableStream({
           async start(c) {

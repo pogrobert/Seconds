@@ -133,7 +133,7 @@ type Message =
 /**
  * Message limits (Robert, 2026-11-23). Every message stops at what the server accepts
  * (routes/api/build-stream.ts cuts at 1,500), with a counter near the end so nothing is cut
- * silently. The first message needs a few words about the business: "hi" made a site from nothing,
+ * silently. The first message needs a few words about what the site is for: "hi" made a site from nothing,
  * at full cost. Edits have no minimum ("undo", "darker").
  */
 const MAX_CHARS = 1500
@@ -474,7 +474,7 @@ function Build() {
           placeholder={
             result
               ? 'What should change?'
-              : 'Describe a business: who it is, what it offers, how it should feel…'
+              : "Describe the site: who it's for, what it offers, how it should feel…"
           }
           className={`max-h-48 flex-none overflow-y-auto leading-relaxed field-sizing-fixed motion-safe:transition-[height] motion-safe:duration-150 motion-safe:ease-out ${big ? 'min-h-20 text-base md:text-base' : 'min-h-12 text-sm'}`}
         />
@@ -490,11 +490,23 @@ function Build() {
             versions (shown on the versions' tooltips). No hints in the box (Robert, 2026-11-23). */}
         <InputGroupAddon align="block-end" className="justify-between">
           <span id="composer-note" aria-live="polite" className="text-xs font-normal text-zinc-400">
-            {!result && draft.trim() && tooShort(draft)
-              ? 'Add a few words about the business'
-              : draft.length >= COUNT_FROM
-                ? `${draft.length.toLocaleString('en-GB')} / ${MAX_CHARS.toLocaleString('en-GB')}`
-                : ''}
+            {/* The note eases in, barely (Robert, 2026-11-23); the counter just updates. */}
+            <AnimatePresence initial={false}>
+              {!result && draft.trim() && tooShort(draft) ? (
+                <motion.span
+                  key="short"
+                  className="inline-block"
+                  initial={{ opacity: 0, y: 2 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, transition: { duration: 0.12 } }}
+                  transition={{ duration: 0.18, ease: 'easeOut' }}
+                >
+                  Add a few more words
+                </motion.span>
+              ) : draft.length >= COUNT_FROM ? (
+                `${draft.length.toLocaleString('en-GB')} / ${MAX_CHARS.toLocaleString('en-GB')}`
+              ) : null}
+            </AnimatePresence>
           </span>
           <InputGroupButton
             type="submit"
@@ -516,8 +528,9 @@ function Build() {
   // site.
   if (messages.length === 0)
     return (
-      <div className="flex h-dvh flex-col bg-zinc-50 text-zinc-900 antialiased selection:bg-zinc-200 md:[&>header]:px-5">
-        {top}
+      // Nothing above the headline on the first screen (Robert, 2026-11-23): the name appears with
+      // the split view.
+      <div className="flex h-dvh flex-col bg-zinc-50 text-zinc-900 antialiased selection:bg-zinc-200">
         <main className="flex min-h-0 flex-1 flex-col items-center overflow-y-auto px-5 pb-10">
           <div className="my-auto flex w-full max-w-2xl flex-col gap-7 pt-10">
             <div className="text-center">
