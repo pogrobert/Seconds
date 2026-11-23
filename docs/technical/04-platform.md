@@ -195,7 +195,7 @@ builder/                                   repo root (name is a placeholder)
 │   ├── research/ *  technical/ *
 │   └── decisions/                         short ADRs: NNNN-title.md
 ├── apps/
-│   ├── web/ *                             TanStack Start → Worker "builder-app" on the app domain
+│   ├── web/ *                             TanStack Start → Worker "seconds" on the app domain
 │   │   ├── AGENTS.md *
 │   │   ├── vite.config.ts *  wrangler.jsonc *  .dev.vars.example *
 │   │   ├── migrations/                    D1 SQL files (M1)
@@ -383,7 +383,7 @@ See section 2.8.
 ```jsonc
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "builder-app",
+  "name": "seconds",
   "main": "src/server.ts",                       // custom entry: fetch + queue + DO exports
   "compatibility_date": "2026-11-13",
   "observability": { "enabled": true, "head_sampling_rate": 0.1 },
