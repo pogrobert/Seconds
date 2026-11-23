@@ -1,6 +1,6 @@
 # Third-party notices
 
-Blocks in `src/blocks/` are adapted from **Tailark** (https://github.com/tailark/blocks, commit 8139698, Radix base, Mist, Veil and Dusk styles). Each block's header comment names the Tailark block it follows. Brand logos, app screenshots and sample copy are removed; content comes from the business. Token names follow **shadcn/ui** (MIT).
+Blocks in `src/blocks/tailark/` (and the in-house `src/blocks/core/`, which follow their patterns) are adapted from **Tailark** (https://github.com/tailark/blocks, commit 8139698, Radix base, Mist, Veil and Dusk styles). Each block's header comment names the Tailark block it follows. Brand logos, app screenshots and sample copy are removed; content comes from the business. Token names follow **shadcn/ui** (MIT).
 
 ```
 MIT License
@@ -30,7 +30,7 @@ SOFTWARE.
 
 Blocks in `src/blocks/shadcnui/` are adapted from **Shadcn UI Blocks** (https://github.com/akash3444/shadcn-ui-blocks, commit 73a69e9). Each file names the block it follows.
 
-````
+```
 MIT License
 
 Copyright 2025 Shadcn UI Blocks
@@ -39,14 +39,15 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. ```
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+```
 
 ## Efferd
 
 Blocks in `src/blocks/efferd/` are adapted from **Efferd** (https://github.com/shabanhr/efferd-ui, commit d0748f4). Each file names the block it follows.
 
-````
-LICENCEMIT License
+```
+MIT License
 
 Copyright (c) 2025 sshahaider
 
@@ -67,6 +68,4 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
-```
 ```

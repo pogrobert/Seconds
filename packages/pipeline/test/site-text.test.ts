@@ -33,20 +33,20 @@ describe('groundContact', () => {
       contact: { place: '', address: '', hours: '', phone: '', email: '', ...contact },
     }) as SiteCopy
   const words =
-    'Physio clinic at 12 Leith Walk, Edinburgh EH6 5AA. Call 0131 496 0142 or hello@leithphysio.co.uk.'
+    'Physio clinic at 12 Leith Walk, Edinburgh EH6 5AA. Call 0131 496 0142 or hello@leithphysio.example.'
 
   it('keeps what the owner gave, tidied', () => {
     const c = groundContact(
       copy({
         address: '12 Leith Walk, Edinburgh, EH6 5AA',
         phone: '+44 131 496 0142',
-        email: 'hello@leithphysio.co.uk',
+        email: 'hello@leithphysio.example',
       }),
       words,
     ).contact
     expect(c.address).toBe('12 Leith Walk, Edinburgh, EH6 5AA')
     expect(c.phone).toBe('+44 131 496 0142')
-    expect(c.email).toBe('hello@leithphysio.co.uk')
+    expect(c.email).toBe('hello@leithphysio.example')
   })
 
   it('drops an address, phone or email the owner never gave', () => {
@@ -54,7 +54,7 @@ describe('groundContact', () => {
       copy({
         address: '45 Great Junction Street, Leith',
         phone: '0131 555 0199',
-        email: 'info@leith.com',
+        email: 'info@leith.example',
       }),
       'Physio clinic in Leith, Edinburgh, for runners.',
     ).contact

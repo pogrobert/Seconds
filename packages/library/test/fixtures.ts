@@ -56,8 +56,8 @@ export const full: SiteContent = {
     { days: 'Monday and Wednesday', time: '8:00–17:00' },
     { days: 'Tuesday and Thursday', time: '8:00–14:00' },
   ],
-  address: ['Dominikánské náměstí 1', '601 67 Brno'],
-  phone: '+420 542 171 111',
+  address: ['Náměstí Míru 12', '602 00 Brno'],
+  phone: '+420 555 010 101',
   email: 'podatelna@brno-stred.example',
   book: '#visit',
   cta: {
