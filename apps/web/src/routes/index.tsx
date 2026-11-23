@@ -245,6 +245,17 @@ function Build() {
   const photoBlobs = useRef(new Map<string, Blob>())
   const [recent, setRecent] = useState<SiteSummary[]>([])
   const [allRecent, setAllRecent] = useState(false)
+  // TEMP (Robert, 2026-11-23): three ways to set Try and Recent together, switched on the dev
+  // server only, until one is picked.
+  const [home, setHome] = useState<Home>('centred')
+  const [tryWidth, setTryWidth] = useState(0)
+  useEffect(() => {
+    if (!import.meta.env.DEV) return
+    try {
+      const h = localStorage.getItem('builder.home') as Home | null
+      if (h && HOMES.includes(h)) setHome(h)
+    } catch {}
+  }, [])
   /** Each version shown, with its photo links, newest last: "undo" steps back one. */
   const versions = useRef<{ result: BuildResult; links: Record<string, string> }[]>([])
   const [links, setLinks] = useState<Record<string, string>>({})
@@ -689,13 +700,15 @@ function Build() {
             </div>
             {composerBox(true)}
             <TryRow
+              look={home}
+              onWidth={setTryWidth}
               typing={!!draft.trim()}
               onPick={(ex) => {
                 setDraft(ex.prompt)
                 composer.current?.focus()
               }}
             />
-            {recent.length > 0 && (
+            {recent.length > 0 && home !== 'rows' && (
               // Sites made here before, newest first (history.ts); kept only in this browser.
               // As wide as the message box, its text lined up with the box's (Robert, 2026-11-23).
               // It hangs below the centred block instead of joining it: the list is read after
@@ -704,56 +717,116 @@ function Build() {
                 aria-labelledby="recent-title"
                 className={`absolute inset-x-0 top-full mt-7 pb-10 ${ENTER}`}
               >
-                <h2 id="recent-title" className="mb-1 px-4 text-xs font-medium text-zinc-400">
-                  Recent
-                </h2>
-                <ul className="flex flex-col">
-                  {recent.slice(0, allRecent ? undefined : 4).map((x) => (
-                    <li
-                      key={x.id}
-                      // A press shrinks the row a touch, as buttons do; on a row this wide 0.985
-                      // reads like their 0.97.
-                      className="group relative flex items-center rounded-lg transition-[background-color,transform] duration-150 ease-out hover:bg-zinc-200/50 active:scale-[0.985]"
+                <div
+                  className="mx-auto"
+                  // Centred: as wide as the Try row above, so the two read as one block.
+                  // Its text (16px in) lines up with "Try", so it is 32px wider.
+                  style={home === 'centred' && tryWidth ? { width: tryWidth + 32 } : undefined}
+                >
+                  <h2 id="recent-title" className="mb-1 px-4 text-xs font-medium text-zinc-400">
+                    Recent
+                  </h2>
+                  <ul className="flex flex-col">
+                    {recent.slice(0, allRecent ? undefined : 4).map((x) => (
+                      <li
+                        key={x.id}
+                        // A press shrinks the row a touch, as buttons do; on a row this wide 0.985
+                        // reads like their 0.97.
+                        className="group relative flex items-center rounded-lg transition-[background-color,transform] duration-150 ease-out hover:bg-zinc-200/50 active:scale-[0.985]"
+                      >
+                        <button
+                          type="button"
+                          onClick={() => void reopen(x.id)}
+                          className="flex min-w-0 flex-1 items-baseline gap-2 rounded-lg px-4 py-2 text-left text-sm pointer-coarse:pr-12 outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+                        >
+                          <span className="truncate font-medium text-zinc-800">{x.name}</span>
+                          <span className="truncate text-zinc-500">{x.kind}</span>
+                          <span className="ml-auto shrink-0 pl-2 text-xs text-zinc-400 tabular-nums transition-opacity pointer-fine:group-focus-within:opacity-0 pointer-fine:group-hover:opacity-0">
+                            {ago(x.updated)}
+                          </span>
+                        </button>
+                        <button
+                          type="button"
+                          aria-label={`Remove ${x.name}`}
+                          onClick={async () => {
+                            await removeSite(x.id)
+                            setRecent(await listSites())
+                          }}
+                          // With a mouse it takes the time's place on hover; on touch both show.
+                          className="absolute top-1/2 right-1.5 grid size-7 -translate-y-1/2 place-items-center rounded-md text-zinc-400 transition-colors outline-none hover:bg-zinc-200 hover:text-zinc-700 focus-visible:ring-3 focus-visible:ring-ring/50 pointer-fine:opacity-0 pointer-fine:group-focus-within:opacity-100 pointer-fine:group-hover:opacity-100"
+                        >
+                          <XIcon className="size-3.5" />
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                  {recent.length > 4 && !allRecent && (
+                    <button
+                      type="button"
+                      onClick={() => setAllRecent(true)}
+                      className="mt-0.5 rounded-md px-4 py-1 text-xs text-zinc-500 outline-none hover:text-zinc-800 focus-visible:ring-3 focus-visible:ring-ring/50"
                     >
-                      <button
-                        type="button"
-                        onClick={() => void reopen(x.id)}
-                        className="flex min-w-0 flex-1 items-baseline gap-2 rounded-lg px-4 py-2 text-left text-sm pointer-coarse:pr-12 outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
-                      >
-                        <span className="truncate font-medium text-zinc-800">{x.name}</span>
-                        <span className="truncate text-zinc-500">{x.kind}</span>
-                        <span className="ml-auto shrink-0 pl-2 text-xs text-zinc-400 tabular-nums transition-opacity pointer-fine:group-focus-within:opacity-0 pointer-fine:group-hover:opacity-0">
-                          {ago(x.updated)}
-                        </span>
-                      </button>
-                      <button
-                        type="button"
-                        aria-label={`Remove ${x.name}`}
-                        onClick={async () => {
-                          await removeSite(x.id)
-                          setRecent(await listSites())
-                        }}
-                        // With a mouse it takes the time's place on hover; on touch both show.
-                        className="absolute top-1/2 right-1.5 grid size-7 -translate-y-1/2 place-items-center rounded-md text-zinc-400 transition-colors outline-none hover:bg-zinc-200 hover:text-zinc-700 focus-visible:ring-3 focus-visible:ring-ring/50 pointer-fine:opacity-0 pointer-fine:group-focus-within:opacity-100 pointer-fine:group-hover:opacity-100"
-                      >
-                        <XIcon className="size-3.5" />
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-                {recent.length > 4 && !allRecent && (
-                  <button
-                    type="button"
-                    onClick={() => setAllRecent(true)}
-                    className="mt-0.5 rounded-md px-4 py-1 text-xs text-zinc-500 outline-none hover:text-zinc-800 focus-visible:ring-3 focus-visible:ring-ring/50"
-                  >
-                    Show {recent.length - 4} more
-                  </button>
-                )}
+                      Show {recent.length - 4} more
+                    </button>
+                  )}
+                </div>
               </section>
+            )}
+            {recent.length > 0 && home === 'rows' && (
+              // Rows: Recent as a second line in the Try row's own form, its label in the same
+              // column, the newest names only.
+              <nav
+                aria-label="Recent sites"
+                className={`absolute inset-x-0 top-full mt-1 flex min-h-9 items-center gap-1 px-4 text-sm whitespace-nowrap ${ENTER}`}
+              >
+                <span className="w-16 shrink-0 cursor-default text-zinc-500 select-none">
+                  Recent
+                </span>
+                {recent.slice(0, 4).map((x, i) => (
+                  <span
+                    key={x.id}
+                    className={`flex min-w-0 items-center ${i >= 2 ? 'max-sm:hidden' : ''}`}
+                  >
+                    {i > 0 && (
+                      <span aria-hidden className="mr-1 cursor-default text-zinc-300 select-none">
+                        ·
+                      </span>
+                    )}
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      title={`${x.kind}, ${ago(x.updated)}`}
+                      onClick={() => void reopen(x.id)}
+                      className="min-w-0 truncate px-2.5 text-sm text-zinc-800 hover:bg-zinc-200/70 hover:text-zinc-950"
+                    >
+                      {x.name}
+                    </Button>
+                  </span>
+                ))}
+              </nav>
             )}
           </div>
         </main>
+        {import.meta.env.DEV && (
+          <div className="fixed right-4 bottom-4 z-50 flex items-center gap-1 rounded-xl bg-[#121212] p-1 text-xs text-[#d3d3cd] shadow-lg">
+            {HOMES.map((h) => (
+              <button
+                key={h}
+                type="button"
+                aria-pressed={home === h}
+                onClick={() => {
+                  setHome(h)
+                  try {
+                    localStorage.setItem('builder.home', h)
+                  } catch {}
+                }}
+                className={`rounded-lg px-2.5 py-1.5 capitalize ${home === h ? 'bg-[#fff] text-[#121212]' : 'hover:bg-[#262624]'}`}
+              >
+                {h}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
     )
 
@@ -1061,7 +1134,22 @@ function Build() {
  * old names lift away, the new ones settle one after another), paused while the pointer is on
  * the row. A name fills the message box with its detailed prompt; nothing is sent until Enter.
  */
-function TryRow({ onPick, typing }: { onPick: (ex: Example) => void; typing: boolean }) {
+const HOMES = ['centred', 'left', 'rows'] as const
+type Home = (typeof HOMES)[number]
+
+function TryRow({
+  onPick,
+  typing,
+  look,
+  onWidth,
+}: {
+  onPick: (ex: Example) => void
+  typing: boolean
+  /** centred: names in equal slots, no dots; left and rows: names close, from the box's edge. */
+  look: Home
+  onWidth: (w: number) => void
+}) {
+  const slots = look === 'centred'
   // The first set is fixed so the server and the browser draw the same page; then random.
   const [shown, setShown] = useState(() => EXAMPLES.slice(0, 4))
   const paused = useRef(false)
@@ -1097,6 +1185,22 @@ function TryRow({ onPick, typing }: { onPick: (ex: Example) => void; typing: boo
     ro.observe(el)
     return () => ro.disconnect()
   }, [])
+  // The row's drawn width (Try and the names), for Recent to match in the centred look.
+  const row = useRef<HTMLDivElement>(null)
+  useLayoutEffect(() => {
+    const el = row.current
+    if (!el) return
+    const tell = () => {
+      const kids = Array.from(el.children).filter((c) => !c.hasAttribute('aria-hidden'))
+      const first = kids[0]?.getBoundingClientRect()
+      const last = kids[kids.length - 1]?.getBoundingClientRect()
+      if (first && last) onWidth(Math.round(last.right - first.left))
+    }
+    tell()
+    const ro = new ResizeObserver(tell)
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [onWidth])
   // Between two sets the names are briefly gone; the row keeps the width it had.
   const names = useRef<HTMLDivElement>(null)
   const [held, setHeld] = useState(0)
@@ -1112,7 +1216,8 @@ function TryRow({ onPick, typing }: { onPick: (ex: Example) => void; typing: boo
   return (
     // biome-ignore lint/a11y/noStaticElementInteractions: pausing on hover only, no action
     <div
-      className="relative flex min-h-9 items-center justify-center gap-1 text-sm whitespace-nowrap"
+      ref={row}
+      className={`relative flex min-h-9 items-center gap-1 text-sm whitespace-nowrap ${slots ? 'justify-center' : 'justify-start px-4'}`}
       onMouseEnter={() => {
         paused.current = true
       }}
@@ -1131,8 +1236,12 @@ function TryRow({ onPick, typing }: { onPick: (ex: Example) => void; typing: boo
           </span>
         ))}
       </div>
-      <span className="mr-1 shrink-0 cursor-default text-zinc-500 select-none">Try</span>
-      <div className="-my-1 py-1" style={{ minWidth: held || undefined }}>
+      <span
+        className={`shrink-0 cursor-default text-zinc-500 select-none ${look === 'rows' ? 'w-16' : 'mr-1'}`}
+      >
+        Try
+      </span>
+      <div className="-my-1 py-1" style={{ minWidth: (slots && held) || undefined }}>
         <div ref={names} className="flex w-max">
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
@@ -1167,12 +1276,12 @@ function TryRow({ onPick, typing }: { onPick: (ex: Example) => void; typing: boo
                     },
                   }}
                 >
-                  {i > 0 && (
+                  {i > 0 && !slots && (
                     <span aria-hidden className="mr-1 cursor-default text-zinc-300 select-none">
                       ·
                     </span>
                   )}
-                  <span className="flex justify-center" style={{ width: slot }}>
+                  <span className="flex justify-center" style={slots ? { width: slot } : undefined}>
                     <Button
                       variant="ghost"
                       size="sm"
