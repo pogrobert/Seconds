@@ -1,5 +1,0 @@
-{
-  "extends": "../../tsconfig.base.json",
-  "compilerOptions": { "types": ["react", "node"], "lib": ["es2024", "dom", "dom.iterable"] },
-  "include": ["src", "test", "scripts", "vitest.config.ts", "vitest.browser.config.ts"]
-}

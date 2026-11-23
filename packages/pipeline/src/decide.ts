@@ -4,8 +4,6 @@
 // M0 has one real adapter (TypeSafe's Jev, chosen by Robert on 2026-11-14) and one stand-in that
 // answers at random from a seed, which is also arm C of the test ("random valid choices").
 
-import { rng } from './defaults.ts'
-
 export type ChoiceQuestion = {
   kind: 'choice'
   /** Stable id, used by code only; the model never sees it. */
@@ -248,5 +246,19 @@ export function randomDecisions(seed: string): DecisionPort {
         ],
       }
     },
+  }
+}
+
+/** A small seeded random generator (mulberry32), so a random choice can be reproduced. */
+export function rng(seed: string) {
+  let h = 1779033703
+  for (const ch of seed) h = Math.imul(h ^ ch.charCodeAt(0), 3432918353)
+  let a = h >>> 0
+  return () => {
+    a = (a + 0x6d2b79f5) >>> 0
+    let t = a
+    t = Math.imul(t ^ (t >>> 15), t | 1)
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61)
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296
   }
 }

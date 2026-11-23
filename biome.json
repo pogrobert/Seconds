@@ -43,12 +43,7 @@
       }
     },
     {
-      "includes": [
-        "packages/spec/src/**",
-        "packages/pipeline/src/**",
-        "packages/blocks/src/manifest/**",
-        "packages/blocks/src/blocks/*/manifest.ts"
-      ],
+      "includes": ["packages/spec/src/**", "packages/pipeline/src/**"],
       "linter": {
         "rules": {
           "style": {
@@ -56,9 +51,8 @@
               "level": "error",
               "options": {
                 "paths": {
-                  "react": "Pure package: no React. Only blocks/components and render may use it.",
-                  "react-dom": "Pure package: no React.",
-                  "@repo/blocks/components": "The pipeline reads block manifests, never components."
+                  "react": "Pure package: no React.",
+                  "react-dom": "Pure package: no React."
                 },
                 "patterns": [
                   {
@@ -68,26 +62,6 @@
                   {
                     "group": ["node:*"],
                     "message": "Pure package: no Node built-ins."
-                  }
-                ]
-              }
-            }
-          }
-        }
-      }
-    },
-    {
-      "includes": ["packages/blocks/**", "packages/render/**"],
-      "linter": {
-        "rules": {
-          "style": {
-            "noRestrictedImports": {
-              "level": "error",
-              "options": {
-                "patterns": [
-                  {
-                    "group": ["cloudflare:*"],
-                    "message": "Only apps/web/src/server/env.ts touches Cloudflare."
                   }
                 ]
               }

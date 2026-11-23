@@ -91,5 +91,5 @@ The dev server must be running (`pnpm --filter @repo/web dev`, port 5173). From 
 
 Designs are original. Do not copy markup or CSS from Tailwind Plus, Aceternity, shadcnblocks,
 Relume, Untitled UI Pro, Flowbite Pro, Magic UI Pro, React Bits, Monet.Design or any site's
-paid set. Ideas from MIT sources (such as scala-sites) are fine; copied code needs its notice in
-`packages/library/NOTICE.md`.
+paid set. Ideas from MIT sources (such as scala-sites) are fine; copied code needs its licence notice in a `NOTICE.md`
+beside it.

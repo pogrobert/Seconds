@@ -8,9 +8,5 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "test": "vitest run --passWithNoTests"
-  },
-  "dependencies": {
-    "@repo/spec": "workspace:*",
-    "@repo/blocks": "workspace:*"
   }
 }
