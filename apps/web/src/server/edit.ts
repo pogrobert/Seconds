@@ -8,6 +8,9 @@ import { NAMED_COLOURS } from '@repo/eval/grammar/colour-rules'
 import { TYPE_RULES } from '@repo/eval/grammar/type-rules'
 import { LIVE } from '@repo/library'
 import {
+  type Answer,
+  type DecisionCall,
+  type DecisionPort,
   EXTRAS,
   type Extra,
   groundAnswers,
@@ -29,6 +32,55 @@ import {
   type SiteState,
   sitePhotos,
 } from './make-site'
+
+/**
+ * Jev's answers kept for one edit, by question: the same question about the same item, asked again
+ * later in the edit, is answered from here, without another request. The checks after the writer
+ * ask early, side by side (the items about to be removed, the grounding of the lists), and the
+ * steps that run one after another later find their answers ready. Each question is answered on
+ * its own, so an answer does not depend on the request it came in.
+ */
+function remembering(port: DecisionPort): DecisionPort {
+  const kept = new Map<string, Promise<Answer>>()
+  return {
+    id: port.id,
+    model: port.model,
+    async decide(state, questions, signal) {
+      const s = JSON.stringify(state)
+      const keyOf = (q: Question) =>
+        JSON.stringify([
+          s,
+          q.kind,
+          q.prompt,
+          q.kind === 'choice' ? q.options : q.kind === 'score' ? q.levels : null,
+        ])
+      const fresh = new Map<string, Question>()
+      for (const q of questions) if (!kept.has(keyOf(q))) fresh.set(keyOf(q), q)
+      let calls: DecisionCall[] = []
+      if (fresh.size) {
+        const asked = port.decide(state, [...fresh.values()], signal)
+        for (const [k, q] of fresh)
+          kept.set(
+            k,
+            asked.then(
+              (r) => r.answers.get(q.id) ?? { kind: 'missing', id: q.id, reason: 'error' },
+              (e) => {
+                kept.delete(k)
+                throw e
+              },
+            ),
+          )
+        calls = (await asked).calls
+      }
+      const answers = new Map<string, Answer>()
+      for (const q of questions) {
+        const a = await kept.get(keyOf(q))
+        if (a) answers.set(q.id, { ...a, id: q.id })
+      }
+      return { answers, calls }
+    },
+  }
+}
 
 /** Words of four letters or more, by their first five letters. */
 const stems = (x: unknown) =>
@@ -133,7 +185,7 @@ const PARTS: Partial<Record<keyof SiteCopy, string>> = {
  * replaced in the parts that go back, so the page never shows both.
  */
 async function keepAsked(
-  decide: ReturnType<typeof typesafeDecisions>,
+  decide: DecisionPort,
   before: SiteCopy,
   after: SiteCopy,
   request: string,
@@ -243,7 +295,7 @@ async function keepAsked(
  * writer kept (2026-11-21): every list item is put to Jev, and those the request removes go.
  */
 async function removeItems(
-  decide: ReturnType<typeof typesafeDecisions>,
+  decide: DecisionPort,
   copy: SiteCopy,
   request: string,
 ): Promise<SiteCopy> {
@@ -370,7 +422,7 @@ function visible(x: Extra, c: SiteCopy): boolean {
  * and Friday" (2026-11-21): a new item Jev more likely than not takes for a guess goes.
  */
 async function groundNew(
-  decide: ReturnType<typeof typesafeDecisions>,
+  decide: DecisionPort,
   words: string,
   before: SiteCopy,
   copy: SiteCopy,
@@ -472,9 +524,11 @@ export async function edit(
 ): Promise<EditOutcome> {
   const t0 = performance.now()
   const env = getEnv()
-  const decide = env.TYPESAFE_API_KEY
-    ? typesafeDecisions({ apiKey: env.TYPESAFE_API_KEY })
-    : randomDecisions(request)
+  const decide = remembering(
+    env.TYPESAFE_API_KEY
+      ? typesafeDecisions({ apiKey: env.TYPESAFE_API_KEY })
+      : randomDecisions(request),
+  )
   const type = TYPE_RULES.find((t) => t.key === state.type)
   const site = [
     `Name: ${state.copy.name}, a ${state.copy.kind}.`,
@@ -564,6 +618,12 @@ export async function edit(
   }
   if (yes('asks:undo')) return { undo: true, restart: false }
   if (yes('asks:restart')) return { restart: true }
+  // Questions asked ahead only to have their answers ready (remembering): a failed one is asked
+  // again where it is needed.
+  const ahead = (p: Promise<unknown>) => void p.catch(() => {})
+  // Removing something: the page's list items are put to Jev now, while the writer still works;
+  // the removal after it then asks only about items the writer changed (removeItems).
+  if (yes('asks:remove') && rewritten) ahead(removeItems(decide, state.copy, request))
 
   const next: SiteState = { ...state, words: `${state.words}\n${request}` }
   const changed: string[] = []
@@ -683,10 +743,24 @@ export async function edit(
     if (w.copy) {
       // The photo searches stay unless new photos are asked for: changing them would not change
       // the photos already shown.
+      const after = { ...w.copy, photos: state.copy.photos }
+      // The lists the writer changed get the new site's check below (groundNew), on items from
+      // the old and the new words: asked now, beside the check of what was asked for, rather than
+      // after it.
+      if (
+        (['faq', 'offer', 'reasons', 'steps'] as const).some(
+          (k) => JSON.stringify(after[k]) !== JSON.stringify(state.copy[k]),
+        )
+      ) {
+        // The old words' other names and headlines are not asked about: an edit keeps its own.
+        const none = { names: [], headlines: [], offerTitles: [] }
+        ahead(groundAnswers(decide, next.words, after))
+        ahead(groundAnswers(decide, next.words, { ...state.copy, more: none }))
+      }
       let copy = await keepAsked(
         decide,
         state.copy,
-        { ...w.copy, photos: state.copy.photos },
+        after,
         request,
         yes('asks:allText'),
         yes('asks:remove'),
