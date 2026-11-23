@@ -107,6 +107,8 @@ its own.
 A hobby project. It makes single-page sites for small businesses. It can't publish them yet, and
 it has no sign-in, forms, booking or maps.
 
+Made by [Robert Poghosyan](https://pogrobert.com).
+
 ## Licence
 
 [MIT No Attribution](LICENSE). Third-party code keeps its own licence.
