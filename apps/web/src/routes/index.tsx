@@ -351,7 +351,13 @@ function Build() {
         history.filter((m) => m.role === 'user').map((m) => m.text),
         setProgress,
         (p) => photos(p),
-        result?.state ?? null,
+        // Which design is being looked at: "something more premium" is about that one.
+        result?.state
+          ? {
+              ...result.state,
+              viewing: result.state.templates[result.sites.findIndex((x) => x.id === look)],
+            }
+          : null,
         (p) => landed(p),
       )
       if (run !== session.current) return
@@ -393,11 +399,12 @@ function Build() {
         ...built,
         sites: built.sites.map((x) => ({ ...x, html: withSpaces(x.html) })),
       }
-      // After an edit, stay on the design being looked at when it is still one of the three.
+      // After an edit, stay on the design being looked at when it is still one of the three,
+      // unless the edit asked for other designs: then the best new one.
       const was = result?.sites.find((x) => x.id === look)?.label
       const same = edited ? r.sites.find((x) => x.label === was) : undefined
       setResult(r)
-      setLook(same?.id ?? r.suggested)
+      setLook(r.show ?? same?.id ?? r.suggested)
       versions.current.push({
         result: r,
         links: edited && !built.photoJob ? linksRef.current : {},

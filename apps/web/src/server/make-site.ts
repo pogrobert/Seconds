@@ -94,6 +94,8 @@ export type BuildResult = {
   name: string
   kindLabel: string
   suggested: string
+  /** After an edit that changed the designs: the version to show (the best new one). */
+  show?: string
   sites: BuiltSite[]
   /** Photo id → data: URI; the page swaps each `__IMG_id__` token for a local link. */
   images: Record<string, string>
@@ -310,6 +312,8 @@ export type SiteState = {
   seed: string
   /** The photo ids the page shows, set by the build page when the photos arrive. */
   shown?: string[]
+  /** The design the owner is looking at (a template id), sent by the build page with an edit. */
+  viewing?: string
 }
 
 /**

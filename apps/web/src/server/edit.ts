@@ -171,6 +171,16 @@ const ASKS = {
     'ask to change all of the text at once: make it shorter, longer, simpler, plainer, a different tone or a different language, or say there is too much or too little text',
 } as const
 
+/**
+ * The new designs in the old ones' places: a design kept stays on its tab, and new ones take the
+ * tabs that came free, best first. "Make it dark" once moved every tab (2026-11-24).
+ */
+export function inPlace(old: string[], pick: string[]): string[] {
+  const fresh = pick.filter((id) => !old.includes(id))
+  const out = old.map((id) => (pick.includes(id) ? id : (fresh.shift() ?? id)))
+  return [...out, ...fresh].slice(0, Math.max(pick.length, old.length))
+}
+
 /** Plain colour words and the colours that count as each (by name or mood). */
 const HUES: [RegExp, RegExp][] = [
   [/\bpink\b/i, /pink/],
@@ -722,25 +732,47 @@ export async function edit(
       changed.push(`colour to ${c.key}`)
     } else if (c) already.push(`the colour is already ${c.key}`)
   }
+  // The design the owner is looking at: "something more premium" is about that one.
+  const viewing =
+    state.viewing && state.templates.includes(state.viewing) ? state.viewing : state.templates[0]
+  const labelOf = (id: string | undefined) => LIVE.find((t) => t.id === id)?.label ?? 'that design'
+  /** The design to show after this edit, when the designs changed. */
+  let best: string | undefined
   if (yes('asks:look')) {
     const a = top('look')
     const dist = a?.dist ?? (a ? { [a.top]: 1 } : {})
     const ranked = LIVE.map((t) => t.id).sort((x, y) => (dist[y] ?? 0) - (dist[x] ?? 0))
-    if (ranked.length >= 3 && ranked[0] !== state.templates[0]) {
-      next.templates = ranked.slice(0, 3)
-      changed.push('the designs')
-    } else if (alone && !spaced && ranked.length >= 4) {
-      // Asked only for a different look ("more premium", "calmer and more minimal"), the owner
-      // wants a change: the next-best designs, not "already the closest" (2026-11-23). Beside a
-      // colour or words, the current design stays.
-      next.templates = ranked.filter((id) => id !== state.templates[0]).slice(0, 3)
-      changed.push('the designs')
+    // Asked only for a different look ("more premium", "calmer and more minimal"), the owner
+    // wants a change: the next-best designs, not "already the closest" (2026-11-23). Beside a
+    // colour or words, the current design stays.
+    // Beside a colour, words or spacing, the look question often says yes too: the designs then
+    // change only if the one being looked at no longer fits ("make it green" on the third tab
+    // once swapped the designs, 2026-11-24).
+    const fits = ranked.slice(0, 3).includes(viewing ?? '')
+    const pick =
+      ranked.length < 3
+        ? null
+        : !alone
+          ? fits
+            ? null
+            : ranked.slice(0, 3)
+          : ranked[0] !== viewing
+            ? ranked.slice(0, 3)
+            : !spaced && ranked.length >= 4
+              ? ranked.filter((id) => id !== viewing).slice(0, 3)
+              : null
+    if (pick) {
+      next.templates = inPlace(state.templates, pick)
+      best = pick[0]
+      changed.push(
+        next.templates.join() === state.templates.join()
+          ? `the view to ${labelOf(best)}`
+          : 'the designs',
+      )
     } else if (alone)
       // Beside a colour or spacing request the look question often says yes too ("make it blue"
       // 0.92, 2026-11-24): the design staying is then no news worth a reply.
-      already.push(
-        `${LIVE.find((t) => t.id === state.templates[0])?.label ?? 'the first design'} is already the closest design to that`,
-      )
+      already.push(`${labelOf(viewing)} is already the closest design to that`)
   }
   if (yes('asks:spacing')) {
     const want = top('spacing')?.top as Spacing | undefined
@@ -1011,6 +1043,9 @@ export async function edit(
       name: next.copy.name,
       kindLabel: next.copy.kind,
       suggested: sites[0]?.id ?? 'b1',
+      ...(best && sites[next.templates.indexOf(best)]
+        ? { show: sites[next.templates.indexOf(best)]?.id }
+        : {}),
       sites,
       images: {},
       credits: [],
