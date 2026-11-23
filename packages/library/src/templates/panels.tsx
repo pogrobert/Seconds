@@ -17,6 +17,7 @@ import {
   Pic,
   present,
   RESET,
+  reachOf,
   type Template,
   type TemplateProps,
 } from './shared.tsx'
@@ -147,7 +148,7 @@ function Extras({ c, x, g }: { c: TemplateProps['c']; x: Extra; g: number }) {
 function Page({ c, extras }: TemplateProps) {
   const xs = present(c, extras)
   const f = facts(c)
-  const reach = f.find((x) => x.href)
+  const reach = reachOf(f)
   const offer = offerItems(c)
   // The ladder: opening 0, introduction 1, offer 2, then the extras in turn. The gallery takes no
   // step of its own: its prints hang at the foot of the sheet before it, which keeps the ladder

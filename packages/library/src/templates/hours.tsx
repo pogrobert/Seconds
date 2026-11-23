@@ -16,6 +16,7 @@ import {
   Pic,
   present,
   RESET,
+  reachOf,
   type Template,
   type TemplateProps,
 } from './shared.tsx'
@@ -106,9 +107,9 @@ function Door({ c }: { c: TemplateProps['c'] }) {
   const f = facts(c).filter((x) => x.label !== 'Hours')
   const rows = c.hours.filter((h) => h.days || h.time)
   // The sign carries the hours; without hours it carries the first way to get in touch.
-  const onSign = rows.length ? null : (f.find((x) => x.href) ?? f[0])
+  const onSign = rows.length ? null : (reachOf(f) ?? f[0])
   // Beside the sign, the quickest way to get in touch leads, set large; then the rest.
-  const lead = f.find((x) => x.href && x !== onSign)
+  const lead = f.find((x) => x.href && x.label !== 'Address' && x !== onSign)
   const rest = [...(lead ? [lead] : []), ...f.filter((x) => x !== onSign && x !== lead)]
   return (
     <div className={`w door${rest.length ? '' : ' one'}`}>
@@ -218,7 +219,7 @@ function Extras({ c, x }: { c: TemplateProps['c']; x: Extra }) {
 function Page({ c, extras }: TemplateProps) {
   const xs = present(c, extras)
   const f = facts(c)
-  const reach = f.find((x) => x.href)
+  const reach = reachOf(f)
   const offer = offerItems(c)
   return (
     <>

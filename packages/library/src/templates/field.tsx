@@ -14,6 +14,7 @@ import {
   Pic,
   present,
   RESET,
+  reachOf,
   type Template,
   type TemplateProps,
 } from './shared.tsx'
@@ -212,8 +213,8 @@ function Page({ c, extras }: TemplateProps) {
           <div className="say2">
             <h2>{c.cta.headline}</h2>
             <p className="sub">{c.cta.subhead}</p>
-            {f.find((x) => x.href)?.href ? (
-              <a className="btn" href={f.find((x) => x.href)?.href}>
+            {reachOf(f)?.href ? (
+              <a className="btn" href={reachOf(f)?.href}>
                 {c.cta.label}
               </a>
             ) : null}

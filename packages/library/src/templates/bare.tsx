@@ -15,6 +15,7 @@ import {
   Pic,
   present,
   RESET,
+  reachOf,
   type Template,
   type TemplateProps,
 } from './shared.tsx'
@@ -127,7 +128,7 @@ function Extras({ c, x }: { c: C; x: Extra }) {
 function Page({ c, extras }: TemplateProps) {
   const xs = present(c, extras)
   const f = facts(c)
-  const reach = f.find((x) => x.href)
+  const reach = reachOf(f)
   // The one contact line: the first way to reach them, or else where they are.
   const line = reach ?? f.find((x) => x.label === 'Address')
   const groups = c.prices.filter((g) => g.items.length)

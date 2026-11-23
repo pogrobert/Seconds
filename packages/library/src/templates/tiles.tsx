@@ -16,6 +16,7 @@ import {
   Pic,
   present,
   RESET,
+  reachOf,
   type Template,
   type TemplateProps,
 } from './shared.tsx'
@@ -186,7 +187,7 @@ function Page({ c, extras }: TemplateProps) {
   const f = facts(c)
   const its = offerItems(c)
   const offerTones = ['t1', 'pap', 't2', 'pap', 't1']
-  const reach = f.find((x) => x.href)
+  const reach = reachOf(f)
   return (
     <>
       <div className="w top">

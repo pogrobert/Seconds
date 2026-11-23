@@ -17,6 +17,7 @@ import {
   Pic,
   present,
   RESET,
+  reachOf,
   type Template,
   type TemplateProps,
 } from './shared.tsx'
@@ -194,7 +195,7 @@ function Extras({ c, x }: { c: TemplateProps['c']; x: Extra }) {
 
 function Page({ c, extras }: TemplateProps) {
   const xs = present(c, extras)
-  const reach = facts(c).find((x) => x.href)
+  const reach = reachOf(facts(c))
   const offer = offerItems(c)
   // Group rows only when the owner named more than one group.
   const groups = c.prices.filter((g) => g.items.length)

@@ -17,6 +17,7 @@ import {
   Pic,
   present,
   RESET,
+  reachOf,
   type Template,
   type TemplateProps,
 } from './shared.tsx'
@@ -128,7 +129,7 @@ function Extras({ c, x }: { c: TemplateProps['c']; x: Extra }) {
 function Page({ c, extras }: TemplateProps) {
   const xs = present(c, extras)
   const f = facts(c)
-  const call = f.find((x) => x.href)
+  const call = reachOf(f)
   return (
     <>
       <div className="card">

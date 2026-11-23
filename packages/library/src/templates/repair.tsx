@@ -18,6 +18,7 @@ import {
   Pic,
   present,
   RESET,
+  reachOf,
   type Template,
   type TemplateProps,
 } from './shared.tsx'
@@ -206,7 +207,7 @@ function Lines({ list }: { list: Item[] }) {
 function Page({ c, extras }: TemplateProps) {
   const xs = present(c, extras)
   const f = facts(c)
-  const reach = f.find((x) => x.href)
+  const reach = reachOf(f)
   const groups = c.prices.filter((g) => g.items.length)
   const named = groups.filter((g) => g.group).length > 1
   return (

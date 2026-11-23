@@ -16,6 +16,7 @@ import {
   Pic,
   present,
   RESET,
+  reachOf,
   type Template,
   type TemplateProps,
 } from './shared.tsx'
@@ -204,7 +205,7 @@ function Page({ c, extras }: TemplateProps) {
   const xs = present(c, extras)
   const toc = contents(c, xs)
   const f = facts(c)
-  const reach = f.find((x) => x.href)
+  const reach = reachOf(f)
   const groups = c.prices.filter((g) => g.items.length).length
   const offer = toc.find((e) => e.id === 'offer')
   const visit = toc[toc.length - 1]

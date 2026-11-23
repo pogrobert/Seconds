@@ -261,6 +261,42 @@ export function checkSiteCopy(c: SiteCopy, words = ''): string[] {
   return p
 }
 
+/** Lower case, accents gone, so "Rua São Bento" and "rua sao bento" match. */
+const plain = (x: string) => x.normalize('NFKD').replace(/\p{M}/gu, '').toLowerCase()
+
+/**
+ * Contact details only when the owner gave them (Robert, 2026-11-23: "we do not invent
+ * addresses"). The prompt says so, but a rule in a prompt is a request, not a check: an address,
+ * phone number or email the owner's words do not hold is taken off the page. An address passes
+ * when every number in it and most of its words are the owner's (the writer may tidy "st" into
+ * "Street"); a phone when its digits run in the owner's; an email only as written.
+ */
+export function groundContact(c: SiteCopy, words: string): SiteCopy {
+  const said = plain(words)
+  const saidWords = new Set(said.match(/[\p{L}\p{N}]+/gu) ?? [])
+  const saidDigits = said.replace(/\D/g, '')
+  const contact = { ...c.contact }
+  if (contact.address.trim()) {
+    const parts = plain(contact.address).match(/[\p{L}\p{N}]+/gu) ?? []
+    const nums = parts.filter((t) => /\d/.test(t))
+    const letters = parts.filter((t) => !/\d/.test(t) && t.length > 1)
+    const known = letters.filter((t) => saidWords.has(t)).length
+    if (
+      !parts.length ||
+      !nums.every((t) => saidWords.has(t)) ||
+      known < Math.ceil(letters.length * 0.6)
+    )
+      contact.address = ''
+  }
+  if (contact.phone.trim()) {
+    const digits = contact.phone.replace(/\D/g, '')
+    if (digits.length < 5 || !saidDigits.includes(digits.replace(/^(?:00|0)?44/, '')))
+      contact.phone = ''
+  }
+  if (contact.email.trim() && !said.includes(plain(contact.email.trim()))) contact.email = ''
+  return { ...c, contact }
+}
+
 /**
  * Items the writer left blank. The schema asks for at least four questions and three steps, so
  * when it has nothing true to put there (an edit of a site whose questions the check removed),
@@ -419,7 +455,7 @@ export async function writeSiteCopy(o: {
         continue
       }
       text = body?.choices?.[0]?.message?.content ?? ''
-      copy = dropEmpty(wholeSentences(tidy(JSON.parse(text) as SiteCopy)))
+      copy = groundContact(dropEmpty(wholeSentences(tidy(JSON.parse(text) as SiteCopy))), o.words)
       problems = checkSiteCopy(copy, o.words)
     } catch (e) {
       problems = [e instanceof Error ? e.message : String(e)]

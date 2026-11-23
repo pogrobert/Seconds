@@ -15,6 +15,7 @@ import {
   Pic,
   present,
   RESET,
+  reachOf,
   type Template,
   type TemplateProps,
 } from './shared.tsx'
@@ -164,7 +165,7 @@ function Facts({ c }: { c: TemplateProps['c'] }) {
 
 function Page({ c, extras }: TemplateProps) {
   const xs = present(c, extras)
-  const reach = facts(c).find((x) => x.href)
+  const reach = reachOf(facts(c))
   const groups = c.prices.filter((g) => g.items.length)
   const named = groups.length > 1 && groups.every((g) => g.group)
   return (

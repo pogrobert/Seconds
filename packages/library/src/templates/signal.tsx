@@ -14,6 +14,7 @@ import {
   Pic,
   present,
   RESET,
+  reachOf,
   type Template,
   type TemplateProps,
 } from './shared.tsx'
@@ -141,7 +142,7 @@ function Page({ c, extras }: TemplateProps) {
   const f = facts(c)
   const phone = f.find((x) => x.label === 'Phone')
   const hours = f.find((x) => x.label === 'Hours')
-  const reach = f.find((x) => x.href)
+  const reach = reachOf(f)
   return (
     <>
       <div className="strip">

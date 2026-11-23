@@ -27,12 +27,25 @@ export function facts(c: SiteContent): { label: string; value: string; href?: st
   const out: { label: string; value: string; href?: string }[] = []
   const hours = c.hours.map((h) => [h.days, h.time].filter(Boolean).join(' ')).join('; ')
   if (hours) out.push({ label: 'Hours', value: hours })
-  if (c.address.length) out.push({ label: 'Address', value: c.address.join(', ') })
+  // The address opens a map (Robert, 2026-11-23); Google's link works on every phone and
+  // computer and needs no key. Only ever the owner's own address (site-text.ts groundContact).
+  if (c.address.length) {
+    const value = c.address.join(', ')
+    out.push({
+      label: 'Address',
+      value,
+      href: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${c.name}, ${value}`)}`,
+    })
+  }
   if (c.phone)
     out.push({ label: 'Phone', value: c.phone, href: `tel:${c.phone.replace(/\s/g, '')}` })
   if (c.email) out.push({ label: 'Email', value: c.email, href: `mailto:${c.email}` })
   return out
 }
+
+/** The way to get in touch for a page's main button: a phone or email link, never the map. */
+export const reachOf = <T extends { label: string; href?: string }>(f: T[]) =>
+  f.find((x) => x.href && x.label !== 'Address')
 
 export const offerItems = (c: SiteContent) => items(c)
 export { hasVisit }

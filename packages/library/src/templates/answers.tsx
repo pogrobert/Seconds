@@ -18,6 +18,7 @@ import {
   Pic,
   present,
   RESET,
+  reachOf,
   type Template,
   type TemplateProps,
 } from './shared.tsx'
@@ -183,7 +184,7 @@ function Page({ c, extras }: TemplateProps) {
   const faq = xs.includes('faq') && c.faq?.length ? c.faq : null
   const rest = xs.filter((x) => x !== 'faq')
   const f = facts(c)
-  const reach = f.find((x) => x.href)
+  const reach = reachOf(f)
   const offer = offerItems(c)
   return (
     <>
