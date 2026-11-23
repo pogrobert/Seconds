@@ -686,18 +686,25 @@ function Build() {
               {result ? (
                 // The three versions as tabs, named after their design (arrow keys move between
                 // them; keys 1, 2 and 3 too); a small square says whether one is light or dark.
-                <TabsList aria-label="Versions" {...TAB_LOOKS[TAB_LOOK].list}>
+                <TabsList
+                  aria-label="Versions"
+                  variant="line"
+                  // Names with a line under the one shown (Robert picked it, 2026-11-23). The
+                  // list fills the bar's height; each tab is a small box in the middle, so its
+                  // focus ring has room, and its line reaches down onto the bar's bottom edge.
+                  className="h-auto! gap-1 self-stretch p-0"
+                >
                   {result.sites.map((s, i) => {
                     const dark = / night ·/.test(s.rules)
                     return (
                       <Tooltip key={s.id}>
                         {/* A span between: tooltips and tabs both set data-state on their element. */}
                         <TooltipTrigger asChild>
-                          <span className={TAB_LOOK === 'line' ? 'flex self-stretch' : 'flex'}>
+                          <span className="flex">
                             <TabsTrigger
                               value={s.id}
                               tabIndex={0}
-                              className={TAB_LOOKS[TAB_LOOK].tab}
+                              className="h-8 flex-none gap-1.5 px-1.5 text-[13px] text-zinc-500 hover:text-zinc-800 group-data-horizontal/tabs:after:inset-x-1.5 group-data-horizontal/tabs:after:bottom-[-8.5px] data-active:text-zinc-900"
                             >
                               <span
                                 aria-hidden
@@ -957,27 +964,6 @@ function Mark() {
       <span className="size-2.5 rounded-[3px] bg-white" />
     </span>
   )
-}
-
-// TEMP: tab looks for Robert to pick from (2026-11-23).
-const TAB_LOOK = 'text' as 'now' | 'line' | 'solid' | 'text'
-const TAB_LOOKS = {
-  now: {
-    list: {},
-    tab: 'gap-1.5 px-2.5 text-[13px] data-active:bg-white data-active:shadow-[0_1px_2px_rgba(9,9,11,.08)]',
-  },
-  line: {
-    list: { variant: 'line' as const, className: 'h-12! self-stretch gap-4 p-0 pl-1.5' },
-    tab: 'h-full gap-1.5 rounded-none px-0 text-[13px] text-zinc-500 group-data-horizontal/tabs:after:bottom-[-1px] data-active:text-zinc-900',
-  },
-  solid: {
-    list: { className: 'gap-1 bg-transparent p-0' },
-    tab: 'h-8 gap-1.5 rounded-full px-3 text-[13px] text-zinc-600 hover:bg-zinc-100 data-active:bg-zinc-900 data-active:text-white data-active:shadow-none data-active:hover:bg-zinc-900',
-  },
-  text: {
-    list: { className: 'gap-0.5 bg-transparent p-0' },
-    tab: 'h-8 gap-1.5 rounded-md px-2.5 text-[13px] text-zinc-400 hover:text-zinc-700 data-active:bg-transparent data-active:text-zinc-900 data-active:shadow-none',
-  },
 }
 
 /** "Heritage lettering, navy" from a version's rules ("Atelier template · Heritage type · navy · …"). */
