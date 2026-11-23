@@ -10,6 +10,7 @@ import {
   InfoIcon,
   LayoutIcon,
   MonitorIcon,
+  SquaresFourIcon,
   WarningCircleIcon,
   WifiHighIcon,
   XIcon,
@@ -85,6 +86,23 @@ type Progress = { choices?: number; words?: number; check?: number }
  * The build, read as it happens (routes/api/build-stream.ts): each part reports when it is done,
  * so the progress shows what is really finished, then the result.
  */
+/** "More designs": the next three for the same site, drawn without a model (server/edit.ts). */
+const MORE = 'More designs'
+async function nextDesigns(state: NonNullable<BuildResult['state']>): Promise<BuildResult> {
+  const res = await fetch('/api/designs', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ state }),
+  })
+  const body = (await res.json().catch(() => null)) as {
+    result?: BuildResult
+    error?: string
+  } | null
+  if (!res.ok || !body?.result)
+    throw new Error(body?.error ?? `Could not draw more designs (HTTP ${res.status}).`)
+  return body.result
+}
+
 async function streamBuild(
   messages: string[],
   onStep: (p: Progress) => void,
@@ -318,12 +336,16 @@ function Build() {
       const photosIn = new Promise<PhotoResult | null>((ok) => {
         photos = ok
       })
-      const built = await streamBuild(
-        history.filter((m) => m.role === 'user').map((m) => m.text),
-        setProgress,
-        (p) => photos(p),
-        result?.state ?? null,
-      )
+      const more = !!result?.state && words.toLowerCase() === MORE.toLowerCase()
+      const built =
+        more && result?.state
+          ? await nextDesigns(result.state)
+          : await streamBuild(
+              history.filter((m) => m.role === 'user').map((m) => m.text),
+              setProgress,
+              (p) => photos(p),
+              result?.state ?? null,
+            )
       if (run !== session.current) return
       // "Undo": the version before comes back, photos and all.
       if (built.undo) {
@@ -681,7 +703,7 @@ function Build() {
       // the split view.
       <div className="flex h-dvh flex-col bg-zinc-50 text-zinc-900 antialiased selection:bg-teal-600/25">
         <main className="flex min-h-0 flex-1 flex-col items-center overflow-y-auto px-5 pb-10">
-          <div className="my-auto flex w-full max-w-2xl flex-col gap-7 pt-10">
+          <div className="relative my-auto flex w-full max-w-2xl flex-col gap-7 pt-10">
             <div className="text-center">
               <h1 className="text-[2rem] leading-tight font-medium tracking-[-0.02em] text-balance sm:text-[2.5rem]">
                 Websites in seconds
@@ -698,7 +720,12 @@ function Build() {
             {recent.length > 0 && (
               // Sites made here before, newest first (history.ts); kept only in this browser.
               // As wide as the message box, its text lined up with the box's (Robert, 2026-11-23).
-              <section aria-labelledby="recent-title" className="w-full">
+              // It hangs below the centred block instead of joining it: the list is read after
+              // the page loads, and joining would push the headline and box up (a layout shift).
+              <section
+                aria-labelledby="recent-title"
+                className={`absolute inset-x-0 top-full mt-7 pb-10 ${ENTER}`}
+              >
                 <h2 id="recent-title" className="mb-1 px-4 text-xs font-medium text-zinc-400">
                   Recent
                 </h2>
@@ -913,6 +940,23 @@ function Build() {
                   Preview
                 </span>
               )}
+              {result?.state && (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      disabled={busy}
+                      onClick={() => void send(MORE)}
+                      className="text-[13px] text-zinc-600"
+                    >
+                      <SquaresFourIcon />
+                      <span className="max-sm:sr-only">{MORE}</span>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Three more designs for the same site</TooltipContent>
+                </Tooltip>
+              )}
               <div className="ml-auto flex items-center gap-1">
                 <ToggleGroup
                   type="single"
@@ -1071,15 +1115,32 @@ function TryRow({ onPick, typing }: { onPick: (ex: Example) => void; typing: boo
     }, 5000)
     return () => clearInterval(t)
   }, [])
-  // The names' own width, so the row glides to a new width instead of jumping (Robert,
-  // 2026-11-23). An empty moment between two sets is not a width.
+  // The row never changes width (Robert, 2026-11-23): each name sits in a slot as wide as the
+  // longest example name, measured from hidden copies of them all, so "Try" and the row stay put
+  // while the names change.
+  const measure = useRef<HTMLDivElement>(null)
+  // 122px is what it measures in Atkinson at 14px (2026-11-23), so the first paint already has it.
+  const [slot, setSlot] = useState(122)
+  useLayoutEffect(() => {
+    const el = measure.current
+    if (!el) return
+    const fit = () => {
+      const w = Math.max(...Array.from(el.children, (c) => (c as HTMLElement).offsetWidth))
+      if (w > 0) setSlot(Math.ceil(w))
+    }
+    fit()
+    const ro = new ResizeObserver(fit)
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [])
+  // Between two sets the names are briefly gone; the row keeps the width it had.
   const names = useRef<HTMLDivElement>(null)
-  const [width, setWidth] = useState<number | null>(null)
+  const [held, setHeld] = useState(0)
   useEffect(() => {
     const el = names.current
     if (!el) return
     const ro = new ResizeObserver(() => {
-      if (el.offsetWidth > 0) setWidth(el.offsetWidth)
+      if (el.offsetWidth > 0) setHeld(el.offsetWidth)
     })
     ro.observe(el)
     return () => ro.disconnect()
@@ -1087,7 +1148,7 @@ function TryRow({ onPick, typing }: { onPick: (ex: Example) => void; typing: boo
   return (
     // biome-ignore lint/a11y/noStaticElementInteractions: pausing on hover only, no action
     <div
-      className="flex min-h-9 items-center justify-center gap-1 text-sm whitespace-nowrap"
+      className="relative flex min-h-9 items-center justify-center gap-1 text-sm whitespace-nowrap"
       onMouseEnter={() => {
         paused.current = true
       }}
@@ -1095,13 +1156,19 @@ function TryRow({ onPick, typing }: { onPick: (ex: Example) => void; typing: boo
         paused.current = false
       }}
     >
-      <span className="mr-1 shrink-0 cursor-default text-zinc-500 select-none">Try</span>
-      <motion.div
-        className="-my-1 overflow-hidden py-1"
-        initial={false}
-        animate={width === null ? {} : { width }}
-        transition={{ duration: 0.28, ease: [0.23, 1, 0.32, 1] }}
+      <div
+        ref={measure}
+        aria-hidden
+        className="pointer-events-none invisible absolute top-0 left-0 flex h-0 overflow-hidden"
       >
+        {EXAMPLES.map((x) => (
+          <span key={x.title} className="px-2.5 text-sm font-medium whitespace-nowrap">
+            {x.title}
+          </span>
+        ))}
+      </div>
+      <span className="mr-1 shrink-0 cursor-default text-zinc-500 select-none">Try</span>
+      <div className="-my-1 py-1" style={{ minWidth: held || undefined }}>
         <div ref={names} className="flex w-max">
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
@@ -1141,20 +1208,22 @@ function TryRow({ onPick, typing }: { onPick: (ex: Example) => void; typing: boo
                       ·
                     </span>
                   )}
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => onPick(x)}
-                    className="min-w-0 truncate px-2.5 text-sm text-zinc-800 hover:bg-zinc-200/70 hover:text-zinc-950"
-                  >
-                    {x.title}
-                  </Button>
+                  <span className="flex justify-center" style={{ width: slot }}>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => onPick(x)}
+                      className="min-w-0 truncate px-2.5 text-sm text-zinc-800 hover:bg-zinc-200/70 hover:text-zinc-950"
+                    >
+                      {x.title}
+                    </Button>
+                  </span>
                 </motion.span>
               ))}
             </motion.div>
           </AnimatePresence>
         </div>
-      </motion.div>
+      </div>
     </div>
   )
 }
