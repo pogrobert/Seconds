@@ -10,9 +10,9 @@ import {
   InfoIcon,
   LayoutIcon,
   MonitorIcon,
+  TrashIcon,
   WarningCircleIcon,
   WifiHighIcon,
-  XIcon,
 } from '@phosphor-icons/react'
 import { createFileRoute } from '@tanstack/react-router'
 import { AnimatePresence, motion } from 'motion/react'
@@ -789,7 +789,7 @@ function Build() {
                       </button>
                       <button
                         type="button"
-                        aria-label={`Remove ${x.name}`}
+                        aria-label={`Delete ${x.name}`}
                         onClick={async () => {
                           await removeSite(x.id)
                           setRecent(await listSites())
@@ -797,7 +797,7 @@ function Build() {
                         // With a mouse it takes the time's place on hover; on touch both show.
                         className="absolute top-1/2 right-1.5 grid size-7 -translate-y-1/2 place-items-center rounded-md text-zinc-400 transition-colors outline-none hover:bg-zinc-200 hover:text-zinc-700 focus-visible:ring-3 focus-visible:ring-ring/50 pointer-fine:opacity-0 pointer-fine:group-focus-within:opacity-100 pointer-fine:group-hover:opacity-100"
                       >
-                        <XIcon className="size-3.5" />
+                        <TrashIcon className="size-3.5" />
                       </button>
                     </li>
                   ))}
