@@ -299,7 +299,6 @@ export const outdoors: Template = {
   label: 'Outdoors',
   text: "Open-air and energetic: full-width photo bands that melt into the organisation's own colour, with big bold type set across the seam, and light, airy sections between them for the offer and the details; for surf schools, climbing and outdoor activity centres, cabins and glamping, adventure trips, bike tours and other outdoor businesses.",
   dark: false,
-  draft: true,
   css: CSS,
   Page,
 }

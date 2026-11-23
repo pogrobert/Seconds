@@ -242,7 +242,6 @@ export const luxe: Template = {
   label: 'Quiet luxe',
   text: "Light, airy and unhurried: a near-white page with a great deal of space, large fine headings and small lightly spaced text, the promise set very large over one photo running edge to edge, a few large photos placed off-centre, the offer as an open list and a fine thread of the organisation's colour running in from the edge to each heading; refined, calm and discreet, for jewellers, boutique hotels, perfumers, wineries, bridal shops and other high-end services.",
   dark: false,
-  draft: true,
   css: CSS,
   Page,
 }

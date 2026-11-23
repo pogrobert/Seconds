@@ -249,7 +249,6 @@ export const neon: Template = {
   label: 'Neon night',
   text: "A near-black flyer for a night out, lit by one neon colour: the organisation's colour glowing like a sign, the headline lit large beside a photo in a glowing tube frame, the offer as a gig line-up of big centred names with lit prices and steps as outlined neon numbers: loud, electric and after-dark, for clubs, bars, DJs, comedy nights, karaoke, arcades and late-night venues.",
   dark: true,
-  draft: true,
   css: CSS,
   Page,
 }

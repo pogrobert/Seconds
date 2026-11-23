@@ -13,7 +13,7 @@ it: "make it green", "roomier", "our number is 0113 496 0123", "write it in Span
 Most AI site builders have a model write the code. That takes minutes, and edits can break the
 page. Seconds never lets a model write code. The work is split three ways:
 
-1. **Ready-made designs.** 47 whole-page templates, each designed to look good for any small
+1. **Ready-made designs.** 54 whole-page templates, each designed to look good for any small
    business, with any words, any colour and with or without photos. They come with 30-odd
    colours, 8 sets of lettering and 3 spacing levels.
 2. **A decision model chooses.** [Jev](https://typesafe.ai) answers multiple-choice questions:
@@ -78,7 +78,7 @@ pnpm check
 | Folder              | What it holds                                                                                                        |
 | ------------------- | -------------------------------------------------------------------------------------------------------------------- |
 | `apps/web`          | The app: the chat and preview page, and the server that builds and edits sites. It runs on Cloudflare Workers.       |
-| `packages/library`  | The 47 page templates and their shared parts. See [the template contract](packages/library/src/templates/README.md). |
+| `packages/library`  | The 54 page templates and their shared parts. See [the template contract](packages/library/src/templates/README.md). |
 | `packages/pipeline` | The calls to the decision and text models, and the checks on what they return.                                       |
 | `packages/spec`     | The site spec's types and its list of content fields.                                                                |
 | `tools/eval`        | Colour and lettering rules, and sample businesses.                                                                   |

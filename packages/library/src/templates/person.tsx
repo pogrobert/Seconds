@@ -243,7 +243,6 @@ export const person: Template = {
   label: 'Person',
   text: "A quiet personal homepage on light paper: the person's name set very large across the top, their role and a small portrait beside the headline, then their work, roles or services as a clean list, every heading small in their own colour in a margin on the left like a well-kept CV: personal, calm and understated, for portfolios, freelance developers and designers, writers, coaches, CVs and pages about famous people or characters.",
   dark: false,
-  draft: true,
   css: CSS,
   Page,
 }

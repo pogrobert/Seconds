@@ -241,7 +241,6 @@ export const velvet: Template = {
   label: 'Velvet',
   text: "A near-black page with ivory type and wide, unhurried spacing, the organisation's colour used only as brass: fine rules, a small gem where each section begins, the prices and one button, the headline beside a tall portrait in a thin brass frame (or the name's initial as a monogram): dark, refined and luxurious, for cocktail bars, whisky bars, jewellers, perfumers and upmarket barbers.",
   dark: true,
-  draft: true,
   css: CSS,
   Page,
 }

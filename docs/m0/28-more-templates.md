@@ -67,3 +67,10 @@ The same 237 briefs again, with the drafts in the choice:
 
 Field's pull eased (top three for 84 briefs, from 95), Signal's too (56, from 62). Still never
 chosen: Numbered, Glossary, Units, Bare, Ticker.
+
+## Kept (2026-11-24)
+
+Robert kept all seven; they are live (54 templates). Real builds through the app, each brief's
+first design: surf school → Outdoors, invoicing startup → Product, comedy club → Neon night,
+boutique hotel → Quiet luxe, tattoo studio → Ink, freelance developer → Person, speakeasy →
+Velvet; pages in 1.3–1.9 s.

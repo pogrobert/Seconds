@@ -244,7 +244,6 @@ export const ink: Template = {
   label: 'Ink',
   text: 'A near-black gallery catalogue where the photos are the work, running edge to edge across the screen, with small, exact white type on a strict grid, hairlines opening each section and the offer listed like works in an exhibition: spare, confident and art-led, for tattoo studios, photographers, galleries, bands and designers.',
   dark: true,
-  draft: true,
   css: CSS,
   Page,
 }

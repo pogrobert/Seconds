@@ -238,7 +238,6 @@ export const product: Template = {
   label: 'Product',
   text: "A crisp product page on white: one bold statement set very large, a wide panel of the organisation's own colour holding its introduction, the offer laid out as a ruled grid of features and the way it works as numbered steps on a line; clear, modern and confident, and complete with no photos, for software startups, apps, online tools and digital agencies.",
   dark: false,
-  draft: true,
   css: CSS,
   Page,
 }
