@@ -345,8 +345,10 @@ export type SiteState = {
   type: string
   /** The three templates shown, best first. */
   templates: string[]
-  /** Every live template, best fit first, the order of the wall of designs (2026-11-23). */
+  /** Every live template, best fit first, for "More designs" (Robert, 2026-11-23). */
   ranked?: string[]
+  /** The templates already shown, so "More designs" moves on; it starts over after the last. */
+  seen?: string[]
   extras: Extra[]
   art: { style: ArtStyle; strength: ArtStrength }
   seed: string
@@ -533,6 +535,7 @@ export async function build(
         type: best.type.key,
         templates: chosenTemplates.map((t) => t.id),
         ranked: parts.templates,
+        seen: chosenTemplates.map((t) => t.id),
         extras: extrasOf,
         art: { style: art.style, strength: art.strength },
         seed,

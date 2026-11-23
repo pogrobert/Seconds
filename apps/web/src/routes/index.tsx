@@ -86,21 +86,21 @@ type Progress = { choices?: number; words?: number; check?: number }
  * The build, read as it happens (routes/api/build-stream.ts): each part reports when it is done,
  * so the progress shows what is really finished, then the result.
  */
-/** One design on the wall: the template and its page for this site (server/edit.ts allDesigns). */
-type Design = { template: string; site: BuildResult['sites'][number] }
-async function fetchDesigns(state: NonNullable<BuildResult['state']>): Promise<Design[]> {
+/** "More designs": the next three for the same site, drawn without a model (server/edit.ts). */
+const MORE = 'More designs'
+async function nextDesigns(state: NonNullable<BuildResult['state']>): Promise<BuildResult> {
   const res = await fetch('/api/designs', {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({ state }),
   })
   const body = (await res.json().catch(() => null)) as {
-    designs?: Design[]
+    result?: BuildResult
     error?: string
   } | null
-  if (!res.ok || !body?.designs)
-    throw new Error(body?.error ?? `Could not draw the designs (HTTP ${res.status}).`)
-  return body.designs
+  if (!res.ok || !body?.result)
+    throw new Error(body?.error ?? `Could not draw more designs (HTTP ${res.status}).`)
+  return body.result
 }
 
 async function streamBuild(
@@ -262,10 +262,6 @@ function Build() {
   /** Each photo's file, by its link, so the photos can be kept with the site. */
   const photoBlobs = useRef(new Map<string, Blob>())
   const [recent, setRecent] = useState<SiteSummary[]>([])
-  /** The wall of every design for this site (Robert, 2026-11-23), drawn once per version. */
-  const [wall, setWall] = useState(false)
-  const [designs, setDesigns] = useState<{ for: BuildResult; list: Design[] } | null>(null)
-  const [wallError, setWallError] = useState<string | null>(null)
   const [allRecent, setAllRecent] = useState(false)
   /** Each version shown, with its photo links, newest last: "undo" steps back one. */
   const versions = useRef<{ result: BuildResult; links: Record<string, string> }[]>([])
@@ -319,7 +315,6 @@ function Build() {
     const history = [...messages, { role: 'user', text: words } as Message]
     const run = session.current
     const start = () => {
-      setWall(false)
       setMessages(history)
       setDraft('')
       setBusy(true)
@@ -341,12 +336,16 @@ function Build() {
       const photosIn = new Promise<PhotoResult | null>((ok) => {
         photos = ok
       })
-      const built = await streamBuild(
-        history.filter((m) => m.role === 'user').map((m) => m.text),
-        setProgress,
-        (p) => photos(p),
-        result?.state ?? null,
-      )
+      const more = !!result?.state && words.toLowerCase() === MORE.toLowerCase()
+      const built =
+        more && result?.state
+          ? await nextDesigns(result.state)
+          : await streamBuild(
+              history.filter((m) => m.role === 'user').map((m) => m.text),
+              setProgress,
+              (p) => photos(p),
+              result?.state ?? null,
+            )
       if (run !== session.current) return
       // "Undo": the version before comes back, photos and all.
       if (built.undo) {
@@ -468,7 +467,6 @@ function Build() {
     session.current++
     generation.current++
     const reset = () => {
-      setWall(false)
       for (const u of photoUrls.current) URL.revokeObjectURL(u)
       photoUrls.current = []
       photoBlobs.current.clear()
@@ -551,7 +549,6 @@ function Build() {
       )
     const d = saved.data
     const apply = () => {
-      setWall(false)
       siteId.current = saved.id
       versions.current = d.versions.map((v) => ({ result: v.result, links: relink(v.links) }))
       setMessages(d.messages)
@@ -564,53 +561,6 @@ function Build() {
     const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     if (document.startViewTransition && !still) document.startViewTransition(() => flushSync(apply))
     else apply()
-  }
-
-  /** Opens or closes the wall; the designs are drawn on first opening for this version. */
-  async function toggleWall() {
-    if (wall) return setWall(false)
-    if (!result?.state) return
-    setWall(true)
-    setWallError(null)
-    if (designs?.for === result) return
-    const forResult = result
-    try {
-      const list = await fetchDesigns(forResult.state as NonNullable<BuildResult['state']>)
-      setDesigns({ for: forResult, list })
-    } catch (e) {
-      setWallError(e instanceof Error ? e.message : String(e))
-    }
-  }
-
-  /**
-   * A design picked on the wall takes the place of the version being looked at (one of the
-   * three already: that one is shown). No chat message and nothing to undo: it is a choice of
-   * look, like switching tabs; the site's state follows, so later edits keep it.
-   */
-  function pickDesign(d: Design) {
-    if (!result?.state) return
-    const shown = result.state.templates.indexOf(d.template)
-    const at = result.sites.findIndex((x) => x.id === (look ?? result.suggested))
-    const i = shown >= 0 ? shown : Math.max(0, at)
-    const id = result.sites[i]?.id ?? 'b1'
-    if (shown < 0) {
-      const next: BuildResult = {
-        ...result,
-        state: {
-          ...result.state,
-          templates: result.state.templates.map((t, k) => (k === i ? d.template : t)),
-        },
-        sites: result.sites.map((x, k) =>
-          k === i ? { ...d.site, id, html: withSpaces(d.site.html) } : x,
-        ),
-      }
-      const top = versions.current[versions.current.length - 1]
-      if (top?.result === result) top.result = next
-      setResult(next)
-      setDesigns((w) => (w ? { ...w, for: next } : w))
-    }
-    setLook(id)
-    setWall(false)
   }
 
   const onSubmit = (e: FormEvent) => {
@@ -941,10 +891,7 @@ function Build() {
         >
           <Tabs
             value={site?.id ?? ''}
-            onValueChange={(v) => {
-              setLook(v)
-              setWall(false)
-            }}
+            onValueChange={setLook}
             // Every version is its own Tab stop (Robert, 2026-11-23), so focus alone must not
             // switch: Tab passing over them would land on the last. Enter or Space picks one;
             // arrows and 1, 2, 3 still work.
@@ -973,7 +920,6 @@ function Build() {
                             <TabsTrigger
                               value={s.id}
                               tabIndex={0}
-                              onClick={() => setWall(false)}
                               className="h-8 flex-none gap-1.5 px-1.5 text-[13px] text-zinc-500 hover:text-zinc-800 group-data-horizontal/tabs:after:inset-x-1.5 group-data-horizontal/tabs:after:bottom-[-8.5px] data-active:text-zinc-900"
                             >
                               <span
@@ -1004,17 +950,14 @@ function Build() {
                       variant="ghost"
                       size="sm"
                       disabled={busy}
-                      aria-pressed={wall}
-                      onClick={() => void toggleWall()}
-                      className={`text-[13px] ${wall ? 'bg-zinc-100 text-zinc-900' : 'text-zinc-600'}`}
+                      onClick={() => void send(MORE)}
+                      className="text-[13px] text-zinc-600"
                     >
                       <SquaresFourIcon />
-                      <span className="max-sm:sr-only">All designs</span>
+                      <span className="max-sm:sr-only">{MORE}</span>
                     </Button>
                   </TooltipTrigger>
-                  <TooltipContent>
-                    {wall ? 'Back to the preview' : 'Every design for this site'}
-                  </TooltipContent>
+                  <TooltipContent>Three more designs for the same site</TooltipContent>
                 </Tooltip>
               )}
               <div className="ml-auto flex items-center gap-1">
@@ -1077,15 +1020,7 @@ function Build() {
             <main
               className={`relative flex min-h-0 flex-1 items-stretch justify-center ${device === 'phone' ? 'bg-zinc-50' : ''}`}
             >
-              {wall && result ? (
-                <Wall
-                  designs={designs?.for === result ? designs.list : null}
-                  error={wallError}
-                  links={links}
-                  shown={result.state?.templates ?? []}
-                  onPick={pickDesign}
-                />
-              ) : site ? (
+              {site ? (
                 <TabsContent
                   value={site.id}
                   className="flex min-h-0 flex-1 items-center justify-center"
@@ -1308,103 +1243,6 @@ function Mark() {
 /** How chat replies and chips arrive: a 4px rise and a fade, 200ms, strong ease-out. */
 const ENTER =
   'motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-1 animation-duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] fill-mode-both'
-
-/**
- * The wall (Robert, 2026-11-23): every design for this site at once, best fit first, each a
- * small live page in the site's words, colours and photos. A thumbnail is the page laid out at
- * 1280 by 960 and scaled to the card, so it is the real thing, not a picture of it.
- */
-function Wall({
-  designs,
-  error,
-  links,
-  shown,
-  onPick,
-}: {
-  designs: Design[] | null
-  error: string | null
-  links: Record<string, string>
-  shown: string[]
-  onPick: (d: Design) => void
-}) {
-  const grid = useRef<HTMLUListElement>(null)
-  const [scale, setScale] = useState(0.2)
-  useLayoutEffect(() => {
-    const el = grid.current
-    if (!el) return
-    const fit = () => {
-      const card = el.querySelector<HTMLElement>('[data-thumb]')
-      if (card?.clientWidth) setScale(card.clientWidth / 1280)
-    }
-    fit()
-    const watch = new ResizeObserver(fit)
-    watch.observe(el)
-    return () => watch.disconnect()
-  }, [designs])
-  if (error)
-    return (
-      <div className="flex flex-1 items-center justify-center p-8 text-sm text-zinc-500">
-        {error}
-      </div>
-    )
-  return (
-    <ul
-      ref={grid}
-      aria-label="All designs"
-      aria-busy={!designs}
-      className="grid min-h-0 flex-1 auto-rows-min grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-x-4 gap-y-5 overflow-y-auto p-4"
-    >
-      {(designs ?? Array.from({ length: 12 }, () => null)).map((d, i) =>
-        d ? (
-          <li
-            key={d.template}
-            className={`group relative flex flex-col gap-2 transition-transform duration-150 ease-out has-[button:active]:scale-[0.98] ${ENTER}`}
-            style={{ animationDelay: `${Math.min(i, 12) * 25}ms` }}
-          >
-            <span
-              data-thumb
-              className="relative block aspect-[4/3] overflow-hidden rounded-lg bg-[#fff] ring-1 ring-zinc-200 transition-shadow group-hover:ring-zinc-400 group-has-[button:focus-visible]:ring-3 group-has-[button:focus-visible]:ring-ring/50"
-            >
-              <iframe
-                srcDoc={withSpaces(d.site.html)}
-                loading="lazy"
-                tabIndex={-1}
-                aria-hidden
-                title={d.site.label}
-                onLoad={(e) => fillSpaces(e.currentTarget.contentDocument, links)}
-                className="pointer-events-none absolute top-0 left-0 origin-top-left"
-                style={{ width: 1280, height: 960, transform: `scale(${scale})` }}
-              />
-            </span>
-            <span className="flex items-center gap-1.5 px-0.5 text-[13px]">
-              <span
-                aria-hidden
-                className={`size-2.5 rounded-[3px] ${/ night ·/.test(d.site.rules) ? 'bg-zinc-800' : 'bg-white ring-1 ring-zinc-300 ring-inset'}`}
-              />
-              <span className="font-medium text-zinc-800">{d.site.label}</span>
-              {shown.includes(d.template) && (
-                <span className="ml-auto text-xs text-zinc-400">
-                  Version {shown.indexOf(d.template) + 1}
-                </span>
-              )}
-            </span>
-            <button
-              type="button"
-              onClick={() => onPick(d)}
-              aria-label={`Use ${d.site.label}${shown.includes(d.template) ? `, version ${shown.indexOf(d.template) + 1}` : ''}`}
-              className="absolute inset-0 rounded-lg outline-none"
-            />
-          </li>
-        ) : (
-          <li key={i} className="flex flex-col gap-2" aria-hidden>
-            <Skeleton className="aspect-[4/3] rounded-lg" />
-            <Skeleton className="h-3.5 w-20" />
-          </li>
-        ),
-      )}
-    </ul>
-  )
-}
 
 /** What is kept of a site in this browser (history.ts). */
 type Kept = {
