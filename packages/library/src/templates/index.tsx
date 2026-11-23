@@ -106,10 +106,10 @@ export const TEMPLATES: Template[] = [
 ]
 export const LIVE = TEMPLATES.filter((t) => !t.draft)
 
-/** A template's variants: its own, then the shared spacing ones. */
+/** A template's variants: its own, then the shared spacing ones (reviewed ones only, see `Variant`). */
 export function variantsOf(id: string): Variant[] {
   const tpl = TEMPLATES.find((x) => x.id === id)
-  return tpl ? [...(tpl.variants ?? []), ...spacingVariants(tpl.css)] : []
+  return tpl ? [...(tpl.variants ?? []), ...spacingVariants(tpl.css)].filter((v) => !v.draft) : []
 }
 
 export function renderTemplate(

@@ -16,7 +16,7 @@ import { type Content, contentFromCopy, contentOf } from '@repo/eval/grammar/pag
 import ruleProfiles from '@repo/eval/grammar/rule-profiles.json'
 import { TYPE_RULES } from '@repo/eval/grammar/type-rules'
 import photoManifest from '@repo/eval/photos/manifest.json'
-import { LIVE, renderTemplate, theme } from '@repo/library'
+import { LIVE, renderTemplate, theme, variantsOf } from '@repo/library'
 import {
   type DecisionPort,
   EXTRAS,
@@ -26,6 +26,7 @@ import {
   KINDS,
   type Kind,
   randomDecisions,
+  rng,
   type SiteCopy,
   typesafeDecisions,
   writePhotoQueries,
@@ -301,11 +302,31 @@ export type SiteState = {
   type: string
   /** The three templates shown, best first. */
   templates: string[]
+  /** Each version's spacing, by position (absent: standard). See `spacingFor`. */
+  spacing?: Spacing[]
   extras: Extra[]
   art: { style: ArtStyle; strength: ArtStrength }
   seed: string
   /** The photo ids the page shows, set by the build page when the photos arrive. */
   shown?: string[]
+}
+
+/**
+ * How roomy each version's sections are: a reviewed variant of the template's own spacing
+ * (`spacingVariants`, packages/library). More looks from the same three designs; code picks them
+ * from the site's seed, half of them standard, and the owner can ask for more space or less.
+ */
+export const SPACINGS = ['standard', 'snug', 'roomy'] as const
+export type Spacing = (typeof SPACINGS)[number]
+export function spacingFor(seed: string, n: number): Spacing[] {
+  const r = rng(`${seed}-spacing`)
+  const pool: Spacing[] = ['standard', 'standard', 'snug', 'roomy']
+  return Array.from({ length: n }, () => pool[Math.floor(r() * pool.length)] ?? 'standard')
+}
+/** A version's spacing, when its template has that variant; otherwise standard. */
+const spacingOf = (state: SiteState, i: number, id: string): Spacing => {
+  const s = state.spacing?.[i] ?? 'standard'
+  return s !== 'standard' && variantsOf(id).some((v) => v.id === s) ? s : 'standard'
 }
 
 /** The three versions: one template each, in the site's type and colour. */
@@ -319,12 +340,24 @@ export function drawTemplates(
   return state.templates
     .map((id) => LIVE.find((x) => x.id === id))
     .filter((x): x is (typeof LIVE)[number] => !!x)
-    .map((tpl, i) => ({
-      id: `b${i + 1}`,
-      label: tpl.label,
-      rules: `${tpl.label} template · ${type.label} type · ${state.brandName || 'neutral'} · ${state.extras.join(', ') || 'no extras'}${tpl.dark ? ' · night ·' : ''}`,
-      html: darkTokens(renderTemplate(content, tpl.id, t, state.extras), tpl.dark),
-    }))
+    .map((tpl, i) => {
+      const spacing = spacingOf(state, i, tpl.id)
+      return {
+        id: `b${i + 1}`,
+        label: tpl.label,
+        rules: `${tpl.label} template · ${type.label} type · ${state.brandName || 'neutral'} · ${state.extras.join(', ') || 'no extras'} · ${spacing} spacing${tpl.dark ? ' · night ·' : ''}`,
+        html: darkTokens(
+          renderTemplate(
+            content,
+            tpl.id,
+            t,
+            state.extras,
+            spacing === 'standard' ? undefined : spacing,
+          ),
+          tpl.dark,
+        ),
+      }
+    })
 }
 
 /** A step of the build finishing, for the build page's live progress (routes/api/build-stream.ts). */
@@ -476,6 +509,7 @@ export async function build(
         brandName: art.brandName,
         type: type.key,
         templates: chosen.map((t) => t.id),
+        spacing: spacingFor(seed, chosen.length),
         extras,
         art: { style: art.style, strength: art.strength },
         seed,

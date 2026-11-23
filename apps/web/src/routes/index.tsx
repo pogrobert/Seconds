@@ -1466,7 +1466,13 @@ function Reply({
                   <dt className="text-zinc-400">Designs</dt>
                   <dd className="text-zinc-700">
                     {r.sites
-                      .map((s) => (/ night ·/.test(s.rules) ? `${s.label} (dark)` : s.label))
+                      .map((s) => {
+                        const tags = [
+                          / night ·/.test(s.rules) && 'dark',
+                          s.rules.match(/ (snug|roomy) spacing/)?.[1],
+                        ].filter(Boolean)
+                        return tags.length ? `${s.label} (${tags.join(', ')})` : s.label
+                      })
                       .join(', ')}
                   </dd>
                   {styleOf(r.sites[0]?.rules ?? '') && (

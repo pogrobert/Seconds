@@ -26,8 +26,8 @@ export type Template = {
 
 /**
  * A variant of a template: a few CSS rules laid over its own, for more looks from one design
- * (docs/m0/25-template-plan.md). Drafts until reviewed, like templates: never offered to an owner
- * while `draft` is set.
+ * (docs/m0/25-template-plan.md). A variant marked `draft` is not reviewed yet and is never offered
+ * to an owner.
  */
 export type Variant = { id: string; label: string; css: string; draft?: boolean }
 
@@ -48,8 +48,8 @@ export function spacingVariants(css: string): Variant[] {
   const at = (k: number, g: number) =>
     `:root{--sec:${scale(sec, k)}${gut ? `;--gut:${scale(gut, g)}` : ''}}`
   return [
-    { id: 'snug', label: 'Snug', css: at(0.7, 0.85), draft: true },
-    { id: 'roomy', label: 'Roomy', css: at(1.3, 1.25), draft: true },
+    { id: 'snug', label: 'Snug', css: at(0.7, 0.85) },
+    { id: 'roomy', label: 'Roomy', css: at(1.3, 1.25) },
   ]
 }
 

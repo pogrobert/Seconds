@@ -30,6 +30,8 @@ import {
   type PhotoLanded,
   type PhotoResult,
   type SiteState,
+  SPACINGS,
+  type Spacing,
   sitePhotos,
 } from './make-site'
 
@@ -94,7 +96,7 @@ const stems = (x: unknown) =>
 
 /** First five letters of words about looks, never counted as the request's own words. */
 const STYLE = new Set(
-  'modern bolder louder darker light lighter minimal elegant playful calmer warmer cooler colour color colourful theme design style fonts lettering serif photos pictures black white brighter softer moody moodier trustworthy friendly'
+  'modern bolder louder darker light lighter minimal elegant playful calmer warmer cooler colour color colourful theme design style fonts lettering serif photos pictures black white brighter softer moody moodier trustworthy friendly space spacing spacious roomier roomy airier airy tighter compact snugger'
     .split(' ')
     .map((w) => w.slice(0, 5)),
 )
@@ -147,6 +149,8 @@ const ASKS = {
     "ask for a colour or a change of colour (such as 'make it green', 'red and black', 'warmer colours'), even a colour it already has",
   look: 'ask for a different design, layout, style or mood (darker, lighter, bolder, calmer, more modern, more traditional and so on)',
   type: 'ask for different fonts or lettering',
+  spacing:
+    'ask for more or less space on the page: roomier, airier, more spacious, more white space or breathing room, or tighter, more compact, less spread out',
   // "Remove anything about cats" scored 0.83 as removing a part and switched on two sections
   // (2026-11-21): facts inside a part are the words' business.
   sections:
@@ -535,6 +539,7 @@ export async function edit(
     `Colour: ${state.brandName}.`,
     `Designs shown: ${state.templates.map((id) => LIVE.find((t) => t.id === id)?.label ?? id).join(', ')}.`,
     `Lettering: ${type?.label ?? state.type}.`,
+    `Spacing: ${(state.spacing ?? []).join(', ') || 'standard'}.`,
     `Extra parts of the page: ${state.extras.map((x) => EXTRA_TEXT[x]).join('; ') || 'none'}.`,
   ].join(' ')
 
@@ -558,6 +563,16 @@ export async function edit(
       prompt:
         "After the owner's request, which design for this organisation's whole website would its owner and its visitors like best?",
       options: LIVE.map((t) => ({ key: t.id, text: t.text })),
+    },
+    {
+      kind: 'choice',
+      id: 'spacing',
+      prompt: "How much space should the website's sections have now, after the owner's request?",
+      options: [
+        { key: 'snug', text: 'Snug: less space, more on each screen.' },
+        { key: 'standard', text: 'Standard: as the design is.' },
+        { key: 'roomy', text: 'Roomy: more space and breathing room around everything.' },
+      ],
     },
     {
       kind: 'choice',
@@ -608,9 +623,18 @@ export async function edit(
   // design request (2026-11-21).
   // Mood words ("calmer and more minimal") brush the words question (0.54): only a clear other
   // request makes the design one change among several.
-  const alone = !['words', 'colour', 'type', 'sections', 'photos'].some((x) => p(`asks:${x}`) > 0.6)
+  const alone = !['words', 'colour', 'type', 'sections', 'photos', 'spacing'].some(
+    (x) => p(`asks:${x}`) > 0.6,
+  )
+  // "More breathing room" also reads as a new look: beside a spacing request, the design changes
+  // only when Jev is very sure.
+  const spaced = p('asks:spacing') > 0.5
   const sure = (id: string) =>
-    id === 'asks:restart' || id === 'asks:sections' || (id === 'asks:look' && !alone) ? 0.75 : 0.5
+    id === 'asks:look' && spaced
+      ? 0.85
+      : id === 'asks:restart' || id === 'asks:sections' || (id === 'asks:look' && !alone)
+        ? 0.75
+        : 0.5
   const yes = (id: string) => p(id) > sure(id)
   const top = (id: string) => {
     const a = r.answers.get(id)
@@ -646,7 +670,7 @@ export async function edit(
     if (ranked.length >= 3 && ranked[0] !== state.templates[0]) {
       next.templates = ranked.slice(0, 3)
       changed.push('the designs')
-    } else if (alone && ranked.length >= 4) {
+    } else if (alone && !spaced && ranked.length >= 4) {
       // Asked only for a different look ("more premium", "calmer and more minimal"), the owner
       // wants a change: the next-best designs, not "already the closest" (2026-11-23). Beside a
       // colour or words, the current design stays.
@@ -656,6 +680,23 @@ export async function edit(
       already.push(
         `${LIVE.find((t) => t.id === state.templates[0])?.label ?? 'the first design'} is already the closest design to that`,
       )
+  }
+  if (yes('asks:spacing')) {
+    const want = top('spacing')?.top as Spacing | undefined
+    if (want && (SPACINGS as readonly string[]).includes(want)) {
+      const now = state.templates.map((_, i) => state.spacing?.[i] ?? 'standard')
+      if (now.every((x) => x === want)) already.push(`the spacing is already ${want}`)
+      else {
+        next.spacing = state.templates.map(() => want)
+        changed.push(
+          want === 'roomy'
+            ? 'the spacing to roomier'
+            : want === 'snug'
+              ? 'the spacing to snugger'
+              : 'the spacing back to standard',
+        )
+      }
+    }
   }
   if (yes('asks:type')) {
     const t = TYPE_RULES.find((x) => x.key === top('type')?.top)
