@@ -46,7 +46,7 @@ import {
 import libraryCss from '../generated/library.css?raw'
 import { ART_STRENGTHS, ART_STYLES, type ArtStrength, type ArtStyle } from './art'
 import { getEnv } from './env'
-import { type FoundPhoto, findPhotos } from './photos'
+import { type FoundPhoto, findPhotos, toDataUri } from './photos'
 
 // The build page's one server call, for any kind of business (docs/m0/15-any-business.md).
 // 1. In parallel: the decision model reads the words (five scales and a direct pick in every layer
@@ -748,8 +748,7 @@ export async function sitePhotos(job: PhotoJob): Promise<PhotoResult> {
             theme: dark ? 'dark' : 'light',
           }),
         )
-        images[id] =
-          `data:image/svg+xml;base64,${btoa(String.fromCharCode(...new TextEncoder().encode(svg)))}`
+        images[id] = toDataUri(new TextEncoder().encode(svg), 'image/svg+xml')
       }
       slots[`${slot}${dark ? 'dk' : ''}`] = id
     }

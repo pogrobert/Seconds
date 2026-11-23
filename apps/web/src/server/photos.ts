@@ -334,8 +334,9 @@ async function judge(
   }
 }
 
-function toDataUri(buf: ArrayBuffer, type: string) {
-  const bytes = new Uint8Array(buf)
+/** A data: link for some bytes, encoded in chunks: one spread of a large file overflows the stack. */
+export function toDataUri(buf: ArrayBuffer | Uint8Array, type: string) {
+  const bytes = buf instanceof Uint8Array ? buf : new Uint8Array(buf)
   let bin = ''
   for (let i = 0; i < bytes.length; i += 0x8000)
     bin += String.fromCharCode(...bytes.subarray(i, i + 0x8000))
