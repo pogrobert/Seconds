@@ -15,7 +15,7 @@ catalogs:
     '@cloudflare/vite-plugin':
       specifier: 1.68.0
       version: 1.68.0
-    '@fontsource-variable/geist':
+    '@fontsource-variable/atkinson-hyperlegible-next':
       specifier: 5.3.0
       version: 5.3.0
     '@pogrobert/surfaces':
@@ -171,7 +171,7 @@ importers:
       '@cloudflare/vite-plugin':
         specifier: 'catalog:'
         version: 1.68.0(@types/node@26.6.6)(vite@8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0))(workerd@1.20261110.1)(wrangler@4.160.0(@types/node@26.6.6))
-      '@fontsource-variable/geist':
+      '@fontsource-variable/atkinson-hyperlegible-next':
         specifier: 'catalog:'
         version: 5.3.0
       '@tailwindcss/vite':
@@ -854,8 +854,8 @@ packages:
   '@floating-ui/utils@0.2.12':
     resolution: {integrity: sha512-HpCo8tmWzLVad5s2d19EhAz5zqrrQ6s69qd6moPMQvkOuSwDT1YgRfWSVuc4ennqrgv3OHppiOGMQ7oC13yIww==}
 
-  '@fontsource-variable/geist@5.3.0':
-    resolution: {integrity: sha512-j0m+vLQuG5XAYoHtGCVu0spvlGreR3EzpECUVzkFmI1mTVnAO38l/NEPDCFgZ177JxzYJCLSmTQibIiYPilGrA==}
+  '@fontsource-variable/atkinson-hyperlegible-next@5.3.0':
+    resolution: {integrity: sha512-UnLzNUy1RWoLDfydAatP4NaRm99X/WbQEph7q/PymJnCFIOOwKOx3pBmp5ys8trO0dM+CKGuJgeZP9fAR4mQpA==}
 
   '@img/colour@1.1.0':
     resolution: {integrity: sha512-Td76q7j57o/tLVdgS746cYARfSyxk8iEfRxewL9h4OMzYhbW4TAcppl0mT4eyqXddh6L/jwoM75mo7ixa/pCeQ==}
@@ -4143,7 +4143,7 @@ snapshots:
 
   '@floating-ui/utils@0.2.12': {}
 
-  '@fontsource-variable/geist@5.3.0': {}
+  '@fontsource-variable/atkinson-hyperlegible-next@5.3.0': {}
 
   '@img/colour@1.1.0': {}
 

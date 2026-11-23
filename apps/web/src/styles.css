@@ -2,29 +2,32 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-/* Geist for the build page, from @fontsource-variable/geist (OFL). Declared here, not imported,
+/* Atkinson Hyperlegible Next, the type of Robert's Portfolio and Surfaces (OFL), from
+   @fontsource-variable/atkinson-hyperlegible-next. Declared here, not imported,
    for font-display: optional: preloaded in __root.tsx, it is almost always ready for the first
-   paint; when it is not, that page view keeps the system font instead of jumping when Geist swaps
-   in (layout shift on reload, 2026-11-23). */
+   paint; when it is not, that page view keeps the system font instead of jumping when the font
+   swaps in (layout shift on reload, 2026-11-23). The page used Geist until 2026-11-23. */
 @font-face {
-  font-family: "Geist Variable";
+  font-family: "Atkinson Hyperlegible Next Variable";
   font-style: normal;
   font-display: optional;
-  font-weight: 100 900;
-  src: url("../node_modules/@fontsource-variable/geist/files/geist-latin-ext-wght-normal.woff2")
+  font-weight: 200 800;
+  src: url("../node_modules/@fontsource-variable/atkinson-hyperlegible-next/files/atkinson-hyperlegible-next-latin-ext-wght-normal.woff2")
     format("woff2-variations");
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308,
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308,
     U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113,
     U+2C60-2C7F, U+A720-A7FF;
 }
 @font-face {
-  font-family: "Geist Variable";
+  font-family: "Atkinson Hyperlegible Next Variable";
   font-style: normal;
   font-display: optional;
-  font-weight: 100 900;
-  src: url("../node_modules/@fontsource-variable/geist/files/geist-latin-wght-normal.woff2")
+  font-weight: 200 800;
+  src: url("../node_modules/@fontsource-variable/atkinson-hyperlegible-next/files/atkinson-hyperlegible-next-latin-wght-normal.woff2")
     format("woff2-variations");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
     U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
@@ -56,11 +59,26 @@
   animation-duration: 0.3s;
 }
 
-/* shadcn/ui's tokens (components/ui), set to the zinc greys the build page already uses (Robert
-   picked the neutral, v0-like look, 2026-11-20). Geist is served with the app. */
+/* The family look of Robert's Portfolio and Surfaces (Robert, 2026-11-23): their warm paper and
+   ink and their teal for focus. Tailwind's zinc greys, used across the build page, are redefined
+   as the same warm scale, and shadcn/ui's tokens (components/ui) take the same colours. */
+@theme {
+  --color-zinc-50: #fbfbfa; /* paper */
+  --color-zinc-100: #f2f2f0;
+  --color-zinc-200: #e8e8e5; /* rule */
+  --color-zinc-300: #d5d5d0;
+  --color-zinc-400: #9c9c94;
+  --color-zinc-500: #66665f; /* quiet */
+  --color-zinc-600: #4f4f4a;
+  --color-zinc-700: #3d3d39; /* body */
+  --color-zinc-800: #262624;
+  --color-zinc-900: #121212; /* ink */
+  --color-zinc-950: #0b0b0a;
+}
+
 @theme inline {
   --font-heading: var(--font-sans);
-  --font-sans: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Atkinson Hyperlegible Next Variable", Arial, sans-serif;
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
@@ -88,27 +106,26 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-/* Tailwind's zinc: 950 foreground, 900 primary, 100 muted, 200 borders, 500 muted text. */
 :root {
-  --background: oklch(0.985 0 0);
-  --foreground: oklch(0.141 0.005 285.823);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.141 0.005 285.823);
-  --popover: oklch(0.21 0.006 285.885);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.21 0.006 285.885);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.967 0.001 286.375);
-  --secondary-foreground: oklch(0.21 0.006 285.885);
-  --muted: oklch(0.967 0.001 286.375);
-  --muted-foreground: oklch(0.552 0.016 285.938);
-  --accent: oklch(0.967 0.001 286.375);
-  --accent-foreground: oklch(0.21 0.006 285.885);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.92 0.004 286.32);
-  --input: oklch(0.92 0.004 286.32);
-  --ring: oklch(0.705 0.015 286.067);
-  --radius: 0.625rem;
+  --background: #fbfbfa;
+  --foreground: #121212;
+  --card: #ffffff;
+  --card-foreground: #121212;
+  --popover: #121212;
+  --popover-foreground: #fbfbfa;
+  --primary: #121212;
+  --primary-foreground: #fbfbfa;
+  --secondary: color-mix(in srgb, #121212 7%, #fbfbfa);
+  --secondary-foreground: #121212;
+  --muted: color-mix(in srgb, #121212 7%, #fbfbfa);
+  --muted-foreground: #66665f;
+  --accent: color-mix(in srgb, #121212 7%, #fbfbfa);
+  --accent-foreground: #121212;
+  --destructive: #b42318;
+  --border: #e8e8e5;
+  --input: #e8e8e5;
+  --ring: #0f766e; /* Surfaces' action teal */
+  --radius: 0.5625rem;
 }
 
 @layer base {

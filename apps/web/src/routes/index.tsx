@@ -840,7 +840,7 @@ function TryRow({ onPick }: { onPick: (ex: Example) => void }) {
         paused.current = false
       }}
     >
-      <span className="mr-1 shrink-0 text-zinc-500">Try</span>
+      <span className="mr-1 shrink-0 cursor-default text-zinc-500 select-none">Try</span>
       <motion.div
         className="-my-1 overflow-hidden py-1"
         initial={false}
@@ -882,7 +882,7 @@ function TryRow({ onPick }: { onPick: (ex: Example) => void }) {
                   }}
                 >
                   {i > 0 && (
-                    <span aria-hidden className="mr-1 text-zinc-300">
+                    <span aria-hidden className="mr-1 cursor-default text-zinc-300 select-none">
                       ·
                     </span>
                   )}
