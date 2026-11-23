@@ -545,7 +545,7 @@ export async function sitePhotos(job: PhotoJob): Promise<PhotoResult> {
   const found = job.none
     ? {
         natural: empty,
-        lowkey: empty,
+        spare: empty,
         images: {},
         ms: 0,
         limited: false,
@@ -564,10 +564,10 @@ export async function sitePhotos(job: PhotoJob): Promise<PhotoResult> {
         { avoid: job.avoid ?? [] },
       )
   const n = found.natural
-  const k = found.lowkey
+  const spare = found.spare
   // Each space a photo no other space shows ("repeating images"); a space
-  // with no fresh photo left gets its own drawn art. Low-key (darker) photos only stand in for a
-  // natural one; no template has low-key spaces of its own.
+  // with no fresh photo left gets its own drawn art. Spares (each subject's next pick) only stand
+  // in for a first choice that is missing.
   const taken = new Set<string>()
   const pick = (...xs: (FoundPhoto | undefined)[]) => {
     const p = xs.find((x) => x && !taken.has(x.id))
@@ -575,11 +575,11 @@ export async function sitePhotos(job: PhotoJob): Promise<PhotoResult> {
     return p
   }
   const chosen: Record<keyof typeof SLOTS, FoundPhoto | undefined> = {
-    hero: pick(n.place[0], k.place[0], n.people[0], ...n.place),
-    about: pick(n.people[0], n.place[1], k.people[0], ...n.people, ...n.place),
-    d1: pick(n.detail[0], k.detail[0], n.detail[1], ...n.detail, ...n.people),
+    hero: pick(n.place[0], spare.place[0], n.people[0], ...n.place),
+    about: pick(n.people[0], n.place[1], spare.people[0], ...n.people, ...n.place),
+    d1: pick(n.detail[0], spare.detail[0], n.detail[1], ...n.detail, ...n.people),
     d2: pick(n.detail[1], n.people[1], n.detail[2], ...n.detail, ...n.people, ...n.place),
-    cta: pick(n.place[1], n.place[2], k.place[1], n.people[2], ...n.place, ...n.people),
+    cta: pick(n.place[1], n.place[2], n.people[2], ...n.place, ...n.people),
   }
   const slots: Record<string, string> = {}
   const images: Record<string, string> = {}
@@ -618,7 +618,14 @@ export async function sitePhotos(job: PhotoJob): Promise<PhotoResult> {
   }
   const used = new Set(Object.values(slots))
   const seen = new Set<string>()
-  const credits = [...n.place, ...n.people, ...n.detail, ...k.place, ...k.people, ...k.detail]
+  const credits = [
+    ...n.place,
+    ...n.people,
+    ...n.detail,
+    ...spare.place,
+    ...spare.people,
+    ...spare.detail,
+  ]
     .filter((p) => used.has(p.id) && !seen.has(p.id) && seen.add(p.id))
     .map((p) => p.credit)
   if (art && !job.none) {

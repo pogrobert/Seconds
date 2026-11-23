@@ -3,8 +3,7 @@
 //    things a camera can see. Wikimedia Commons for the town itself, when there is one: its
 //    "quality images" of that town, kept only when the title or description names it.
 // 2. A look. A small vision model sees every candidate and keeps only the ones that fit this
-//    business, best first, plus a dark, moody one per subject for the low-key looks. It only
-//    judges photos; it never makes them (no AI pictures).
+//    business, best first. It only judges photos; it never makes them (no AI pictures).
 // 3. Download. Pixabay forbids hotlinking, so the server downloads each chosen photo and hands it
 //    to the page once; the page turns them into local blob links shared by every look.
 // Nothing is borrowed: when nothing fits, the page is drawn without photos.
@@ -23,7 +22,11 @@ export type FoundPhoto = {
 type Slots<T> = { place: T; people: T; detail: T }
 export type Found = {
   natural: Slots<FoundPhoto[]>
-  lowkey: Slots<FoundPhoto[]>
+  /**
+   * The vision model's next pick per subject, after the ones in `natural`: a checked photo held in
+   * reserve for a space whose first choices are missing.
+   */
+  spare: Slots<FoundPhoto[]>
   /** id → data: URI, for the build page to turn into blob links. */
   images: Record<string, string>
   ms: number
@@ -234,7 +237,7 @@ async function commons(town: string, n: number): Promise<Candidate[]> {
 
 /* ---------------------------------------------------------------------------- The look */
 
-type Choice = Slots<string[]> & { dark: Slots<string>; townFits: boolean }
+type Choice = Slots<string[]> & { townFits: boolean }
 
 /**
  * One call: the vision model sees every candidate, numbered, and keeps only those that fit.
@@ -267,7 +270,6 @@ async function judge(
         'Reject: anything that is not a real photograph (illustrations, cartoons, 3D renders, AI-generated images with their too-smooth, too-perfect look), the wrong trade or setting, a different country or city than the one named, staged or cheesy stock, text or watermarks, people in poor taste, blurry or dull pictures.',
         'place = the room or setting where it works; people = people doing its kind of work or being served; detail = a close-up object or material typical of it.',
         `townFits: true only if a photo of ${about.town || 'the town'} itself (its streets, square or buildings) would suit this organisation's home page, as for a council, a civic or tourist body, or a museum. False for a shop, clinic, studio, trade, firm or restaurant.`,
-        'dark: for each subject, the id of one fitting photo that is dark and moody (mostly deep shadows), or "" if none.',
       ].join('\n'),
     },
   ]
@@ -277,22 +279,15 @@ async function judge(
       { type: 'image_url', image_url: { url: inline.get(c.id) } },
     )
   const ids = { type: 'array', items: { type: 'string' }, maxItems: 3 }
-  const slots = (t: unknown) => ({
-    type: 'object',
-    additionalProperties: false,
-    required: [...SUBJECTS],
-    properties: { place: t, people: t, detail: t },
-  })
   const schema = {
     type: 'object',
     additionalProperties: false,
-    required: ['townFits', ...SUBJECTS, 'dark'],
+    required: ['townFits', ...SUBJECTS],
     properties: {
       townFits: { type: 'boolean' },
       place: ids,
       people: ids,
       detail: ids,
-      dark: slots({ type: 'string' }),
     },
   }
   const ask = () =>
@@ -461,15 +456,8 @@ export async function findPhotos(
           let costUsd = first.costUsd + tries.reduce((n, t) => n + t.costUsd, 0)
           const ok = tries.flatMap((t) => (t.choice ? [t.choice] : []))
           if (ok.length) {
-            const choice: Choice = {
-              place: [],
-              people: [],
-              detail: [],
-              dark: { place: '', people: '', detail: '' },
-              townFits: false,
-            }
+            const choice: Choice = { place: [], people: [], detail: [], townFits: false }
             choice[s] = ok.flatMap((c) => c[s]).slice(0, 3)
-            choice.dark[s] = ok.map((c) => c.dark[s]).find(Boolean) ?? ''
             return { s, choice, costUsd }
           }
           const last = await judge(key, about, alone(s), 'qwen/qwen3-vl-30b-a3b-instruct')
@@ -480,18 +468,8 @@ export async function findPhotos(
       const costUsd = looked.costUsd + parts.reduce((n, x) => n + x.costUsd, 0)
       if (parts.some((x) => x.choice)) {
         // A subject that no model would look at stays empty: unchecked photos are what this avoids.
-        const merged: Choice = {
-          place: [],
-          people: [],
-          detail: [],
-          dark: { place: '', people: '', detail: '' },
-          townFits,
-        }
-        for (const x of parts)
-          if (x.choice) {
-            merged[x.s] = x.choice[x.s]
-            merged.dark[x.s] = x.choice.dark[x.s]
-          }
+        const merged: Choice = { place: [], people: [], detail: [], townFits }
+        for (const x of parts) if (x.choice) merged[x.s] = x.choice[x.s]
         looked = { choice: merged, costUsd }
       } else looked = { choice: null, costUsd }
     }
@@ -504,7 +482,6 @@ export async function findPhotos(
     place: (found[0] ?? []).slice(0, 2).map((c) => c.id),
     people: (found[1] ?? []).slice(0, 2).map((c) => c.id),
     detail: (found[2] ?? []).slice(0, 2).map((c) => c.id),
-    dark: { place: '', people: '', detail: '' },
     townFits: false,
   }
   // Town photos first, only where the town itself is the subject (councils, civic and tourist
@@ -527,15 +504,15 @@ export async function findPhotos(
   >
   natural.people = take('people', choice.people, 2)
   natural.detail = take('detail', choice.detail, 2)
-  const dark = Object.fromEntries(
-    SUBJECTS.map((s) => {
-      const id = choice.dark[s]
-      return [s, id && pools[s].some((c) => c.id === id) ? [id] : []]
-    }),
-  ) as Slots<string[]>
+  // Each subject's next pick, kept in reserve for a space whose first choices are missing (no
+  // template has low-key spaces, so no dark photo is asked for). Taken after every subject's first
+  // two, so those stay as they were.
+  const spare = Object.fromEntries(SUBJECTS.map((s) => [s, take(s, choice[s], 1)])) as Slots<
+    string[]
+  >
 
   const images: Record<string, string> = {}
-  const wanted = [...new Set([...SUBJECTS.flatMap((s) => [...natural[s], ...dark[s]])])]
+  const wanted = [...new Set([...SUBJECTS.flatMap((s) => [...natural[s], ...spare[s]])])]
   await Promise.all(
     wanted.map(async (id) => {
       const c = byId.get(id)
@@ -566,7 +543,7 @@ export async function findPhotos(
     Object.fromEntries(SUBJECTS.map((s) => [s, x[s].flatMap(photo)])) as Slots<FoundPhoto[]>
   return {
     natural: set(natural),
-    lowkey: set(dark),
+    spare: set(spare),
     images,
     ms: Math.round(performance.now() - t0),
     limited,
