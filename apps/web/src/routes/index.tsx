@@ -949,7 +949,8 @@ function Build() {
             <div className="flex h-12 shrink-0 items-center gap-2 border-b border-zinc-200 px-2.5">
               {result ? (
                 // The three versions as tabs, named after their design (arrow keys move between
-                // them; keys 1, 2 and 3 too); a small square says whether one is light or dark.
+                // them; keys 1, 2 and 3 too). Screen readers also hear whether one is light or
+                // dark; the small squares that showed it were dropped (2026-11-24).
                 <TabsList
                   aria-label="Versions"
                   variant="line"
@@ -968,12 +969,8 @@ function Build() {
                             <TabsTrigger
                               value={s.id}
                               tabIndex={0}
-                              className="h-8 flex-none gap-1.5 px-1.5 text-[13px] text-zinc-500 hover:text-zinc-800 group-data-horizontal/tabs:after:inset-x-1.5 group-data-horizontal/tabs:after:bottom-[-8.5px] data-active:text-zinc-900"
+                              className="h-8 flex-none px-1.5 text-[13px] text-zinc-500 hover:text-zinc-800 group-data-horizontal/tabs:after:inset-x-1.5 group-data-horizontal/tabs:after:bottom-[-8.5px] data-active:text-zinc-900"
                             >
-                              <span
-                                aria-hidden
-                                className={`size-2.5 rounded-[3px] ${dark ? 'bg-zinc-800' : 'bg-white ring-1 ring-inset ring-zinc-300'}`}
-                              />
                               {s.label}
                               <span className="sr-only">{dark ? '(dark)' : '(light)'}</span>
                             </TabsTrigger>
