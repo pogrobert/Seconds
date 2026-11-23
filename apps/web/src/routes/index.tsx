@@ -563,7 +563,13 @@ function Build() {
               <MessageScrollerViewport aria-label="Conversation" className="px-2 pt-2 pb-5">
                 <MessageScrollerContent>
                   {messages.map((m, i) => (
-                    <MessageScrollerItem key={i} scrollAnchor={m.role === 'user'}>
+                    <MessageScrollerItem
+                      key={i}
+                      scrollAnchor={m.role === 'user'}
+                      // Drawn at once, not when seen (the scroller's content-visibility: auto):
+                      // the view transition must find the first message to fly the prompt into.
+                      className={i === 0 ? '[content-visibility:visible]' : undefined}
+                    >
                       {m.role === 'user' ? (
                         <ChatMessage align="end">
                           <Bubble variant="muted" align="end">
