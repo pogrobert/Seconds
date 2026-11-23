@@ -424,7 +424,7 @@ function Build() {
                 : r.already?.length
                   ? `Nothing to change: ${r.already.join('; ')}.`
                   : 'Nothing changed: I could not tell which part you meant. Try naming it: the headline, the colour, the photos, the design.'
-            : `Here is ${r.name}, ${/^[aeiou]/i.test(r.kindLabel) ? 'an' : 'a'} ${r.kindLabel}, in three versions to compare. Tell me what to change.`,
+            : `Here is ${r.name}, ${/^[aeiou]/i.test(r.kindLabel) ? 'an' : 'a'} ${r.kindLabel}, in three versions to compare. ${r.ask ?? 'Tell me what to change.'}`,
           result: r,
           ...(r.photoJob ? { photos: 'waiting' as const } : {}),
         },

@@ -235,6 +235,45 @@ saying they cannot be done; after "no more photos of kids", "remove the photos" 
 steps of 17–46 s were the bench waiting out the site's own 10-a-minute limit, not the edit; the
 bench now leaves the wait out. OpenRouter spent on this round: $0.40 (measured).
 
+## Famous names, unclear briefs and "add something about…" (2026-11-24)
+
+"Portfolio page for Dutch van der Linde" made him a photographer "across Europe" (then a painter,
+then an illustrator): the brief never said what he does, so the writer guessed and built on the
+guess. Robert: do both fixes, "for both real and fictional", no middle path.
+
+- **Unclear briefs:** the writer now first decides `unclear` (the words do not say what the
+  person or organisation does). Then it guesses no trade, medium or product, writes neutral words,
+  and the reply asks: "What does Anna Berg do? Tell me and I will fill it in."
+- **Famous names:** it also decides `known` (a famous real person, a well-known fictional
+  character or a famous organisation it knows reliable facts about) and then writes their site
+  from what is known: Dutch "the gang leader from Red Dead Redemption", Sherlock Holmes at 221B
+  Baker Street, Taylor Swift's albums. The made-up-item checks stand down for these sites; contact
+  details (address, hours, phone, email) still come only from the owner.
+- **Namesakes and themes are not famous sites:** the first version made a "Harry Potter themed
+  café" a site about Harry Potter, with a made-up menu, and had Paris Hilton run a Swansea cleaning
+  firm. The rule now says the site must be for or about the famous one itself; "John Lewis,
+  electrician", "Tom Ford, hairdresser" and "Batman barbers" stay ordinary businesses.
+- The writer decides both itself, in the same call: it is the one that knows whether it knows
+  someone, and no extra step waits before the words.
+
+Making "add something about the people in his gang" work took four fixes, each measured:
+
+| Found | Fix |
+|---|---|
+| The writer had no room: the introduction was near its limit, so it squeezed "and his crew" into the subhead | The edit prompt says to add in full and shorten the field's other sentences to make room; lists of people, places or works go in the offer or the reasons |
+| It wrote "the men who rode with him" | On a known site it names them: Arthur Morgan, John Marston, Hosea Matthews… (5 of 5 runs) |
+| The part check undid it: "does it ask for a change to the introduction?" 0.71, under 0.75 | The question judges the change itself ("does this change do what the request asks?"): 0.92, an unasked headline change 0.54. When nothing passes, the likeliest part keeps its change |
+| Gang members added to the offer were taken off as made-up services (0.24) | The new-item question also asks "is it one of the people, places or things the request asks to add?": 0.76, a team member 0.96, "Phone support" for a phone number still 0.31. On known sites it stands down (album titles 0.42–0.55) |
+| "List her albums" changed nothing: the words question gave 0.49 | It now covers listing or describing people, works, products, places or history, and rules out colour, design, space, photos and whole parts: 0.78–0.96 for word requests, 0.04–0.14 for the rest |
+
+Also found in the re-run: **"start over: a dog daycare in Austin"** kept the old site's name
+("Splash Kids") from earlier messages, then was named "start over". A fresh start now builds from
+the new message alone, without the "start over:" words; a bare "start over" rebuilds the first
+brief.
+
+The 50-step set showed no regressions. OpenRouter spent on this round: about $0.76 (measured),
+most of it on repeated runs of the same edits.
+
 ## Not yet done
 
 - **Undo goes back one version at a time,** and only within the open page: a reload forgets the versions.

@@ -115,6 +115,11 @@ export type BuildResult = {
   }
   costUsd: number
   notes: string[]
+  /**
+   * A question back to the owner after a new site, when the words could not say what it does
+   * ("portfolio for Dutch van der Linde" got a made-up photographer, 2026-11-24).
+   */
+  ask?: string
   /** The photo step to run next; null when the page already has its photos (the sample). */
   photoJob: PhotoJob | null
 }
@@ -557,6 +562,9 @@ export async function build(
     },
     costUsd: jevUsd + w.costUsd,
     notes,
+    ...(w.copy?.unclear && !w.copy.known
+      ? { ask: `What does ${content.name} do? Tell me and I will fill it in.` }
+      : {}),
     photoJob,
   }
 }

@@ -13,6 +13,14 @@ export type Extra = (typeof EXTRAS)[number]
 
 export type SiteCopy = {
   /**
+   * The owner's words name a famous real person, a well-known fictional character or a famous
+   * organisation the writer knows reliable facts about: those facts may be used (2026-11-24,
+   * Robert: "do for both real and fictional"). Contact details still come only from the owner.
+   */
+  known?: boolean
+  /** The owner's words do not say what it does, and it is not known: nothing is guessed. */
+  unclear?: boolean
+  /**
    * The concept, written first so every other field follows it (docs/m0/22-concept.md): the one
    * thought the page is built around, in a short phrase ("slow mornings by the sea").
    */
@@ -93,6 +101,8 @@ const obj = (props: Record<string, unknown>) => ({
 function schema() {
   const L = SITE_LIMITS
   return obj({
+    known: { type: 'boolean' },
+    unclear: { type: 'boolean' },
     idea: str(L.idea),
     voice: str(L.voice),
     name: str(L.name),
@@ -181,7 +191,13 @@ function prompt(words: string): string {
     '- Promise nothing the owner did not: no delivery, shipping, online shop or checkout, online booking, parking, guarantees or opening times of your own. If the owner asks for something a simple website cannot do (such as taking payments), leave it out.',
     "- If the owner's words contradict each other, leave out everything they contradict, and do not mention the contradiction. Example: 'closed every day and open 24 hours' → say nothing about opening times; 'quiet, very loud' → describe neither.",
     '- Never claim to be the best, finest, number one or leading, even if the owner does: say what they actually do instead.',
-    'First decide the concept; every other field follows it.',
+    'First decide two things about who this is:',
+    '- known: true only if the owner\'s words name a famous real person, a well-known fictional character (from a film, book, game or show) or a famous organisation that most people would recognise and that you know reliable facts about. An ordinary name you do not recognise is not known, even if it sounds familiar. The website must be for that person, character or organisation itself, or about them (a fan page, a tribute). A business that is only named after one, themed on one or shares a name with one is not known: write it as an ordinary business and add nothing about the famous one beyond what the owner wrote. Examples: "Harry Potter themed café in Leeds", "Paris Hilton cleaning services, Swansea" and "John Lewis, electrician" are not known; "Shrek fan page" and "website for Gandalf" are.',
+    '- unclear: true if the owner\'s words do not say what this person or organisation does (their trade, craft, field, or what they make or offer) and known is false. "Portfolio for Anna Berg" is unclear; "portfolio for Anna Berg, wedding photographer" is not.',
+    "If known: write their own website from what is widely and reliably known about them, as if the owner had written it: who they are, what they do or are known for, their story, the people and places tied to them. Use nothing you are unsure of. The contact details (address, opening hours, phone, email) and prices still come only from the owner's words, and contact.place only from a town the owner names.",
+    'If unclear: do not guess a trade, craft, medium, subject or product. Write words that fit any line of work: the headline and introduction about the person or organisation by name, offer items such as "Recent work", "Earlier projects" and "Working together", reasons and steps that hold for anyone, and photo searches that fit any work, such as "desk with notebook", "person at work" and "hands writing".',
+    '',
+    'Then decide the concept; every other field follows it.',
     `- idea: the one thought this page is built around, in a short phrase drawn from the owner's words and the feel of the place, never a description of the business. A bakery that opens at dawn → "bread while the town sleeps"; a family vet → "the vet your dog doesn't mind" (at most ${L.idea}).`,
     `- voice: how the words sound, in three plain adjectives that fit this organisation, such as "unhurried, warm, exact" or "straight, quick, reassuring" (at most ${L.voice}). Write every other field in this voice.`,
     '',
@@ -434,7 +450,7 @@ export async function writeSiteCopy(o: {
               'The owner has seen the website and now asks:',
               o.edit.request,
               '',
-              'Answer with the whole JSON again, changed only as this asks. Keep every other field exactly as it is, word for word. All the rules above still apply, with one exception: what the owner states in this request is theirs to promise and must be used, even where the rules above forbid it unasked (delivery, online booking, an area served, hours, prices, an address, a name). Put it where a visitor will see it: the subhead, the introduction, the offer or the contact details. When the owner asks to remove something, or says the organisation does not do or offer something, take it out of every field, questions and answers included, and do not write about what it does not do. Requests about the colour, design, fonts or photos are handled elsewhere: never write them into the text (no "a modern purple setting"), and a headline asked to be "about fire" is about fire, not about a colour named in the same request. A request to write in another language means every field in that language. Humour never leans on national, ethnic or regional stereotypes (no leprechauns for Dublin). A phone number, email, address or opening hours go in the contact details (and may be mentioned in a sentence), never as an item of the offer. If the request does not concern the words at all, return them unchanged.',
+              'Answer with the whole JSON again, changed only as this asks. Keep every other field exactly as it is, word for word. All the rules above still apply, with one exception: what the owner states in this request is theirs to promise and must be used, even where the rules above forbid it unasked (delivery, online booking, an area served, hours, prices, an address, a name). Put it where a visitor will see it: the subhead, the introduction, the offer or the contact details. When the owner asks to remove something, or says the organisation does not do or offer something, take it out of every field, questions and answers included, and do not write about what it does not do. Requests about the colour, design, fonts or photos are handled elsewhere: never write them into the text (no "a modern purple setting"), and a headline asked to be "about fire" is about fire, not about a colour named in the same request. A request to write in another language means every field in that language. Humour never leans on national, ethnic or regional stereotypes (no leprechauns for Dublin). A phone number, email, address or opening hours go in the contact details (and may be mentioned in a sentence), never as an item of the offer. When the owner asks to add something, add it in full where it fits best, even if a field is already near its limit: shorten the other sentences of that field to make room rather than squeezing the addition into a few words. People, places, works or things listed fit best as items of the offer or as reasons, each with its own short description. If the website is for a known person, character or organisation (known is true), answer a request about them from what is widely and reliably known, and be specific: name the people, places and works it concerns, never "the people who rode with him" or "his many works" in general. For example, on a site for Dutch van der Linde, "add something about the people in his gang" adds Arthur Morgan, John Marston, Hosea Matthews and others by name, each with a short line on who they are. If the request does not concern the words at all, return them unchanged.',
             ].join('\n'),
           },
         ]
@@ -609,8 +625,12 @@ export async function groundAnswers(
       })),
   ]
   const res = await port.decide({ owner_words: words }, questions)
+  // A known person, character or organisation: the writer may use what is known about them, so a
+  // fact the owner did not write is no guess (2026-11-24). groundContact still keeps contact
+  // details to the owner's words.
+  const trust = copy.known === true
   const scores: Record<string, number> = {}
-  for (const [id, a] of res.answers) if (a.kind === 'bool') scores[id] = a.pTrue
+  if (!trust) for (const [id, a] of res.answers) if (a.kind === 'bool') scores[id] = a.pTrue
   // The FAQ check keeps its 0.5 (docs/m0/19). For items, details, reasons and steps 0.5 dropped
   // general things every such place offers ("Filter coffee", a plumber's "Leak detection"
   // description) and left the offer bare (round 3, docs/m0/23): those need Jev to be surer.
@@ -663,7 +683,7 @@ export async function groundAnswers(
       n.trim(),
     )
   const invented = (i: number) =>
-    placeholder(copy.offer.items[i]?.name ?? '') ||
+    (!trust && placeholder(copy.offer.items[i]?.name ?? '')) ||
     ((scores[`named${i}`] ?? 0) > 0.6 && unsaid(copy.offer.items[i]?.name ?? ''))
   const genuine = copy.offer.items
     .map((it, i) => ({ it: guess(`detail${i}`) ? { ...it, detail: '' } : it, i }))

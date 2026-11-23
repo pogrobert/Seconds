@@ -145,8 +145,10 @@ const ASKS = {
     'ask for fewer sections of the page in general, without naming which (not fewer words, not the photos, not one named thing)',
   remove:
     'ask to remove, drop or stop mentioning something, or say the organisation no longer does or offers something',
+  // "List her albums" scored 0.49 and nothing changed (2026-11-24); this wording gives it 0.93,
+  // real word requests 0.78–0.96, and colour, spacing, photos or a new part 0.04–0.14.
   words:
-    'change any words on the site: its name, a heading, a description, prices, opening hours, an address, a phone number or other facts, or make the text shorter, longer, simpler, more direct, warmer or different in tone, or tell a new fact about the organisation that belongs on its website (what it offers, delivery, the area it serves, opening hours, prices, contact details)',
+    'change any words on the site: its name, a heading, a description, prices, opening hours, an address, a phone number or other facts, or make the text shorter, longer, simpler, more direct, warmer or different in tone, or tell a new fact about the organisation that belongs on its website (what it offers, delivery, the area it serves, opening hours, prices, contact details), or ask for things to be listed or described in the text, such as its people, works, products, places or history? Asking for a colour, a design, more or less space, photos or a whole part of the page is not this',
   // "Make it blue" on a navy site scored 0.49 as "a different colour" (2026-11-21): any colour
   // asked for counts, and one it already has is said back to the owner.
   colour:
@@ -252,7 +254,7 @@ const PARTS: Partial<Record<keyof SiteCopy, string>> = {
 
 /** Words of a removal request that say nothing about what goes (first five letters). */
 const FILLER = new Set(
-  'remove anything about stuff things mention mentions please delete take stop that this those there their with from'
+  'remove anything something about stuff things mention mentions please delete take stop that this those there their with from more some also'
     .split(' ')
     .map((w) => w.slice(0, 5)),
 )
@@ -285,17 +287,26 @@ async function keepAsked(
   // "Phone support" service, and "we stopped doing boiler installs" a "Boiler servicing" one
   // (2026-11-21).
   const oldItems = new Set(before.offer.items.map(itemKey))
-  const added = after.offer.items.filter((x) => !oldItems.has(itemKey(x)))
+  // On a known person's or organisation's site the writer adds what is known about them: the
+  // check cannot tell "Fearless" from a made-up service (0.42–0.55 for "list her albums",
+  // 2026-11-24), so it stands down there, as the check of new sites does (groundAnswers).
+  const added = before.known ? [] : after.offer.items.filter((x) => !oldItems.has(itemKey(x)))
   const res = await decide.decide({ request }, [
     ...added.map((x, i) => ({
       kind: 'bool' as const,
       id: `add${i}`,
-      prompt: `A website owner sent \`request\`. Does it ask to add this to what the organisation offers, or say that it offers, does or sells it (with or without a price)? Item: ${JSON.stringify(x).slice(0, 300)}`,
+      // "Add something about the people in his gang" put Arthur Morgan in the offer, and the old
+      // question ("add this to what the organisation offers?", 0.24) took him off; this one gives
+      // 0.76, a team member 0.96, and "Phone support" for a phone number still 0.31 (2026-11-24).
+      prompt: `A website owner sent \`request\`. Does it ask to add this item to the website, or is the item one of the people, places or things the request asks to add, or does the request say the organisation offers, does or sells it (with or without a price)? Item: ${JSON.stringify(x).slice(0, 300)}`,
     })),
     ...keys.map((k) => ({
       kind: 'bool' as const,
       id: k,
-      prompt: `A website owner sent \`request\`. Does it ask for a change to ${PARTS[k]}, or give a fact that belongs there? Before: ${JSON.stringify(before[k]).slice(0, 400)} After: ${JSON.stringify(after[k]).slice(0, 400)}`,
+      // Judged on the change itself: "add something about the people in his gang" scored 0.71 on
+      // "does it ask for a change to the introduction?" and the names went back; this asks 0.92,
+      // and an unasked headline change 0.54 (2026-11-24).
+      prompt: `A website owner sent \`request\`. Does this change to ${PARTS[k]} do what the request asks, or carry a fact the request gives? Before: ${JSON.stringify(before[k]).slice(0, 400)} After: ${JSON.stringify(after[k]).slice(0, 400)}`,
     })),
     ...dropped.map(({ x }, i) => ({
       kind: 'bool' as const,
@@ -357,10 +368,20 @@ async function keepAsked(
     // the headline (Jev said yes to it).
     return carries(k) || takesOut(k) || (a?.kind === 'bool' && a.pTrue > 0.75)
   }
+  // "Add something about the people in his gang" names no part: every part the writer changed
+  // scored under the bar and went back, and the owner got "the words already say that"
+  // (2026-11-24). When a request adds and no part passes, the likeliest part keeps its change.
+  const pOf = (k: keyof SiteCopy) => {
+    const a = res.answers.get(k)
+    return a?.kind === 'bool' ? a.pTrue : 0
+  }
+  const likeliest = [...keys].sort((x, y) => pOf(y) - pOf(x))[0]
+  const fallback =
+    !removing && likeliest && !keys.some(asked) && pOf(likeliest) > 0.25 ? likeliest : undefined
   const renamed = asked('name') && before.name !== after.name
   const out: SiteCopy = { ...after }
   for (const k of keys) {
-    if (asked(k)) {
+    if (asked(k) || k === fallback) {
       ;(out as Record<string, unknown>)[k] = keepItems(before[k], after[k], goes)
       continue
     }
@@ -856,8 +877,10 @@ export async function edit(
     // A new fact the writer left out altogether ("we deliver across Copenhagen same day" once came
     // back unchanged, 2026-11-23): one more try, told plainly. Not for whole-text changes, whose
     // words ("less text") need not appear.
+    // Filler ("something", "about") is no fact: "add something about the people in his gang"
+    // asked again for words the page never needs.
     const fresh = [...stems(request)].filter(
-      (t) => !STYLE.has(t) && !COLOUR_WORDS.has(t) && !stems(state.copy).has(t),
+      (t) => !STYLE.has(t) && !COLOUR_WORDS.has(t) && !FILLER.has(t) && !stems(state.copy).has(t),
     )
     if (
       env.OPENROUTER_API_KEY &&

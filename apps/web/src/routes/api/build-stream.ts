@@ -9,6 +9,15 @@ import { edit } from '../../server/edit'
 import { overLimit } from '../../server/limit'
 import { build, type PhotoLanded, type SiteState } from '../../server/make-site'
 
+/** A new brief without the words that asked to start again ("start over: a dog daycare"). */
+const fresh = (m: string) =>
+  m
+    .replace(
+      /^\s*(?:(?:let'?s |please )?(?:start (?:over|again|afresh)|begin again|from scratch|new site|scratch that|forget (?:that|it|this))(?: please)?)[\s:;,.!-]*(?:(?:instead|now)[\s:,]*)?/i,
+      '',
+    )
+    .trim()
+
 export const Route = createFileRoute('/api/build-stream')({
   server: {
     handlers: {
@@ -62,7 +71,20 @@ export const Route = createFileRoute('/api/build-stream')({
               const result =
                 edited && !edited.restart
                   ? edited.result
-                  : await build(messages, step, { onPhotos: (p) => photos(p), onPhoto: photo })
+                  : // Starting over builds from the new message alone: "start over: a dog daycare"
+                    // once kept the old site's name from earlier messages (2026-11-24).
+                    // A leading "start over:" is no part of the brief (it became the name); a bare
+                    // "start over" builds the first brief again, from scratch.
+                    await build(
+                      edited?.restart
+                        ? [fresh(messages.at(-1) ?? '') || (messages[0] ?? '')]
+                        : messages,
+                      step,
+                      {
+                        onPhotos: (p) => photos(p),
+                        onPhoto: photo,
+                      },
+                    )
               send({ type: 'result', result })
               if (result.photoJob) {
                 landed = (p) => send({ type: 'photo', ...p })
