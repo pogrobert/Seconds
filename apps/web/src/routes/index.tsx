@@ -235,6 +235,8 @@ function Build() {
   const frame = useRef<HTMLIFrameElement>(null)
   /** Which build is current: photos from an older build are dropped. */
   const generation = useRef(0)
+  /** Which conversation is current: "Builder" starts a new one, and late answers are dropped. */
+  const session = useRef(0)
   /** Each version shown, with its photo links, newest last: "undo" steps back one. */
   const versions = useRef<{ result: BuildResult; links: Record<string, string> }[]>([])
   const [links, setLinks] = useState<Record<string, string>>({})
@@ -285,6 +287,7 @@ function Build() {
     const words = text.trim()
     if (!words || busy || (!result && tooShort(words))) return
     const history = [...messages, { role: 'user', text: words } as Message]
+    const run = session.current
     const start = () => {
       setMessages(history)
       setDraft('')
@@ -313,6 +316,7 @@ function Build() {
         (p) => photos(p),
         result?.state ?? null,
       )
+      if (run !== session.current) return
       // "Undo": the version before comes back, photos and all.
       if (built.undo) {
         versions.current.pop()
@@ -380,7 +384,7 @@ function Build() {
       // The photo step: the page is already showing; photos fill its spaces as they come.
       if (r.photoJob) {
         const found = await photosIn
-        if (mine !== generation.current) return
+        if (mine !== generation.current || run !== session.current) return
         // The early photo step failed: ask for it now, the old way.
         const p = found ?? (await findSitePhotos(r.photoJob))
         const byId: Record<string, string> = {}
@@ -411,13 +415,38 @@ function Build() {
         )
       }
     } catch (e) {
+      if (run !== session.current) return
       setMessages((m) => [
         ...m,
         { role: 'error', text: e instanceof Error ? e.message : String(e) },
       ])
     } finally {
-      setBusy(false)
+      if (run === session.current) setBusy(false)
     }
+  }
+
+  /**
+   * "Builder" in the corner: back to the first screen for a new site (Robert, 2026-11-23). The
+   * site is not kept; a build still under way is let go. Dissolves, as the way in does.
+   */
+  function startOver() {
+    session.current++
+    generation.current++
+    const reset = () => {
+      for (const u of photoUrls.current) URL.revokeObjectURL(u)
+      photoUrls.current = []
+      versions.current = []
+      setMessages([])
+      setResult(null)
+      setLook(null)
+      setLinks({})
+      setProgress({})
+      setBusy(false)
+      setDraft('')
+    }
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (document.startViewTransition && !still) document.startViewTransition(() => flushSync(reset))
+    else reset()
   }
 
   const onSubmit = (e: FormEvent) => {
@@ -460,10 +489,19 @@ function Build() {
   // of the window (Robert, 2026-11-23). In the split view it sits over the chat column.
   const top = (
     <header className="flex h-13 shrink-0 items-center gap-2.5 px-5 md:px-2">
-      <span className="flex items-center gap-2 text-[15px] font-semibold tracking-tight">
-        <Mark />
-        Builder
-      </span>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <button
+            type="button"
+            onClick={startOver}
+            className="-mx-1 flex cursor-pointer items-center gap-2 rounded-lg px-1 text-[15px] font-semibold tracking-tight outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+          >
+            <Mark />
+            Builder
+          </button>
+        </TooltipTrigger>
+        <TooltipContent>Start a new site</TooltipContent>
+      </Tooltip>
       {result && (
         <>
           <span aria-hidden className="text-zinc-300">
