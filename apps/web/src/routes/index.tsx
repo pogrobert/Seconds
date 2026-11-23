@@ -1392,11 +1392,7 @@ function Reply({
                 <TraceTitle>Details</TraceTitle>
               </TraceCollapsibleTrigger>
               <TraceCollapsibleContent>
-                <p className="mt-2 max-w-[42ch] text-zinc-500">
-                  Put together from ready-made designs. A model picks the design and writes the
-                  words; it writes no code.
-                </p>
-                <dl className="mt-2.5 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5">
+                <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5">
                   <dt className="text-zinc-400">Made in</dt>
                   <dd className="text-zinc-700 tabular-nums">
                     {seconds(r.ms.total)}
