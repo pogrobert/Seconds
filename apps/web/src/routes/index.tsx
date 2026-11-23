@@ -824,17 +824,16 @@ function Build() {
             )}
           </div>
         </main>
-        {/* Who made it, on the first screen only (2026-11-24): a label and a name, as the Details
-            rows read. A new tab, so a half-typed brief is not lost. */}
-        <footer className="flex shrink-0 justify-center gap-1.5 px-5 pt-2 pb-[max(1rem,env(safe-area-inset-bottom))] text-xs">
-          <span className="text-zinc-400">Author</span>
+        {/* Who made it, on the first screen only (2026-11-24): one quiet word, linking to the
+            author's site in a new tab, so a half-typed brief is not lost. */}
+        <footer className="flex shrink-0 justify-center px-5 pt-2 pb-[max(1rem,env(safe-area-inset-bottom))] text-xs">
           <a
             href="https://pogrobert.com"
             target="_blank"
             rel="noopener"
-            className="rounded-sm text-zinc-500 underline-offset-4 outline-none transition-colors hover:text-zinc-800 hover:underline focus-visible:ring-3 focus-visible:ring-ring/50"
+            className="rounded-sm text-zinc-400 underline-offset-4 outline-none transition-colors hover:text-zinc-800 hover:underline focus-visible:ring-3 focus-visible:ring-ring/50"
           >
-            Robert Poghosyan
+            Author
           </a>
         </footer>
       </div>
