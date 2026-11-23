@@ -1,4 +1,5 @@
-// Card: the whole business on one card. The page is a ground of the owner's colour; on it sits a
+// Card: the whole business on one card. The page is light paper with a hint of the owner's colour
+// (Robert, 2026-11-23: the full colour around the card was too loud; it stays on the button); on it sits a
 // single white card, narrow like a letter, holding everything in one column: the name set as a
 // letterhead, the promise, what they do with prices, and the contact details at the foot like the
 // back of a business card. Sections inside are parted by fine rules, never boxes. Needs no photos:
@@ -26,9 +27,9 @@ const isArt = (p: Photo) => p.src.startsWith('data:image/svg')
 
 const CSS = `${RESET}
 img{height:auto}
-:root{--g:var(--band);--on-g:var(--band-foreground);--card:#fff;--line:color-mix(in oklab,var(--band) 16%,#e8e6e1);--ink:color-mix(in oklab,var(--band) 22%,#17181a);--quiet:color-mix(in oklab,var(--ink) 64%,#fff);--tint:color-mix(in oklab,var(--band) 7%,#fff);--pad:clamp(1.5rem,5vw,3.5rem)}
-body{background:var(--g);color:var(--ink);font-size:1.0625rem;line-height:1.6;padding:clamp(.75rem,4vw,4rem) clamp(.6rem,3vw,2rem)}
-.card{max-width:42rem;margin-inline:auto;background:var(--card);border-radius:calc(var(--radius) * 1.5);box-shadow:0 30px 60px -30px rgb(0 0 0 / .45);overflow:hidden}
+:root{--g:var(--band);--on-g:var(--band-foreground);--card:#fff;--line:color-mix(in oklab,var(--band) 16%,#e8e6e1);--ink:color-mix(in oklab,var(--band) 22%,#17181a);--quiet:color-mix(in oklab,var(--ink) 64%,#fff);--tint:color-mix(in oklab,var(--band) 7%,#fff);--ground:color-mix(in oklab,var(--band) 12%,#f3f1ec);--pad:clamp(1.5rem,5vw,3.5rem)}
+body{background:var(--ground);color:var(--ink);font-size:1.0625rem;line-height:1.6;padding:clamp(.75rem,4vw,4rem) clamp(.6rem,3vw,2rem)}
+.card{max-width:42rem;margin-inline:auto;background:var(--card);border-radius:calc(var(--radius) * 1.5);box-shadow:0 0 0 1px color-mix(in oklab,var(--band) 10%,#e5e2dc),0 24px 48px -28px rgb(0 0 0 / .25);overflow:hidden}
 .in{padding-inline:var(--pad)}
 .lh{display:flex;justify-content:space-between;align-items:baseline;gap:.5rem 1.5rem;flex-wrap:wrap;padding-block:1.75rem 1.5rem;border-bottom:1px solid var(--line)}
 .lh b{font-family:var(--font-heading);font-weight:var(--heading-weight);font-size:1.15rem;letter-spacing:var(--heading-tracking);line-height:1.3}
@@ -73,7 +74,7 @@ body{background:var(--g);color:var(--ink);font-size:1.0625rem;line-height:1.6;pa
 .back dt{color:var(--quiet);font-size:.95rem}
 .back dd{font-weight:600;overflow-wrap:anywhere}
 .back dd a{text-decoration:none;border-bottom:1px solid currentColor}
-.foot{max-width:42rem;margin:1.25rem auto 0;display:flex;justify-content:space-between;gap:.25rem 1.5rem;flex-wrap:wrap;color:var(--on-g);opacity:.85;font-size:.9rem;padding-inline:.25rem}
+.foot{max-width:42rem;margin:1.25rem auto 0;display:flex;justify-content:space-between;gap:.25rem 1.5rem;flex-wrap:wrap;color:var(--quiet);font-size:.9rem;padding-inline:.25rem}
 @media (max-width:520px){.lh nav{display:none}.back dl div{grid-template-columns:minmax(0,1fr);gap:0}}`
 
 function Extras({ c, x }: { c: TemplateProps['c']; x: Extra }) {
@@ -211,7 +212,7 @@ function Page({ c, extras }: TemplateProps) {
 export const card: Template = {
   id: 'card',
   label: 'Card',
-  text: "One white card, narrow like a letter, on a ground of the owner's colour, holding the whole business in a single column: name, promise, a short price list and contact details at the foot like a business card: simple, personal and tidy, for dog walkers, cleaners, tutors, childminders and other sole traders.",
+  text: "One white card, narrow like a letter, on pale paper, holding the whole business in a single column: name, promise, a short price list and contact details at the foot like a business card: simple, personal and tidy, for dog walkers, cleaners, tutors, childminders and other sole traders.",
   dark: false,
   css: CSS,
   Page,
