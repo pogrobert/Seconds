@@ -297,6 +297,33 @@ export function groundContact(c: SiteCopy, words: string): SiteCopy {
   return { ...c, contact }
 }
 
+/** Each list's items once, by name: the writer once returned "Portrait session" twice. */
+export function dedupe(c: SiteCopy): SiteCopy {
+  const once = <T>(xs: T[]) => {
+    const seen = new Set<string>()
+    return xs.filter((x) => {
+      const k = itemKey(x)
+      if (seen.has(k)) return false
+      seen.add(k)
+      return true
+    })
+  }
+  return {
+    ...c,
+    faq: once(c.faq),
+    offer: { ...c.offer, items: once(c.offer.items) },
+    reasons: once(c.reasons),
+    steps: { ...c.steps, items: once(c.steps.items) },
+    audience: { ...c.audience, items: once(c.audience.items) },
+  }
+}
+
+/** A list item's identity: its name, title or question. */
+export const itemKey = (x: unknown) => {
+  const o = x as Record<string, unknown>
+  return String(o?.name ?? o?.title ?? o?.q ?? JSON.stringify(x)).toLowerCase()
+}
+
 /**
  * Items the writer left blank. The schema asks for at least four questions and three steps, so
  * when it has nothing true to put there (an edit of a site whose questions the check removed),

@@ -199,6 +199,42 @@ photographer), three edits each. Every stated fact reached the page. Found and f
 Still weak: photos (a home kitchen for a takeaway, Bitcoin coins for a kids' coding club).
 OpenRouter spent on this round: about $0.08 (measured).
 
+## Fourth testing loop: contact details, spacing and things it cannot do (2026-11-24)
+
+Robert: "try editing different things and see if it works", with a $1 limit. Ten businesses, four
+edits each (`tools/bench/runs/edits-2026-11-24.json`), then the same 50 steps again after the
+fixes, and a few edits in the real build page. `tools/bench/src/probe-edit.ts` asks Jev only the
+"what does the request ask for" questions, to see the scores behind a wrong edit.
+
+Worked first time: adding a phone number and address and then removing the address; prices added
+and changed; a rename with typos ("chnage teh name to Splash Kids pls"); a new service; Georgian
+and back; opening hours added and removed; an Instagram handle; a review quote; "start over";
+undo.
+
+| Found | Fix |
+|---|---|
+| The spacing changed when nobody asked: "remove the questions and answers", "make the headline shorter", "less text", "remove the opening hours" (Jev 0.65–0.88 on the spacing question) | The question now asks about empty space in the layout, "as opposed to changing what is on the page or how much text there is": those score 0.03–0.05, real spacing requests (German too) 0.93–0.97 |
+| "No more photos of kids please" took every photo off (0.62) | The no-photos question excludes photos of one kind: 0.08, while "remove the photos" stays 0.82–0.90 |
+| "Make it pink and roomier…" gave tangerine: the owner had said "use orange" before, and the pink vote split between rose and hot pink | A plain colour word in the request keeps the choice to colours of that hue |
+| "Make it blue", "more spacious" also said "Clinic is already the closest design to that" | That is said only when the design was the only thing asked for |
+| "Can you add a map?", "add a contact form": "I could not tell what to change" | A plain answer for maps, forms, booking and selling online |
+| "Remove anything about used bikes" left them in the intro, the closing line and a reason | A removal's change counts as asked for when it takes the request's words out; a list left short by a removal no longer falls back to the old list |
+| "Make it pink and more spacious" on a roomy site said only "Changed colour to rose" | Replies add what was already so: "…; the spacing is already roomy" |
+| A pottery studio's offer listed "Beginner wheel class" three times | New sites keep each list item once, as edits did |
+
+**Not changed (photos are on hold):** the photo check (Gemini 2.5 Flash Lite through OpenRouter)
+was often refused with "temporarily rate-limited upstream" by Google AI Studio during the run, so
+some spaces got no photo. A second provider or model for that call would fix it.
+
+**Still weak:** "remove anything about used bikes" can leave a heading in other words ("Second-hand
+rides"); "move the questions to the top" and "make the logo bigger" pick other designs instead of
+saying they cannot be done; after "no more photos of kids", "remove the photos" is read as
+"remove those photos" (Jev 0.33 with that history, 0.85 without).
+
+**Timings (measured, laptop):** word edits 1.0–3.0 s; colour, design, spacing edits 0.3–0.4 s. Four
+steps of 17–46 s were the bench waiting out the site's own 10-a-minute limit, not the edit; the
+bench now leaves the wait out. OpenRouter spent on this round: $0.40 (measured).
+
 ## Not yet done
 
 - **Undo goes back one version at a time,** and only within the open page: a reload forgets the versions.

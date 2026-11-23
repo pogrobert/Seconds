@@ -411,7 +411,9 @@ function Build() {
             ? r.reply
               ? r.reply
               : changes.length
-                ? `Changed ${changes.length > 1 ? `${changes.slice(0, -1).join(', ')} and ${changes[changes.length - 1]}` : changes[0]}. Anything else?`
+                ? // What was asked for but already so is said too: "make it pink and more spacious"
+                  // on a roomy site said only "Changed colour to rose" (2026-11-24).
+                  `Changed ${changes.length > 1 ? `${changes.slice(0, -1).join(', ')} and ${changes[changes.length - 1]}` : changes[0]}${r.already?.length ? `; ${r.already.join('; ')}` : ''}. Anything else?`
                 : r.already?.length
                   ? `Nothing to change: ${r.already.join('; ')}.`
                   : 'Nothing changed: I could not tell which part you meant. Try naming it: the headline, the colour, the photos, the design.'

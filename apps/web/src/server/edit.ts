@@ -11,9 +11,11 @@ import {
   type Answer,
   type DecisionCall,
   type DecisionPort,
+  dedupe,
   EXTRAS,
   type Extra,
   groundAnswers,
+  itemKey,
   type Question,
   randomDecisions,
   type SiteCopy,
@@ -133,8 +135,10 @@ const ASKS = {
   vague:
     'say they dislike it or want it different without saying what to change (the colour, design, words, photos or a part)',
   // "No more photos of food please" took every photo off (2026-11-23): that asks for other photos.
+  // "No more photos of kids please" scored 0.62 and took every photo off (2026-11-24); this wording
+  // gives it 0.08 and still 0.80–0.90 for "remove the photos" and "no photos please".
   noPhotos:
-    'ask to take all photos off the website and show none at all (not to replace some photos with other ones)',
+    'ask for a website with no photos at all? Asking to stop showing photos of one kind (people, kids, food) while keeping other photos is not this',
   // Jev gave this 0.79 to 0.94 for "remove the photos", "less text" and "I don't like it"
   // (2026-11-23): it acts only when the sections question agrees.
   fewerParts:
@@ -149,8 +153,11 @@ const ASKS = {
     "ask for a colour or a change of colour (such as 'make it green', 'red and black', 'warmer colours'), even a colour it already has",
   look: 'ask for a different design, layout, style or mood (darker, lighter, bolder, calmer, more modern, more traditional and so on)',
   type: 'ask for different fonts or lettering',
+  // The old wording scored 0.65–0.88 for "remove the photos", "less text" and "make the headline
+  // shorter" and changed the spacing (2026-11-24); this one gives those 0.03–0.05 and real
+  // spacing requests, German included, 0.93–0.97.
   spacing:
-    'ask for more or less space on the page: roomier, airier, more spacious, more white space or breathing room, or tighter, more compact, less spread out',
+    'ask for more or less empty space between and around the things on the page (the layout feeling roomier, airier, more spacious, or tighter, more compact, more crowded), as opposed to changing what is on the page or how much text there is',
   // "Remove anything about cats" scored 0.83 as removing a part and switched on two sections
   // (2026-11-21): facts inside a part are the words' business.
   sections:
@@ -163,6 +170,57 @@ const ASKS = {
   allText:
     'ask to change all of the text at once: make it shorter, longer, simpler, plainer, a different tone or a different language, or say there is too much or too little text',
 } as const
+
+/** Plain colour words and the colours that count as each (by name or mood). */
+const HUES: [RegExp, RegExp][] = [
+  [/\bpink\b/i, /pink/],
+  [/\bred\b/i, /\bred\b|cherry|oxblood|burgundy|claret/],
+  [/\borange\b/i, /orange/],
+  [/\byellow\b/i, /yellow|saffron|mustard/],
+  [/\bgreen\b/i, /green|teal/],
+  [/\bblue\b/i, /blue|teal|petrol/],
+  [/\b(purple|violet)\b/i, /purple|violet|plum|aubergine|lavender/],
+  [/\bbrown\b/i, /brown|espresso/],
+  [/\b(grey|gray)\b/i, /grey|gray|slate|charcoal/],
+]
+
+/**
+ * The colour to use: Jev's pick, kept to the hue the request names. "Make it pink" on a salon
+ * whose owner once said "use orange" gave tangerine 0.42, rose 0.28 and hot pink 0.27 (2026-11-24):
+ * the pink vote was split.
+ */
+function colourAsked(
+  request: string,
+  a: { top: string; dist?: Record<string, number> | null } | null,
+): (typeof NAMED_COLOURS)[number] | undefined {
+  const pick = NAMED_COLOURS.find((x) => x.key === a?.top)
+  const hues = HUES.filter(([word]) => word.test(request)).map(([, fits]) => fits)
+  if (!hues.length || !a?.dist) return pick
+  const fits = NAMED_COLOURS.filter((c) => hues.some((h) => h.test(`${c.key} ${c.mood}`)))
+  if (!fits.length || (pick && fits.includes(pick))) return pick
+  const dist = a.dist
+  return [...fits].sort((x, y) => (dist[y.key] ?? 0) - (dist[x.key] ?? 0))[0]
+}
+
+/** What the editor cannot do yet, said plainly when a request asks for it and nothing changed. */
+const NOT_YET: [RegExp, string][] = [
+  [
+    /\bmaps?\b/i,
+    'A map on the page is not offered yet. When the page has an address, the address opens Google Maps.',
+  ],
+  [
+    /\bforms?\b/i,
+    'Forms are not offered yet: visitors reach you through the phone number or email on the page.',
+  ],
+  [
+    /\b(booking|bookings|reservations?|appointments? system|book online)\b/i,
+    'Online booking is not offered yet. The main button can call or email you instead.',
+  ],
+  [
+    /\b(shop|store|checkout|cart|basket|payments?)\b/i,
+    'Selling online is not offered yet: the page can list what you sell and how to reach you.',
+  ],
+]
 
 /** The parts of the words an edit may change, as Jev reads them. */
 const PARTS: Partial<Record<keyof SiteCopy, string>> = {
@@ -181,6 +239,13 @@ const PARTS: Partial<Record<keyof SiteCopy, string>> = {
   faq: 'the questions and answers',
   audience: 'the needs it meets',
 }
+
+/** Words of a removal request that say nothing about what goes (first five letters). */
+const FILLER = new Set(
+  'remove anything about stuff things mention mentions please delete take stop that this those there their with from'
+    .split(' ')
+    .map((w) => w.slice(0, 5)),
+)
 
 /**
  * The writer, asked to change one thing, sometimes rewrites others too (a phone number changed
@@ -267,11 +332,20 @@ async function keepAsked(
     const was = tokens(before[k])
     return [...tokens(after[k])].some((t) => said.has(t) && !was.has(t))
   }
+  // Removing something takes its words out instead of adding them: "remove anything about used
+  // bikes" had the writer drop them from the intro and closing line and a reason go, and all three
+  // came back, as none carried the request's words (Jev 0.52–0.55 on the parts, 2026-11-24).
+  const named = new Set([...said].filter((t) => !FILLER.has(t)))
+  const takesOut = (k: keyof SiteCopy) => {
+    if (!removing) return false
+    const now = tokens(after[k])
+    return [...tokens(before[k])].some((t) => named.has(t) && !now.has(t))
+  }
   const asked = (k: keyof SiteCopy) => {
     const a = res.answers.get(k)
     // Without the request's own words, Jev must be sure: a packages request once also rewrote
     // the headline (Jev said yes to it).
-    return carries(k) || (a?.kind === 'bool' && a.pTrue > 0.75)
+    return carries(k) || takesOut(k) || (a?.kind === 'bool' && a.pTrue > 0.75)
   }
   const renamed = asked('name') && before.name !== after.name
   const out: SiteCopy = { ...after }
@@ -351,33 +425,6 @@ function rename(text: string, from: string, to: string): string {
   return text.split(to).join(keep).replace(re, to).split(keep).join(to)
 }
 
-/** Each list's items once, by name: the writer once returned "Portrait session" twice. */
-function dedupe(c: SiteCopy): SiteCopy {
-  const once = <T>(xs: T[]) => {
-    const seen = new Set<string>()
-    return xs.filter((x) => {
-      const k = itemKey(x)
-      if (seen.has(k)) return false
-      seen.add(k)
-      return true
-    })
-  }
-  return {
-    ...c,
-    faq: once(c.faq),
-    offer: { ...c.offer, items: once(c.offer.items) },
-    reasons: once(c.reasons),
-    steps: { ...c.steps, items: once(c.steps.items) },
-    audience: { ...c.audience, items: once(c.audience.items) },
-  }
-}
-
-/** A list item's identity: its name, title or question. */
-const itemKey = (x: unknown) => {
-  const o = x as Record<string, unknown>
-  return String(o?.name ?? o?.title ?? o?.q ?? JSON.stringify(x)).toLowerCase()
-}
-
 /** Items in `before`'s lists (also one level down, as the offer's items) that `after` lacks. */
 function droppedItems(before: unknown, after: unknown): unknown[] {
   if (Array.isArray(before) && Array.isArray(after)) {
@@ -438,6 +485,8 @@ async function groundNew(
    * site's check applies.
    */
   allText = false,
+  /** The owner asked to remove something: the fallback lists lose what the edit took out. */
+  removing = false,
 ): Promise<SiteCopy> {
   const g = await groundAnswers(decide, words, copy)
   const was = (xs: unknown[]) => new Set(xs.map((x) => JSON.stringify(x)))
@@ -462,7 +511,17 @@ async function groundNew(
   )
   // A rewrite of the whole text carries the checked items over in new words: too few left after
   // the check means the writer's own (translated) list, never the old language's.
-  const fallback = allText ? copy : before
+  // "Remove anything about used bikes" left one reason of two, and the fallback brought back
+  // "Used bikes on display" (2026-11-24): a removal's fallback keeps only what the edit kept.
+  const kept = <T>(xs: T[], now: T[]) =>
+    removing ? xs.filter((x) => now.some((y) => itemKey(y) === itemKey(x))) : xs
+  const fallback = allText
+    ? copy
+    : {
+        ...before,
+        reasons: kept(before.reasons, copy.reasons),
+        steps: { ...before.steps, items: kept(before.steps.items, copy.steps.items) },
+      }
   const out = g.copy
   // Questions the owner asked for, when the check leaves fewer than two real answers: one real
   // answer is enough, with the rest left for the owner to fill ("add a section with questions and
@@ -656,7 +715,7 @@ export async function edit(
   /** Asked for, but already so: said back to the owner instead of "nothing changed". */
   const already: string[] = []
   if (yes('asks:colour')) {
-    const c = NAMED_COLOURS.find((x) => x.key === top('colour')?.top)
+    const c = colourAsked(request, top('colour'))
     if (c && c.key !== state.brandName) {
       next.brand = c.hex
       next.brandName = c.key
@@ -676,7 +735,9 @@ export async function edit(
       // colour or words, the current design stays.
       next.templates = ranked.filter((id) => id !== state.templates[0]).slice(0, 3)
       changed.push('the designs')
-    } else
+    } else if (alone)
+      // Beside a colour or spacing request the look question often says yes too ("make it blue"
+      // 0.92, 2026-11-24): the design staying is then no news worth a reply.
       already.push(
         `${LIVE.find((t) => t.id === state.templates[0])?.label ?? 'the first design'} is already the closest design to that`,
       )
@@ -819,11 +880,16 @@ export async function edit(
           copy,
           top('part')?.top === 'faq',
           yes('asks:allText'),
+          yes('asks:remove'),
         )
       copy = dedupe(copy)
       // Fewer than three steps or needs is no section: keep the earlier ones instead of a stub.
-      if (copy.steps.items.length < 3) copy = { ...copy, steps: state.copy.steps }
-      if (copy.audience.items.length < 3) copy = { ...copy, audience: state.copy.audience }
+      // After a removal the short list stays, and its section hides: the earlier ones would bring
+      // back what the owner asked to take off.
+      if (!yes('asks:remove')) {
+        if (copy.steps.items.length < 3) copy = { ...copy, steps: state.copy.steps }
+        if (copy.audience.items.length < 3) copy = { ...copy, audience: state.copy.audience }
+      }
       if (JSON.stringify(copy) === JSON.stringify(state.copy)) wordsSame = true
       else {
         next.copy = copy
@@ -932,7 +998,8 @@ export async function edit(
       ? undefined
       : yes('asks:vague')
         ? 'Tell me what you would like different: the colour, the design, the words, the photos or a part of the page. The other two versions are different designs too.'
-        : 'I could not tell what to change. Try naming the colour, the design, the words, the photos or a part of the page.'
+        : (NOT_YET.find(([re]) => re.test(request))?.[1] ??
+          'I could not tell what to change. Try naming the colour, the design, the words, the photos or a part of the page.')
   const content = contentFor(next.copy, next.brand)
   const sites = drawTemplates(next, content)
   const total = Math.round(performance.now() - t0)

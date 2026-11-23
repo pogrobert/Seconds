@@ -19,6 +19,7 @@ import photoManifest from '@repo/eval/photos/manifest.json'
 import { LIVE, renderTemplate, theme, variantsOf } from '@repo/library'
 import {
   type DecisionPort,
+  dedupe,
   EXTRAS,
   type Extra,
   groundAnswers,
@@ -458,7 +459,9 @@ export async function build(
   // Jev checks each answer against the owner's words (docs/m0/19-fuller-pages.md).
   const tg = performance.now()
   const grounded = w.copy ? await groundAnswers(decide, words, w.copy) : null
-  if (grounded) w.copy = grounded.copy
+  // A list item twice ("Beginner wheel class" three times for a pottery studio, 2026-11-24) is
+  // kept once, as edits already did.
+  if (grounded) w.copy = dedupe(grounded.copy)
   const groundMs = Math.round(performance.now() - tg)
   onStep({ step: 'check', ms: groundMs })
   if (!w.copy)

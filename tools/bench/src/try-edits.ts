@@ -30,13 +30,23 @@ const cases = JSON.parse(readFileSync(process.argv[2] ?? '', 'utf8')) as Case[]
 const out = join(root, 'runs', `try-${new Date().toISOString().slice(0, 16).replace(/[:T]/g, '-')}`)
 mkdirSync(out, { recursive: true })
 
-async function step(messages: string[], state: unknown) {
-  const t0 = performance.now()
-  const res = await fetch('http://localhost:5173/api/build-stream', {
+const post = (messages: string[], state: unknown) =>
+  fetch('http://localhost:5173/api/build-stream', {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({ messages, state }),
   })
+
+async function step(messages: string[], state: unknown) {
+  let t0 = performance.now()
+  let res = await post(messages, state)
+  // The per-visitor limit (server/limit.ts) applies here too: wait it out and try again. The wait
+  // is not the edit's time: 15–45 s waits once read as slow edits (2026-11-24).
+  for (let i = 0; res.status === 429 && i < 6; i++) {
+    await new Promise((ok) => setTimeout(ok, 15_000))
+    t0 = performance.now()
+    res = await post(messages, state)
+  }
   const text = await res.text()
   let result: Result | null = null
   let photos: Photos = null
