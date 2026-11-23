@@ -164,3 +164,26 @@ day.
 - **Light and dark:** each version's light or dark ground is already Jev's pick. A dark
   version's photo spaces get their own tokens, and the photo step draws the art in Surfaces' dark
   theme there. Photos are the same in both.
+
+## A backup for the photo check (2026-11-24, measured)
+
+During the editing tests Google AI Studio, the only provider of Gemini 2.5 Flash Lite on
+OpenRouter, often answered "temporarily rate-limited upstream", and spaces went without photos.
+Gemini 2.5 Flash has the same single provider, so the backup had to be another company's model.
+`tools/bench/src/photo-models.ts` ran the look with eight models on the same six businesses:
+
+| Model | Time | Cost a look | Notes |
+|---|---|---|---|
+| Gemini 2.5 Flash Lite (first) | 1.2–2.3 s | ~$0.0001–0.0006 | |
+| **GPT-4.1 mini (backup)** | 4.4–5.6 s | ~$0.0006 | answered every time; picks about as good (better for a coding club, worse for a plumber) |
+| Llama 4 Scout | 1.5–3.2 s | ~$0.0004 | kept nothing at all for two businesses in one run |
+| Llama 4 Maverick | 2.9–5.3 s | ~$0.0014 | sometimes kept almost nothing |
+| Claude Haiku 5.5 | 5–17 s | | often kept no people |
+| Gemma 3 27B | 5.5–25 s | ~$0.0005 | |
+| Mistral Small 3.2 | 8–35 s | ~$0.0001 | |
+| GPT-4o mini | 4.3–6.8 s | ~$0.023 | 40 times the cost |
+| Qwen 3.6 35B | 44–54 s | ~$0.008 | |
+
+The look and the town question now send `models: [first, backup]`: OpenRouter tries the backup in
+the same request when the first fails or is busy. With a first model that cannot take images, all
+six businesses still got checked photos, in 3.4–4.3 s.

@@ -38,6 +38,17 @@ export type Found = {
 }
 
 const SUBJECTS = ['place', 'people', 'detail'] as const
+
+/**
+ * The backup for the look and the town question: OpenRouter tries it in the same request when the
+ * first model fails or is busy. Gemini 2.5 Flash Lite is served only by Google AI Studio, which
+ * often answered "temporarily rate-limited upstream" (2026-11-24), and then spaces went without
+ * photos. GPT-4.1 mini runs elsewhere (OpenAI) and was the steadiest of eight models tried on six
+ * businesses: 4.4–5.6 s, about $0.0006, an answer every time, picks about as good
+ * (tools/bench/src/photo-models.ts).
+ */
+const BACKUP = 'openai/gpt-4.1-mini'
+const withBackup = (model: string) => (model === BACKUP ? [model] : [model, BACKUP])
 type Subject = (typeof SUBJECTS)[number]
 
 /** A photo that might be used, from either source. */
@@ -293,7 +304,7 @@ async function judge(
       method: 'POST',
       headers: { authorization: `Bearer ${apiKey}`, 'content-type': 'application/json' },
       body: JSON.stringify({
-        model,
+        models: withBackup(model),
         messages: [{ role: 'user', content }],
         temperature: 0,
         // Without a cap OpenRouter reserves 65,535 tokens a call, and a key near its limit is
@@ -350,7 +361,7 @@ async function townSuits(
     method: 'POST',
     headers: { authorization: `Bearer ${apiKey}`, 'content-type': 'application/json' },
     body: JSON.stringify({
-      model,
+      models: withBackup(model),
       temperature: 0,
       max_tokens: 100,
       messages: [
