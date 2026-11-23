@@ -464,10 +464,25 @@ export async function build(
       )
   }
   const [{ r, ms: decideMs }, w] = await Promise.all([decided, written])
-  const [reading, art, parts] = r
+  let [reading, art, parts] = r
+  // A famous person, character or organisation: Jev chose from the brief alone, which for
+  // "portfolio page for Dutch van der Linde" means a light portfolio (2026-11-24). Asked again
+  // with who they are, beside the check below so the page waits little longer.
+  const who = w.copy?.known
+    ? `${words}\nWho this is: ${w.copy.kind}. ${w.copy.subhead} ${w.copy.about}`
+    : null
+  const again = who
+    ? Promise.all([
+        readBrief(decide, { business: 'organisation', name: '', place: '', words: who }),
+        pickArt(decide, who),
+        pickParts(decide, who),
+      ]).catch(() => null)
+    : Promise.resolve(null)
   // Jev checks each answer against the owner's words (docs/m0/19-fuller-pages.md).
   const tg = performance.now()
   const grounded = w.copy ? await groundAnswers(decide, words, w.copy) : null
+  const repicked = await again
+  if (repicked) [reading, art, parts] = repicked
   // A list item twice ("Beginner wheel class" three times for a pottery studio, 2026-11-24) is
   // kept once, as edits already did.
   if (grounded) w.copy = dedupe(grounded.copy)

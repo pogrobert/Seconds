@@ -266,6 +266,14 @@ Making "add something about the people in his gang" work took four fixes, each m
 | Gang members added to the offer were taken off as made-up services (0.24) | The new-item question also asks "is it one of the people, places or things the request asks to add?": 0.76, a team member 0.96, "Phone support" for a phone number still 0.31. On known sites it stands down (album titles 0.42–0.55) |
 | "List her albums" changed nothing: the words question gave 0.49 | It now covers listing or describing people, works, products, places or history, and rules out colour, design, space, photos and whole parts: 0.78–0.96 for word requests, 0.04–0.14 for the rest |
 
+**The look, too.** The words for Dutch were right, but the page was a light editorial portfolio
+with a photo studio, laptops and a man pinning prints: the photo searches and the design pick both
+run beside the words, from the brief alone ("portfolio page"). Now the early photo call has the
+same famous-name rule (Dutch: a campfire, cowboys on horseback, a gunslinger, a revolver), and on a
+known site Jev picks the designs, colour and lettering again with who they are, beside the fact
+check (Dutch: Cinema, dark; Taylor Swift: Cinema, Programme, Album in rose; page 1.4–2.1 s).
+Ordinary and themed businesses are unchanged.
+
 Also found in the re-run: **"start over: a dog daycare in Austin"** kept the old site's name
 ("Splash Kids") from earlier messages, then was named "start over". A fresh start now builds from
 the new message alone, without the "start over:" words; a bare "start over" rebuilds the first

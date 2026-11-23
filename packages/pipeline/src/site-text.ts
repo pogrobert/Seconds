@@ -758,6 +758,9 @@ export async function writePhotoQueries(o: {
             `kind: what it is in a few plain words, such as "tattoo studio" or "county council" (at most ${L.kind}).`,
             'town: the town or city the owner names, also when it is only part of the name, else "".',
             `photos: three short English stock-photo searches (2 to 4 words, at most ${L.photo} characters) for things a camera can see in this organisation's own world. No place names, no brand names, no abstract words (not "community", "information", "quality"): place = the room or setting where it works, such as "bakery counter" or "dental surgery"; people = someone doing its work, such as "baker kneading dough"; detail = a close-up object or material, such as "sourdough loaf".`,
+            // "Portfolio page for Dutch van der Linde" searched a photo studio and laptops: these
+            // searches run beside the words, so they need the writer's rule on famous names.
+            'If the words are for or about a famous real person, a well-known fictional character or a famous organisation that you know, kind and photos come from their world as you know it, not from the kind of page asked for: for a Wild West outlaw, kind "outlaw gang leader" and photos such as "campfire at night", "cowboy on horseback" and "old revolver"; never a photo of the person themselves. A business only named after or themed on one is an ordinary business. If the words do not say what the person or organisation does, choose photos that fit any work, such as "desk with notebook".',
           ].join('\n'),
         },
       ],
