@@ -832,7 +832,7 @@ function TryRow({ onPick }: { onPick: (ex: Example) => void }) {
   return (
     // biome-ignore lint/a11y/noStaticElementInteractions: pausing on hover only, no action
     <div
-      className="flex min-h-9 items-center justify-center gap-2 text-sm whitespace-nowrap"
+      className="flex min-h-9 items-center justify-center gap-1 text-sm whitespace-nowrap"
       onMouseEnter={() => {
         paused.current = true
       }}
@@ -840,7 +840,7 @@ function TryRow({ onPick }: { onPick: (ex: Example) => void }) {
         paused.current = false
       }}
     >
-      <span className="shrink-0 cursor-default text-zinc-500 select-none">Try</span>
+      <span className="mr-1 shrink-0 cursor-default text-zinc-500 select-none">Try</span>
       <motion.div
         className="-my-1 overflow-hidden py-1"
         initial={false}
@@ -851,7 +851,7 @@ function TryRow({ onPick }: { onPick: (ex: Example) => void }) {
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
               key={shown.map((x) => x.title).join('|')}
-              className="flex min-w-0 items-center gap-2"
+              className="flex min-w-0 items-center gap-1"
               initial="hidden"
               animate="show"
               exit="exit"
@@ -881,11 +881,16 @@ function TryRow({ onPick }: { onPick: (ex: Example) => void }) {
                     },
                   }}
                 >
+                  {i > 0 && (
+                    <span aria-hidden className="mr-1 cursor-default text-zinc-300 select-none">
+                      ·
+                    </span>
+                  )}
                   <Button
-                    variant="outline"
+                    variant="ghost"
                     size="sm"
                     onClick={() => onPick(x)}
-                    className="h-8 min-w-0 truncate rounded-full bg-white px-3 text-sm font-medium text-zinc-700 hover:bg-zinc-100 hover:text-zinc-950"
+                    className="min-w-0 truncate px-2.5 text-sm text-zinc-800 hover:bg-zinc-200/70 hover:text-zinc-950"
                   >
                     {x.title}
                   </Button>
