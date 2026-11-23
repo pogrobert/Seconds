@@ -1,7 +1,7 @@
 // The template quality gate and review wall (docs/m0/25-template-plan.md). Every template is
 // drawn by the dev server (POST /api/template, no model calls) with test content in many cases,
 // and each page must pass the bench's page checks at desktop and phone width. Then the wall:
-// every template filled with the same sample businesses, side by side, for Robert to review.
+// every template filled with the same sample businesses, side by side, for review.
 //   PLAYWRIGHT_BROWSERS_PATH=$PWD/.browsers node src/template-gate.ts [--only a,b] [--no-wall]
 // Needs `pnpm --filter @repo/web dev` running on :5173. Output: runs/gate-<time>/ (wall.html).
 

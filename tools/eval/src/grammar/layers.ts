@@ -173,7 +173,7 @@ export const DETAIL_RULES: DetailRule[] = [
 /**
  * The quiet opening (round 3, docs/m0/14-design-rules-3.md): one atmospheric photo across the
  * whole screen, a single short line set modestly in the middle, one outlined button. Every site
- * Robert loved opens like this or close to it (Remedy Place, Heartcore, Humming Puppy, KOL).
+ * the author loved opens like this or close to it (Remedy Place, Heartcore, Humming Puppy, KOL).
  */
 export const QUIET_HERO: HeroRule = {
   key: 'quiet',

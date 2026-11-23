@@ -16,7 +16,7 @@ export type Template = {
   text: string
   /** Whether the page is dark (photo art and the build page's version dot follow it). */
   dark: boolean
-  /** Not yet kept by Robert: drawn by the gate and the wall, never offered to an owner. */
+  /** Not yet kept by the author: drawn by the gate and the wall, never offered to an owner. */
   draft?: boolean
   css: string
   Page: (p: TemplateProps) => ReactNode
@@ -27,7 +27,7 @@ export function facts(c: SiteContent): { label: string; value: string; href?: st
   const out: { label: string; value: string; href?: string }[] = []
   const hours = c.hours.map((h) => [h.days, h.time].filter(Boolean).join(' ')).join('; ')
   if (hours) out.push({ label: 'Hours', value: hours })
-  // The address opens a map (Robert, 2026-11-23); Google's link works on every phone and
+  // The address opens a map; Google's link works on every phone and
   // computer and needs no key. Only ever the owner's own address (site-text.ts groundContact).
   if (c.address.length) {
     const value = c.address.join(', ')

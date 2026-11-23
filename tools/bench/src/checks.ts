@@ -1,4 +1,4 @@
-// Checks code can judge (docs/m0/18-bench.md). Taste is left to Robert's blind ratings.
+// Checks code can judge (docs/m0/18-bench.md). Taste is left to blind ratings.
 
 /**
  * Runs inside the page (page.evaluate), so it must not use anything from outside itself.

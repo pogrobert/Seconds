@@ -3,8 +3,8 @@
 // photo as the cover picture) facing the first inside page, where the introduction is the
 // programme note and the offer is the running order, centred, item under item with a short rule
 // between. The inside pages run in two columns either side of the fold (one section alone runs
-// across both, its heading over the spread: a lone section left the right page empty, Robert
-// 2026-11-23); the closing spread puts
+// across both, its heading over the spread: a lone section left the right page empty); the
+// closing spread puts
 // the facts on the last inside page and the call on the back cover. With no photos the cover is
 // type only. For choirs, orchestras, bands, amateur theatre, societies and festivals.
 

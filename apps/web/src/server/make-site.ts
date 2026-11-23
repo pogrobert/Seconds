@@ -231,7 +231,7 @@ async function nearestKind(port: DecisionPort, words: string): Promise<Kind> {
 const NEUTRAL_BRAND = '#171717'
 
 /**
- * The quiet colour rules only (Robert, 2026-11-17: tinted grounds and loud brand colours looked
+ * The quiet colour rules only (tinted grounds and loud brand colours looked
  * cheap): a warm cream page with the colour on buttons and bands, or a near-black page.
  */
 const COLOUR_CREAM = COLOUR_RULES.find((r) => r.key === 'cream') as (typeof COLOUR_RULES)[number]
@@ -565,7 +565,7 @@ export async function sitePhotos(job: PhotoJob): Promise<PhotoResult> {
       )
   const n = found.natural
   const k = found.lowkey
-  // Each space a photo no other space shows (Robert, 2026-11-20: "repeating images"); a space
+  // Each space a photo no other space shows ("repeating images"); a space
   // with no fresh photo left gets its own drawn art. Low-key (darker) photos only stand in for a
   // natural one; no template has low-key spaces of its own.
   const taken = new Set<string>()
@@ -628,7 +628,7 @@ export async function sitePhotos(job: PhotoJob): Promise<PhotoResult> {
         `The photo search was busy, so ${art} ${art === 1 ? 'spot goes' : 'spots go'} without a photo. Try again in a minute. (${found.limitInfo})`,
       )
     // Most templates close up a spot without a photo (pairs, galleries, strips: shared.tsx RESET);
-    // a few keep a Surfaces pattern there. Said plainly to the owner (Robert, 2026-11-23: the old
+    // a few keep a Surfaces pattern there. Said plainly to the owner (the old
     // "they show drawn art" was not what he saw).
     else
       notes.push(

@@ -2,7 +2,7 @@ import { z } from 'zod'
 import { FIELDS, type FieldLimits, type FieldName, type FieldValues } from './fields.ts'
 
 // The section types: named subsets of the global field list, with limits.
-// Accepted by Robert on 2026-11-14 (docs/decisions/0001-section-types.md).
+// Accepted on 2026-11-14 (docs/decisions/0001-section-types.md).
 // Rule: only ever add. Removing a type or field, making an optional field required, or lowering a
 // limit breaks saved sites and needs a spec migration. test/lock.test.ts enforces this.
 

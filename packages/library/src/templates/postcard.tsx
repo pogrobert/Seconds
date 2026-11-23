@@ -2,7 +2,7 @@
 // border; the other is the writing side, with the message (the headline) and the business's own name and address on ruled lines. With no photo
 // the card shows its writing side alone, message beside address, as the back of a real postcard.
 // Below, every photo is a white-bordered print, the offer reads like an itinerary on perforated
-// lines. No drawn stamp, postmark or airmail edge: Robert, 2026-11-23, no fake decorations. For B&Bs, holiday lets, tours and campsites.
+// lines. No drawn stamp, postmark or airmail edge: no fake decorations. For B&Bs, holiday lets, tours and campsites.
 
 import { Fragment } from 'react'
 import {
@@ -85,7 +85,7 @@ h2{font-size:clamp(1.9rem,3.4vw,2.8rem);line-height:1.1;margin-bottom:clamp(1.75
 .end dt{font-size:.9rem;opacity:.75}.end dd{font-family:var(--font-heading);font-size:1.15rem;overflow-wrap:break-word}.end dd a{text-decoration:none;border-bottom:1px solid currentColor}
 .foot{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding-block:1.75rem;font-size:.92rem;opacity:.85;border-top:1px solid color-mix(in oklab,var(--on-acc) 25%,transparent)}
 @media (max-width:760px){.top nav{display:none}.card{grid-template-columns:minmax(0,1fr);rotate:none}.front{min-height:0;aspect-ratio:4/3}.card:has(.front ${ART}) .back{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"tag tag" "msg msg" "addr addr"}.card:has(.front ${ART}) .addr{border-inline-start:0;padding-inline-start:0}.about,.offer,.strip,.end .cl{grid-template-columns:minmax(0,1fr)}.about figure{max-width:17rem}.offer .print{max-width:17rem}}
-/* Questions beside their heading on wide screens: a heading over a narrow list left the right half empty (Robert, 2026-11-23). */
+/* Questions beside their heading on wide screens: a heading over a narrow list left the right half empty. */
 @media (min-width:861px){#questions .faq>div{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);column-gap:clamp(2rem,5vw,5rem);align-items:start}#questions .faq>div>h2,#questions .faq>div>.head{margin:0}#questions .faq>div{max-width:none}}`
 
 function Extras({ c, x }: { c: TemplateProps['c']; x: Extra }) {

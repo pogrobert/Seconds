@@ -18,7 +18,7 @@ export async function overLimit(request: Request): Promise<Response | null> {
       )
 }
 
-/** The bench's routes (tools/bench) exist only on Robert's machine. */
+/** The bench's routes (tools/bench) exist only on a developer's machine (BENCH=1). */
 export function benchOnly(): Response | null {
   return (getEnv() as unknown as { BENCH?: string }).BENCH === '1'
     ? null

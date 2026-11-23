@@ -2,8 +2,8 @@
 // (build.ts, which is also loaded in the browser, so this file imports nothing).
 
 /**
- * Surfaces styles that can stand in for a photo, and colour strengths. Robert (2026-11-17): "let
- * jev choose among all 12 and the colour too". Shown side by side by tools/eval/src/art-styles.ts.
+ * Surfaces styles that can stand in for a photo, and colour strengths. Jev chooses among all of
+ * them, and the colour too.
  */
 export const ART_STYLES = [
   'underpaint',

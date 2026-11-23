@@ -1,5 +1,5 @@
 // Serves the bench reports and the blind rating page on http://localhost:8791, and keeps
-// Robert's ratings in tools/bench/ratings.json (committed: they are the taste record).
+// the author's ratings in tools/bench/ratings.json (committed: they are the taste record).
 //   pnpm --filter @repo/bench serve
 
 import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs'
@@ -86,7 +86,7 @@ createServer((req, res) => {
     return send(200, JSON.stringify(readRatings()), TYPES['.json'])
 
   // The comparison with Lovable and v0 (docs/m0/21-vs-lovable-v0.md): which briefs have all three
-  // screenshots, and Robert's blind rankings, kept in vs/ratings.json.
+  // screenshots, and the author's blind rankings, kept in vs/ratings.json.
   if (url.pathname === '/api/vs' && req.method === 'POST') {
     let body = ''
     req.on('data', (d) => {

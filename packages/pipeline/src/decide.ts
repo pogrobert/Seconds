@@ -1,7 +1,7 @@
 // The decision interface (docs/technical/03, D2 and section 3.1, cut to what M0 needs).
 // Our own small question and answer types, close to System One but not tied to one vendor: options
 // are an ordered list with stable keys, and distributions may be missing. Adapters only translate.
-// M0 has one real adapter (TypeSafe's Jev, chosen by Robert on 2026-11-14) and one stand-in that
+// M0 has one real adapter (TypeSafe's Jev) and one stand-in that
 // answers at random from a seed, which is also arm C of the test ("random valid choices").
 
 export type ChoiceQuestion = {

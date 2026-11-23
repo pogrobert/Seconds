@@ -39,13 +39,13 @@ catalog:
   shadcn: 4.23.0
   "@fontsource-variable/atkinson-hyperlegible-next": 5.3.0
   "@shadcn/react": 0.3.1
-  # The build page's icons, Phosphor regular, as in Meerlume's sidebar (Robert, 2026-11-23); the
+  # The build page's icons, Phosphor regular, as in Meerlume's sidebar; the
   # site blocks keep the Lucide icons they came with.
   "@phosphor-icons/react": 2.1.10
 
 # Supply-chain settings.
 minimumReleaseAge: 4320 # minutes: skip versions younger than 3 days
-minimumReleaseAgeExclude: # Robert's own packages, named one by one
+minimumReleaseAgeExclude: # the author's own packages, named one by one
   - "@pogrobert/surfaces"
 trustPolicy: no-downgrade
 blockExoticSubdeps: true

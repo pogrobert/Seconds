@@ -1,5 +1,5 @@
 // Market: playful and warm, like a stall on market day. No drawn awning, scallops or sticker
-// button (Robert, 2026-11-23: no fake decorations): prices sit on small tilted tags, and photos are soft rounded shapes and one circle.
+// button (no fake decorations): prices sit on small tilted tags, and photos are soft rounded shapes and one circle.
 // Everything else stays calm on a warm cream page. For bakeries, ice cream, children's
 // activities and market stalls.
 
@@ -79,7 +79,7 @@ h2{font-size:clamp(1.9rem,3.4vw,2.8rem);line-height:1.08;margin-bottom:clamp(1.7
 .end dd{font-size:1.1rem;overflow-wrap:break-word}.end dd a{text-decoration:none;border-bottom:1px solid currentColor}
 .foot{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding-block:1.75rem;font-size:.92rem;border-top:2px dotted color-mix(in oklab,var(--on-acc) 35%,var(--acc))}
 @media (max-width:760px){.top nav{display:none}.hero,.about,.offer,.end .cl{grid-template-columns:minmax(0,1fr)}.media{max-width:24rem;margin-inline:auto;width:100%}.about figure{max-width:15rem}.side img{min-height:0;aspect-ratio:4/3}.hero:has(.media ${ART}){grid-template-columns:minmax(0,1fr);align-items:start}.hero:has(.media ${ART}) .media{margin-inline:0}}
-/* Questions beside their heading on wide screens: a heading over a narrow list left the right half empty (Robert, 2026-11-23). */
+/* Questions beside their heading on wide screens: a heading over a narrow list left the right half empty. */
 @media (min-width:861px){#questions .faq>div{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);column-gap:clamp(2rem,5vw,5rem);align-items:start}#questions .faq>div>h2,#questions .faq>div>.head{margin:0}#questions .faq>div{max-width:none}}`
 
 function Extras({ c, x }: { c: TemplateProps['c']; x: Extra }) {

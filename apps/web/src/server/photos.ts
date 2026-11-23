@@ -4,7 +4,7 @@
 //    "quality images" of that town, kept only when the title or description names it.
 // 2. A look. A small vision model sees every candidate and keeps only the ones that fit this
 //    business, best first, plus a dark, moody one per subject for the low-key looks. It only
-//    judges photos; it never makes them (Robert, 2026-11-17: no AI pictures).
+//    judges photos; it never makes them (no AI pictures).
 // 3. Download. Pixabay forbids hotlinking, so the server downloads each chosen photo and hands it
 //    to the page once; the page turns them into local blob links shared by every look.
 // Nothing is borrowed: when nothing fits, the page is drawn without photos.
@@ -76,8 +76,8 @@ const words = (s: string) =>
 /** Hits whose tags share a word with the subject, best match first (Pixabay ranks by popularity). */
 /**
  * Tags that mark an image as drawn or generated rather than photographed. Pixabay files some
- * AI-made images as photos (a cartoon groomer reached a dog groomer's page, 2026-11-20); Robert's
- * rule is no AI pictures.
+ * AI-made images as photos (a cartoon groomer reached a dog groomer's page, 2026-11-20); the rule is no AI
+ * pictures.
  */
 const MADE =
   /\b(ai[- ]?generated|generated|ai|artificial intelligence|midjourney|stable diffusion|illustration|cartoon|drawing|render|3d|clipart|vector|digital art|painting)\b/i

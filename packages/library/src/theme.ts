@@ -20,7 +20,7 @@ const luminance = (hex: string) => {
 }
 
 /**
- * Neutral colours (shadcn/ui's "neutral" scale). Robert, 2026-11-17: the tinted grounds and brand
+ * Neutral colours (shadcn/ui's "neutral" scale). The tinted grounds and brand
  * colours from the colour rules looked cheap. A colour rule now only decides light or dark; every
  * site is black, white and greys, and the photos carry the colour.
  */
@@ -52,7 +52,7 @@ const NEUTRAL = {
 }
 
 /**
- * The colour rule's palette as tokens (Robert, 2026-11-19: "leave the colour choices to Jev").
+ * The colour rule's palette as tokens ("leave the colour choices to Jev").
  * Jev picks a named colour and one of the quiet colour rules (a warm off-white page with the colour
  * as accent and bands, or a near-black page); the loud rules stay out (make-site.ts).
  */

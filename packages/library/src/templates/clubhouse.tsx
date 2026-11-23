@@ -1,4 +1,4 @@
-// Clubhouse: a sports or social club. No made-up crest (Robert, 2026-11-23: no fake decorations;
+// Clubhouse: a sports or social club. No made-up crest (no fake decorations;
 // a club has its own). The opening is striped like a kit shirt in two shades
 // of the club's colour. One recurring detail, the hoop: two bars of the colour with a gap, like
 // the bands on a sock, under every heading. The offer is a fixture list, each row ending in a

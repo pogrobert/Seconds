@@ -265,7 +265,7 @@ export function checkSiteCopy(c: SiteCopy, words = ''): string[] {
 const plain = (x: string) => x.normalize('NFKD').replace(/\p{M}/gu, '').toLowerCase()
 
 /**
- * Contact details only when the owner gave them (Robert, 2026-11-23: "we do not invent
+ * Contact details only when the owner gave them ("we do not invent
  * addresses"). The prompt says so, but a rule in a prompt is a request, not a check: an address,
  * phone number or email the owner's words do not hold is taken off the page. An address passes
  * when every number in it and most of its words are the owner's (the writer may tidy "st" into

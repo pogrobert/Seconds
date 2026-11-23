@@ -1,7 +1,7 @@
 // Price tickets: a butcher's or greengrocer's window. The opening and the offer stand against a
 // wall of white glazed tiles. Each item of the offer is a bold price ticket: a white card with a
 // heavy border in the business's colour and a fine inner line, the price set very large with the
-// name beneath (no drawn metal stands: Robert, 2026-11-23, no fake decorations). Every third
+// name beneath (no drawn metal stands: no fake decorations). Every third
 // ticket is turned out in the brand colour. With no price the name carries the ticket. The
 // headline is the biggest ticket of all, standing beside the opening photo, or alone on the tiles
 // without one. The opening hours close the page on a ticket of their own. For butchers,
@@ -92,7 +92,7 @@ h2{font-size:clamp(1.9rem,3.6vw,3rem);line-height:1.08;margin-bottom:clamp(1.75r
 .end dd{font-family:var(--font-heading);font-size:1.15rem;line-height:1.35;overflow-wrap:break-word}.end dd a{text-decoration:none;border-bottom:1px solid currentColor}
 .foot{display:flex;justify-content:space-between;gap:.5rem 1.5rem;flex-wrap:wrap;padding-block:1.6rem;font-size:.92rem;border-top:1px solid color-mix(in oklab,var(--on-acc) 35%,var(--acc))}
 @media (max-width:760px){:root{--t:2.6rem}.top nav{display:none}.hero .w,.about,.end .cl,.pair{grid-template-columns:minmax(0,1fr)}.hero img{aspect-ratio:4/3}.about figure{max-width:16rem}.row{grid-template-columns:repeat(auto-fill,minmax(min(9.5rem,100%),1fr))}.pr{font-size:2.1rem}.row .np h4{font-size:1.35rem}.row .tk h4{font-size:1.05rem}.tk{padding-inline:.9rem}}
-/* Questions beside their heading on wide screens: a heading over a narrow list left the right half empty (Robert, 2026-11-23). */
+/* Questions beside their heading on wide screens: a heading over a narrow list left the right half empty. */
 @media (min-width:861px){#questions>.w{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);column-gap:clamp(2rem,5vw,5rem);align-items:start}#questions>.w>h2,#questions>.w>.head{margin:0}#questions .qa{max-width:none}}`
 
 const groups = (c: TemplateProps['c']) => c.prices.filter((g) => g.items.length)

@@ -93,7 +93,7 @@ h2{font-size:clamp(2rem,3.6vw,2.9rem);line-height:1.15;margin-bottom:clamp(2rem,
 .foot{display:flex;justify-content:space-between;gap:.5rem 2rem;flex-wrap:wrap;padding-block:2rem 2.5rem;font-size:1.05rem;border-top:1px solid color-mix(in oklab,var(--on-acc) 30%,transparent)}
 @media (max-width:860px){.hero,.about,.end .in{grid-template-columns:minmax(0,1fr)}.about .frame{max-width:22rem}.hero .frame img{aspect-ratio:4/3}.cols{grid-template-columns:minmax(0,1fr)}.top nav a:not(:last-child){display:none}.top nav a:last-child{box-shadow:inset 0 0 0 2px var(--line);text-decoration:none}}
 @media (max-width:480px){body{font-size:1.1875rem}.pair{grid-template-columns:minmax(0,1fr)}.pair figure:last-child{margin-top:0}.btn{width:100%}.list li{grid-template-columns:minmax(0,1fr)}}
-/* Questions beside their heading on wide screens: a heading over a narrow list left the right half empty (Robert, 2026-11-23). */
+/* Questions beside their heading on wide screens: a heading over a narrow list left the right half empty. */
 @media (min-width:861px){#questions>.w{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);column-gap:clamp(2rem,5vw,5rem);align-items:start}#questions>.w>h2,#questions>.w>.head{margin:0}#questions .faq{max-width:none}}`
 
 function Extras({ c, x }: { c: TemplateProps['c']; x: Extra }) {

@@ -1,4 +1,4 @@
-// What to suggest next, above the message box (Robert, 2026-11-23: the chips were the same five
+// What to suggest next, above the message box (the chips were the same five
 // for every site). Code reads the site as it stands and picks up to three from a small pool, so
 // they cost no model call and no time. Two kinds: a change that is sent as it is ("Less text"),
 // and a missing fact that starts a message for the owner to finish ("Opening hours: ").

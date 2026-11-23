@@ -4,7 +4,7 @@ import { FIELDS } from '../src/fields.ts'
 import { SECTION_TYPES } from '../src/section-types.ts'
 
 // Saved sites depend on the section types. Only additions are allowed (decision 0001).
-// A change that fails here needs a spec migration and Robert's approval, not a lock update.
+// A change that fails here needs a spec migration and the author's approval, not a lock update.
 type Limits = Record<string, unknown> & {
   required?: boolean
   max?: number

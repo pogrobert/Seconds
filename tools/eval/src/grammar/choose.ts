@@ -27,7 +27,7 @@ export type RuleCache = Record<string, { text: string; profile: Profile }>
 export type Direction = { id: string; label: string; only: Partial<Record<LayerId, string[]>> }
 
 /**
- * Atmospheric (round 3): the look of every site Robert loved (docs/research/
+ * Atmospheric (round 3): the look of every site the author loved (docs/research/
  * 2026-11-16-reference-library.md): one low-key photo, a deep or near-black page, very little on
  * the first screen, restrained type, no decoration for its own sake.
  */

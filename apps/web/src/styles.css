@@ -6,7 +6,7 @@
    of following the system setting (which gave dark-mode visitors a half-dark, grey message box). */
 @custom-variant dark (&:is(.dark *));
 
-/* Atkinson Hyperlegible Next, the type of Robert's Portfolio and Surfaces (OFL), from
+/* Atkinson Hyperlegible Next, the type of the author's Portfolio and Surfaces (OFL), from
    @fontsource-variable/atkinson-hyperlegible-next, preloaded in __root.tsx. Until it arrives the
    page uses "Atkinson Fallback": Arial sized and spaced to take exactly Atkinson's room, so the
    swap moves nothing. font-display: optional (tried first, 2026-11-23) avoided the shift but left
@@ -45,7 +45,7 @@
 }
 
 /* The first message dissolves the centred start into the split view (routes/index.tsx, View
-   Transitions; Robert picked it from four, 2026-11-23). Nothing travels: the start blurs away
+   Transitions; picked from four tried). Nothing travels: the start blurs away
    and the split view comes into focus, a little after, so the two never sit sharp on each other. */
 ::view-transition-old(root) {
   animation: vt-blur-out 0.2s ease-out both;
@@ -68,7 +68,7 @@
   }
 }
 
-/* The family look of Robert's Portfolio and Surfaces (Robert, 2026-11-23): their warm paper and
+/* The family look of the author's Portfolio and Surfaces: their warm paper and
    ink and their teal for focus. Tailwind's zinc greys, used across the build page, are redefined
    as the same warm scale, and shadcn/ui's tokens (components/ui) take the same colours. */
 @theme {
@@ -137,7 +137,7 @@
   --radius: 0.5625rem;
 }
 
-/* Dark (Robert, 2026-11-23), following the system setting. The build page draws almost all of
+/* Dark, following the system setting. The build page draws almost all of
    its colour from the warm grey scale, white and the tokens above, so dark is those turned over:
    paper becomes a warm near-black, white the raised surfaces, ink a warm near-white. Parts that
    must not turn (the phone's hardware, the white behind a site) use literal colours. shadcn's own

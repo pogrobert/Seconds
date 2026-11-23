@@ -1,5 +1,4 @@
-// Recent sites, kept in the visitor's own browser (IndexedDB), never on a server (Robert,
-// 2026-11-23: a reload or "Builder" in the corner used to lose the site). The ten newest are
+// Recent sites, kept in the visitor's own browser (IndexedDB), never on a server (a reload or "Builder" in the corner used to lose the site). The ten newest are
 // kept; each holds the chat, every version still reachable by undo, and the photos as files.
 // Where the browser keeps nothing (a private window, storage blocked), it all just does nothing.
 

@@ -100,7 +100,7 @@ export const COLOUR_RULES: ColourRule[] = [
     key: 'deep',
     label: 'Deep',
     text: 'The whole page in a deep, dark version of the brand colour with cream text: rich, moody and luxurious, like an evening venue',
-    // Oranges, browns and yellows turn to mud when taken this dark (Robert, 2026-11-17: "the bg
+    // Oranges, browns and yellows turn to mud when taken this dark ("the bg
     // colour ... is awful", a deep brown). They get night or brand ink instead.
     fits: (brand) => {
       const b = lch(brand)
@@ -149,7 +149,7 @@ export const COLOUR_RULES: ColourRule[] = [
 
 /**
  * Night (round 3): near-black with the faintest warmth of the brand, cream text, the brand colour
- * only as a small accent. Dogpound, Remedy Place and Humming Puppy, the darkest of Robert's loves.
+ * only as a small accent. Dogpound, Remedy Place and Humming Puppy, the darkest of the author's picks.
  */
 COLOUR_RULES.push({
   key: 'night',

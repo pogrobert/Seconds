@@ -158,7 +158,7 @@ type Message =
   | { role: 'error'; text: string }
 
 /**
- * Message limits (Robert, 2026-11-23). Every message stops at what the server accepts
+ * Message limits. Every message stops at what the server accepts
  * (routes/api/build-stream.ts cuts at 1,500), with a counter near the end so nothing is cut
  * silently. The first message needs a few words about what the site is for: "hi" made a site from nothing,
  * at full cost. Edits have no minimum ("undo", "darker").
@@ -265,7 +265,7 @@ function Build() {
   }, [onStart])
 
   // The message box grows with what is typed, up to its max height, and glides to its new height
-  // (Robert, 2026-11-23): a hidden copy of the text, as wide as the box, says how tall it must be,
+  //: a hidden copy of the text, as wide as the box, says how tall it must be,
   // so the box itself never has to be reset to "auto", which would stop the transition.
   const mirror = useRef<HTMLTextAreaElement>(null)
   useEffect(() => {
@@ -304,8 +304,8 @@ function Build() {
       setNow(performance.now())
       setProgress({})
     }
-    // The first message dissolves the centred start into the split view (Robert picked it from
-    // four, 2026-11-23): nothing travels, the start blurs away and the split view comes into
+    // The first message dissolves the centred start into the split view (picked from four
+    // tried): nothing travels, the start blurs away and the split view comes into
     // focus (View Transitions, styles.css; where the browser has none, or motion is reduced, it
     // simply switches).
     const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -438,7 +438,7 @@ function Build() {
   }
 
   /**
-   * "Builder" in the corner: back to the first screen for a new site (Robert, 2026-11-23). The
+   * "Builder" in the corner: back to the first screen for a new site. The
    * site is not kept; a build still under way is let go. Dissolves, as the way in does.
    */
   function startOver() {
@@ -578,7 +578,7 @@ function Build() {
   }
 
   // The name and the site being made; no status on the right, so the preview can reach the top
-  // of the window (Robert, 2026-11-23). In the split view it sits over the chat column.
+  // of the window. In the split view it sits over the chat column.
   const top = (
     <header className="flex h-13 shrink-0 items-center gap-2.5 px-5 md:px-2">
       <Tooltip>
@@ -636,10 +636,10 @@ function Build() {
           className={`pointer-events-none invisible absolute top-0 left-0 -z-10 resize-none overflow-hidden border-0 px-2.5 py-2 leading-relaxed field-sizing-fixed ${big ? 'text-base' : 'text-sm'}`}
         />
         {/* Enter sends and Shift Enter starts a new line, as in any chat; 1, 2 and 3 switch
-            versions (shown on the versions' tooltips). No hints in the box (Robert, 2026-11-23). */}
+            versions (shown on the versions' tooltips). No hints in the box. */}
         <InputGroupAddon align="block-end" className="justify-between">
           <span id="composer-note" aria-live="polite" className="text-xs font-normal text-zinc-400">
-            {/* The note eases in, barely (Robert, 2026-11-23); the counter just updates. */}
+            {/* The note eases in, barely; the counter just updates. */}
             <AnimatePresence initial={false}>
               {!result && draft.trim() && tooShort(draft) ? (
                 <motion.span
@@ -677,7 +677,7 @@ function Build() {
   // site.
   if (messages.length === 0)
     return (
-      // Nothing above the headline on the first screen (Robert, 2026-11-23): the name appears with
+      // Nothing above the headline on the first screen: the name appears with
       // the split view.
       <div className="flex h-dvh flex-col bg-zinc-50 text-zinc-900 antialiased selection:bg-teal-600/25">
         <main className="flex min-h-0 flex-1 flex-col items-center overflow-y-auto px-5 pb-10">
@@ -697,7 +697,7 @@ function Build() {
             />
             {recent.length > 0 && (
               // Sites made here before, newest first (history.ts); kept only in this browser.
-              // As wide as the message box, its text lined up with the box's (Robert, 2026-11-23).
+              // As wide as the message box, its text lined up with the box's.
               // It hangs below the centred block instead of joining it: the list is read after
               // the page loads, and joining would push the headline and box up (a layout shift).
               <section
@@ -781,7 +781,7 @@ function Build() {
                       key={i}
                       scrollAnchor={m.role === 'user'}
                       // Its paint is clipped to its box (content-visibility: auto), so a little
-                      // room below keeps the focus ring on Details whole (Robert, 2026-11-23).
+                      // room below keeps the focus ring on Details whole.
                       // Replies ease in; the visitor's own message shows at once.
                       className={m.role === 'user' ? 'pb-1' : `pb-1 ${ENTER}`}
                     >
@@ -828,7 +828,7 @@ function Build() {
           </MessageScrollerProvider>
           {!busy && result && (
             // What can be said next, one click each, just above the box as in shadcn's AI
-            // Elements (Robert, 2026-11-23: under the reply they scrolled away and were always the
+            // Elements (under the reply they scrolled away and were always the
             // same). Chosen from the site as it stands (suggest.ts); a missing fact starts a
             // message to finish instead of sending.
             <Suggestions aria-label="Suggested changes" className="-mx-3 mb-1 px-3 py-1">
@@ -863,14 +863,14 @@ function Build() {
         <section
           aria-label="Preview"
           // The border is drawn on top, not around: a site clipped to the rounded corner leaves
-          // half-covered pixels where the panel's own colour showed as a light rim (Robert,
-          // 2026-11-23); the border laid over them covers exactly those pixels.
+          // half-covered pixels where the panel's own colour showed as a light rim;
+          // the border laid over them covers exactly those pixels.
           className="relative order-1 flex min-w-0 flex-col overflow-hidden rounded-xl bg-white shadow-[0_1px_2px_rgba(9,9,11,.04)] after:pointer-events-none after:absolute after:inset-0 after:z-10 after:rounded-[inherit] after:border after:border-zinc-200 max-md:h-[58dvh] max-md:shrink-0 md:order-none md:flex-1"
         >
           <Tabs
             value={site?.id ?? ''}
             onValueChange={setLook}
-            // Every version is its own Tab stop (Robert, 2026-11-23), so focus alone must not
+            // Every version is its own Tab stop, so focus alone must not
             // switch: Tab passing over them would land on the last. Enter or Space picks one;
             // arrows and 1, 2, 3 still work.
             activationMode="manual"
@@ -883,7 +883,7 @@ function Build() {
                 <TabsList
                   aria-label="Versions"
                   variant="line"
-                  // Names with a line under the one shown (Robert picked it, 2026-11-23). The
+                  // Names with a line under the one shown. The
                   // list fills the bar's height; each tab is a small box in the middle, so its
                   // focus ring has room, and its line reaches down onto the bar's bottom edge.
                   className="h-auto! gap-1 self-stretch p-0"
@@ -929,9 +929,9 @@ function Build() {
                   aria-label="Screen size"
                   variant="outline"
                   size="sm"
-                  // One joined pair, not two buttons (Robert, 2026-11-23).
+                  // One joined pair, not two buttons.
                   spacing={0}
-                  // Both reachable with Tab, not only with arrows (Robert, 2026-11-23).
+                  // Both reachable with Tab, not only with arrows.
                   rovingFocus={false}
                   // On a phone the preview already is a phone. Each item sits in a span for its
                   // tooltip, so the group's own first/last rounding can't see them as a row.
@@ -1080,7 +1080,7 @@ function TryRow({ onPick, typing }: { onPick: (ex: Example) => void; typing: boo
     return () => clearInterval(t)
   }, [])
   return (
-    // From the message box's text edge, like Recent below (Robert, 2026-11-23): "Try" never moves
+    // From the message box's text edge, like Recent below: "Try" never moves
     // when the names change, and the two lists share one edge.
     // biome-ignore lint/a11y/noStaticElementInteractions: pausing on hover only, no action
     <div
@@ -1192,7 +1192,7 @@ function toneOf(doc: Document | null | undefined): Tone {
 }
 
 /**
- * The phone preview as a real phone (Robert, 2026-11-23): an iPhone-sized screen (393 by 852,
+ * The phone preview as a real phone: an iPhone-sized screen (393 by 852,
  * the width sites are laid out at), its bezel, side buttons, Dynamic Island, a status bar in the
  * page's own top colour, and the home bar. It is scaled down as one piece when the window is
  * shorter, so the page inside keeps the phone's true width.
@@ -1386,7 +1386,7 @@ function Reply({
                 <MarkerContent>{notes.join(' ')}</MarkerContent>
               </Marker>
             )}
-            {/* For someone new: how this was made, in plain rows (Robert, 2026-11-23). */}
+            {/* For someone new: how this was made, in plain rows. */}
             <TraceCollapsible className="mt-2 text-xs text-zinc-500">
               <TraceCollapsibleTrigger className="text-xs">
                 <TraceTitle>Details</TraceTitle>

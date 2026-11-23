@@ -1,6 +1,6 @@
 // Atelier: crafted and personal, like a maker's workroom kept tidy. Warm pale paper; the name sewn
-// on like a garment label; beside the promise, a photo in a stitched mount (no swatch card: Robert,
-// 2026-11-23, no fake decorations). The offer hangs from a rail
+// on like a garment label; beside the promise, a photo in a stitched mount (no swatch card: no fake
+// decorations). The offer hangs from a rail
 // as fabric tags, each on its own thread with a punched hole and a stitched edge, the price at the
 // foot. Sections are parted by dashed seams; the facts at the close sit on a sewn-in care label.
 // Calm and premium, with the maker's hand only in the details. For tailors, dressmakers, interior
@@ -111,7 +111,7 @@ h2{font-size:clamp(1.9rem,3.4vw,2.75rem);line-height:1.12;max-width:24ch;margin-
 .foot{display:flex;justify-content:space-between;gap:.5rem 2rem;flex-wrap:wrap;padding-block:2rem 2.5rem;font-size:.92rem;opacity:.85;border-top:1.5px dashed color-mix(in oklab,var(--on-acc) 35%,transparent)}
 @media (max-width:860px){.hero,.about,.end .in{grid-template-columns:minmax(0,1fr)}.visual{max-width:30rem}.visual img{aspect-ratio:4/3}.about figure{max-width:22rem}.cols{grid-template-columns:minmax(0,1fr)}.top nav a:not(:last-child){display:none}}
 @media (max-width:560px){.rail{grid-template-columns:minmax(0,1fr);row-gap:0;border-inline-start:3px solid var(--ink)}.rail>li{border-top:0;padding-block:.75rem;padding-inline:1.5rem 0}.rail>li::before{top:2rem;left:auto;inset-inline-start:0;width:1.5rem;height:1px}.ft,.rail>li:nth-child(n) .ft{margin-top:0;transform:none;clip-path:none;padding:1.2rem 1.2rem 1.2rem 2.75rem}.ft::before{top:1.6rem;left:auto;inset-inline-start:.9rem;margin:0}.ft::after{inset:.4rem;border-top:1.5px dashed var(--seam)}.pair{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:1rem}}
-/* Questions beside their heading on wide screens: a heading over a narrow list left the right half empty (Robert, 2026-11-23). */
+/* Questions beside their heading on wide screens: a heading over a narrow list left the right half empty. */
 @media (min-width:861px){#questions>.w{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);column-gap:clamp(2rem,5vw,5rem);align-items:start}#questions>.w>h2,#questions>.w>.head{margin:0}#questions .faq{max-width:none}}`
 
 function Extras({ c, x }: { c: TemplateProps['c']; x: Extra }) {

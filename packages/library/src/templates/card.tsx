@@ -1,5 +1,5 @@
 // Card: the whole business on one card. The page is light paper with a hint of the owner's colour
-// (Robert, 2026-11-23: the full colour around the card was too loud; it stays on the button); on it sits a
+// (the full colour around the card was too loud; it stays on the button); on it sits a
 // single white card, narrow like a letter, holding everything in one column: the name set as a
 // letterhead, the promise, what they do with prices, and the contact details at the foot like the
 // back of a business card. Sections inside are parted by fine rules, never boxes. Needs no photos:
