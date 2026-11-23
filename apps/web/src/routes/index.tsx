@@ -471,11 +471,7 @@ function Build() {
           onKeyDown={onKey}
           rows={big ? 3 : 2}
           style={big ? { viewTransitionName: 'prompt' } : undefined}
-          placeholder={
-            result
-              ? 'What should change?'
-              : "Describe the site: who it's for, what it offers, how it should feel…"
-          }
+          placeholder={result ? 'What should change?' : "What's the site for?"}
           className={`max-h-48 flex-none overflow-y-auto leading-relaxed field-sizing-fixed motion-safe:transition-[height] motion-safe:duration-150 motion-safe:ease-out ${big ? 'min-h-20 text-base md:text-base' : 'min-h-12 text-sm'}`}
         />
         <textarea
