@@ -2,7 +2,9 @@
 // booklet: the first spread is the cover in the organisation's colour (name, headline, the hero
 // photo as the cover picture) facing the first inside page, where the introduction is the
 // programme note and the offer is the running order, centred, item under item with a short rule
-// between. The inside pages run in two columns either side of the fold; the closing spread puts
+// between. The inside pages run in two columns either side of the fold (one section alone runs
+// across both, its heading over the spread: a lone section left the right page empty, Robert
+// 2026-11-23); the closing spread puts
 // the facts on the last inside page and the call on the back cover. With no photos the cover is
 // type only. For choirs, orchestras, bands, amateur theatre, societies and festivals.
 
@@ -60,6 +62,9 @@ h2{font-size:clamp(1.6rem,2.8vw,2.3rem);line-height:1.12;text-align:center;max-w
 .order .pr{display:block;margin-top:.35rem;color:var(--acc);font-weight:600;font-variant-numeric:tabular-nums}
 .inside{background:var(--page);padding:var(--pad);columns:2;column-gap:calc(var(--pad) * 2);column-rule:1px solid var(--hair);border-top:1px solid var(--hair)}
 .inside>section{break-inside:avoid;padding-block:0 clamp(2rem,4vw,3rem)}
+.inside>section:only-child{break-inside:auto;padding-bottom:0}
+.inside>section:only-child>h2{column-span:all;margin-bottom:clamp(1.25rem,2.5vw,1.75rem)}
+.inside>section.say:only-child,.inside>section.pair:only-child{column-span:all}
 .inside>section+section{padding-top:clamp(.5rem,1vw,1rem)}
 .inside>section+section::before{content:"";display:block;width:3rem;border-top:2px solid var(--acc);margin:0 auto clamp(1.75rem,3.5vw,2.5rem)}
 .inside h2{margin-bottom:1.25rem}
