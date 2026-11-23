@@ -33,6 +33,7 @@ import {
 } from '@repo/pipeline'
 import { ART_STRENGTHS, ART_STYLES, type ArtStrength, type ArtStyle } from './art'
 import { getEnv } from './env'
+import { fetchPhoto, photoLink } from './photo-store'
 import { type FoundPhoto, findPhotos, toDataUri } from './photos'
 
 // One build, for any kind of organisation (docs/m0/15-any-business.md):
@@ -58,10 +59,15 @@ export type PhotoJob = {
   none?: boolean
 }
 
-/** The photo step's answer: each slot token's image, by id, so a photo used twice is sent once. */
+/**
+ * The photo step's answer: each slot token's image, by id, so a photo used twice is sent once.
+ * `images` holds links: /api/photo/… for photos (photo-store.ts), data: links for drawn art.
+ */
 export type PhotoResult = {
   slots: Record<string, string>
   images: Record<string, string>
+  /** The searches the photos were found with (an edit asking for other photos writes new ones). */
+  queries?: PhotoJob['queries']
   credits: { photographer: string; page: string }[]
   notes: string[]
   ms: number
@@ -69,6 +75,9 @@ export type PhotoResult = {
   /** How many spaces got drawn art (Surfaces) because no photo fitted. */
   art: number
 }
+/** One photo space ready, sent to the build page as it lands, before the whole step is done. */
+export type PhotoLanded = { slots: string[]; id: string; src: string }
+
 export type BuildResult = {
   /** What the site was made from, for editing it (docs/m0/27-editing.md); null for the sample. */
   state: SiteState | null
@@ -332,6 +341,8 @@ export async function build(
      * the caller runs the photo step after the page.
      */
     onPhotos?: (p: PhotoResult | null) => void
+    /** Each space's photo as soon as it is ready, hero first; `onPhotos` still ends the step. */
+    onPhoto?: (p: PhotoLanded) => void
   } = {},
 ): Promise<BuildResult> {
   const t0 = performance.now()
@@ -397,7 +408,7 @@ export async function build(
                 : null,
             )
         if (!job) return null
-        const p = await sitePhotos(job)
+        const p = await sitePhotos(job, opts.onPhoto)
         return {
           ...p,
           ms: Math.round(performance.now() - t0),
@@ -516,6 +527,10 @@ const SLOTS = {
   d1: 'detail',
   d2: 'detail',
 } as const
+type Slot = keyof typeof SLOTS
+
+/** The order spaces choose their photos in: each takes the best one no earlier space took. */
+const PICK_ORDER: Slot[] = ['hero', 'about', 'd1', 'd2', 'cta']
 
 /** A quiet colour for drawn art, one per business: low saturation, mid tone (neutral sites). */
 function artColour(seed: string, s: number = ART_STRENGTHS.muted) {
@@ -534,10 +549,70 @@ function artColour(seed: string, s: number = ART_STRENGTHS.muted) {
 }
 
 /**
+ * Which photo each space shows. Each space a photo no other space shows ("repeating images"); a
+ * space with no fresh photo left gets drawn art (undefined). Spares (each subject's next pick)
+ * only stand in for a first choice that is missing. Only photos that `ok` accepts count (those
+ * that downloaded), and they are asked about lazily, in each space's own order, so a space waits
+ * only for the downloads ahead of it.
+ */
+async function assignPhotos(
+  found: { natural: Record<string, FoundPhoto[]>; spare: Record<string, FoundPhoto[]> },
+  ok: (p: FoundPhoto) => Promise<boolean>,
+  onSpace: (slot: Slot, p: FoundPhoto | undefined) => void = () => {},
+): Promise<Record<Slot, FoundPhoto | undefined>> {
+  const n = found.natural as Record<'place' | 'people' | 'detail', FoundPhoto[]>
+  const spare = found.spare as Record<'place' | 'people' | 'detail', FoundPhoto[]>
+  /** The i-th photo of a list that downloaded. */
+  const at = (xs: FoundPhoto[], i: number) => async () => {
+    let k = 0
+    for (const x of xs) if ((await ok(x)) && k++ === i) return [x]
+    return []
+  }
+  /** Every photo of a list that downloaded. */
+  const all = (xs: FoundPhoto[]) => async () => {
+    const out: FoundPhoto[] = []
+    for (const x of xs) if (await ok(x)) out.push(x)
+    return out
+  }
+  const prefs: Record<Slot, (() => Promise<FoundPhoto[]>)[]> = {
+    hero: [at(n.place, 0), at(spare.place, 0), at(n.people, 0), all(n.place)],
+    about: [at(n.people, 0), at(n.place, 1), at(spare.people, 0), all(n.people), all(n.place)],
+    d1: [at(n.detail, 0), at(spare.detail, 0), at(n.detail, 1), all(n.detail), all(n.people)],
+    d2: [
+      at(n.detail, 1),
+      at(n.people, 1),
+      at(n.detail, 2),
+      all(n.detail),
+      all(n.people),
+      all(n.place),
+    ],
+    cta: [at(n.place, 1), at(n.place, 2), at(n.people, 2), all(n.place), all(n.people)],
+  }
+  const taken = new Set<string>()
+  const chosen = {} as Record<Slot, FoundPhoto | undefined>
+  for (const slot of PICK_ORDER) {
+    let p: FoundPhoto | undefined
+    for (const pref of prefs[slot]) {
+      p = (await pref()).find((x) => !taken.has(x.id))
+      if (p) break
+    }
+    if (p) taken.add(p.id)
+    chosen[slot] = p
+    onSpace(slot, p)
+  }
+  return chosen
+}
+
+/**
  * The photo step: finds and checks photos for the page's spaces (photos.ts). A space no photo
  * fits gets drawn art from Surfaces instead: never another business's photo, never unchecked.
+ * Each space is handed to `onPhoto` as soon as its photo has downloaded, hero first, so the page
+ * fills while later photos are still on their way.
  */
-export async function sitePhotos(job: PhotoJob): Promise<PhotoResult> {
+export async function sitePhotos(
+  job: PhotoJob,
+  onPhoto: (p: PhotoLanded) => void = () => {},
+): Promise<PhotoResult> {
   const t0 = performance.now()
   const env = getEnv()
   const notes: string[] = []
@@ -546,7 +621,6 @@ export async function sitePhotos(job: PhotoJob): Promise<PhotoResult> {
     ? {
         natural: empty,
         spare: empty,
-        images: {},
         ms: 0,
         limited: false,
         limitInfo: '',
@@ -565,57 +639,57 @@ export async function sitePhotos(job: PhotoJob): Promise<PhotoResult> {
       )
   const n = found.natural
   const spare = found.spare
-  // Each space a photo no other space shows ("repeating images"); a space
-  // with no fresh photo left gets its own drawn art. Spares (each subject's next pick) only stand
-  // in for a first choice that is missing.
-  const taken = new Set<string>()
-  const pick = (...xs: (FoundPhoto | undefined)[]) => {
-    const p = xs.find((x) => x && !taken.has(x.id))
-    if (p) taken.add(p.id)
-    return p
+  // Download only what the spaces will show if every download works, all at once, hero first;
+  // a failed one sends its space down its own list, and only then is the next photo downloaded.
+  const downloads = new Map<string, Promise<boolean>>()
+  const ready = (p: FoundPhoto) => {
+    let d = downloads.get(p.id)
+    if (!d) {
+      d = fetchPhoto(p.id, p.source)
+      downloads.set(p.id, d)
+    }
+    return d
   }
-  const chosen: Record<keyof typeof SLOTS, FoundPhoto | undefined> = {
-    hero: pick(n.place[0], spare.place[0], n.people[0], ...n.place),
-    about: pick(n.people[0], n.place[1], spare.people[0], ...n.people, ...n.place),
-    d1: pick(n.detail[0], spare.detail[0], n.detail[1], ...n.detail, ...n.people),
-    d2: pick(n.detail[1], n.people[1], n.detail[2], ...n.detail, ...n.people, ...n.place),
-    cta: pick(n.place[1], n.place[2], n.people[2], ...n.place, ...n.people),
+  const hoped = await assignPhotos(found, async () => true)
+  for (const slot of PICK_ORDER) {
+    const p = hoped[slot]
+    if (p) void ready(p)
   }
   const slots: Record<string, string> = {}
   const images: Record<string, string> = {}
   let art = 0
-  for (const [slot] of Object.entries(SLOTS) as [keyof typeof SLOTS, string][]) {
-    const p = chosen[slot]
-    if (p && found.images[p.id]) {
+  const fill = (slot: Slot, p: FoundPhoto | undefined) => {
+    if (p) {
       // A photo is the same in light and dark versions.
+      images[p.id] = photoLink(p.id, p.source)
       slots[slot] = p.id
       slots[`${slot}dk`] = p.id
-      images[p.id] = found.images[p.id] ?? ''
-      continue
+      onPhoto({ slots: [slot, `${slot}dk`], id: p.id, src: images[p.id] ?? '' })
+      return
     }
     // Drawn art in Jev's style and colour strength, in each version's own theme; the same for
     // the same business every time.
     for (const dark of [false, true]) {
       // One drawing per space, so two spaces never show the same art.
       const id = `art${slot}${dark ? 'dk' : ''}`
-      if (!images[id]) {
-        const svg = toSvg(
-          generate({
-            style: job.art.style,
-            seed: `${job.seed}-${slot}`,
-            color: artColour(job.seed, ART_STRENGTHS[job.art.strength]),
-            width: 1200,
-            height: 800,
-            mood: 'calm',
-            theme: dark ? 'dark' : 'light',
-          }),
-        )
-        images[id] = toDataUri(new TextEncoder().encode(svg), 'image/svg+xml')
-      }
+      const svg = toSvg(
+        generate({
+          style: job.art.style,
+          seed: `${job.seed}-${slot}`,
+          color: artColour(job.seed, ART_STRENGTHS[job.art.strength]),
+          width: 1200,
+          height: 800,
+          mood: 'calm',
+          theme: dark ? 'dark' : 'light',
+        }),
+      )
+      images[id] = toDataUri(new TextEncoder().encode(svg), 'image/svg+xml')
       slots[`${slot}${dark ? 'dk' : ''}`] = id
+      onPhoto({ slots: [`${slot}${dark ? 'dk' : ''}`], id, src: images[id] ?? '' })
     }
     art++
   }
+  await assignPhotos(found, ready, fill)
   const used = new Set(Object.values(slots))
   const seen = new Set<string>()
   const credits = [
@@ -653,6 +727,7 @@ export async function sitePhotos(job: PhotoJob): Promise<PhotoResult> {
     images,
     credits,
     notes,
+    queries: job.queries,
     ms: Math.round(performance.now() - t0),
     costUsd: found.costUsd,
     art,

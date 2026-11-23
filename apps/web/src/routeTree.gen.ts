@@ -15,6 +15,7 @@ import { Route as ApiBuildStreamRouteImport } from './routes/api/build-stream'
 import { Route as ApiPhotosRouteImport } from './routes/api/photos'
 import { Route as ApiTemplateRouteImport } from './routes/api/template'
 import { Route as ApiTemplatePickRouteImport } from './routes/api/template-pick'
+import { Route as ApiPhotoIdRouteImport } from './routes/api/photo.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -46,6 +47,11 @@ const ApiTemplatePickRoute = ApiTemplatePickRouteImport.update({
   path: '/api/template-pick',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPhotoIdRoute = ApiPhotoIdRouteImport.update({
+  id: '/api/photo/$id',
+  path: '/api/photo/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -54,6 +60,7 @@ export interface FileRoutesByFullPath {
   '/api/photos': typeof ApiPhotosRoute
   '/api/template': typeof ApiTemplateRoute
   '/api/template-pick': typeof ApiTemplatePickRoute
+  '/api/photo/$id': typeof ApiPhotoIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -62,6 +69,7 @@ export interface FileRoutesByTo {
   '/api/photos': typeof ApiPhotosRoute
   '/api/template': typeof ApiTemplateRoute
   '/api/template-pick': typeof ApiTemplatePickRoute
+  '/api/photo/$id': typeof ApiPhotoIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -71,6 +79,7 @@ export interface FileRoutesById {
   '/api/photos': typeof ApiPhotosRoute
   '/api/template': typeof ApiTemplateRoute
   '/api/template-pick': typeof ApiTemplatePickRoute
+  '/api/photo/$id': typeof ApiPhotoIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -81,6 +90,7 @@ export interface FileRouteTypes {
     | '/api/photos'
     | '/api/template'
     | '/api/template-pick'
+    | '/api/photo/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -89,6 +99,7 @@ export interface FileRouteTypes {
     | '/api/photos'
     | '/api/template'
     | '/api/template-pick'
+    | '/api/photo/$id'
   id:
     | '__root__'
     | '/'
@@ -97,6 +108,7 @@ export interface FileRouteTypes {
     | '/api/photos'
     | '/api/template'
     | '/api/template-pick'
+    | '/api/photo/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -106,6 +118,7 @@ export interface RootRouteChildren {
   ApiPhotosRoute: typeof ApiPhotosRoute
   ApiTemplateRoute: typeof ApiTemplateRoute
   ApiTemplatePickRoute: typeof ApiTemplatePickRoute
+  ApiPhotoIdRoute: typeof ApiPhotoIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -152,6 +165,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiTemplatePickRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/photo/$id': {
+      id: '/api/photo/$id'
+      path: '/api/photo/$id'
+      fullPath: '/api/photo/$id'
+      preLoaderRoute: typeof ApiPhotoIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -162,6 +182,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPhotosRoute: ApiPhotosRoute,
   ApiTemplateRoute: ApiTemplateRoute,
   ApiTemplatePickRoute: ApiTemplatePickRoute,
+  ApiPhotoIdRoute: ApiPhotoIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

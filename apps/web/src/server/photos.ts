@@ -4,16 +4,16 @@
 //    "quality images" of that town, kept only when the title or description names it.
 // 2. A look. A small vision model sees every candidate and keeps only the ones that fit this
 //    business, best first. It only judges photos; it never makes them (no AI pictures).
-// 3. Download. Pixabay forbids hotlinking, so the server downloads each chosen photo and hands it
-//    to the page once; the page turns them into local blob links shared by every look.
+// 3. Download. Pixabay forbids hotlinking, so the server downloads each photo a space will show
+//    (make-site.ts, photo-store.ts) and the page fetches it from the server, once for every look.
 // Nothing is borrowed: when nothing fits, the page is drawn without photos.
 // Before real users: ask Pixabay about this volume (CLAUDE.md, "Test images"). Every photo keeps
 // its credit, and Commons photos their licence.
 
 export type FoundPhoto = {
   id: string
-  /** Token placed in the page; the build page swaps it for a local link. */
-  token: string
+  /** Where to download it from, once it is chosen for a space. */
+  source: string
   alt: string
   width: number
   height: number
@@ -27,8 +27,6 @@ export type Found = {
    * reserve for a space whose first choices are missing.
    */
   spare: Slots<FoundPhoto[]>
-  /** id → data: URI, for the build page to turn into blob links. */
-  images: Record<string, string>
   ms: number
   /** Pixabay refused a search for going over its rate limit (100 a minute). */
   limited: boolean
@@ -511,27 +509,17 @@ export async function findPhotos(
     string[]
   >
 
-  const images: Record<string, string> = {}
+  // Nothing is downloaded here: the photo step downloads only the photos its spaces show, best
+  // space first, and falls back to the next pick when a download fails.
   const wanted = [...new Set([...SUBJECTS.flatMap((s) => [...natural[s], ...spare[s]])])]
-  await Promise.all(
-    wanted.map(async (id) => {
-      const c = byId.get(id)
-      const res = c ? await fetch(c.full, { headers: UA }).catch(() => null) : null
-      if (!res?.ok) return
-      images[id] = toDataUri(
-        await res.arrayBuffer(),
-        res.headers.get('content-type') ?? 'image/jpeg',
-      )
-    }),
-  )
   const photo = (id: string): FoundPhoto[] => {
     const c = byId.get(id)
-    if (!c || !images[id]) return []
+    if (!c) return []
     const width = Math.min(1600, c.width)
     return [
       {
         id,
-        token: `__IMG_${id}__`,
+        source: c.full,
         alt: c.alt,
         width,
         height: Math.round((width * c.height) / c.width),
@@ -544,12 +532,11 @@ export async function findPhotos(
   return {
     natural: set(natural),
     spare: set(spare),
-    images,
     ms: Math.round(performance.now() - t0),
     limited,
     limitInfo,
     judged: !!looked.choice,
-    commons: wanted.filter((id) => id.startsWith('c') && images[id]).length,
+    commons: wanted.filter((id) => id.startsWith('c')).length,
     costUsd: looked.costUsd,
   }
 }

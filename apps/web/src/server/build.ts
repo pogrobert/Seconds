@@ -2,4 +2,4 @@
 // and the photo fallback through routes/api/photos.ts, both behind the per-visitor limit
 // (server/limit.ts); the server functions that also reached the models are gone (public launch,
 // 2026-11-23).
-export type { BuildResult, BuiltSite, PhotoJob, PhotoResult } from './make-site'
+export type { BuildResult, BuiltSite, PhotoJob, PhotoLanded, PhotoResult } from './make-site'

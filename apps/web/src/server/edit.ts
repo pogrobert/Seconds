@@ -24,6 +24,7 @@ import {
   type BuildStep,
   contentFor,
   drawTemplates,
+  type PhotoLanded,
   type PhotoResult,
   type SiteState,
   sitePhotos,
@@ -466,6 +467,8 @@ export async function edit(
   request: string,
   onStep: (s: BuildStep) => void = () => {},
   onPhotos?: (p: PhotoResult | null) => void,
+  /** Each space's new photo as it lands (make-site.ts, sitePhotos). */
+  onPhoto?: (p: PhotoLanded) => void,
 ): Promise<EditOutcome> {
   const t0 = performance.now()
   const env = getEnv()
@@ -774,7 +777,7 @@ export async function edit(
     }
     changed.push('the photos (taken off)')
     if (onPhotos)
-      sitePhotos(photoJob).then(
+      sitePhotos(photoJob, onPhoto).then(
         (p) => onPhotos({ ...p, ms: Math.round(performance.now() - t0) }),
         () => onPhotos(null),
       )
@@ -795,7 +798,7 @@ export async function edit(
       }
       changed.push('the photos')
       if (onPhotos)
-        sitePhotos(photoJob).then(
+        sitePhotos(photoJob, onPhoto).then(
           (p) => onPhotos({ ...p, ms: Math.round(performance.now() - t0) }),
           () => onPhotos(null),
         )

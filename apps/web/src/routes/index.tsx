@@ -65,7 +65,7 @@ import {
 } from '@/components/ui/trace'
 import { EXAMPLES, type Example } from '../examples'
 import { ago, listSites, loadSite, removeSite, type SiteSummary, saveSite } from '../history'
-import type { BuildResult, PhotoJob, PhotoResult } from '../server/build'
+import type { BuildResult, PhotoJob, PhotoLanded, PhotoResult } from '../server/build'
 import { suggestionsFor } from '../suggest'
 
 /** The photo step on its own, when the photos found during the build did not arrive. */
@@ -91,6 +91,8 @@ async function streamBuild(
   onPhotos: (p: PhotoResult | null) => void,
   /** The site so far: the last message is then an edit of it (docs/m0/27-editing.md). */
   state: BuildResult['state'] = null,
+  /** Each photo space as soon as its photo is ready, hero first, before `onPhotos`. */
+  onPhoto: (p: PhotoLanded) => void = () => {},
 ): Promise<BuildResult> {
   const res = await fetch('/api/build-stream', {
     method: 'POST',
@@ -126,6 +128,7 @@ async function streamBuild(
         const ev = JSON.parse(line) as
           | { type: 'step'; step: keyof Progress; ms: number }
           | { type: 'result'; result: BuildResult }
+          | ({ type: 'photo' } & PhotoLanded)
           | { type: 'photos'; photos: PhotoResult | null }
           | { type: 'error'; message: string }
         if (ev.type === 'step') {
@@ -134,7 +137,8 @@ async function streamBuild(
         } else if (ev.type === 'result') {
           got = true
           resolve(ev.result)
-        } else if (ev.type === 'photos') onPhotos(ev.photos)
+        } else if (ev.type === 'photo') onPhoto(ev)
+        else if (ev.type === 'photos') onPhotos(ev.photos)
         else reject(new Error(ev.message))
       }
       if (end) {
@@ -179,7 +183,7 @@ const WAITING_CSS =
   '<style>img[data-img]{background:linear-gradient(110deg,rgba(127,127,127,.10) 35%,rgba(127,127,127,.24) 50%,rgba(127,127,127,.10) 65%) 0 0/300% 100%;animation:img-wait 1.6s linear infinite}@keyframes img-wait{from{background-position:100% 0}to{background-position:-50% 0}}.img-in{animation:img-in .5s ease-out}@keyframes img-in{from{opacity:0}to{opacity:1}}@media (prefers-reduced-motion:reduce){img[data-img],.img-in{animation:none}}</style>'
 const withSpaces = (html: string) =>
   html
-    .replace(/src="__IMG_([A-Za-z0-9]+)__"/g, `src="${BLANK}" data-img="$1"`)
+    .replace(/src="__IMG_([A-Za-z0-9]+)__"/g, `src="${BLANK}" data-img="$1" data-slot="$1"`)
     .replace('</head>', `${WAITING_CSS}</head>`)
 
 /** Puts the photos into a page already showing: each space gets its photo and fades in. */
@@ -207,21 +211,42 @@ function wireLinks(doc: Document | null | undefined) {
   })
 }
 
+/**
+ * Each space shows its link's photo. A page whose words did not change is not drawn again (an
+ * edit asking for other photos, or undoing one), so a space already showing a photo takes the new
+ * one, and goes back to waiting while its links are cleared for photos still to come.
+ */
 function fillSpaces(doc: Document | null | undefined, links: Record<string, string>) {
   // Slots that got drawn art are listed under "art:<slot>"; templates hide some of those.
   if (!doc) return
-  for (const img of Array.from(doc.querySelectorAll<HTMLImageElement>('img[data-img]'))) {
-    const url = links[img.dataset.img ?? '']
-    if (!url) continue
+  // Pages kept in Recent before spaces carried their slot name.
+  for (const img of Array.from(doc.querySelectorAll<HTMLImageElement>('img[data-img]')))
+    img.dataset.slot ??= img.dataset.img
+  for (const img of Array.from(doc.querySelectorAll<HTMLImageElement>('img[data-slot]'))) {
+    const slot = img.dataset.slot ?? ''
+    const url = links[slot]
+    if (!url) {
+      if (img.hasAttribute('data-img')) continue
+      img.dataset.img = slot
+      img.classList.remove('img-in')
+      delete img.dataset.art
+      img.src = BLANK
+      continue
+    }
+    // Photos land one at a time: a space already showing or loading its photo is left alone.
+    if (img.getAttribute('src') === url) continue
     img.addEventListener(
       'load',
       () => {
         img.removeAttribute('data-img')
+        img.classList.remove('img-in')
+        void img.offsetWidth
         img.classList.add('img-in')
       },
       { once: true },
     )
-    if (links[`art:${img.dataset.img ?? ''}`]) img.dataset.art = ''
+    if (links[`art:${slot}`]) img.dataset.art = ''
+    else delete img.dataset.art
     img.src = url
   }
 }
@@ -318,11 +343,16 @@ function Build() {
       const photosIn = new Promise<PhotoResult | null>((ok) => {
         photos = ok
       })
+      const early: PhotoLanded[] = []
+      let landed = (p: PhotoLanded) => {
+        early.push(p)
+      }
       const built = await streamBuild(
         history.filter((m) => m.role === 'user').map((m) => m.text),
         setProgress,
         (p) => photos(p),
         result?.state ?? null,
+        (p) => landed(p),
       )
       if (run !== session.current) return
       // "Undo": the version before comes back, photos and all.
@@ -391,37 +421,68 @@ function Build() {
         },
       ])
       setBusy(false)
-      // The photo step: the page is already showing; photos fill its spaces as they come.
+      // The photo step: the page is already showing; each space fills as its photo lands (hero
+      // first), fetched as a file and kept as a local link, so the photos can be saved with the
+      // site (history.ts).
       if (r.photoJob) {
+        const current = () => mine === generation.current && run === session.current
+        const files = new Map<string, Promise<string>>()
+        const file = (id: string, src: string) => {
+          let f = files.get(id)
+          if (!f) {
+            f = (async () => {
+              // One retry: the photo is on the server already, so a miss is a passing hiccup.
+              const res = await fetch(src).then((x) => (x.ok ? x : fetch(src)))
+              if (!res.ok) throw new Error(`photo ${id}: HTTP ${res.status}`)
+              const blob = await res.blob()
+              const url = URL.createObjectURL(blob)
+              photoUrls.current.push(url)
+              photoBlobs.current.set(url, blob)
+              return url
+            })()
+            files.set(id, f)
+          }
+          return f
+        }
+        // Each version starts from no photos: an edit that brings photos replaces them all.
+        let mineLinks: Record<string, string> = {}
+        const put = async ({ slots, id, src }: PhotoLanded) => {
+          const url = await file(id, src).catch(() => '')
+          if (!url || !current()) return
+          const add: Record<string, string> = {}
+          for (const slot of slots) {
+            add[slot] = url
+            if (src.startsWith('data:image/svg')) add[`art:${slot}`] = '1'
+          }
+          mineLinks = { ...mineLinks, ...add }
+          setLinks((l) => ({ ...l, ...add }))
+          const top = versions.current[versions.current.length - 1]
+          if (top?.result === r) top.links = mineLinks
+        }
+        const puts: Promise<void>[] = []
+        landed = (p) => {
+          puts.push(put(p))
+        }
+        for (const p of early.splice(0)) landed(p)
         const found = await photosIn
-        if (mine !== generation.current || run !== session.current) return
+        if (!current()) return
         // The early photo step failed: ask for it now, the old way.
         const p = found ?? (await findSitePhotos(r.photoJob))
-        const byId: Record<string, string> = {}
-        await Promise.all(
-          Object.entries(p.images).map(async ([id, data]) => {
-            const blob = await (await fetch(data)).blob()
-            const url = URL.createObjectURL(blob)
-            photoUrls.current.push(url)
-            photoBlobs.current.set(url, blob)
-            byId[id] = url
-          }),
-        )
-        const bySlot = Object.fromEntries([
-          ...Object.entries(p.slots).map(([slot, id]) => [slot, byId[id] ?? '']),
-          ...Object.entries(p.slots)
-            .filter(([, id]) => p.images[id]?.startsWith('data:image/svg'))
-            .map(([slot]) => [`art:${slot}`, '1']),
-        ])
-        setLinks(bySlot)
-        const top = versions.current[versions.current.length - 1]
-        if (top?.result === r) top.links = bySlot
+        // Spaces that did not come one by one (the old way above) fill now.
+        for (const [slot, id] of Object.entries(p.slots))
+          if (!mineLinks[slot]) landed({ slots: [slot], id, src: p.images[id] ?? '' })
+        await Promise.all(puts)
+        if (!current()) return
         // The server leaves these out when the owner later asks for different photos.
         const shown = Object.values(p.slots).filter(
           (id) => !p.images[id]?.startsWith('data:image/svg'),
         )
-        // Kept on the version itself, so an undone-to version still knows its photos.
-        if (r.state) r.state.shown = shown
+        // Kept on the version itself, so an undone-to version still knows its photos, and the
+        // searches they came from (an edit asking for other photos writes new ones).
+        if (r.state) {
+          r.state.shown = shown
+          if (p.queries) r.state.copy = { ...r.state.copy, photos: p.queries }
+        }
         setMessages((m) =>
           m.map((x) => (x.role === 'assistant' && x.result === r ? { ...x, photos: p } : x)),
         )
