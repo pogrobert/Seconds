@@ -86,7 +86,10 @@ body{background:var(--paper);color:var(--ink);font-size:1.1875rem;line-height:1.
 .foot .w{display:flex;justify-content:space-between;gap:.5rem 2rem;flex-wrap:wrap;padding-block:1.75rem;font-size:1rem;color:var(--quiet)}
 .foot b{color:var(--ink)}
 @media (max-width:900px){.dir{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:640px){body{font-size:1.125rem}.hero,.end .cols,.list,.dir{grid-template-columns:minmax(0,1fr)}.hero figure{order:-1}.bar nav{display:none}.end dl div{grid-template-columns:minmax(0,1fr);gap:.15rem}.pair{grid-template-columns:minmax(0,1fr)}}`
+@media (max-width:640px){body{font-size:1.125rem}.hero,.end .cols,.list,.dir{grid-template-columns:minmax(0,1fr)}.hero figure{order:-1}.bar nav{display:none}.end dl div{grid-template-columns:minmax(0,1fr);gap:.15rem}.pair{grid-template-columns:minmax(0,1fr)}}
+/* Questions beside their heading on wide screens: a heading over a narrow list left the right half empty (Robert, 2026-11-23). */
+@media (min-width:861px){#questions>.w{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);column-gap:clamp(2rem,5vw,5rem);align-items:start}#questions>.w>h2,#questions>.w>.head{margin:0}#questions .faq{max-width:none}}
+@media (min-width:861px){.sec.grey>.w{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);column-gap:clamp(2rem,5vw,5rem);align-items:start}.sec.grey>.w>h2{margin:0}.steps{max-width:none}}`
 
 function Extras({ c, x }: { c: TemplateProps['c']; x: Extra }) {
   if (x === 'statement')

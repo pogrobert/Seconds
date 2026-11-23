@@ -84,7 +84,9 @@ section.wall:not(:has(${REAL})){display:none}
 .card dt{font-size:.88rem;color:var(--quiet)}
 .card dd{overflow-wrap:anywhere}.card dd a{text-decoration:none;border-bottom:1px solid var(--line)}
 .foot{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding-block:1.6rem;font-size:.9rem;color:var(--quiet);border-top:1px solid var(--line)}
-@media (max-width:760px){.top nav{display:none}.open,.about,.end .cl{grid-template-columns:minmax(0,1fr)}.open .hang figure:nth-child(1){width:62%}.open .hang figure:nth-child(2){width:32%;margin-top:4rem}.wall .hang figure:nth-child(1){width:40%;margin-top:3rem}.wall .hang figure:nth-child(2){width:54%}.fr{padding:.55rem;border-width:.35rem}.about .fr{max-width:18rem;margin-top:0}.labels li{flex:1 1 100%;margin-top:0!important}}`
+@media (max-width:760px){.top nav{display:none}.open,.about,.end .cl{grid-template-columns:minmax(0,1fr)}.open .hang figure:nth-child(1){width:62%}.open .hang figure:nth-child(2){width:32%;margin-top:4rem}.wall .hang figure:nth-child(1){width:40%;margin-top:3rem}.wall .hang figure:nth-child(2){width:54%}.fr{padding:.55rem;border-width:.35rem}.about .fr{max-width:18rem;margin-top:0}.labels li{flex:1 1 100%;margin-top:0!important}}
+/* Questions beside their heading on wide screens: a heading over a narrow list left the right half empty (Robert, 2026-11-23). */
+@media (min-width:861px){#questions .faq{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);column-gap:clamp(2rem,5vw,5rem);align-items:start}#questions .faq>h2,#questions .faq>.head{margin:0}#questions .faq{max-width:none}}`
 
 function Extras({ c, x }: { c: TemplateProps['c']; x: Extra }) {
   if (x === 'statement')
@@ -101,12 +103,14 @@ function Extras({ c, x }: { c: TemplateProps['c']; x: Extra }) {
         <div className="w">
           <div className="faq">
             <h2>Questions</h2>
-            {c.faq?.map((f) => (
-              <details key={f.q}>
-                <summary>{f.q}</summary>
-                <p>{f.a}</p>
-              </details>
-            ))}
+            <div className="qs">
+              {c.faq?.map((f) => (
+                <details key={f.q}>
+                  <summary>{f.q}</summary>
+                  <p>{f.a}</p>
+                </details>
+              ))}
+            </div>
           </div>
         </div>
       </section>

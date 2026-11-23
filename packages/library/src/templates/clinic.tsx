@@ -90,7 +90,9 @@ body{background:var(--paper);color:var(--ink);font-size:1.0625rem;line-height:1.
 .end dd a{text-decoration:none;border-bottom:1px solid var(--line)}
 .end{margin-top:clamp(2.5rem,5vw,4rem)}
 .foot{display:flex;justify-content:space-between;gap:.5rem 2rem;flex-wrap:wrap;padding-block:2rem 2.5rem;font-size:.92rem;color:var(--quiet)}
-@media (max-width:860px){.hero,.about,.end{grid-template-columns:minmax(0,1fr)}.top nav a:not(:last-child){display:none}.visual{padding-bottom:0}.fc{position:relative;inset:auto;width:auto;margin:-3rem 1rem 0}.visual img{aspect-ratio:4/3}.about img{max-width:20rem}.menu{grid-template-columns:minmax(0,1fr)}.menu li:nth-child(2){border-top:1px solid var(--line)}}`
+@media (max-width:860px){.hero,.about,.end{grid-template-columns:minmax(0,1fr)}.top nav a:not(:last-child){display:none}.visual{padding-bottom:0}.fc{position:relative;inset:auto;width:auto;margin:-3rem 1rem 0}.visual img{aspect-ratio:4/3}.about img{max-width:20rem}.menu{grid-template-columns:minmax(0,1fr)}.menu li:nth-child(2){border-top:1px solid var(--line)}}
+/* Questions beside their heading on wide screens: a heading over a narrow list left the right half empty (Robert, 2026-11-23). */
+@media (min-width:861px){#questions>.w{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);column-gap:clamp(2rem,5vw,5rem);align-items:start}#questions>.w>h2,#questions>.w>.head{margin:0}#questions .faq{max-width:none}}`
 
 function Card({ c }: { c: TemplateProps['c'] }) {
   const f = facts(c)
