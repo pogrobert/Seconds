@@ -120,7 +120,7 @@ function TraceCollapsibleContent({
   return (
     <CollapsibleContent
       data-slot="trace-collapsible-content"
-      className="min-w-0 overflow-hidden duration-200 [--radix-accordion-content-height:var(--radix-collapsible-content-height)] data-open:animate-accordion-down data-closed:animate-accordion-up"
+      className="min-w-0 overflow-hidden duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] data-closed:duration-150 [--radix-accordion-content-height:var(--radix-collapsible-content-height)] data-open:animate-accordion-down data-closed:animate-accordion-up"
       {...props}
     >
       <div

@@ -595,7 +595,8 @@ function Build() {
                       scrollAnchor={m.role === 'user'}
                       // Its paint is clipped to its box (content-visibility: auto), so a little
                       // room below keeps the focus ring on Details whole (Robert, 2026-11-23).
-                      className="pb-1"
+                      // Replies ease in; the visitor's own message shows at once.
+                      className={m.role === 'user' ? 'pb-1' : `pb-1 ${ENTER}`}
                     >
                       {m.role === 'user' ? (
                         <ChatMessage align="end">
@@ -624,7 +625,7 @@ function Build() {
                     </MessageScrollerItem>
                   ))}
                   {busy && (
-                    <MessageScrollerItem>
+                    <MessageScrollerItem className={ENTER}>
                       <div aria-live="polite" className="flex gap-3">
                         <Mark />
                         <div className="min-w-0 flex-1 rounded-lg border border-zinc-200 bg-white px-3 py-2.5">
@@ -643,16 +644,15 @@ function Build() {
             // Elements (Robert, 2026-11-23: under the reply they scrolled away and were always the
             // same). Chosen from the site as it stands (suggest.ts); a missing fact starts a
             // message to finish instead of sending.
-            <Suggestions
-              aria-label="Suggested changes"
-              className="-mx-3 mb-1 px-3 py-1 motion-safe:animate-in motion-safe:fade-in-0 motion-safe:duration-200"
-            >
+            <Suggestions aria-label="Suggested changes" className="-mx-3 mb-1 px-3 py-1">
               {suggestionsFor(result, {
                 canUndo: versions.current.length > 1,
                 said: messages.flatMap((m) => (m.role === 'user' ? [m.text] : [])),
-              }).map((x) => (
+              }).map((x, i) => (
                 <Suggestion
                   key={x.label}
+                  // The row arrives one chip after another, 40ms apart (animation review).
+                  style={{ animationDelay: `${i * 40}ms` }}
                   suggestion={x.text}
                   onClick={(text) => {
                     if (x.send) return send(text)
@@ -663,7 +663,7 @@ function Build() {
                       box?.setSelectionRange(text.length, text.length)
                     })
                   }}
-                  className="h-7 bg-white text-xs font-normal text-zinc-600"
+                  className={`h-7 bg-white text-xs font-normal text-zinc-600 ${ENTER}`}
                 >
                   {x.send ? x.label : `${x.label}…`}
                 </Suggestion>
@@ -838,16 +838,26 @@ function Build() {
                   </EmptyHeader>
                 </Empty>
               )}
-              {busy && site && (
-                <div className="pointer-events-none absolute inset-0 bg-white/50">
-                  <div className="h-0.5 w-full overflow-hidden bg-zinc-100">
-                    <div className="h-full w-1/3 animate-[slide_1.1s_ease-in-out_infinite] bg-zinc-900 motion-reduce:animate-none" />
-                  </div>
-                  <span className="absolute top-4 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-full bg-white px-3 py-1.5 text-xs text-zinc-600 shadow-sm ring-1 ring-zinc-900/[.08]">
-                    <Spinner /> Making the new version…
-                  </span>
-                </div>
-              )}
+              {/* While an edit is made: a veil and one pill, eased in after 100ms so quick edits
+                  don't flash, and out a little faster (animation review, 2026-11-23). */}
+              <AnimatePresence>
+                {busy && site && (
+                  <motion.div
+                    key="making"
+                    initial={{ opacity: 0 }}
+                    animate={{
+                      opacity: 1,
+                      transition: { delay: 0.1, duration: 0.15, ease: [0.23, 1, 0.32, 1] },
+                    }}
+                    exit={{ opacity: 0, transition: { duration: 0.12, ease: 'easeOut' } }}
+                    className="pointer-events-none absolute inset-0 bg-white/50"
+                  >
+                    <span className="absolute top-4 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-full bg-white px-3 py-1.5 text-xs text-zinc-600 shadow-sm ring-1 ring-zinc-900/[.08]">
+                      <Spinner /> Making the new version…
+                    </span>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </main>
           </Tabs>
         </section>
@@ -975,6 +985,10 @@ function Mark() {
     </span>
   )
 }
+
+/** How chat replies and chips arrive: a 4px rise and a fade, 200ms, strong ease-out. */
+const ENTER =
+  'motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-1 animation-duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] fill-mode-both'
 
 type Tone = { bg: string; dark: boolean }
 const LIGHT: Tone = { bg: '#ffffff', dark: false }
