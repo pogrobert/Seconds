@@ -10,7 +10,6 @@ import {
   InfoIcon,
   LayoutIcon,
   MonitorIcon,
-  SquaresFourIcon,
   WarningCircleIcon,
   WifiHighIcon,
   XIcon,
@@ -86,23 +85,6 @@ type Progress = { choices?: number; words?: number; check?: number }
  * The build, read as it happens (routes/api/build-stream.ts): each part reports when it is done,
  * so the progress shows what is really finished, then the result.
  */
-/** "More designs": the next three for the same site, drawn without a model (server/edit.ts). */
-const MORE = 'More designs'
-async function nextDesigns(state: NonNullable<BuildResult['state']>): Promise<BuildResult> {
-  const res = await fetch('/api/designs', {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ state }),
-  })
-  const body = (await res.json().catch(() => null)) as {
-    result?: BuildResult
-    error?: string
-  } | null
-  if (!res.ok || !body?.result)
-    throw new Error(body?.error ?? `Could not draw more designs (HTTP ${res.status}).`)
-  return body.result
-}
-
 async function streamBuild(
   messages: string[],
   onStep: (p: Progress) => void,
@@ -336,16 +318,12 @@ function Build() {
       const photosIn = new Promise<PhotoResult | null>((ok) => {
         photos = ok
       })
-      const more = !!result?.state && words.toLowerCase() === MORE.toLowerCase()
-      const built =
-        more && result?.state
-          ? await nextDesigns(result.state)
-          : await streamBuild(
-              history.filter((m) => m.role === 'user').map((m) => m.text),
-              setProgress,
-              (p) => photos(p),
-              result?.state ?? null,
-            )
+      const built = await streamBuild(
+        history.filter((m) => m.role === 'user').map((m) => m.text),
+        setProgress,
+        (p) => photos(p),
+        result?.state ?? null,
+      )
       if (run !== session.current) return
       // "Undo": the version before comes back, photos and all.
       if (built.undo) {
@@ -942,23 +920,6 @@ function Build() {
                 <span className="flex items-center px-1.5 text-[13px] font-medium text-zinc-400">
                   Preview
                 </span>
-              )}
-              {result?.state && (
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      disabled={busy}
-                      onClick={() => void send(MORE)}
-                      className="text-[13px] text-zinc-600"
-                    >
-                      <SquaresFourIcon />
-                      <span className="max-sm:sr-only">{MORE}</span>
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>Three more designs for the same site</TooltipContent>
-                </Tooltip>
               )}
               <div className="ml-auto flex items-center gap-1">
                 <ToggleGroup

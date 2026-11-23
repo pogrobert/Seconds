@@ -580,9 +580,6 @@ export async function edit(
     const a = top('look')
     const dist = a?.dist ?? (a ? { [a.top]: 1 } : {})
     const ranked = LIVE.map((t) => t.id).sort((x, y) => (dist[y] ?? 0) - (dist[x] ?? 0))
-    // A new look starts a new ranking for "More designs" too.
-    next.ranked = ranked
-    next.seen = []
     if (ranked.length >= 3 && ranked[0] !== state.templates[0]) {
       next.templates = ranked.slice(0, 3)
       changed.push('the designs')
@@ -812,7 +809,6 @@ export async function edit(
       : yes('asks:vague')
         ? 'Tell me what you would like different: the colour, the design, the words, the photos or a part of the page. The other two versions are different designs too.'
         : 'I could not tell what to change. Try naming the colour, the design, the words, the photos or a part of the page.'
-  next.seen = [...new Set([...(next.seen ?? []), ...next.templates])]
   const content = contentFor(next.copy, next.brand)
   const sites = drawTemplates(next, content)
   const total = Math.round(performance.now() - t0)
@@ -835,41 +831,5 @@ export async function edit(
       ...(reply ? { reply } : {}),
       photoJob,
     },
-  }
-}
-
-/**
- * "More designs" (Robert, 2026-11-23): the next three templates in the site's ranking, best fit
- * first, with the same words, colour, type and photos. No model is asked, so it costs nothing
- * and takes about as long as drawing the pages. After the last, it starts over.
- */
-export function moreDesigns(state: SiteState): BuildResult {
-  const t0 = performance.now()
-  const live = new Set(LIVE.map((t) => t.id))
-  const ranked = (state.ranked?.length ? state.ranked : [...live]).filter((id) => live.has(id))
-  let seen = new Set([...(state.seen ?? []), ...state.templates])
-  let templates = ranked.filter((id) => !seen.has(id)).slice(0, 3)
-  if (templates.length < 3) {
-    seen = new Set(state.templates)
-    templates = ranked.filter((id) => !seen.has(id)).slice(0, 3)
-  }
-  const next: SiteState = { ...state, templates, seen: [...seen, ...templates] }
-  const sites = drawTemplates(next, contentFor(next.copy, next.brand))
-  const total = Math.round(performance.now() - t0)
-  return {
-    state: next,
-    changed: ['the designs'],
-    reply: 'Here are three more designs. Say "undo" to bring the last three back.',
-    name: next.copy.name,
-    kindLabel: next.copy.kind,
-    suggested: sites[0]?.id ?? 'b1',
-    sites,
-    images: {},
-    credits: [],
-    photoSearches: Object.values(next.copy.photos),
-    ms: { decide: 0, check: 0, text: 0, photos: 0, render: total, order: 0, total },
-    costUsd: 0,
-    notes: [],
-    photoJob: null,
   }
 }
