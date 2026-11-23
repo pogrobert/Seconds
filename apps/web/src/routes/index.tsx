@@ -531,7 +531,7 @@ function Build() {
           <div className="my-auto flex w-full max-w-2xl flex-col gap-7 pt-10">
             <div className="text-center">
               <h1 className="text-[2rem] leading-tight font-medium tracking-[-0.02em] text-balance sm:text-[2.5rem]">
-                Websites in seconds.
+                Websites in seconds
               </h1>
             </div>
             {composerBox(true)}
