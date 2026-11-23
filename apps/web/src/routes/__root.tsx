@@ -38,7 +38,11 @@ function RootDocument({ children }: { children: ReactNode }) {
       <body>
         {/* "Reduce motion" keeps Motion's fades and drops its movement. */}
         <MotionConfig reducedMotion="user">
-          <TooltipProvider delayDuration={300}>{children}</TooltipProvider>
+          {/* No hoverable tooltips: they wait for the pointer to move on before closing, and a
+              pointer that goes into the preview's frame never tells this page it moved. */}
+          <TooltipProvider delayDuration={300} disableHoverableContent>
+            {children}
+          </TooltipProvider>
         </MotionConfig>
         <Scripts />
       </body>
