@@ -40,6 +40,7 @@ The reason to build it: code-writing builders (Lovable, v0, Bolt, Replit) take m
 - **M0 business kinds (2026-11-14):** restaurant or café, hair and beauty salon, dental or medical clinic, trades (plumber, electrician, roofer…), fitness or yoga studio.
 - **M0 style families (2026-11-14):** Poster, Quiet and Soft (`docs/decisions/0002-style-families.md`). Workshop and Deep stay as options outside M0.
 - **Test images (2026-11-14):** licensed stock photos for M0's sample businesses and briefs. Pexels was chosen first but has paused new API keys, so the fetcher uses **Pixabay** (free account; licence allows using, storing and modifying without attribution; API forbids permanent hotlinking and mass downloads). Credit photographers anyway. Keep downloads small and hand-queried; ask the provider before bulk use or before offering stock photos in the product. Unsplash is out: its API requires hotlinking.
+- **Licence (2026-11-23):** MIT-0 (MIT No Attribution), in `LICENSE`. Third-party code keeps its own licence and notice (shadcn/ui in `apps/web/src/components/ui/NOTICE.md`). The repository stays private until Robert says otherwise: do not make anything public, push to a public remote or publish a package without his word.
 - **Ambition.** Robert does not accept "it is not possible". When something blocks the goal, find the strongest way around it. Still report honestly: say what is measured, what is estimated and what failed.
 
 ### What we know about naming
@@ -52,7 +53,6 @@ The reason to build it: code-writing builders (Lovable, v0, Bolt, Replit) take m
 
 Treat each of these as a default to propose, and ask before relying on it.
 
-- **Licence:** fully open source under Apache-2.0, with the repository kept private until the first demo works. Do not make anything public, push to a public remote or publish a package until Robert says so.
 - **Money later:** if it ever charges, building and exporting stay free and publishing on a custom domain is paid. Polar is the likely payment route.
 - **Library shape:** deep, not wide. A few hundred excellent blocks with several variants each, multiplied by a style space, instead of thousands of separate blocks.
 

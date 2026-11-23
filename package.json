@@ -1,6 +1,7 @@
 {
   "name": "builder-root",
   "private": true,
+  "license": "MIT-0",
   "type": "module",
   "packageManager": "pnpm@10.29.3",
   "engines": {
