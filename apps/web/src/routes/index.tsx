@@ -586,7 +586,7 @@ function Build() {
           <button
             type="button"
             onClick={startOver}
-            className="-mx-1 flex cursor-pointer items-center gap-2 rounded-lg px-1 text-[15px] font-semibold tracking-tight outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+            className="-mx-1 flex items-center gap-2 transition-transform duration-150 ease-out active:scale-[0.97] rounded-lg px-1 text-[15px] font-semibold tracking-tight outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
           >
             <Mark />
             Builder
@@ -697,24 +697,27 @@ function Build() {
             />
             {recent.length > 0 && (
               // Sites made here before, newest first (history.ts); kept only in this browser.
-              <section aria-labelledby="recent-title" className="mx-auto mt-4 w-full max-w-md">
-                <h2 id="recent-title" className="mb-1 px-2.5 text-xs font-medium text-zinc-400">
+              // As wide as the message box, its text lined up with the box's (Robert, 2026-11-23).
+              <section aria-labelledby="recent-title" className="w-full">
+                <h2 id="recent-title" className="mb-1 px-4 text-xs font-medium text-zinc-400">
                   Recent
                 </h2>
                 <ul className="flex flex-col">
                   {recent.slice(0, allRecent ? undefined : 4).map((x) => (
                     <li
                       key={x.id}
-                      className="group flex items-center rounded-lg transition-colors hover:bg-zinc-200/50"
+                      // A press shrinks the row a touch, as buttons do; on a row this wide 0.985
+                      // reads like their 0.97.
+                      className="group relative flex items-center rounded-lg transition-[background-color,transform] duration-150 ease-out hover:bg-zinc-200/50 active:scale-[0.985]"
                     >
                       <button
                         type="button"
                         onClick={() => void reopen(x.id)}
-                        className="flex min-w-0 flex-1 cursor-pointer items-baseline gap-2 rounded-lg px-2.5 py-1.5 text-left text-sm outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+                        className="flex min-w-0 flex-1 items-baseline gap-2 rounded-lg px-4 py-2 text-left text-sm pointer-coarse:pr-12 outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
                       >
                         <span className="truncate font-medium text-zinc-800">{x.name}</span>
                         <span className="truncate text-zinc-500">{x.kind}</span>
-                        <span className="ml-auto shrink-0 pl-2 text-xs text-zinc-400 tabular-nums">
+                        <span className="ml-auto shrink-0 pl-2 text-xs text-zinc-400 tabular-nums transition-opacity pointer-fine:group-focus-within:opacity-0 pointer-fine:group-hover:opacity-0">
                           {ago(x.updated)}
                         </span>
                       </button>
@@ -725,7 +728,8 @@ function Build() {
                           await removeSite(x.id)
                           setRecent(await listSites())
                         }}
-                        className="mr-1 grid size-7 shrink-0 cursor-pointer place-items-center rounded-md text-zinc-400 transition-colors outline-none hover:bg-zinc-200 hover:text-zinc-700 focus-visible:ring-3 focus-visible:ring-ring/50 pointer-fine:opacity-0 pointer-fine:group-hover:opacity-100 pointer-fine:focus-visible:opacity-100"
+                        // With a mouse it takes the time's place on hover; on touch both show.
+                        className="absolute top-1/2 right-1.5 grid size-7 -translate-y-1/2 place-items-center rounded-md text-zinc-400 transition-colors outline-none hover:bg-zinc-200 hover:text-zinc-700 focus-visible:ring-3 focus-visible:ring-ring/50 pointer-fine:opacity-0 pointer-fine:group-focus-within:opacity-100 pointer-fine:group-hover:opacity-100"
                       >
                         <XIcon className="size-3.5" />
                       </button>
@@ -736,7 +740,7 @@ function Build() {
                   <button
                     type="button"
                     onClick={() => setAllRecent(true)}
-                    className="mt-0.5 cursor-pointer rounded-md px-2.5 py-1 text-xs text-zinc-500 outline-none hover:text-zinc-800 focus-visible:ring-3 focus-visible:ring-ring/50"
+                    className="mt-0.5 rounded-md px-4 py-1 text-xs text-zinc-500 outline-none hover:text-zinc-800 focus-visible:ring-3 focus-visible:ring-ring/50"
                   >
                     Show {recent.length - 4} more
                   </button>
