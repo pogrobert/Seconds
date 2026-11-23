@@ -1,6 +1,56 @@
 import { createFileRoute } from '@tanstack/react-router'
+import {
+  AlertCircleIcon,
+  ArrowUpIcon,
+  ChevronRightIcon,
+  ExternalLinkIcon,
+  LayoutTemplateIcon,
+  MonitorIcon,
+  RotateCwIcon,
+  SmartphoneIcon,
+} from 'lucide-react'
+import { AnimatePresence, motion } from 'motion/react'
 import { type FormEvent, type KeyboardEvent, useEffect, useRef, useState } from 'react'
-import { type BuildResult, findSitePhotos, type PhotoResult } from '../server/build'
+import { flushSync } from 'react-dom'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { Bubble, BubbleContent } from '@/components/ui/bubble'
+import { Button } from '@/components/ui/button'
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupTextarea,
+} from '@/components/ui/input-group'
+import { Kbd } from '@/components/ui/kbd'
+import { Message as ChatMessage } from '@/components/ui/message'
+import {
+  MessageScroller,
+  MessageScrollerButton,
+  MessageScrollerContent,
+  MessageScrollerItem,
+  MessageScrollerProvider,
+  MessageScrollerViewport,
+} from '@/components/ui/message-scroller'
+import { Skeleton } from '@/components/ui/skeleton'
+import { Spinner } from '@/components/ui/spinner'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
+import { EXAMPLES, type Example } from '../examples'
+import type { BuildResult, PhotoJob, PhotoResult } from '../server/build'
+
+/** The photo step on its own, when the photos found during the build did not arrive. */
+async function findSitePhotos(job: PhotoJob): Promise<PhotoResult> {
+  const res = await fetch('/api/photos', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify(job),
+  })
+  if (!res.ok) throw new Error(`HTTP ${res.status}`)
+  return (await res.json()) as PhotoResult
+}
 
 type Progress = { choices?: number; words?: number; check?: number }
 
@@ -80,12 +130,18 @@ type Message =
   | { role: 'assistant'; text: string; result?: BuildResult; photos?: PhotoResult | 'waiting' }
   | { role: 'error'; text: string }
 
-const EXAMPLES = [
-  'A calm, upmarket hair colour studio in Leith. Unhurried appointments and honest advice.',
-  'We cook everything over open fire. Dark room, a long bar, evenings only, a bit theatrical.',
-  'A family dentist by the sea. Children actually like coming here.',
-  'Electricians in Bristol: tidy, qualified, clear written quotes, we turn up when we say.',
-]
+/**
+ * Message limits (Robert, 2026-11-23). Every message stops at what the server accepts
+ * (routes/api/build-stream.ts cuts at 1,500), with a counter near the end so nothing is cut
+ * silently. The first message needs a few words about the business: "hi" made a site from nothing,
+ * at full cost. Edits have no minimum ("undo", "darker").
+ */
+const MAX_CHARS = 1500
+const COUNT_FROM = 1200
+const tooShort = (text: string) => {
+  const t = text.trim()
+  return t.length < 15 || t.split(/\s+/).length < 3
+}
 
 const seconds = (ms: number) => `${(ms / 1000).toFixed(1)} s`
 
@@ -150,7 +206,6 @@ function Build() {
   const [result, setResult] = useState<BuildResult | null>(null)
   const [look, setLook] = useState<string | null>(null)
   const [device, setDevice] = useState<'desktop' | 'phone'>('desktop')
-  const scroller = useRef<HTMLDivElement>(null)
   const photoUrls = useRef<string[]>([])
   const frame = useRef<HTMLIFrameElement>(null)
   /** Which build is current: photos from an older build are dropped. */
@@ -166,21 +221,28 @@ function Build() {
   const composer = useRef<HTMLTextAreaElement>(null)
   const [reloads, setReloads] = useState(0)
 
-  // The message box grows with what is typed, up to its max height.
+  // The first screen starts with the cursor in the message box.
+  useEffect(() => {
+    composer.current?.focus()
+  }, [])
+
+  // The message box grows with what is typed, up to its max height, and glides to its new height
+  // (Robert, 2026-11-23): a hidden copy of the text, as wide as the box, says how tall it must be,
+  // so the box itself never has to be reset to "auto", which would stop the transition.
+  const mirror = useRef<HTMLTextAreaElement>(null)
   useEffect(() => {
     const t = composer.current
-    if (!t) return
-    t.style.height = 'auto'
-    t.style.height = `${t.scrollHeight}px`
-  }, [draft])
+    const m = mirror.current
+    if (!t || !m) return
+    m.style.width = `${t.clientWidth}px`
+    m.value = t.value || t.placeholder
+    const min = Number.parseFloat(getComputedStyle(t).minHeight) || 0
+    t.style.height = `${Math.min(192, Math.max(min, m.scrollHeight))}px`
+  }, [draft, messages.length === 0])
 
   useEffect(() => {
     fillSpaces(frame.current?.contentDocument, links)
   }, [links])
-
-  useEffect(() => {
-    scroller.current?.scrollTo({ top: scroller.current.scrollHeight, behavior: 'smooth' })
-  }, [messages, busy])
 
   // A running clock while the page or its photos are being made.
   const lastReply = [...messages].reverse().find((m) => m.role === 'assistant')
@@ -193,14 +255,22 @@ function Build() {
 
   async function send(text: string) {
     const words = text.trim()
-    if (!words || busy) return
+    if (!words || busy || (!result && tooShort(words))) return
     const history = [...messages, { role: 'user', text: words } as Message]
-    setMessages(history)
-    setDraft('')
-    setBusy(true)
-    setStarted(performance.now())
-    setNow(performance.now())
-    setProgress({})
+    const start = () => {
+      setMessages(history)
+      setDraft('')
+      setBusy(true)
+      setStarted(performance.now())
+      setNow(performance.now())
+      setProgress({})
+    }
+    // The first message moves the page from the centred start to the split view as one motion
+    // (View Transitions; where the browser has none, or motion is reduced, it simply switches).
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (!messages.length && document.startViewTransition && !still)
+      document.startViewTransition(() => flushSync(start))
+    else start()
     try {
       // Photos arrive on the same stream once found; they wait here until the page is in.
       let photos: (p: PhotoResult | null) => void = () => {}
@@ -282,7 +352,7 @@ function Build() {
         const found = await photosIn
         if (mine !== generation.current) return
         // The early photo step failed: ask for it now, the old way.
-        const p = found ?? (await findSitePhotos({ data: r.photoJob }))
+        const p = found ?? (await findSitePhotos(r.photoJob))
         const byId: Record<string, string> = {}
         await Promise.all(
           Object.entries(p.images).map(async ([id, data]) => {
@@ -331,8 +401,6 @@ function Build() {
     }
   }
   const site = result?.sites.find((s) => s.id === look) ?? result?.sites[0]
-  const last = [...messages].reverse().find((m) => m.role === 'assistant')
-  const photosWaiting = last?.role === 'assistant' && last.photos === 'waiting'
 
   // 1, 2 and 3 switch versions, unless typing.
   useEffect(() => {
@@ -358,296 +426,471 @@ function Build() {
     setTimeout(() => URL.revokeObjectURL(url), 60_000)
   }
 
+  // The name and the site being made; no status on the right, so the preview can reach the top
+  // of the window (Robert, 2026-11-23). In the split view it sits over the chat column.
+  const top = (
+    <header className="flex h-13 shrink-0 items-center gap-2.5 px-5 md:px-2">
+      <span className="flex items-center gap-2 text-[15px] font-semibold tracking-tight">
+        <Mark />
+        Builder
+      </span>
+      {result && (
+        <>
+          <span aria-hidden className="text-zinc-300">
+            /
+          </span>
+          <span className="truncate text-sm font-medium text-zinc-600">{result.name}</span>
+        </>
+      )}
+    </header>
+  )
+
+  const composerBox = (big: boolean) => (
+    <form
+      onSubmit={onSubmit}
+      // The first screen's box and the split view's are one box to the view transition: it glides
+      // from the middle to the bottom left; the words typed in it fly up as the first message.
+      style={{ viewTransitionName: 'composer' }}
+      className="shrink-0"
+    >
+      <InputGroup
+        // The send button is disabled while the box is empty; shadcn greys the whole group for any
+        // disabled control inside, which here would grey the box the visitor is about to type in.
+        className={`bg-white has-disabled:bg-white has-disabled:opacity-100 has-[[data-slot=input-group-control]:focus-visible]:border-zinc-300 has-[[data-slot=input-group-control]:focus-visible]:ring-[3px] has-[[data-slot=input-group-control]:focus-visible]:ring-zinc-900/[.04] ${big ? 'rounded-2xl p-1.5 shadow-[0_1px_2px_rgba(9,9,11,.04),0_12px_32px_-16px_rgba(9,9,11,.18)]' : 'rounded-xl p-0.5 shadow-[0_1px_2px_rgba(9,9,11,.04)]'}`}
+      >
+        <label htmlFor="composer" className="sr-only">
+          Message
+        </label>
+        <InputGroupTextarea
+          id="composer"
+          maxLength={MAX_CHARS}
+          aria-describedby="composer-note"
+          ref={composer}
+          value={draft}
+          onChange={(e) => setDraft(e.target.value)}
+          onKeyDown={onKey}
+          rows={big ? 3 : 2}
+          style={big ? { viewTransitionName: 'prompt' } : undefined}
+          placeholder={
+            result
+              ? 'What should change?'
+              : 'Describe a business: who it is, what it offers, how it should feel…'
+          }
+          className={`max-h-48 flex-none overflow-y-auto leading-relaxed field-sizing-fixed motion-safe:transition-[height] motion-safe:duration-150 motion-safe:ease-out ${big ? 'min-h-20 text-base md:text-base' : 'min-h-12 text-sm'}`}
+        />
+        <textarea
+          ref={mirror}
+          aria-hidden
+          tabIndex={-1}
+          readOnly
+          rows={1}
+          className={`pointer-events-none invisible absolute top-0 left-0 -z-10 resize-none overflow-hidden border-0 px-2.5 py-2 leading-relaxed field-sizing-fixed ${big ? 'text-base' : 'text-sm'}`}
+        />
+        {/* Enter sends and Shift Enter starts a new line, as in any chat; 1, 2 and 3 switch
+            versions (shown on the versions' tooltips). No hints in the box (Robert, 2026-11-23). */}
+        <InputGroupAddon align="block-end" className="justify-between">
+          <span id="composer-note" aria-live="polite" className="text-xs font-normal text-zinc-400">
+            {!result && draft.trim() && tooShort(draft)
+              ? 'Add a few words about the business'
+              : draft.length >= COUNT_FROM
+                ? `${draft.length.toLocaleString('en-GB')} / ${MAX_CHARS.toLocaleString('en-GB')}`
+                : ''}
+          </span>
+          <InputGroupButton
+            type="submit"
+            variant="default"
+            size="icon-sm"
+            disabled={busy || !draft.trim() || (!result && tooShort(draft))}
+            aria-label={busy ? 'Making…' : 'Send'}
+            className="rounded-full"
+          >
+            {busy ? <Spinner /> : <ArrowUpIcon />}
+          </InputGroupButton>
+        </InputGroupAddon>
+      </InputGroup>
+    </form>
+  )
+
+  // Before the first message: a centred start, the message box large in the middle and the
+  // examples under it (launch, 2026-11-23); the split view with the preview comes with the first
+  // site.
+  if (messages.length === 0)
+    return (
+      <div className="flex h-dvh flex-col bg-zinc-50 text-zinc-900 antialiased selection:bg-zinc-200 md:[&>header]:px-5">
+        {top}
+        <main className="flex min-h-0 flex-1 flex-col items-center overflow-y-auto px-5 pb-10">
+          <div className="my-auto flex w-full max-w-2xl flex-col gap-7 pt-10">
+            <div className="text-center">
+              <h1 className="text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
+                Websites in seconds.
+              </h1>
+            </div>
+            {composerBox(true)}
+            <TryRow
+              onPick={(ex) => {
+                setDraft(ex.prompt)
+                composer.current?.focus()
+              }}
+            />
+          </div>
+        </main>
+      </div>
+    )
+
   return (
     <div className="flex h-dvh flex-col bg-zinc-50 text-zinc-900 antialiased selection:bg-zinc-200">
-      <header className="flex h-13 shrink-0 items-center gap-2.5 px-5">
-        <span className="flex items-center gap-2 text-[15px] font-semibold tracking-tight">
-          <Mark />
-          Builder
-        </span>
-        {result && (
-          <>
-            <span aria-hidden className="text-zinc-300">
-              /
-            </span>
-            <span className="truncate text-sm font-medium text-zinc-600">{result.name}</span>
-            <span className="truncate text-sm text-zinc-400">· {result.kindLabel}</span>
-          </>
-        )}
-        <span
-          className="ml-auto flex items-center gap-1.5 text-xs text-zinc-500"
-          aria-live="polite"
+      <div className="md:hidden">{top}</div>
+      <div className="flex min-h-0 flex-1 flex-col gap-3 px-3 pb-3 md:flex-row md:pt-3">
+        <aside
+          className="order-2 flex min-h-0 w-full flex-1 flex-col md:order-none md:w-[400px] md:flex-none md:shrink-0"
+          aria-label="Chat"
         >
-          {busy ? (
-            <>
-              <Spinner /> Making…
-            </>
-          ) : photosWaiting ? (
-            <>
-              <span className="size-1.5 animate-pulse rounded-full bg-zinc-400" /> Photos coming
-            </>
-          ) : result ? (
-            <>
-              <span className="size-1.5 rounded-full bg-zinc-900" /> Ready
-            </>
-          ) : null}
-        </span>
-      </header>
-
-      <div className="flex min-h-0 flex-1 gap-3 px-3 pb-3">
-        <aside className="flex min-h-0 w-[400px] shrink-0 flex-col" aria-label="Chat">
-          <div ref={scroller} className="min-h-0 flex-1 overflow-y-auto px-2 pt-2 pb-5">
-            {messages.length === 0 ? (
-              <div className="flex h-full flex-col justify-end gap-6 pb-1">
-                <div className="px-1">
-                  <h1 className="text-2xl font-semibold tracking-tight text-balance">
-                    What should the site be for?
-                  </h1>
-                  <p className="mt-2 text-sm leading-relaxed text-pretty text-zinc-600">
-                    Who it is, what it does and how it should feel. The page appears in about a
-                    second; photos follow a few seconds later.
-                  </p>
-                </div>
-                <div className="flex flex-col gap-2">
-                  <p className="px-1 text-xs font-medium text-zinc-500">Try one</p>
-                  {EXAMPLES.map((ex) => (
-                    <button
-                      key={ex}
-                      type="button"
-                      onClick={() => send(ex)}
-                      className="group flex items-start gap-3 rounded-lg border border-zinc-200 bg-white px-3.5 py-3 text-left text-[13px] leading-snug text-zinc-700 transition-colors hover:border-zinc-300 hover:bg-zinc-50 hover:text-zinc-900"
-                    >
-                      <span className="flex-1">{ex}</span>
-                      <Icon
-                        name="arrow"
-                        className="mt-px size-4 shrink-0 text-zinc-300 transition-colors group-hover:text-zinc-600"
-                      />
-                    </button>
+          <div className="-mt-3 hidden md:block">{top}</div>
+          {/* The chat keeps the newest turn in view while it grows, and offers a button back down
+              when the visitor has scrolled up (shadcn Message Scroller, launch 2026-11-23). */}
+          <MessageScrollerProvider autoScroll>
+            <MessageScroller className="min-h-0 flex-1">
+              <MessageScrollerViewport aria-label="Conversation" className="px-2 pt-2 pb-5">
+                <MessageScrollerContent>
+                  {messages.map((m, i) => (
+                    <MessageScrollerItem key={i} scrollAnchor={m.role === 'user'}>
+                      {m.role === 'user' ? (
+                        <ChatMessage align="end">
+                          <Bubble variant="muted" align="end">
+                            <BubbleContent
+                              style={i === 0 ? { viewTransitionName: 'prompt' } : undefined}
+                              className="rounded-2xl rounded-br-md px-4 py-2.5"
+                            >
+                              {m.text}
+                            </BubbleContent>
+                          </Bubble>
+                        </ChatMessage>
+                      ) : m.role === 'error' ? (
+                        <Alert variant="destructive">
+                          <AlertCircleIcon />
+                          <AlertTitle>Something went wrong</AlertTitle>
+                          <AlertDescription>{m.text}</AlertDescription>
+                        </Alert>
+                      ) : (
+                        <Reply
+                          m={m}
+                          photosFor={
+                            m === lastReply && m.photos === 'waiting'
+                              ? seconds(Math.max(0, now - started))
+                              : undefined
+                          }
+                        />
+                      )}
+                    </MessageScrollerItem>
                   ))}
-                </div>
-              </div>
-            ) : (
-              <ol className="flex flex-col gap-6">
-                {messages.map((m, i) => (
-                  <li key={i} className={m.role === 'user' ? 'flex justify-end' : ''}>
-                    {m.role === 'user' ? (
-                      <p className="max-w-[85%] rounded-2xl rounded-br-md bg-zinc-100 px-4 py-2.5 text-sm leading-relaxed text-zinc-900">
-                        {m.text}
-                      </p>
-                    ) : m.role === 'error' ? (
-                      <p className="rounded-xl bg-red-50 px-3.5 py-2.5 text-sm text-red-800 ring-1 ring-red-200">
-                        Something went wrong: {m.text}
-                      </p>
-                    ) : (
-                      <Reply
-                        m={m}
-                        photosFor={
-                          m === lastReply && m.photos === 'waiting'
-                            ? seconds(Math.max(0, now - started))
-                            : undefined
-                        }
-                      />
-                    )}
-                  </li>
-                ))}
-                {busy && (
-                  <li aria-live="polite" className="flex gap-3">
-                    <Mark />
-                    <div className="min-w-0 flex-1 rounded-lg border border-zinc-200 bg-white px-3 py-2.5">
-                      <Steps steps={liveSteps(progress, Math.max(0, now - started))} />
-                    </div>
-                  </li>
-                )}
-              </ol>
-            )}
-          </div>
-          <form
-            onSubmit={onSubmit}
-            className="shrink-0 rounded-xl border border-zinc-200 bg-white p-2 shadow-[0_1px_2px_rgba(9,9,11,.04)] transition-colors focus-within:border-zinc-400"
-          >
-            <label htmlFor="composer" className="sr-only">
-              Message
-            </label>
-            <textarea
-              id="composer"
-              ref={composer}
-              value={draft}
-              onChange={(e) => setDraft(e.target.value)}
-              onKeyDown={onKey}
-              rows={2}
-              placeholder={
-                result ? 'What should change?' : 'A pilates studio in Deptford, small classes…'
-              }
-              className="block max-h-48 w-full resize-none bg-transparent px-2 py-1.5 text-sm leading-relaxed outline-none placeholder:text-zinc-400"
-            />
-            <div className="flex items-center justify-between gap-2 pl-2">
-              <span className="text-[11px] text-zinc-400">
-                <kbd className="font-sans">Enter</kbd> to send ·{' '}
-                <kbd className="font-sans">Shift Enter</kbd> new line
-                {result && (
-                  <>
-                    {' '}
-                    · <kbd className="font-sans">1 2 3</kbd> versions
-                  </>
-                )}
-              </span>
-              <button
-                type="submit"
-                disabled={busy || !draft.trim()}
-                aria-label={busy ? 'Making…' : 'Send'}
-                title="Send"
-                className="grid size-8 place-items-center rounded-full bg-zinc-900 text-white transition hover:bg-zinc-700 active:scale-95 disabled:bg-zinc-200 disabled:text-zinc-400"
-              >
-                {busy ? <Spinner /> : <Icon name="up" className="size-4" />}
-              </button>
-            </div>
-          </form>
+                  {!busy && result && (
+                    // What can be said next, one click each: shows that a site is edited by just
+                    // saying it (launch, 2026-11-23).
+                    <MessageScrollerItem>
+                      <ul aria-label="Suggested changes" className="flex flex-wrap gap-1.5 pl-9">
+                        {[
+                          ...(versions.current.length > 1 ? ['Undo that'] : []),
+                          'Warmer colours',
+                          'Different photos',
+                          'Less text',
+                          'Write it in Spanish',
+                        ].map((x) => (
+                          <li key={x}>
+                            <Button
+                              variant="outline"
+                              size="xs"
+                              onClick={() => send(x)}
+                              className="rounded-full bg-white px-3 font-normal text-zinc-600"
+                            >
+                              {x}
+                            </Button>
+                          </li>
+                        ))}
+                      </ul>
+                    </MessageScrollerItem>
+                  )}
+                  {busy && (
+                    <MessageScrollerItem>
+                      <div aria-live="polite" className="flex gap-3">
+                        <Mark />
+                        <div className="min-w-0 flex-1 rounded-lg border border-zinc-200 bg-white px-3 py-2.5">
+                          <Steps steps={liveSteps(progress, Math.max(0, now - started))} />
+                        </div>
+                      </div>
+                    </MessageScrollerItem>
+                  )}
+                </MessageScrollerContent>
+              </MessageScrollerViewport>
+              <MessageScrollerButton aria-label="Jump to the latest message" />
+            </MessageScroller>
+          </MessageScrollerProvider>
+          {composerBox(false)}
         </aside>
 
         <section
           aria-label="Preview"
-          className="flex min-w-0 flex-1 flex-col overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-[0_1px_2px_rgba(9,9,11,.04)]"
+          className="order-1 flex min-w-0 flex-col overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-[0_1px_2px_rgba(9,9,11,.04)] max-md:h-[58dvh] max-md:shrink-0 md:order-none md:flex-1"
         >
-          <div className="flex h-12 shrink-0 items-center gap-3 border-b border-zinc-200 px-2.5">
-            {result ? (
-              // The three versions as one segmented switch, named after their design (keys 1, 2
-              // and 3 switch too); a small square says whether the version is light or dark.
-              <nav aria-label="Versions" className="flex gap-0.5 rounded-lg bg-zinc-100 p-0.5">
-                {result.sites.map((s, i) => {
-                  const dark = / night ·/.test(s.rules)
-                  return (
-                    <button
-                      key={s.id}
-                      type="button"
-                      aria-pressed={s.id === site?.id}
-                      title={`${looksOf(s.rules)} (key ${i + 1})`}
-                      onClick={() => setLook(s.id)}
-                      className="flex h-7 items-center gap-1.5 rounded-md px-2.5 text-[13px] font-medium text-zinc-500 outline-none transition-colors hover:text-zinc-900 focus-visible:ring-2 focus-visible:ring-zinc-400 aria-pressed:bg-white aria-pressed:text-zinc-950 aria-pressed:shadow-[0_1px_2px_rgba(9,9,11,.08),0_0_0_1px_rgba(9,9,11,.04)]"
-                    >
-                      <span
-                        aria-hidden
-                        className={`size-2.5 rounded-[3px] ${dark ? 'bg-zinc-800' : 'bg-white ring-1 ring-inset ring-zinc-300'}`}
-                      />
-                      {s.label.startsWith('Blocks') ? `Version ${i + 1}` : s.label}
-                      <span className="sr-only">{dark ? '(dark)' : '(light)'}</span>
-                    </button>
-                  )
-                })}
-              </nav>
-            ) : (
-              <span className="flex items-center px-1.5 text-[13px] font-medium text-zinc-400">
-                Preview
-              </span>
-            )}
-            <div className="ml-auto flex items-center gap-1">
-              <fieldset
-                className="flex gap-0.5 rounded-lg bg-zinc-100 p-0.5"
-                aria-label="Screen size"
-              >
-                {(['desktop', 'phone'] as const).map((d) => (
-                  <button
-                    key={d}
-                    type="button"
-                    aria-pressed={device === d}
-                    aria-label={d === 'desktop' ? 'Desktop' : 'Phone'}
-                    title={d === 'desktop' ? 'Desktop' : 'Phone'}
-                    onClick={() => setDevice(d)}
-                    className="grid size-7 place-items-center rounded-md text-zinc-400 transition-colors hover:text-zinc-900 aria-pressed:bg-white aria-pressed:text-zinc-900 aria-pressed:shadow-[0_1px_2px_rgba(9,9,11,.08)] aria-pressed:ring-1 aria-pressed:ring-zinc-900/[.06]"
-                  >
-                    <Icon name={d} className="size-4" />
-                  </button>
-                ))}
-              </fieldset>
-              <button
-                type="button"
-                onClick={() => setReloads((n) => n + 1)}
-                disabled={!site}
-                aria-label="Reload preview"
-                title="Reload preview"
-                className="grid size-8 place-items-center rounded-lg text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 disabled:opacity-40"
-              >
-                <Icon name="reload" className="size-4" />
-              </button>
-              <button
-                type="button"
-                onClick={openPage}
-                disabled={!site}
-                title="Open this version in a new tab"
-                className="ml-1 flex h-8 items-center gap-1.5 rounded-lg bg-zinc-950 px-3 text-[13px] font-medium text-white transition-colors hover:bg-zinc-800 disabled:bg-zinc-200 disabled:text-zinc-400"
-              >
-                Open <Icon name="out" className="size-3.5" />
-              </button>
-            </div>
-          </div>
-          <main
-            className={`relative flex min-h-0 flex-1 items-stretch justify-center ${device === 'phone' ? 'bg-zinc-50' : ''}`}
+          <Tabs
+            value={site?.id ?? ''}
+            onValueChange={setLook}
+            className="flex min-h-0 flex-1 flex-col gap-0"
           >
-            {site ? (
-              <iframe
-                ref={frame}
-                onLoad={() => {
-                  wireLinks(frame.current?.contentDocument)
-                  fillSpaces(frame.current?.contentDocument, linksRef.current)
-                }}
-                key={`${site.id}-${result?.name}-${reloads}`}
-                title={`${result?.name}, version ${site.id.slice(1)}`}
-                srcDoc={site.html}
-                className={
-                  device === 'phone'
-                    ? 'my-6 h-[calc(100%-3rem)] w-[390px] rounded-[36px] bg-white shadow-2xl ring-[10px] ring-zinc-900'
-                    : 'h-full w-full'
-                }
-              />
-            ) : busy ? (
-              <div className="flex flex-1 flex-col gap-5 p-8" aria-hidden>
-                <div className="flex items-center justify-between">
-                  <div className="h-4 w-28 animate-pulse rounded bg-zinc-100" />
-                  <div className="h-7 w-24 animate-pulse rounded-full bg-zinc-100" />
-                </div>
-                <div className="mt-10 h-10 w-2/3 animate-pulse rounded-lg bg-zinc-100" />
-                <div className="h-4 w-1/2 animate-pulse rounded bg-zinc-100" />
-                <div className="mt-4 aspect-[16/6] w-full animate-pulse rounded-2xl bg-zinc-100" />
-              </div>
-            ) : (
-              <div className="grid flex-1 place-items-center p-8">
-                <div className="flex flex-col items-center gap-4 text-center">
-                  <div aria-hidden className="w-56 rounded-xl p-3 ring-1 ring-zinc-900/[.06]">
-                    <div className="flex gap-1">
-                      <span className="size-1.5 rounded-full bg-zinc-200" />
-                      <span className="size-1.5 rounded-full bg-zinc-200" />
-                      <span className="size-1.5 rounded-full bg-zinc-200" />
-                    </div>
-                    <div className="mt-4 h-2.5 w-2/3 rounded bg-zinc-100" />
-                    <div className="mt-2 h-2 w-1/2 rounded bg-zinc-100" />
-                    <div className="mt-3 h-16 rounded-lg bg-zinc-100/70" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-zinc-700">Your site appears here</p>
-                    <p className="mt-1 text-xs text-zinc-400">
-                      Three versions, about a second after you press Enter.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            )}
-            {busy && site && (
-              <div className="pointer-events-none absolute inset-0 bg-white/50">
-                <div className="h-0.5 w-full overflow-hidden bg-zinc-100">
-                  <div className="h-full w-1/3 animate-[slide_1.1s_ease-in-out_infinite] bg-zinc-900" />
-                </div>
-                <span className="absolute top-4 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-full bg-white px-3 py-1.5 text-xs text-zinc-600 shadow-sm ring-1 ring-zinc-900/[.08]">
-                  <Spinner /> Making the new version…
+            <div className="flex h-12 shrink-0 items-center gap-2 border-b border-zinc-200 px-2.5">
+              {result ? (
+                // The three versions as tabs, named after their design (arrow keys move between
+                // them; keys 1, 2 and 3 too); a small square says whether one is light or dark.
+                <TabsList aria-label="Versions">
+                  {result.sites.map((s, i) => {
+                    const dark = / night ·/.test(s.rules)
+                    return (
+                      <Tooltip key={s.id}>
+                        {/* A span between: tooltips and tabs both set data-state on their element. */}
+                        <TooltipTrigger asChild>
+                          <span className="flex">
+                            <TabsTrigger
+                              value={s.id}
+                              className="gap-1.5 px-2.5 text-[13px] data-active:bg-white data-active:shadow-[0_1px_2px_rgba(9,9,11,.08)]"
+                            >
+                              <span
+                                aria-hidden
+                                className={`size-2.5 rounded-[3px] ${dark ? 'bg-zinc-800' : 'bg-white ring-1 ring-inset ring-zinc-300'}`}
+                              />
+                              {s.label.startsWith('Blocks') ? `Version ${i + 1}` : s.label}
+                              <span className="sr-only">{dark ? '(dark)' : '(light)'}</span>
+                            </TabsTrigger>
+                          </span>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          Version {i + 1} <Kbd>{i + 1}</Kbd>
+                        </TooltipContent>
+                      </Tooltip>
+                    )
+                  })}
+                </TabsList>
+              ) : (
+                <span className="flex items-center px-1.5 text-[13px] font-medium text-zinc-400">
+                  Preview
                 </span>
+              )}
+              <div className="ml-auto flex items-center gap-1">
+                <ToggleGroup
+                  type="single"
+                  value={device}
+                  onValueChange={(v) => v && setDevice(v as typeof device)}
+                  aria-label="Screen size"
+                  variant="outline"
+                  size="sm"
+                  // On a phone the preview already is a phone.
+                  className="max-md:hidden"
+                >
+                  {(['desktop', 'phone'] as const).map((d) => (
+                    <Tooltip key={d}>
+                      <TooltipTrigger asChild>
+                        <span className="flex">
+                          <ToggleGroupItem
+                            value={d}
+                            aria-label={d === 'desktop' ? 'Desktop' : 'Phone'}
+                          >
+                            {d === 'desktop' ? <MonitorIcon /> : <SmartphoneIcon />}
+                          </ToggleGroupItem>
+                        </span>
+                      </TooltipTrigger>
+                      <TooltipContent>{d === 'desktop' ? 'Desktop' : 'Phone'}</TooltipContent>
+                    </Tooltip>
+                  ))}
+                </ToggleGroup>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => setReloads((n) => n + 1)}
+                      disabled={!site}
+                      aria-label="Reload preview"
+                    >
+                      <RotateCwIcon />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Reload preview</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button onClick={openPage} disabled={!site} className="ml-1">
+                      <span className="max-sm:sr-only">Open</span>
+                      <ExternalLinkIcon data-icon="inline-end" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Open this version in a new tab</TooltipContent>
+                </Tooltip>
               </div>
-            )}
-          </main>
-          {site && (
-            <p className="shrink-0 truncate border-t border-zinc-200 px-3.5 py-1.5 text-[11px] text-zinc-400">
-              {looksOf(site.rules)}
-            </p>
-          )}
+            </div>
+            <main
+              className={`relative flex min-h-0 flex-1 items-stretch justify-center ${device === 'phone' ? 'bg-zinc-50' : ''}`}
+            >
+              {site ? (
+                <TabsContent value={site.id} className="flex min-h-0 flex-1 justify-center">
+                  <iframe
+                    ref={frame}
+                    onLoad={() => {
+                      wireLinks(frame.current?.contentDocument)
+                      fillSpaces(frame.current?.contentDocument, linksRef.current)
+                    }}
+                    key={`${site.id}-${result?.name}-${reloads}`}
+                    title={`${result?.name}, version ${site.id.slice(1)}`}
+                    srcDoc={site.html}
+                    className={
+                      device === 'phone'
+                        ? 'my-6 h-[calc(100%-3rem)] w-[390px] rounded-[36px] bg-white shadow-2xl ring-[10px] ring-zinc-900'
+                        : 'h-full w-full'
+                    }
+                  />
+                </TabsContent>
+              ) : busy ? (
+                <div className="flex flex-1 flex-col gap-5 p-8" aria-hidden>
+                  <div className="flex items-center justify-between">
+                    <Skeleton className="h-4 w-28" />
+                    <Skeleton className="h-7 w-24 rounded-full" />
+                  </div>
+                  <Skeleton className="mt-10 h-10 w-2/3" />
+                  <Skeleton className="h-4 w-1/2" />
+                  <Skeleton className="mt-4 aspect-[16/6] w-full rounded-2xl" />
+                </div>
+              ) : (
+                <Empty>
+                  <EmptyHeader>
+                    <EmptyMedia variant="icon">
+                      <LayoutTemplateIcon />
+                    </EmptyMedia>
+                    <EmptyTitle>Your site appears here</EmptyTitle>
+                    <EmptyDescription>
+                      Three versions, about a second after you press Enter.
+                    </EmptyDescription>
+                  </EmptyHeader>
+                </Empty>
+              )}
+              {busy && site && (
+                <div className="pointer-events-none absolute inset-0 bg-white/50">
+                  <div className="h-0.5 w-full overflow-hidden bg-zinc-100">
+                    <div className="h-full w-1/3 animate-[slide_1.1s_ease-in-out_infinite] bg-zinc-900 motion-reduce:animate-none" />
+                  </div>
+                  <span className="absolute top-4 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-full bg-white px-3 py-1.5 text-xs text-zinc-600 shadow-sm ring-1 ring-zinc-900/[.08]">
+                    <Spinner /> Making the new version…
+                  </span>
+                </div>
+              )}
+            </main>
+          </Tabs>
         </section>
       </div>
+    </div>
+  )
+}
+
+/**
+ * The "Try" row: a few example businesses at a time, changing every five seconds as a group (the
+ * old names lift away, the new ones settle one after another), paused while the pointer is on
+ * the row. A name fills the message box with its detailed prompt; nothing is sent until Enter.
+ */
+function TryRow({ onPick }: { onPick: (ex: Example) => void }) {
+  // The first set is fixed so the server and the browser draw the same page; then random.
+  const [shown, setShown] = useState(() => EXAMPLES.slice(0, 4))
+  const paused = useRef(false)
+  useEffect(() => {
+    const next = () =>
+      setShown((prev) => {
+        const pool = EXAMPLES.filter((x) => !prev.includes(x))
+        return [...pool].sort(() => Math.random() - 0.5).slice(0, 4)
+      })
+    const t = setInterval(() => {
+      if (!paused.current && !document.hidden) next()
+    }, 5000)
+    return () => clearInterval(t)
+  }, [])
+  // The names' own width, so the row glides to a new width instead of jumping (Robert,
+  // 2026-11-23). An empty moment between two sets is not a width.
+  const names = useRef<HTMLDivElement>(null)
+  const [width, setWidth] = useState<number | null>(null)
+  useEffect(() => {
+    const el = names.current
+    if (!el) return
+    const ro = new ResizeObserver(() => {
+      if (el.offsetWidth > 0) setWidth(el.offsetWidth)
+    })
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [])
+  return (
+    // biome-ignore lint/a11y/noStaticElementInteractions: pausing on hover only, no action
+    <div
+      className="flex min-h-8 items-center justify-center gap-1 text-[13px] whitespace-nowrap"
+      onMouseEnter={() => {
+        paused.current = true
+      }}
+      onMouseLeave={() => {
+        paused.current = false
+      }}
+    >
+      <span className="mr-1 shrink-0 text-zinc-500">Try</span>
+      <motion.div
+        className="-my-1 overflow-hidden py-1"
+        initial={false}
+        animate={width === null ? {} : { width }}
+        transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <div ref={names} className="flex w-max">
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={shown.map((x) => x.title).join('|')}
+              className="flex min-w-0 items-center gap-1"
+              initial="hidden"
+              animate="show"
+              exit="exit"
+              variants={{
+                hidden: {},
+                show: { transition: { staggerChildren: 0.07, delayChildren: 0.02 } },
+                exit: {
+                  opacity: 0,
+                  y: -5,
+                  filter: 'blur(3px)',
+                  transition: { duration: 0.16, ease: 'easeIn' },
+                },
+              }}
+            >
+              {shown.map((x, i) => (
+                <motion.span
+                  key={x.title}
+                  // Narrow screens show fewer names so the row never wraps.
+                  className={`flex min-w-0 items-center ${i >= 2 ? 'max-sm:hidden' : ''} ${i >= 3 ? 'max-md:hidden' : ''}`}
+                  variants={{
+                    hidden: { opacity: 0, y: 6, filter: 'blur(3px)' },
+                    show: {
+                      opacity: 1,
+                      y: 0,
+                      filter: 'blur(0px)',
+                      transition: { duration: 0.32, ease: [0.22, 1, 0.36, 1] },
+                    },
+                  }}
+                >
+                  {i > 0 && (
+                    <span aria-hidden className="mr-1 text-zinc-300">
+                      ·
+                    </span>
+                  )}
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => onPick(x)}
+                    className="min-w-0 truncate px-2.5 text-[13px] text-zinc-800 hover:bg-zinc-200/70 hover:text-zinc-950"
+                  >
+                    {x.title}
+                  </Button>
+                </motion.span>
+              ))}
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </motion.div>
     </div>
   )
 }
@@ -658,42 +901,6 @@ function Mark() {
     <span aria-hidden className="grid size-6 shrink-0 place-items-center rounded-lg bg-zinc-900">
       <span className="size-2.5 rounded-[3px] bg-white" />
     </span>
-  )
-}
-
-function Spinner() {
-  return (
-    <span
-      aria-hidden
-      className="inline-block size-3.5 animate-spin rounded-full border-[1.5px] border-current border-r-transparent opacity-70"
-    />
-  )
-}
-
-const PATHS: Record<string, string> = {
-  arrow: 'M7 17 17 7M8 7h9v9',
-  up: 'M12 19V5M5 12l7-7 7 7',
-  out: 'M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6',
-  reload: 'M3 12a9 9 0 0 1 15.5-6.2L21 8M21 3v5h-5M21 12a9 9 0 0 1-15.5 6.2L3 16M3 21v-5h5',
-  desktop: 'M3 4h18v12H3zM8 20h8M12 16v4',
-  phone: 'M7 2h10v20H7zM11 18h2',
-}
-
-/** Simple line icons, drawn here (no icon package). */
-function Icon({ name, className }: { name: keyof typeof PATHS; className?: string }) {
-  return (
-    <svg
-      aria-hidden
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={2}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-    >
-      <path d={PATHS[name]} />
-    </svg>
   )
 }
 
@@ -743,7 +950,7 @@ function Steps({ steps }: { steps: { label: string; state: StepState; note?: str
               s.state === 'done'
                 ? 'bg-zinc-900 text-white'
                 : s.state === 'active'
-                  ? 'animate-pulse bg-zinc-300'
+                  ? 'animate-pulse bg-zinc-300 motion-reduce:animate-none'
                   : 'ring-1 ring-zinc-300'
             }`}
           >
@@ -801,58 +1008,60 @@ function Reply({
                 {notes.join(' ')}
               </p>
             )}
-            <details className="group mt-2 text-xs text-zinc-500">
-              <summary className="cursor-pointer list-none select-none text-zinc-400 transition-colors hover:text-zinc-700 [&::-webkit-details-marker]:hidden">
-                <span className="inline-block transition-transform group-open:rotate-90">›</span>{' '}
+            <Collapsible className="mt-2 text-xs text-zinc-500">
+              <CollapsibleTrigger className="group/details -ml-1 flex items-center gap-0.5 rounded-md px-1 text-zinc-400 outline-none transition-colors hover:text-zinc-700 focus-visible:ring-2 focus-visible:ring-ring/50">
+                <ChevronRightIcon className="size-3 transition-transform group-data-[state=open]/details:rotate-90" />
                 Details
-              </summary>
-              <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1.5 rounded-xl bg-white/70 p-3 ring-1 ring-zinc-900/[.06]">
-                <dt className="text-zinc-400">Time</dt>
-                <dd>
-                  choices {seconds(r.ms.decide)} and words {seconds(r.ms.text)} at once, answers
-                  checked {seconds(r.ms.check ?? 0)}, drawing {seconds(r.ms.render)}
-                  {p ? `, photos ${seconds(p.ms)} after` : ''} (measured on this computer)
-                </dd>
-                <dt className="text-zinc-400">Cost</dt>
-                <dd>${(r.costUsd + (p?.costUsd ?? 0)).toFixed(4)} for the models</dd>
-                {r.sites.map((s, i) => (
-                  <div key={s.id} className="contents">
-                    <dt className="text-zinc-400">Version {i + 1}</dt>
-                    <dd>
-                      {looksOf(s.rules)}
-                      <br />
-                      <span className="text-zinc-400">{blocksOf(s.rules).join(', ')}</span>
-                    </dd>
-                  </div>
-                ))}
-                {r.photoSearches.length > 0 && (
-                  <>
-                    <dt className="text-zinc-400">Searches</dt>
-                    <dd>{r.photoSearches.join('; ')}</dd>
-                  </>
-                )}
-                {p && p.credits.length > 0 && (
-                  <>
-                    <dt className="text-zinc-400">Photos</dt>
-                    <dd>
-                      {p.credits.map((c, i) => (
-                        <span key={c.page}>
-                          {i > 0 && ', '}
-                          <a
-                            href={c.page}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="underline decoration-zinc-300 underline-offset-2 hover:text-zinc-800"
-                          >
-                            {c.photographer}
-                          </a>
-                        </span>
-                      ))}
-                    </dd>
-                  </>
-                )}
-              </dl>
-            </details>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1.5 rounded-xl bg-white/70 p-3 ring-1 ring-zinc-900/[.06]">
+                  <dt className="text-zinc-400">Time</dt>
+                  <dd>
+                    choices {seconds(r.ms.decide)} and words {seconds(r.ms.text)} at once, answers
+                    checked {seconds(r.ms.check ?? 0)}, drawing {seconds(r.ms.render)}
+                    {p ? `, photos ${seconds(p.ms)} after` : ''} (measured on this computer)
+                  </dd>
+                  <dt className="text-zinc-400">Cost</dt>
+                  <dd>${(r.costUsd + (p?.costUsd ?? 0)).toFixed(4)} for the models</dd>
+                  {r.sites.map((s, i) => (
+                    <div key={s.id} className="contents">
+                      <dt className="text-zinc-400">Version {i + 1}</dt>
+                      <dd>
+                        {looksOf(s.rules)}
+                        <br />
+                        <span className="text-zinc-400">{blocksOf(s.rules).join(', ')}</span>
+                      </dd>
+                    </div>
+                  ))}
+                  {r.photoSearches.length > 0 && (
+                    <>
+                      <dt className="text-zinc-400">Searches</dt>
+                      <dd>{r.photoSearches.join('; ')}</dd>
+                    </>
+                  )}
+                  {p && p.credits.length > 0 && (
+                    <>
+                      <dt className="text-zinc-400">Photos</dt>
+                      <dd>
+                        {p.credits.map((c, i) => (
+                          <span key={c.page}>
+                            {i > 0 && ', '}
+                            <a
+                              href={c.page}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="underline decoration-zinc-300 underline-offset-2 hover:text-zinc-800"
+                            >
+                              {c.photographer}
+                            </a>
+                          </span>
+                        ))}
+                      </dd>
+                    </>
+                  )}
+                </dl>
+              </CollapsibleContent>
+            </Collapsible>
           </div>
         )}
       </div>

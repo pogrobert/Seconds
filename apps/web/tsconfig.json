@@ -2,7 +2,8 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "lib": ["es2024", "dom", "dom.iterable"],
-    "types": ["react", "react-dom", "vite/client", "./worker-configuration.d.ts"]
+    "types": ["react", "react-dom", "vite/client", "./worker-configuration.d.ts"],
+    "paths": { "@/*": ["./src/*"] }
   },
   "include": ["src", "vite.config.ts", "vitest.config.ts"]
 }

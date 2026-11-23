@@ -1,5 +1,6 @@
 import { createRootRoute, HeadContent, Outlet, Scripts } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
+import { TooltipProvider } from '@/components/ui/tooltip'
 import appCss from '../styles.css?url'
 
 export const Route = createRootRoute({
@@ -10,13 +11,8 @@ export const Route = createRootRoute({
       { title: 'Builder' },
     ],
     links: [
-      { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
-      { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossOrigin: 'anonymous' },
-      // Geist, the build page's own type (the sites it draws load their own fonts).
-      {
-        rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&display=swap',
-      },
+      // Geist, the build page's own type, comes with the stylesheet (styles.css); the sites it
+      // draws load their own fonts.
       { rel: 'stylesheet', href: appCss },
       {
         rel: 'icon',
@@ -35,7 +31,7 @@ function RootDocument({ children }: { children: ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        {children}
+        <TooltipProvider delayDuration={300}>{children}</TooltipProvider>
         <Scripts />
       </body>
     </html>

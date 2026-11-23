@@ -32,6 +32,17 @@
   },
   "overrides": [
     {
+      "includes": ["apps/web/src/components/ui/**"],
+      "linter": {
+        "rules": {
+          "a11y": {
+            "useSemanticElements": "off",
+            "useKeyWithClickEvents": "off"
+          }
+        }
+      }
+    },
+    {
       "includes": [
         "packages/spec/src/**",
         "packages/pipeline/src/**",
