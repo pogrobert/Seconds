@@ -884,7 +884,10 @@ function Build() {
 
         <section
           aria-label="Preview"
-          className="order-1 flex min-w-0 flex-col overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-[0_1px_2px_rgba(9,9,11,.04)] max-md:h-[58dvh] max-md:shrink-0 md:order-none md:flex-1"
+          // The border is drawn on top, not around: a site clipped to the rounded corner leaves
+          // half-covered pixels where the panel's own colour showed as a light rim (Robert,
+          // 2026-11-23); the border laid over them covers exactly those pixels.
+          className="relative order-1 flex min-w-0 flex-col overflow-hidden rounded-xl bg-white shadow-[0_1px_2px_rgba(9,9,11,.04)] after:pointer-events-none after:absolute after:inset-0 after:z-10 after:rounded-[inherit] after:border after:border-zinc-200 max-md:h-[58dvh] max-md:shrink-0 md:order-none md:flex-1"
         >
           <Tabs
             value={site?.id ?? ''}
@@ -1035,7 +1038,7 @@ function Build() {
                         key={`${site.id}-${result?.name}-${reloads}-${device}`}
                         title={`${result?.name}, version ${site.id.slice(1)}`}
                         srcDoc={site.html}
-                        className="h-full w-full bg-white"
+                        className="h-full w-full bg-[#fff]"
                       />
                     )
                     return device === 'phone' ? <Phone tone={tone}>{page}</Phone> : page
@@ -1293,29 +1296,29 @@ function Phone({ tone, children }: { tone: Tone; children: ReactNode }) {
     watch.observe(area)
     return () => watch.disconnect()
   }, [H, W])
-  const ink = tone.dark ? 'text-white' : 'text-black'
+  const ink = tone.dark ? 'text-[#fff]' : 'text-black'
   return (
     <div ref={box} className="relative shrink-0" style={{ width: W * scale, height: H * scale }}>
       <div
-        className="absolute top-0 left-0 origin-top-left rounded-[64px] bg-zinc-950 shadow-[0_0_0_1.5px_#5b5b57,0_0_0_3px_#1c1c1a,0_40px_80px_-30px_rgb(9_9_11/0.45)]"
+        className="absolute top-0 left-0 origin-top-left rounded-[64px] bg-[#0b0b0a] shadow-[0_0_0_1.5px_#5b5b57,0_0_0_3px_#1c1c1a,0_40px_80px_-30px_rgb(9_9_11/0.45)]"
         style={{ width: W, height: H, padding: BEZEL, transform: `scale(${scale})` }}
       >
         {/* Side buttons: action and volume on the left, power on the right. */}
         <span
           aria-hidden
-          className="absolute top-[118px] -left-[4px] h-[34px] w-[4px] rounded-l-sm bg-zinc-800"
+          className="absolute top-[118px] -left-[4px] h-[34px] w-[4px] rounded-l-sm bg-[#262624]"
         />
         <span
           aria-hidden
-          className="absolute top-[178px] -left-[4px] h-[62px] w-[4px] rounded-l-sm bg-zinc-800"
+          className="absolute top-[178px] -left-[4px] h-[62px] w-[4px] rounded-l-sm bg-[#262624]"
         />
         <span
           aria-hidden
-          className="absolute top-[254px] -left-[4px] h-[62px] w-[4px] rounded-l-sm bg-zinc-800"
+          className="absolute top-[254px] -left-[4px] h-[62px] w-[4px] rounded-l-sm bg-[#262624]"
         />
         <span
           aria-hidden
-          className="absolute top-[212px] -right-[4px] h-[96px] w-[4px] rounded-r-sm bg-zinc-800"
+          className="absolute top-[212px] -right-[4px] h-[96px] w-[4px] rounded-r-sm bg-[#262624]"
         />
         <div
           className="relative size-full overflow-hidden rounded-[53px]"
@@ -1340,7 +1343,7 @@ function Phone({ tone, children }: { tone: Tone; children: ReactNode }) {
           <div className="absolute inset-x-0 top-[54px] bottom-0">{children}</div>
           <span
             aria-hidden
-            className={`pointer-events-none absolute bottom-2 left-1/2 h-[5px] w-[136px] -translate-x-1/2 rounded-full ${tone.dark ? 'bg-white/90' : 'bg-black/85'}`}
+            className={`pointer-events-none absolute bottom-2 left-1/2 h-[5px] w-[136px] -translate-x-1/2 rounded-full ${tone.dark ? 'bg-[#fff]/90' : 'bg-black/85'}`}
           />
         </div>
       </div>

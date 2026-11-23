@@ -137,6 +137,47 @@
   --radius: 0.5625rem;
 }
 
+/* Dark (Robert, 2026-11-23), following the system setting. The build page draws almost all of
+   its colour from the warm grey scale, white and the tokens above, so dark is those turned over:
+   paper becomes a warm near-black, white the raised surfaces, ink a warm near-white. Parts that
+   must not turn (the phone's hardware, the white behind a site) use literal colours. shadcn's own
+   dark: styles stay off (see the dark variant at the top). */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --color-zinc-50: #121211;
+    --color-zinc-100: #232321;
+    --color-zinc-200: #2d2d2a;
+    --color-zinc-300: #42423e;
+    --color-zinc-400: #7f7f78;
+    --color-zinc-500: #a6a69e;
+    --color-zinc-600: #bdbdb6;
+    --color-zinc-700: #d3d3cd;
+    --color-zinc-800: #e5e5e0;
+    --color-zinc-900: #f3f3f0;
+    --color-zinc-950: #fafaf8;
+    --color-white: #1b1b19;
+    --background: #121211;
+    --foreground: #f3f3f0;
+    --card: #1b1b19;
+    --card-foreground: #f3f3f0;
+    --popover: #f3f3f0;
+    --popover-foreground: #121211;
+    --primary: #f3f3f0;
+    --primary-foreground: #121211;
+    --secondary: color-mix(in srgb, #f3f3f0 9%, #121211);
+    --secondary-foreground: #f3f3f0;
+    --muted: color-mix(in srgb, #f3f3f0 9%, #121211);
+    --muted-foreground: #a6a69e;
+    --accent: color-mix(in srgb, #f3f3f0 9%, #121211);
+    --accent-foreground: #f3f3f0;
+    --destructive: #f97066;
+    --border: #2d2d2a;
+    --input: #2d2d2a;
+    --ring: #2dd4bf;
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
