@@ -5,11 +5,14 @@ import { TEMPLATES } from '@repo/library'
 import { typesafeDecisions } from '@repo/pipeline'
 import { createFileRoute } from '@tanstack/react-router'
 import { getEnv } from '../../server/env'
+import { benchOnly } from '../../server/limit'
 
 export const Route = createFileRoute('/api/template-pick')({
   server: {
     handlers: {
       POST: async ({ request }) => {
+        const hidden = benchOnly()
+        if (hidden) return hidden
         const b = (await request.json().catch(() => null)) as { words?: string } | null
         const key = getEnv().TYPESAFE_API_KEY
         if (!b?.words || !key) return Response.json({ error: 'words and a key' }, { status: 400 })

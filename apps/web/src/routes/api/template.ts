@@ -5,12 +5,15 @@ import { COLOUR_RULES } from '@repo/eval/grammar/colour-rules'
 import { TYPE_RULES } from '@repo/eval/grammar/type-rules'
 import { type Extra, renderTemplate, type SiteContent, TEMPLATES, theme } from '@repo/library'
 import { createFileRoute } from '@tanstack/react-router'
+import { benchOnly } from '../../server/limit'
 
 export const Route = createFileRoute('/api/template')({
   server: {
     handlers: {
       GET: () => Response.json(TEMPLATES.map((t) => ({ id: t.id, label: t.label, dark: t.dark }))),
       POST: async ({ request }) => {
+        const hidden = benchOnly()
+        if (hidden) return hidden
         const b = (await request.json().catch(() => null)) as {
           template?: string
           content?: SiteContent

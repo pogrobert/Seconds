@@ -5,12 +5,15 @@
 // to show live progress; /api/build (the bench) and the server function still answer once.
 import { createFileRoute } from '@tanstack/react-router'
 import { edit } from '../../server/edit'
+import { overLimit } from '../../server/limit'
 import { build, type SiteState } from '../../server/make-site'
 
 export const Route = createFileRoute('/api/build-stream')({
   server: {
     handlers: {
       POST: async ({ request }) => {
+        const limit = await overLimit(request)
+        if (limit) return limit
         const body = (await request.json().catch(() => null)) as {
           messages?: unknown
           /** The site so far: the last message is then an edit of it (docs/m0/27-editing.md). */

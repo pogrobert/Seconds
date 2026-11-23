@@ -3,5 +3,9 @@
   "name": "builder-app",
   "compatibility_date": "2026-11-01",
   "main": "@tanstack/react-start/server-entry",
-  "observability": { "enabled": true }
+  "observability": { "enabled": true },
+  // Per-visitor limit on the routes that spend model credit (server/limit.ts): 10 a minute.
+  "ratelimits": [
+    { "name": "BUILD_LIMIT", "namespace_id": "1001", "simple": { "limit": 10, "period": 60 } }
+  ]
 }

@@ -6,3 +6,6 @@ TYPESAFE_API_KEY=
 OPENROUTER_API_KEY=
 # Optional, for comparison runs:
 ANTHROPIC_API_KEY=
+
+# Turns on the bench-only routes (/api/build, /api/template, /api/template-pick). Never set in production.
+BENCH=1
