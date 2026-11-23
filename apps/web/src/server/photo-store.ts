@@ -88,8 +88,12 @@ export async function servePhoto(id: string, source: string | null): Promise<Res
   const c = await cache()
   const hit = await c?.match(keyOf(id)).catch(() => undefined)
   if (hit) return hit
+  // A miss (another place, or an old link): fetched again for this one answer and never stored.
+  // Only the photo step stores a photo under its id (fetchPhoto); a link anyone can write must not,
+  // or a made-up link could plant any picture under an id another visitor's page will ask for.
   const k = source ? await download(source) : null
   if (!k?.body.byteLength) return new Response('Not found', { status: 404 })
-  await keep(id, k)
-  return reply(k)
+  return new Response(k.body, {
+    headers: { 'content-type': k.type, 'cache-control': 'private, max-age=86400' },
+  })
 }
