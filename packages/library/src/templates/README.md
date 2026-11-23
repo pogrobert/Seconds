@@ -9,7 +9,13 @@ good on its own.
 
 ## The file
 
-One file per template, `src/templates/<id>.tsx`, shaped like `field.tsx`:
+Start one with `pnpm --filter @repo/library new-template <id> [Label]`: it writes a plain,
+working draft that follows this contract and registers it. Then make it a design of its own.
+
+One file per template, `src/templates/<id>.tsx`, shaped like `field.tsx`. The repeated items
+come from `shared.tsx`: `NavLinks` for the menu, `FactRows` for the contact details,
+`FaqList` or `FaqDetails` for the questions and `ListItems` for reasons, needs and steps. They
+draw only the items; the wrappers, classes and every style stay the template's own:
 
 - `const CSS = `${RESET} ...`` holds all its styles. Plain CSS, no Tailwind, no other stylesheet.
   The page is drawn as static HTML with no JavaScript.
@@ -31,6 +37,15 @@ One file per template, `src/templates/<id>.tsx`, shaped like `field.tsx`:
 - Export `const <id>: Template = { id, label, text, dark, draft: true, css: CSS, Page }`.
   `text` is what the decision model reads when it picks a template: one sentence on the look and
   feel, ending with the kinds of business it suits, in the style of the existing templates.
+
+## Checks
+
+- `pnpm --filter @repo/library test` checks the rules code can check (`test/contract.test.ts`)
+  and that no page changed unexpectedly (`test/templates.test.tsx`, fingerprints of every page;
+  rewrite them with `UPDATE_HASHES=1` after a change you mean, and compare the pages written to
+  `test/.out/`).
+- The gate (`tools/bench/src/template-gate.ts`) checks a drawn page in a real browser, and the
+  review wall shows it beside the others.
 
 ## Rules
 
