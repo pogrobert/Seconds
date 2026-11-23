@@ -25,7 +25,7 @@
     "@tanstack/react-start": "catalog:",
     "class-variance-authority": "catalog:",
     "cn": "catalog:",
-    "lucide-react": "catalog:",
+    "@phosphor-icons/react": "catalog:",
     "motion": "catalog:",
     "radix-ui": "catalog:",
     "react": "catalog:",

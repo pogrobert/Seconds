@@ -1,16 +1,16 @@
-import { createFileRoute } from '@tanstack/react-router'
 import {
-  AlertCircleIcon,
+  ArrowClockwiseIcon,
+  ArrowSquareOutIcon,
   ArrowUpIcon,
   CheckIcon,
   CircleIcon,
-  ExternalLinkIcon,
+  DeviceMobileIcon,
   InfoIcon,
-  LayoutTemplateIcon,
+  LayoutIcon,
   MonitorIcon,
-  RotateCwIcon,
-  SmartphoneIcon,
-} from 'lucide-react'
+  WarningCircleIcon,
+} from '@phosphor-icons/react'
+import { createFileRoute } from '@tanstack/react-router'
 import { AnimatePresence, motion } from 'motion/react'
 import { type FormEvent, type KeyboardEvent, useEffect, useRef, useState } from 'react'
 import { flushSync } from 'react-dom'
@@ -53,6 +53,7 @@ import {
 } from '@/components/ui/trace'
 import { EXAMPLES, type Example } from '../examples'
 import type { BuildResult, PhotoJob, PhotoResult } from '../server/build'
+import { suggestionsFor } from '../suggest'
 
 /** The photo step on its own, when the photos found during the build did not arrive. */
 async function findSitePhotos(job: PhotoJob): Promise<PhotoResult> {
@@ -539,7 +540,7 @@ function Build() {
     return (
       // Nothing above the headline on the first screen (Robert, 2026-11-23): the name appears with
       // the split view.
-      <div className="flex h-dvh flex-col bg-zinc-50 text-zinc-900 antialiased selection:bg-zinc-200">
+      <div className="flex h-dvh flex-col bg-zinc-50 text-zinc-900 antialiased selection:bg-teal-600/25">
         <main className="flex min-h-0 flex-1 flex-col items-center overflow-y-auto px-5 pb-10">
           <div className="my-auto flex w-full max-w-2xl flex-col gap-7 pt-10">
             <div className="text-center">
@@ -561,7 +562,7 @@ function Build() {
     )
 
   return (
-    <div className="flex h-dvh flex-col bg-zinc-50 text-zinc-900 antialiased selection:bg-zinc-200">
+    <div className="flex h-dvh flex-col bg-zinc-50 text-zinc-900 antialiased selection:bg-teal-600/25">
       <div className="md:hidden">{top}</div>
       <div className="flex min-h-0 flex-1 flex-col gap-3 px-3 pb-3 md:flex-row md:pt-3">
         <aside
@@ -573,7 +574,11 @@ function Build() {
               when the visitor has scrolled up (shadcn Message Scroller, launch 2026-11-23). */}
           <MessageScrollerProvider autoScroll>
             <MessageScroller className="min-h-0 flex-1">
-              <MessageScrollerViewport aria-label="Conversation" className="px-2 pt-2 pb-5">
+              {/* The list can take focus so keys can scroll it; a click shows no ring, keys a faint one. */}
+              <MessageScrollerViewport
+                aria-label="Conversation"
+                className="rounded-lg px-2 pt-2 pb-5 outline-none focus-visible:ring-2 focus-visible:ring-zinc-900/10"
+              >
                 <MessageScrollerContent>
                   {messages.map((m, i) => (
                     <MessageScrollerItem
@@ -581,7 +586,9 @@ function Build() {
                       scrollAnchor={m.role === 'user'}
                       // Drawn at once, not when seen (the scroller's content-visibility: auto):
                       // the view transition must find the first message to fly the prompt into.
-                      className={i === 0 ? '[content-visibility:visible]' : undefined}
+                      // Its paint is clipped to its box, so a little room below keeps the focus
+                      // ring on Details whole (Robert, 2026-11-23).
+                      className={i === 0 ? 'pb-1 [content-visibility:visible]' : 'pb-1'}
                     >
                       {m.role === 'user' ? (
                         <ChatMessage align="end">
@@ -596,7 +603,7 @@ function Build() {
                         </ChatMessage>
                       ) : m.role === 'error' ? (
                         <Alert variant="destructive">
-                          <AlertCircleIcon />
+                          <WarningCircleIcon />
                           <AlertTitle>Something went wrong</AlertTitle>
                           <AlertDescription>{m.text}</AlertDescription>
                         </Alert>
@@ -612,28 +619,6 @@ function Build() {
                       )}
                     </MessageScrollerItem>
                   ))}
-                  {!busy && result && (
-                    // What can be said next, one click each: shows that a site is edited by just
-                    // saying it (launch, 2026-11-23).
-                    <MessageScrollerItem>
-                      <Suggestions aria-label="Suggested changes" className="pl-9">
-                        {[
-                          ...(versions.current.length > 1 ? ['Undo that'] : []),
-                          'Warmer colours',
-                          'Different photos',
-                          'Less text',
-                          'Write it in Spanish',
-                        ].map((x) => (
-                          <Suggestion
-                            key={x}
-                            suggestion={x}
-                            onClick={send}
-                            className="h-7 bg-white text-xs font-normal text-zinc-600"
-                          />
-                        ))}
-                      </Suggestions>
-                    </MessageScrollerItem>
-                  )}
                   {busy && (
                     <MessageScrollerItem>
                       <div aria-live="polite" className="flex gap-3">
@@ -649,6 +634,38 @@ function Build() {
               <MessageScrollerButton aria-label="Jump to the latest message" />
             </MessageScroller>
           </MessageScrollerProvider>
+          {!busy && result && (
+            // What can be said next, one click each, just above the box as in shadcn's AI
+            // Elements (Robert, 2026-11-23: under the reply they scrolled away and were always the
+            // same). Chosen from the site as it stands (suggest.ts); a missing fact starts a
+            // message to finish instead of sending.
+            <Suggestions
+              aria-label="Suggested changes"
+              className="-mx-3 mb-1 px-3 py-1 motion-safe:animate-in motion-safe:fade-in-0 motion-safe:duration-200"
+            >
+              {suggestionsFor(result, {
+                canUndo: versions.current.length > 1,
+                said: messages.flatMap((m) => (m.role === 'user' ? [m.text] : [])),
+              }).map((x) => (
+                <Suggestion
+                  key={x.label}
+                  suggestion={x.text}
+                  onClick={(text) => {
+                    if (x.send) return send(text)
+                    setDraft(text)
+                    requestAnimationFrame(() => {
+                      const box = composer.current
+                      box?.focus()
+                      box?.setSelectionRange(text.length, text.length)
+                    })
+                  }}
+                  className="h-7 bg-white text-xs font-normal text-zinc-600"
+                >
+                  {x.send ? x.label : `${x.label}…`}
+                </Suggestion>
+              ))}
+            </Suggestions>
+          )}
           {composerBox(false)}
         </aside>
 
@@ -659,23 +676,28 @@ function Build() {
           <Tabs
             value={site?.id ?? ''}
             onValueChange={setLook}
+            // Every version is its own Tab stop (Robert, 2026-11-23), so focus alone must not
+            // switch: Tab passing over them would land on the last. Enter or Space picks one;
+            // arrows and 1, 2, 3 still work.
+            activationMode="manual"
             className="flex min-h-0 flex-1 flex-col gap-0"
           >
             <div className="flex h-12 shrink-0 items-center gap-2 border-b border-zinc-200 px-2.5">
               {result ? (
                 // The three versions as tabs, named after their design (arrow keys move between
                 // them; keys 1, 2 and 3 too); a small square says whether one is light or dark.
-                <TabsList aria-label="Versions">
+                <TabsList aria-label="Versions" {...TAB_LOOKS[TAB_LOOK].list}>
                   {result.sites.map((s, i) => {
                     const dark = / night ·/.test(s.rules)
                     return (
                       <Tooltip key={s.id}>
                         {/* A span between: tooltips and tabs both set data-state on their element. */}
                         <TooltipTrigger asChild>
-                          <span className="flex">
+                          <span className={TAB_LOOK === 'line' ? 'flex self-stretch' : 'flex'}>
                             <TabsTrigger
                               value={s.id}
-                              className="gap-1.5 px-2.5 text-[13px] data-active:bg-white data-active:shadow-[0_1px_2px_rgba(9,9,11,.08)]"
+                              tabIndex={0}
+                              className={TAB_LOOKS[TAB_LOOK].tab}
                             >
                               <span
                                 aria-hidden
@@ -706,8 +728,13 @@ function Build() {
                   aria-label="Screen size"
                   variant="outline"
                   size="sm"
-                  // On a phone the preview already is a phone.
-                  className="max-md:hidden"
+                  // One joined pair, not two buttons (Robert, 2026-11-23).
+                  spacing={0}
+                  // Both reachable with Tab, not only with arrows (Robert, 2026-11-23).
+                  rovingFocus={false}
+                  // On a phone the preview already is a phone. Each item sits in a span for its
+                  // tooltip, so the group's own first/last rounding can't see them as a row.
+                  className="max-md:hidden [&>span:not(:first-child)>*]:rounded-l-none! [&>span:not(:first-child)>*]:border-l-0! [&>span:not(:last-child)>*]:rounded-r-none!"
                 >
                   {(['desktop', 'phone'] as const).map((d) => (
                     <Tooltip key={d}>
@@ -717,7 +744,7 @@ function Build() {
                             value={d}
                             aria-label={d === 'desktop' ? 'Desktop' : 'Phone'}
                           >
-                            {d === 'desktop' ? <MonitorIcon /> : <SmartphoneIcon />}
+                            {d === 'desktop' ? <MonitorIcon /> : <DeviceMobileIcon />}
                           </ToggleGroupItem>
                         </span>
                       </TooltipTrigger>
@@ -734,7 +761,7 @@ function Build() {
                       disabled={!site}
                       aria-label="Reload preview"
                     >
-                      <RotateCwIcon />
+                      <ArrowClockwiseIcon />
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>Reload preview</TooltipContent>
@@ -743,7 +770,7 @@ function Build() {
                   <TooltipTrigger asChild>
                     <Button onClick={openPage} disabled={!site} className="ml-1">
                       <span className="max-sm:sr-only">Open</span>
-                      <ExternalLinkIcon data-icon="inline-end" />
+                      <ArrowSquareOutIcon data-icon="inline-end" />
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>Open this version in a new tab</TooltipContent>
@@ -785,7 +812,7 @@ function Build() {
                 <Empty>
                   <EmptyHeader>
                     <EmptyMedia variant="icon">
-                      <LayoutTemplateIcon />
+                      <LayoutIcon />
                     </EmptyMedia>
                     <EmptyTitle>Your site appears here</EmptyTitle>
                     <EmptyDescription>
@@ -932,13 +959,36 @@ function Mark() {
   )
 }
 
-/** "Heritage type · neutral light · Natural photos" from a version's rules (blocks left out). */
-const looksOf = (rules: string) =>
-  rules
-    .split(' · ')
-    .filter((x) => !x.includes('/'))
-    .join(' · ')
-const blocksOf = (rules: string) => rules.split(' · ').filter((x) => x.includes('/'))
+// TEMP: tab looks for Robert to pick from (2026-11-23).
+const TAB_LOOK = 'text' as 'now' | 'line' | 'solid' | 'text'
+const TAB_LOOKS = {
+  now: {
+    list: {},
+    tab: 'gap-1.5 px-2.5 text-[13px] data-active:bg-white data-active:shadow-[0_1px_2px_rgba(9,9,11,.08)]',
+  },
+  line: {
+    list: { variant: 'line' as const, className: 'h-12! self-stretch gap-4 p-0 pl-1.5' },
+    tab: 'h-full gap-1.5 rounded-none px-0 text-[13px] text-zinc-500 group-data-horizontal/tabs:after:bottom-[-1px] data-active:text-zinc-900',
+  },
+  solid: {
+    list: { className: 'gap-1 bg-transparent p-0' },
+    tab: 'h-8 gap-1.5 rounded-full px-3 text-[13px] text-zinc-600 hover:bg-zinc-100 data-active:bg-zinc-900 data-active:text-white data-active:shadow-none data-active:hover:bg-zinc-900',
+  },
+  text: {
+    list: { className: 'gap-0.5 bg-transparent p-0' },
+    tab: 'h-8 gap-1.5 rounded-md px-2.5 text-[13px] text-zinc-400 hover:text-zinc-700 data-active:bg-transparent data-active:text-zinc-900 data-active:shadow-none',
+  },
+}
+
+/** "Heritage lettering, navy" from a version's rules ("Atelier template · Heritage type · navy · …"). */
+const styleOf = (rules: string) => {
+  const parts = rules.split(' · ')
+  const at = parts.findIndex((x) => x.endsWith(' type'))
+  if (at < 0) return ''
+  const type = `${parts[at]?.replace(/ type$/, '')} lettering`
+  const colour = parts[at + 1]?.replace(/^neutral\b ?/, '').trim()
+  return colour ? `${type}, ${colour}` : type
+}
 
 type StepState = 'done' | 'active' | 'todo'
 
@@ -1045,40 +1095,45 @@ function Reply({
                 <MarkerContent>{notes.join(' ')}</MarkerContent>
               </Marker>
             )}
+            {/* For someone new: how this was made, in plain rows (Robert, 2026-11-23). */}
             <TraceCollapsible className="mt-2 text-xs text-zinc-500">
               <TraceCollapsibleTrigger className="text-xs">
                 <TraceTitle>Details</TraceTitle>
               </TraceCollapsibleTrigger>
               <TraceCollapsibleContent>
-                <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1.5 rounded-xl bg-white/70 p-3 ring-1 ring-zinc-900/[.06]">
-                  <dt className="text-zinc-400">Time</dt>
-                  <dd>
-                    choices {seconds(r.ms.decide)} and words {seconds(r.ms.text)} at once, answers
-                    checked {seconds(r.ms.check ?? 0)}, drawing {seconds(r.ms.render)}
-                    {p ? `, photos ${seconds(p.ms)} after` : ''} (measured on this computer)
+                <p className="mt-2 max-w-[42ch] text-zinc-500">
+                  Put together from ready-made designs. A model picks the design and writes the
+                  words; it writes no code.
+                </p>
+                <dl className="mt-2.5 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5">
+                  <dt className="text-zinc-400">Made in</dt>
+                  <dd className="text-zinc-700 tabular-nums">
+                    {seconds(r.ms.total)}
+                    {p ? `, then photos in ${seconds(p.ms)}` : ''}
                   </dd>
                   <dt className="text-zinc-400">Cost</dt>
-                  <dd>${(r.costUsd + (p?.costUsd ?? 0)).toFixed(4)} for the models</dd>
-                  {r.sites.map((s, i) => (
-                    <div key={s.id} className="contents">
-                      <dt className="text-zinc-400">Version {i + 1}</dt>
-                      <dd>
-                        {looksOf(s.rules)}
-                        <br />
-                        <span className="text-zinc-400">{blocksOf(s.rules).join(', ')}</span>
-                      </dd>
-                    </div>
-                  ))}
-                  {r.photoSearches.length > 0 && (
+                  <dd className="text-zinc-700 tabular-nums">
+                    ${(r.costUsd + (p?.costUsd ?? 0)).toFixed(4)}
+                  </dd>
+                  <dt className="text-zinc-400">Designs</dt>
+                  <dd className="text-zinc-700">
+                    {r.sites
+                      .map((s, i) => {
+                        const name = s.label.startsWith('Blocks') ? `Version ${i + 1}` : s.label
+                        return / night ·/.test(s.rules) ? `${name} (dark)` : name
+                      })
+                      .join(', ')}
+                  </dd>
+                  {styleOf(r.sites[0]?.rules ?? '') && (
                     <>
-                      <dt className="text-zinc-400">Searches</dt>
-                      <dd>{r.photoSearches.join('; ')}</dd>
+                      <dt className="text-zinc-400">Style</dt>
+                      <dd className="text-zinc-700">{styleOf(r.sites[0]?.rules ?? '')}</dd>
                     </>
                   )}
                   {p && p.credits.length > 0 && (
                     <>
-                      <dt className="text-zinc-400">Photos</dt>
-                      <dd>
+                      <dt className="text-zinc-400">Photos by</dt>
+                      <dd className="text-zinc-700">
                         {p.credits.map((c, i) => (
                           <span key={c.page}>
                             {i > 0 && ', '}
@@ -1086,12 +1141,13 @@ function Reply({
                               href={c.page}
                               target="_blank"
                               rel="noreferrer"
-                              className="underline decoration-zinc-300 underline-offset-2 hover:text-zinc-800"
+                              className="underline decoration-zinc-300 underline-offset-2 hover:text-zinc-900"
                             >
                               {c.photographer}
                             </a>
                           </span>
-                        ))}
+                        ))}{' '}
+                        <span className="text-zinc-400">on Pixabay</span>
                       </dd>
                     </>
                   )}

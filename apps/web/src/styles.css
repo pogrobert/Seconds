@@ -2,6 +2,10 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+/* The build page has no dark theme yet, so shadcn's dark: styles wait for a .dark class instead
+   of following the system setting (which gave dark-mode visitors a half-dark, grey message box). */
+@custom-variant dark (&:is(.dark *));
+
 /* Atkinson Hyperlegible Next, the type of Robert's Portfolio and Surfaces (OFL), from
    @fontsource-variable/atkinson-hyperlegible-next, preloaded in __root.tsx. Until it arrives the
    page uses "Atkinson Fallback": Arial sized and spaced to take exactly Atkinson's room, so the
