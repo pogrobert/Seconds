@@ -186,7 +186,7 @@ M0 needs 8 section types (`docs/technical/README.md`, Build order). By use in th
 
 ## Answers (settled by research, 2026-11-14)
 
-Robert asked for these to be answered by research rather than by him. Three research passes ran on 2026-11-14: how mature builders model sections (Shopify Dawn and Horizon, WordPress Gutenberg, Puck, Builder.io, Payload, Relume); usability and accessibility evidence (NN/g, Baymard, W3C WAI, GOV.UK, web.dev); and a survey of 20 well-designed sites, 4 per kind of business (12 real businesses, 8 templates; `0001-data/design-survey.json`). The options are drawn as mock websites on a private page: https://claude.ai/artifact/Hwtv9D4upSWcinFkzeB2Sd
+Robert asked for these to be answered by research rather than by him. Three research passes ran on 2026-11-14: how mature builders model sections (Shopify Dawn and Horizon, WordPress Gutenberg, Puck, Builder.io, Payload, Relume); usability and accessibility evidence (NN/g, Baymard, W3C WAI, GOV.UK, web.dev); and a survey of 20 well-designed sites, 4 per kind of business (12 real businesses, 8 templates; `0001-data/design-survey.json`). The options are drawn as mock websites on a private review page
 
 | # | Question | Decision | Main evidence |
 |---|---|---|---|

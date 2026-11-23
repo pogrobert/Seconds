@@ -1,6 +1,6 @@
 # M0 result 6: the blind test
 
-**Date:** 2026-11-14. **Rater:** Robert, blind, on https://claude.ai/artifact/78QGdzPNntwTKEWhNDseXa.
+**Date:** 2026-11-14. **Rater:** Robert, blind, on a private review page.
 **Pass mark, set before any results:** the decision model must be preferred in at least 20 of 30 pairs against the code defaults, and must also beat random choices.
 
 ## Answer in short

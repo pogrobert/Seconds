@@ -67,7 +67,7 @@
 
 ## Where to look
 
-- The Wall, published privately: https://claude.ai/artifact/LeX3cwT7s2vwxhVY9JYKoi
+- The Wall is on a private review page
 - To rebuild it: `pnpm --filter @repo/eval wall` (`ROUND=2` reproduces round 2)
 
 ## Not decided

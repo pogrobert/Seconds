@@ -2,7 +2,7 @@
 
 **Date:** 2026-11-15. **Why:** Robert scored four hand-made directions 4 or 5 (`docs/m0/09-directions.md`). A hand-made page only counts if the library can draw the same look for any business, with its own photos and words. So each direction is now built from blocks, and drawn for all five sample businesses.
 
-**Rating page:** https://claude.ai/artifact/MVX7mABEbCspTfUitEK8Qc (private). 20 sites, the same 1-to-5 bar, scores saved with the page.
+**Rating page:** a private review page. 20 sites, the same 1-to-5 bar, scores saved with the page.
 
 ## What a direction is in code
 

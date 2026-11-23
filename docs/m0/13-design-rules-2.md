@@ -7,7 +7,7 @@
 - our look is itself a known AI default
 - the fonts are the ones every generator reaches for
 
-**Rating page:** https://claude.ai/artifact/Jt1rR9fgLuwZ3SY8WZN8of (private). It shows six salon owners, each with round 1's site beside three round 2 designs, scored out of 10.
+**Rating page:** a private review page. It shows six salon owners, each with round 1's site beside three round 2 designs, scored out of 10.
 
 ## What changed
 

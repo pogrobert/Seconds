@@ -4,7 +4,7 @@
 
 **Why:** hand-making directions and rating them round after round is too slow, and it ends in a template box like other no-code builders. Robert wants sites in about a second, a decision model at the centre, and a different site for every owner. The proposal is to store design rules in layers, let the decision model pick a rule per layer, and have code compose the page. Any combination the rules allow must look good. This is the cheapest proof: two layers, six rules each.
 
-**Rating page:** https://claude.ai/artifact/23edwuA74rDL4qu7UgD5wn (private). Scores are stored in the page's database, which only Robert can read or write.
+**Rating page:** a private review page. Scores are stored in the page's database, which only Robert can read or write.
 
 ## What was built
 

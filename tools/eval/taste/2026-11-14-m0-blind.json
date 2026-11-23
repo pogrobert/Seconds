@@ -2,7 +2,6 @@
   "date": "2026-11-14",
   "test": "M0 blind rating, run 'live'",
   "rater": "Robert",
-  "page": "https://claude.ai/artifact/78QGdzPNntwTKEWhNDseXa",
   "note": "Arm a = decision model (TypeSafe jev-1.14.0), b = code defaults, c = random answers to the same questions. 'winner' is the arm Robert preferred, or 'same'.",
   "pairs": [
     {

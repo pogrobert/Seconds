@@ -1,6 +1,6 @@
 # Taste board: what Robert loves
 
-**Date:** 2026-11-15. **Board:** https://claude.ai/artifact/MaTRKnshQdbq5thojY5nnz (private).
+**Date:** 2026-11-15. **Board:** a private review page.
 **Marks:** 7 love, 30 good, 22 not for me, out of 59 real small-business sites. No notes. Stored in `tools/eval/taste/2026-11-15-board.json`.
 
 ## The 7 loved sites

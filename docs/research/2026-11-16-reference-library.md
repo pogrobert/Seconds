@@ -17,7 +17,7 @@ So we built our own library, for internal study only. We learn patterns from it;
   - **Overlays:** consent banners, offers and other pop-ups are hidden on screen. Nothing is clicked, accepted or declined.
   - **Inner scrolling:** sites that scroll inside one container are expanded so the whole page is captured.
 - **The summary** (`node src/references-summary.ts` → `references/summary.json`): the numbers per kind.
-- **The picking page:** https://claude.ai/artifact/425BWVjrQUrtveYN9dWCnY (private). Robert marks each site love, like or not for me; the picks are stored privately in its database.
+- **The picking page:** a private review page. Robert marks each site love, like or not for me; the picks are stored privately in its database.
 
 ## Capture results *(measured, 2026-11-16)*
 

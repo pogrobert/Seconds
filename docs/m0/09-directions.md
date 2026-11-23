@@ -2,7 +2,7 @@
 
 **Date:** 2026-11-15. **Why:** the taste board (`docs/m0/08-taste-board.md`) showed what Robert loves. Before anything goes into the block library, each direction gets one complete homepage designed by hand, to be rated against a fixed bar: would he proudly hand it to the owner?
 
-**Rating page:** https://claude.ai/artifact/67XNHEKJxKEE5EzHuLeCqo (private). Scores are 1 to 5, with a note.
+**Rating page:** a private review page. Scores are 1 to 5, with a note.
 
 | Direction | Business (invented stand-in) | The idea | From |
 |---|---|---|---|

@@ -5,7 +5,7 @@
 - Signature scored 3: "i kinda do not like the black bg and square buttons".
 - Atelier scored 2: the text was hard to read and the blur looked bad.
 
-**Rating page, round 2:** https://claude.ai/artifact/9f24CvZeCgBR4aix9Uzb2F (private). It has 15 sites: 3 directions × 5 businesses.
+**Rating page, round 2:** a private review page. It has 15 sites: 3 directions × 5 businesses.
 
 ## 1. Each photo is measured once, and words are placed and shaded for it
 

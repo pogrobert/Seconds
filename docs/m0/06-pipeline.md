@@ -109,7 +109,7 @@ Run on this computer, not on Cloudflare: TypeSafe `jev-1.14.0` and OpenRouter `o
 
 **The words:** no invented prices, years or awards were found in the 30 copies. Every address the text mentions is the real one.
 
-**Blind rating page:** https://claude.ai/artifact/78QGdzPNntwTKEWhNDseXa
+**Blind rating page:** a private review page
 - 60 pairs: A against B and A against C for every brief.
 - Site files have random names, and each brief's two pairs sit in different halves of the list.
 - Choices are saved in the page's storage, which only the owner can read or write.

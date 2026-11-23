@@ -22,7 +22,7 @@
 
   Two neighbouring sections never share a colour block, except the dark end, which merges on purpose.
 - **Footer wordmark fills the width in every family** *(fixed)*. A new kit piece, `FitLine`, sizes one line from its character count and the font's measured character width, with no JavaScript. The widths were measured in Chromium on 12 business names (`pnpm --filter @repo/eval advance`).
-- **The Wall** *(new preview tool)*: `pnpm --filter @repo/eval wall` renders 24 sites for one business. Code draws each site's family, settings, light or dark, rhythm and block variants at random from what the content fits. The salon's Wall is published privately at https://claude.ai/artifact/DjFPznuzj7fjiBg5Ew7YYE.
+- **The Wall** *(new preview tool)*: `pnpm --filter @repo/eval wall` renders 24 sites for one business. Code draws each site's family, settings, light or dark, rhythm and block variants at random from what the content fits. The salon's Wall is published privately on a private review page.
 
 ## Checks *(measured)*
 
@@ -102,7 +102,7 @@ What changed after Robert's picks:
 - **Code defaults (M0 arm B) use photo-led heroes** for all five kinds of business: `PHOTO_HEROES` in `packages/pipeline/src/defaults.ts`. This makes the defaults a stronger opponent for the decision model, which is fair.
 - **The Wall's round 2** (`pnpm --filter @repo/eval wall`; `ROUND=1` reproduces round 1):
   - It draws the hero only from `PHOTO_HEROES`, with new seeds, and shows whole-page thumbnails. So Robert's picks judge everything below the hero.
-  - It is published privately at https://claude.ai/artifact/XWPuWYPLHGhoSqohY2gdn2.
+  - It is on a private review page.
   - All 24 sites pass the browser checks at 360 and 1280 px *(measured)*.
 - **Defect found by eye, fixed:** in `footer/simple#inline` (now 1.0.1), the details column was set one word per line, with a large empty area beside it. It appeared in 7 of 24 sites, and also in round 1's published sites.
   - Cause: in the wiped Tailwind theme, `max-w-md` resolves to the spacing token md (1.25rem), not a 40rem column width.

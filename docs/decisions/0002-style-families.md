@@ -1,7 +1,7 @@
 # 0002: Style families
 
 **Status:** Robert chose on 2026-11-14: **Poster, Quiet and Soft** are M0's three families. Workshop and Deep stay in the code as options, but are not used in M0. Questions 2 to 4 below are still open; none of them blocks M0.
-**Viewer:** https://claude.ai/artifact/CsxSj5jiajesqcp8Cw2BKq (private): the five families on the same five sample businesses, side by side.
+**Viewer:** a private review page: the five families on the same five sample businesses, side by side.
 
 ## What a style family is
 
