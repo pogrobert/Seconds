@@ -54,110 +54,14 @@
   }
 }
 
-/* The first message turns the centred start into the split view (routes/index.tsx, View
-   Transitions). Four ways to do it while Robert picks (html[data-vt], set just before; see VTS).
-   Shared by all that move things: the parts glide on an iOS-like curve; the typed words can't
-   morph into the message (16px in a wide box, 14px in a narrow bubble, wrapped differently), so
-   the old words fade out fast and the bubble fades in as it lands: never two texts at once. */
-:root {
-  --vt-move: cubic-bezier(0.32, 0.72, 0, 1);
-  --vt-out: cubic-bezier(0.23, 1, 0.32, 1);
-}
-::view-transition-group(composer),
-::view-transition-group(prompt),
-::view-transition-group(stage) {
-  animation-duration: 0.5s;
-  animation-timing-function: var(--vt-move);
-}
-::view-transition-old(prompt),
-::view-transition-new(prompt) {
-  height: 100%;
-  object-fit: none;
-  object-position: left top;
-}
-::view-transition-old(prompt) {
-  animation: vt-fade-out 0.1s ease-out both;
-}
-::view-transition-new(prompt) {
-  animation: vt-fade-in 0.3s var(--vt-out) 0.12s both;
-}
-/* The headline lifts away rather than fading in place over the new page. */
-::view-transition-old(title) {
-  animation: vt-lift-out 0.14s var(--vt-out) both;
-}
+/* The first message dissolves the centred start into the split view (routes/index.tsx, View
+   Transitions; Robert picked it from four, 2026-11-23). Nothing travels: the start blurs away
+   and the split view comes into focus, a little after, so the two never sit sharp on each other. */
 ::view-transition-old(root) {
-  animation: vt-fade-out 0.15s ease-out both;
-}
-::view-transition-new(root) {
-  animation: vt-fade-in 0.3s var(--vt-out) 0.05s both;
-}
-
-/* grow: the box opens out into the preview as one white panel; the preview is revealed inside
-   it, at its own size, as the panel reaches it. */
-::view-transition-group(stage) {
-  overflow: clip;
-  border-radius: 12px;
-  background: #fff;
-  box-shadow:
-    0 0 0 1px var(--color-zinc-200),
-    0 12px 32px -16px rgb(9 9 11 / 0.18);
-}
-::view-transition-old(stage),
-::view-transition-new(stage) {
-  height: 100%;
-  object-fit: none;
-  object-position: left top;
-}
-::view-transition-old(stage) {
-  animation: vt-fade-out 0.12s ease-out both;
-}
-::view-transition-new(stage) {
-  animation: vt-fade-in 0.3s var(--vt-out) 0.16s both;
-}
-::view-transition-new(composer-in) {
-  animation: vt-rise-in 0.3s var(--vt-out) 0.22s both;
-}
-
-/* slide: the preview comes in from the right as the box settles on the left. */
-::view-transition-new(preview) {
-  animation: vt-slide-in 0.45s var(--vt-out) 0.06s both;
-}
-
-/* dissolve: nothing travels; the start blurs away and the split view comes into focus. */
-:root[data-vt="dissolve"]::view-transition-old(root) {
   animation: vt-blur-out 0.2s ease-out both;
 }
-:root[data-vt="dissolve"]::view-transition-new(root) {
-  animation: vt-blur-in 0.4s var(--vt-out) 0.08s both;
-}
-
-@keyframes vt-fade-out {
-  to {
-    opacity: 0;
-  }
-}
-@keyframes vt-fade-in {
-  from {
-    opacity: 0;
-  }
-}
-@keyframes vt-lift-out {
-  to {
-    opacity: 0;
-    transform: translateY(-12px);
-  }
-}
-@keyframes vt-rise-in {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-}
-@keyframes vt-slide-in {
-  from {
-    opacity: 0;
-    transform: translateX(48px);
-  }
+::view-transition-new(root) {
+  animation: vt-blur-in 0.4s cubic-bezier(0.23, 1, 0.32, 1) 0.08s both;
 }
 @keyframes vt-blur-out {
   to {

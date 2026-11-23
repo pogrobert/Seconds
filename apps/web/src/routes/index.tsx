@@ -234,38 +234,12 @@ function Build() {
   linksRef.current = links
   const composer = useRef<HTMLTextAreaElement>(null)
   const [reloads, setReloads] = useState(0)
-  // How the first screen turns into the split view; a switch while Robert picks (dev only).
-  const [vt, setVt] = useState<Vt>(DEFAULT_VT)
-  const named = (role: VtRole) => vtName(vt, role)
-  /** Dev only: play the transition slower, to look at it. */
-  const [speed, setSpeed] = useState(1)
-  /**
-   * Dev only: "Replay" puts the finished site aside and goes back to the start with the first
-   * message in the box; Enter then plays the transition and the making steps without building,
-   * and brings the site back. As often as wanted, at no cost.
-   */
-  const shelved = useRef<{
-    messages: Message[]
-    result: BuildResult | null
-    links: Record<string, string>
-    look: string | null
-    versions: typeof versions.current
-  } | null>(null)
 
-  // The first screen starts with the cursor in the message box (also after a dev Replay).
+  // The first screen starts with the cursor in the message box.
   const onStart = messages.length === 0
   useEffect(() => {
     if (onStart) composer.current?.focus()
   }, [onStart])
-  useEffect(() => {
-    if (!import.meta.env.DEV) return
-    try {
-      const saved = localStorage.getItem('builder.vt') as Vt | null
-      if (saved && VTS.includes(saved)) setVt(saved)
-      const pace = Number(localStorage.getItem('builder.vt-speed'))
-      if (SPEEDS.includes(pace)) setSpeed(pace)
-    } catch {}
-  }, [])
 
   // The message box grows with what is typed, up to its max height, and glides to its new height
   // (Robert, 2026-11-23): a hidden copy of the text, as wide as the box, says how tall it must be,
@@ -306,35 +280,14 @@ function Build() {
       setNow(performance.now())
       setProgress({})
     }
-    // The first message moves the page from the centred start to the split view as one motion
-    // (View Transitions; where the browser has none, or motion is reduced, it simply switches).
+    // The first message dissolves the centred start into the split view (Robert picked it from
+    // four, 2026-11-23): nothing travels, the start blurs away and the split view comes into
+    // focus (View Transitions, styles.css; where the browser has none, or motion is reduced, it
+    // simply switches).
     const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    const dry = import.meta.env.DEV && !messages.length ? shelved.current : null
-    if (!messages.length && document.startViewTransition && !still) {
-      document.documentElement.dataset.vt = vt
-      const t = document.startViewTransition(() => flushSync(start))
-      if (import.meta.env.DEV && speed !== 1)
-        t.ready.then(() => {
-          for (const a of document.getAnimations())
-            if ((a.effect as KeyframeEffect | null)?.pseudoElement?.startsWith('::view-transition'))
-              a.playbackRate = speed
-        })
-    } else start()
-    if (dry) {
-      // The steps tick for about as long as a real build, then the shelved site comes back.
-      const wait = 1400 / speed
-      setTimeout(() => setProgress({ choices: 600, words: 700 }), wait / 2)
-      setTimeout(() => {
-        shelved.current = null
-        versions.current = dry.versions
-        setMessages(dry.messages)
-        setResult(dry.result)
-        setLinks(dry.links)
-        setLook(dry.look)
-        setBusy(false)
-      }, wait)
-      return
-    }
+    if (!messages.length && document.startViewTransition && !still)
+      document.startViewTransition(() => flushSync(start))
+    else start()
     try {
       // Photos arrive on the same stream once found; they wait here until the page is in.
       let photos: (p: PhotoResult | null) => void = () => {}
@@ -510,13 +463,7 @@ function Build() {
   )
 
   const composerBox = (big: boolean) => (
-    <form
-      onSubmit={onSubmit}
-      // The first screen's box and the split view's are one box to the view transition: it glides
-      // from the middle to the bottom left; the words typed in it fly up as the first message.
-      style={{ viewTransitionName: named(big ? 'startBox' : 'chatBox') }}
-      className="shrink-0"
-    >
+    <form onSubmit={onSubmit} className="shrink-0">
       <InputGroup
         // The send button is disabled while the box is empty; shadcn greys the whole group for any
         // disabled control inside, which here would grey the box the visitor is about to type in.
@@ -534,7 +481,6 @@ function Build() {
           onChange={(e) => setDraft(e.target.value)}
           onKeyDown={onKey}
           rows={big ? 3 : 2}
-          style={big ? { viewTransitionName: named('prompt') } : undefined}
           placeholder={big ? "What's the site for?" : 'What should change?'}
           className={`max-h-48 flex-none overflow-y-auto leading-relaxed field-sizing-fixed motion-safe:transition-[height] motion-safe:duration-160 motion-safe:ease-[cubic-bezier(0.23,1,0.32,1)] ${big ? 'h-20 min-h-20 text-base md:text-base' : 'h-12 min-h-12 text-sm'}`}
         />
@@ -594,10 +540,7 @@ function Build() {
         <main className="flex min-h-0 flex-1 flex-col items-center overflow-y-auto px-5 pb-10">
           <div className="my-auto flex w-full max-w-2xl flex-col gap-7 pt-10">
             <div className="text-center">
-              <h1
-                style={{ viewTransitionName: named('title') }}
-                className="text-[2rem] leading-tight font-medium tracking-[-0.02em] text-balance sm:text-[2.5rem]"
-              >
+              <h1 className="text-[2rem] leading-tight font-medium tracking-[-0.02em] text-balance sm:text-[2.5rem]">
                 Websites in seconds
               </h1>
             </div>
@@ -611,24 +554,6 @@ function Build() {
             />
           </div>
         </main>
-        {import.meta.env.DEV && (
-          <VtSwitch
-            vt={vt}
-            speed={speed}
-            onSpeed={(x) => {
-              setSpeed(x)
-              try {
-                localStorage.setItem('builder.vt-speed', String(x))
-              } catch {}
-            }}
-            onPick={(v) => {
-              setVt(v)
-              try {
-                localStorage.setItem('builder.vt', v)
-              } catch {}
-            }}
-          />
-        )}
       </div>
     )
 
@@ -655,19 +580,14 @@ function Build() {
                     <MessageScrollerItem
                       key={i}
                       scrollAnchor={m.role === 'user'}
-                      // Drawn at once, not when seen (the scroller's content-visibility: auto):
-                      // the view transition must find the first message to fly the prompt into.
-                      // Its paint is clipped to its box, so a little room below keeps the focus
-                      // ring on Details whole (Robert, 2026-11-23).
-                      className={i === 0 ? 'pb-1 [content-visibility:visible]' : 'pb-1'}
+                      // Its paint is clipped to its box (content-visibility: auto), so a little
+                      // room below keeps the focus ring on Details whole (Robert, 2026-11-23).
+                      className="pb-1"
                     >
                       {m.role === 'user' ? (
                         <ChatMessage align="end">
                           <Bubble variant="muted" align="end">
-                            <BubbleContent
-                              style={i === 0 ? { viewTransitionName: named('prompt') } : undefined}
-                              className="rounded-2xl rounded-br-md px-4 py-2.5"
-                            >
+                            <BubbleContent className="rounded-2xl rounded-br-md px-4 py-2.5">
                               {m.text}
                             </BubbleContent>
                           </Bubble>
@@ -742,7 +662,6 @@ function Build() {
 
         <section
           aria-label="Preview"
-          style={{ viewTransitionName: named('preview') }}
           className="order-1 flex min-w-0 flex-col overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-[0_1px_2px_rgba(9,9,11,.04)] max-md:h-[58dvh] max-md:shrink-0 md:order-none md:flex-1"
         >
           <Tabs
@@ -914,33 +833,6 @@ function Build() {
           </Tabs>
         </section>
       </div>
-      {import.meta.env.DEV && (
-        <VtSwitch
-          vt={vt}
-          speed={speed}
-          onSpeed={(x) => {
-            setSpeed(x)
-            try {
-              localStorage.setItem('builder.vt-speed', String(x))
-            } catch {}
-          }}
-          onPick={(v) => {
-            setVt(v)
-            try {
-              localStorage.setItem('builder.vt', v)
-            } catch {}
-          }}
-          onReplay={() => {
-            const first = messages.find((m) => m.role === 'user')
-            // Not while the page or its photos are still coming: they would land on the start.
-            if (ticking || !first) return
-            shelved.current = { messages, result, links, look, versions: versions.current }
-            setMessages([])
-            setResult(null)
-            setDraft(first.text)
-          }}
-        />
-      )}
     </div>
   )
 }
@@ -1062,80 +954,6 @@ function Mark() {
     <span aria-hidden className="grid size-6 shrink-0 place-items-center rounded-lg bg-zinc-900">
       <span className="size-2.5 rounded-[3px] bg-white" />
     </span>
-  )
-}
-
-/**
- * How the first screen becomes the split view (Robert, 2026-11-23: pick one of four; the switch
- * shows only on the dev server). Each mode names the parts that travel; styles.css moves them.
- * - fly: the box glides to the bottom left, the words fly up into the first message.
- * - grow: the box opens out into the preview; the chat box rises in at the bottom left.
- * - slide: as fly, and the preview slides in from the right.
- * - dissolve: nothing travels; the start screen blurs away and the split view comes into focus.
- */
-const VTS = ['fly', 'grow', 'slide', 'dissolve'] as const
-type Vt = (typeof VTS)[number]
-const DEFAULT_VT: Vt = 'fly'
-type VtRole = 'startBox' | 'chatBox' | 'prompt' | 'title' | 'preview'
-function vtName(vt: Vt, role: VtRole): string | undefined {
-  if (vt === 'dissolve') return undefined
-  if (role === 'prompt' || role === 'title') return role
-  if (role === 'startBox') return vt === 'grow' ? 'stage' : 'composer'
-  if (role === 'chatBox') return vt === 'grow' ? 'composer-in' : 'composer'
-  return vt === 'grow' ? 'stage' : vt === 'slide' ? 'preview' : undefined
-}
-
-/** Dev only: pick the transition and its speed; Replay plays it again without building. */
-const SPEEDS = [1, 0.5, 0.25]
-function VtSwitch({
-  vt,
-  onPick,
-  speed,
-  onSpeed,
-  onReplay,
-}: {
-  vt: Vt
-  onPick: (v: Vt) => void
-  speed: number
-  onSpeed: (x: number) => void
-  onReplay?: () => void
-}) {
-  return (
-    <div className="fixed right-4 bottom-4 z-50 flex items-center gap-1 rounded-xl bg-zinc-900 p-1 text-xs text-zinc-300 shadow-lg">
-      <span className="px-2 text-zinc-500">Transition</span>
-      {VTS.map((v) => (
-        <button
-          key={v}
-          type="button"
-          onClick={() => onPick(v)}
-          aria-pressed={vt === v}
-          className={`rounded-lg px-2.5 py-1.5 capitalize ${vt === v ? 'bg-white text-zinc-900' : 'hover:bg-zinc-800'}`}
-        >
-          {v}
-        </button>
-      ))}
-      <span className="mx-1 h-4 w-px bg-zinc-700" />
-      {SPEEDS.map((x) => (
-        <button
-          key={x}
-          type="button"
-          onClick={() => onSpeed(x)}
-          aria-pressed={speed === x}
-          className={`rounded-lg px-2 py-1.5 tabular-nums ${speed === x ? 'bg-white text-zinc-900' : 'hover:bg-zinc-800'}`}
-        >
-          {x === 1 ? '1×' : x === 0.5 ? '½×' : '¼×'}
-        </button>
-      ))}
-      {onReplay && (
-        <button
-          type="button"
-          onClick={onReplay}
-          className="ml-1 rounded-lg bg-zinc-700 px-2.5 py-1.5 text-white hover:bg-zinc-600"
-        >
-          Replay
-        </button>
-      )}
-    </div>
   )
 }
 
