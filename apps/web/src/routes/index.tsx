@@ -262,7 +262,7 @@ function Build() {
   const frame = useRef<HTMLIFrameElement>(null)
   /** Which build is current: photos from an older build are dropped. */
   const generation = useRef(0)
-  /** Which conversation is current: "Builder" starts a new one, and late answers are dropped. */
+  /** Which conversation is current: the name in the corner starts a new one, and late answers are dropped. */
   const session = useRef(0)
   /** The site being made, for the Recent list (history.ts); a new one per new site. */
   const siteId = useRef<string | null>(null)
@@ -499,7 +499,7 @@ function Build() {
   }
 
   /**
-   * "Builder" in the corner: back to the first screen for a new site. The
+   * The name in the corner: back to the first screen for a new site. The
    * site is not kept; a build still under way is let go. Dissolves, as the way in does.
    */
   function startOver() {
@@ -650,7 +650,7 @@ function Build() {
             className="-mx-1 flex items-center gap-2 transition-transform duration-150 ease-out active:scale-[0.97] rounded-lg px-1 text-[15px] font-semibold tracking-tight outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
           >
             <Mark />
-            Builder
+            Seconds
           </button>
         </TooltipTrigger>
         <TooltipContent>Start a new site</TooltipContent>
@@ -1212,7 +1212,7 @@ function TryRow({ onPick, typing }: { onPick: (ex: Example) => void; typing: boo
   )
 }
 
-/** Builder's mark: the small square logo, also the assistant's avatar in the chat. */
+/** The mark: the small logo, also the assistant's avatar in the chat. */
 function Mark() {
   return (
     <span aria-hidden className="grid size-6 shrink-0 place-items-center rounded-lg bg-zinc-900">

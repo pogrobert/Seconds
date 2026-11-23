@@ -19,7 +19,7 @@ const SOURCES = [
 const ID = /^[pc][A-Za-z0-9]{1,60}$/
 
 // Commons asks automated clients for a descriptive User-Agent; a generic one, no personal details.
-const UA = { 'user-agent': 'BuilderSiteMaker/0.1 (hobby project; small, hand-run builds)' }
+const UA = { 'user-agent': 'SecondsSiteMaker/0.1 (hobby project; small, hand-run builds)' }
 
 type Kept = { body: ArrayBuffer; type: string }
 

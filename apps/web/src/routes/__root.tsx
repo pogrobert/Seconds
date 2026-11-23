@@ -10,7 +10,7 @@ export const Route = createRootRoute({
     meta: [
       { charSet: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { title: 'Builder' },
+      { title: 'Seconds' },
     ],
     links: [
       // Atkinson Hyperlegible Next, the build page's own type, comes with the stylesheet (styles.css);

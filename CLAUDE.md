@@ -1,4 +1,4 @@
-# Builder (working name)
+# Seconds (formerly "Builder")
 
 Status on 2026-11-14: idea and research only. There is no code, no git repository and no dependency installed yet.
 
@@ -20,7 +20,7 @@ The reason to build it: code-writing builders (Lovable, v0, Bolt, Replit) take m
 - **The library is the heart.** It should be large, cover many tastes and directions, and keep growing.
 - **Two headline features are in scope:** The Wall, and a whole business from one link (both described under Milestones).
 - **Agent-ready sites wait.** Giving each site an MCP server and structured actions is a later idea, not part of the first version.
-- **"Builder" is a placeholder name.** The real name is undecided. Do not choose, register or publish under any name.
+- **Name (2026-11-23): Seconds**, at `seconds.pogrobert.com`, matching the first screen's "Websites in seconds". Visitors see it in the page title and the corner wordmark. Internal names stay "builder" (the repository, the Worker `builder-app`, the browser storage `builder`, so saved Recent sites survive). Do not register domains or accounts under it, or publish anything, without Robert.
 - **No monetization for now.**
 - **Reach (2026-11-14):** websites now. The design must leave room for apps (logins, databases, payments) later without a rewrite.
 - **Where it runs (2026-11-14):** the first version is Robert's hosted copy only. Self-hosting is out of the first version; do not build a Docker image, self-host drivers or self-host docs. Keep it possible later by following the two cheap rules in `docs/technical/README.md` (only `env.ts` touches Cloudflare; the pipeline stays pure).

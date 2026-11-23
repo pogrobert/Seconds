@@ -167,7 +167,7 @@ async function pixabay(key: string, q: string, n: number): Promise<Candidate[]> 
 /* ------------------------------------------------------------------------ Wikimedia Commons */
 
 // Commons asks automated clients for a descriptive User-Agent; a generic one, no personal details.
-const UA = { 'user-agent': 'BuilderSiteMaker/0.1 (hobby project; small, hand-run builds)' }
+const UA = { 'user-agent': 'SecondsSiteMaker/0.1 (hobby project; small, hand-run builds)' }
 const plain = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/ł/g, 'l').toLowerCase()
 
 /** The town's own best photos: Commons "quality images" that name the town. */
