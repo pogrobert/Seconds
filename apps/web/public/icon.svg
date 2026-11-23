@@ -1,4 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <title>Seconds</title>
   <!-- Seconds: three pages fanned out, smeared sideways like a quick pick (2026-11-24, "b3"). -->
   <defs>
     <filter id="side" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="9 1.5"/></filter>
