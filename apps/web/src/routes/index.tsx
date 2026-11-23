@@ -155,6 +155,8 @@ function Build() {
   const frame = useRef<HTMLIFrameElement>(null)
   /** Which build is current: photos from an older build are dropped. */
   const generation = useRef(0)
+  /** Each version shown, with its photo links, newest last: "undo" steps back one. */
+  const versions = useRef<{ result: BuildResult; links: Record<string, string> }[]>([])
   const [links, setLinks] = useState<Record<string, string>>({})
   const [started, setStarted] = useState(0)
   const [progress, setProgress] = useState<Progress>({})
@@ -211,14 +213,38 @@ function Build() {
         (p) => photos(p),
         result?.state ?? null,
       )
+      // "Undo": the version before comes back, photos and all.
+      if (built.undo) {
+        versions.current.pop()
+        const before = versions.current[versions.current.length - 1]
+        if (before) {
+          ++generation.current
+          setResult(before.result)
+          setLinks(before.links)
+          setLook(before.result.suggested)
+        }
+        setMessages((m) => [
+          ...m,
+          {
+            role: 'assistant',
+            text: before
+              ? 'Went back to the version before. Anything else?'
+              : 'There is nothing to undo yet.',
+          },
+        ])
+        if (!before && result) versions.current.push({ result, links: linksRef.current })
+        return
+      }
       // An edit that keeps the photos keeps their links; a new site or new photos starts afresh.
+      // Links stay alive while an earlier version may come back; a new site lets them all go.
       const edited = !!built.changed
       const mine = edited && !built.photoJob ? generation.current : ++generation.current
-      if (!edited || built.photoJob) {
+      if (!edited) {
         for (const u of photoUrls.current) URL.revokeObjectURL(u)
         photoUrls.current = []
-        setLinks({})
+        versions.current = []
       }
+      if (!edited || built.photoJob) setLinks({})
       const r: BuildResult = {
         ...built,
         sites: built.sites.map((x) => ({ ...x, html: withSpaces(x.html) })),
@@ -228,17 +254,23 @@ function Build() {
       const same = edited ? r.sites.find((x) => x.label === was) : undefined
       setResult(r)
       setLook(same?.id ?? r.suggested)
+      versions.current.push({
+        result: r,
+        links: edited && !built.photoJob ? linksRef.current : {},
+      })
       const changes = r.changed ?? []
       setMessages((m) => [
         ...m,
         {
           role: 'assistant',
           text: edited
-            ? changes.length
-              ? `Changed ${changes.length > 1 ? `${changes.slice(0, -1).join(', ')} and ${changes[changes.length - 1]}` : changes[0]}. Anything else?`
-              : r.already?.length
-                ? `Nothing to change: ${r.already.join('; ')}.`
-                : 'Nothing changed: I could not tell which part you meant. Try naming it: the headline, the colour, the photos, the design.'
+            ? r.reply
+              ? r.reply
+              : changes.length
+                ? `Changed ${changes.length > 1 ? `${changes.slice(0, -1).join(', ')} and ${changes[changes.length - 1]}` : changes[0]}. Anything else?`
+                : r.already?.length
+                  ? `Nothing to change: ${r.already.join('; ')}.`
+                  : 'Nothing changed: I could not tell which part you meant. Try naming it: the headline, the colour, the photos, the design.'
             : `Here is ${r.name}, ${/^[aeiou]/i.test(r.kindLabel) ? 'an' : 'a'} ${r.kindLabel}, in three versions to compare. Tell me what to change.`,
           result: r,
           ...(r.photoJob ? { photos: 'waiting' as const } : {}),
@@ -266,6 +298,14 @@ function Build() {
             .map(([slot]) => [`art:${slot}`, '1']),
         ])
         setLinks(bySlot)
+        const top = versions.current[versions.current.length - 1]
+        if (top?.result === r) top.links = bySlot
+        // The server leaves these out when the owner later asks for different photos.
+        const shown = Object.values(p.slots).filter(
+          (id) => !p.images[id]?.startsWith('data:image/svg'),
+        )
+        // Kept on the version itself, so an undone-to version still knows its photos.
+        if (r.state) r.state.shown = shown
         setMessages((m) =>
           m.map((x) => (x.role === 'assistant' && x.result === r ? { ...x, photos: p } : x)),
         )

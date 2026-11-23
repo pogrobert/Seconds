@@ -1,9 +1,9 @@
-// Clubhouse: a sports or social club. The name's initials sit in a shield drawn in CSS, the club's
-// crest, in the header and large on the opening, which is striped like a kit shirt in two shades
+// Clubhouse: a sports or social club. No made-up crest (Robert, 2026-11-23: no fake decorations;
+// a club has its own). The opening is striped like a kit shirt in two shades
 // of the club's colour. One recurring detail, the hoop: two bars of the colour with a gap, like
 // the bands on a sock, under every heading. The offer is a fixture list, each row ending in a
 // scoreboard box with its price; steps, how to join, are numbered in small shields. With no
-// photos the opening is crest and type only. For football, cricket, running and rowing clubs.
+// photos the opening is type only. For football, cricket, running and rowing clubs.
 
 import { Fragment } from 'react'
 import type { Photo } from '../ui.tsx'
@@ -23,23 +23,6 @@ import {
 
 const isArt = (p: Photo) => p.src.startsWith('data:image/svg')
 
-/** The crest's letters: the first letter of up to three capitalised words of the name. */
-function initials(name: string): string {
-  const words = name.split(/[\s\-–]+/).filter(Boolean)
-  const caps = words.map((w) => [...w][0] ?? '').filter((ch) => /\p{Lu}/u.test(ch))
-  if (caps.length) return caps.slice(0, 3).join('')
-  return [...name.trim()][0] ?? ''
-}
-
-function Crest({ name, big }: { name: string; big?: boolean }) {
-  const t = initials(name)
-  return (
-    <span className={big ? 'crest big' : 'crest'} aria-hidden="true" data-n={[...t].length}>
-      <span>{t}</span>
-    </span>
-  )
-}
-
 const CSS = `${RESET}
 :root{--kit:var(--band);--on-kit:var(--band-foreground);--dk:color-mix(in oklab,var(--band) 78%,#000);--paper:color-mix(in oklab,var(--band) 4%,#f7f7f3);--tint:color-mix(in oklab,var(--band) 9%,#f1f1ec);--ink:color-mix(in oklab,var(--band) 22%,#111);--quiet:color-mix(in oklab,var(--ink) 70%,var(--paper));--line:color-mix(in oklab,var(--band) 18%,#d6d6cf);--w:74rem;--gut:clamp(1.15rem,4vw,2.5rem);--sec:clamp(3.5rem,7vw,6rem);--stripe:clamp(2.5rem,5vw,4.5rem)}
 body{background:var(--paper);color:var(--ink);font-size:1.0625rem;line-height:1.55}
@@ -48,7 +31,6 @@ body{background:var(--paper);color:var(--ink);font-size:1.0625rem;line-height:1.
 .crest{--s:3.1rem;position:relative;display:inline-grid;place-items:center;flex:none;width:var(--s);height:calc(var(--s) * 1.18);background:repeating-linear-gradient(90deg,var(--kit) 0 calc(var(--s) / 5),var(--dk) calc(var(--s) / 5) calc(var(--s) * 2 / 5));border-radius:calc(var(--s) * .08) calc(var(--s) * .08) 50% 50% / calc(var(--s) * .08) calc(var(--s) * .08) 62% 62%;box-shadow:0 0 0 calc(var(--s) * .05) var(--on-kit),0 0 0 calc(var(--s) * .1) var(--kit)}
 .crest span{display:grid;place-items:center;min-width:72%;height:42%;margin-top:-12%;padding-inline:.1em;background:var(--on-kit);color:var(--kit);font-family:var(--font-heading);font-weight:800;font-size:calc(var(--s) * .3);line-height:1;letter-spacing:.02em}
 .crest[data-n="1"] span{font-size:calc(var(--s) * .34);min-width:46%}
-.crest.big{--s:clamp(8.5rem,17vw,13.5rem)}
 .top{display:flex;align-items:center;justify-content:space-between;gap:1rem 2rem;padding-block:1rem}
 .top .id{display:flex;align-items:center;gap:1rem;min-width:0}
 .top b{font-family:var(--font-heading);font-weight:var(--heading-weight);letter-spacing:var(--heading-tracking);text-transform:var(--heading-case);font-size:1.2rem;line-height:1.2;max-width:30ch}
@@ -58,7 +40,7 @@ body{background:var(--paper);color:var(--ink);font-size:1.0625rem;line-height:1.
 .kit .hoop{border-color:var(--on-kit)}
 .band{height:.9rem;background:var(--on-kit);border-block:.3rem solid var(--dk)}
 .hero{background:repeating-linear-gradient(90deg,var(--kit) 0 var(--stripe),var(--dk) var(--stripe) calc(var(--stripe) * 2))}
-.hero .w{display:grid;grid-template-columns:auto minmax(0,1fr);gap:clamp(2rem,5vw,4.5rem);align-items:center;padding-block:clamp(3rem,7vw,5.5rem)}
+.hero .w{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(2rem,5vw,4.5rem);align-items:center;padding-block:clamp(3rem,7vw,5.5rem)}
 .hero .tag{font-weight:600;margin-bottom:1rem;max-width:44ch}
 .hero h1{font-size:clamp(2.4rem,5.6vw,4.6rem);line-height:1.02;max-width:17ch;margin-bottom:1.25rem;overflow-wrap:break-word}
 .hero p.sub{font-size:clamp(1.12rem,1.6vw,1.3rem);max-width:42ch;margin-bottom:2rem}
@@ -200,7 +182,6 @@ function Page({ c, extras }: TemplateProps) {
       <div className="kit">
         <div className="w top">
           <span className="id">
-            <Crest name={c.name} />
             <b>{c.name}</b>
           </span>
           <nav>
@@ -215,7 +196,6 @@ function Page({ c, extras }: TemplateProps) {
       <div className="band" aria-hidden="true" />
       <header className={heroPic ? 'hero kit has-pic' : 'hero kit'}>
         <div className="w">
-          <Crest name={c.name} big />
           <div>
             <p className="tag">{c.tagline}</p>
             <h1>{c.headline}</h1>
@@ -300,7 +280,6 @@ function Page({ c, extras }: TemplateProps) {
         </div>
         <div className="foot">
           <div className="w">
-            <Crest name={c.name} />
             <b>{c.name}</b>
             <span className="t">{c.tagline}</span>
           </div>
@@ -313,7 +292,7 @@ function Page({ c, extras }: TemplateProps) {
 export const clubhouse: Template = {
   id: 'clubhouse',
   label: 'Clubhouse',
-  text: "A club page in kit colours: the name's initials in a drawn shield like a club crest, an opening striped like a team shirt in two shades of the club's colour, bars like the hoops on a sock under every heading, sessions and memberships as a fixture list with each price in a scoreboard box and joining as numbered shields: proud, sporty and welcoming, for football, rugby, cricket, hockey, running, cycling, rowing and other sports and social clubs.",
+  text: "A club page in kit colours: an opening striped like a team shirt in two shades of the club's colour, bars like the hoops on a sock under every heading, sessions and memberships as a fixture list with each price in a scoreboard box and joining as numbered shields: proud, sporty and welcoming, for football, rugby, cricket, hockey, running, cycling, rowing and other sports and social clubs.",
   dark: false,
   css: CSS,
   Page,

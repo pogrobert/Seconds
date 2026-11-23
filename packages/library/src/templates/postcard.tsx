@@ -1,9 +1,8 @@
 // Postcard: the opening is a postcard lying on a warm table. One side is the photo in a white
-// border; the other is the writing side, with a perforated stamp drawn in CSS, a postmark, the
-// message (the headline) and the business's own name and address on ruled lines. With no photo
+// border; the other is the writing side, with the message (the headline) and the business's own name and address on ruled lines. With no photo
 // the card shows its writing side alone, message beside address, as the back of a real postcard.
 // Below, every photo is a white-bordered print, the offer reads like an itinerary on perforated
-// lines, and the closing has an airmail edge. For B&Bs, holiday lets, tours and campsites.
+// lines. No drawn stamp, postmark or airmail edge: Robert, 2026-11-23, no fake decorations. For B&Bs, holiday lets, tours and campsites.
 
 import { Fragment } from 'react'
 import {
@@ -34,14 +33,8 @@ body{background:var(--paper);color:var(--ink);font-size:1.0625rem;line-height:1.
 .card{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);background:var(--card);padding:var(--edge);rotate:-.8deg;box-shadow:0 1px 2px rgb(0 0 0/.08),0 24px 50px -28px rgb(0 0 0/.35)}
 .front{position:relative;min-height:clamp(24rem,42vw,34rem)}
 .front img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.back{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"tag stamp" "msg msg" "addr addr";gap:1.25rem 1.5rem;align-content:space-between;padding:clamp(1.25rem,2.6vw,2.25rem)}
+.back{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"tag tag" "msg msg" "addr addr";gap:1.25rem 1.5rem;align-content:space-between;padding:clamp(1.25rem,2.6vw,2.25rem)}
 .back .tag{grid-area:tag;color:var(--quiet);font-size:.98rem;align-self:start}
-.stamp{grid-area:stamp;position:relative;width:clamp(4.5rem,6vw,5.75rem);aspect-ratio:4/5;background:var(--desk);border:.3rem dotted var(--card);outline:1px solid var(--line);outline-offset:-.3rem;padding:.3rem;rotate:3deg}
-.stamp i{position:relative;display:block;height:100%;overflow:hidden;background:var(--acc)}
-.stamp i::before{content:"";position:absolute;width:42%;aspect-ratio:1;border-radius:50%;background:var(--sun);top:16%;inset-inline-end:16%}
-.stamp i::after{content:"";position:absolute;width:150%;height:55%;border-radius:50%;background:color-mix(in oklab,var(--on-acc) 30%,var(--acc));bottom:-30%;inset-inline-start:-25%}
-.mark{position:absolute;width:4.5rem;aspect-ratio:1;border-radius:50%;border:2px solid color-mix(in oklab,var(--ink) 35%,transparent);bottom:-1.5rem;inset-inline-start:-2.75rem;rotate:-14deg}
-.mark::after{content:"";position:absolute;top:50%;translate:0 -50%;inset-inline-end:60%;width:5rem;height:1.1rem;background:repeating-linear-gradient(180deg,color-mix(in oklab,var(--ink) 35%,transparent) 0 2px,transparent 2px .45rem)}
 .msg{grid-area:msg}
 .msg h1{font-size:clamp(2rem,3.6vw,3.4rem);line-height:1.05;margin-bottom:1rem}
 .msg .sub{color:var(--quiet);font-size:clamp(1.02rem,1.3vw,1.15rem);max-width:38ch;margin-bottom:1.5rem}
@@ -50,8 +43,7 @@ body{background:var(--paper);color:var(--ink);font-size:1.0625rem;line-height:1.
 .addr li{border-bottom:1px solid var(--line);padding-block:.55rem .3rem;overflow-wrap:break-word}
 .card:has(.front ${ART}){grid-template-columns:minmax(0,1fr);max-width:62rem;margin-inline:auto}
 .card:has(.front ${ART}) .front{display:none}
-.card:has(.front ${ART}) .back{grid-template-columns:minmax(0,3fr) minmax(0,2fr);grid-template-areas:"tag stamp" "msg addr";gap:2rem clamp(1.5rem,4vw,3.5rem);padding:clamp(1.5rem,4vw,3.5rem)}
-.card:has(.front ${ART}) .stamp{justify-self:end}
+.card:has(.front ${ART}) .back{grid-template-columns:minmax(0,3fr) minmax(0,2fr);grid-template-areas:"tag tag" "msg addr";gap:2rem clamp(1.5rem,4vw,3.5rem);padding:clamp(1.5rem,4vw,3.5rem)}
 .card:has(.front ${ART}) .addr{align-self:end;border-inline-start:1px solid var(--line);padding-inline-start:clamp(1.25rem,3vw,2.5rem)}
 .card:has(.front ${ART}) .msg h1{font-size:clamp(2.2rem,4.4vw,3.9rem)}
 .print img{width:100%;height:auto;object-fit:cover;border:var(--edge) solid var(--card);box-shadow:0 1px 2px rgb(0 0 0/.1),0 16px 34px -22px rgb(0 0 0/.4)}
@@ -83,7 +75,7 @@ h2{font-size:clamp(1.9rem,3.4vw,2.8rem);line-height:1.1;margin-bottom:clamp(1.75
 .faq summary{font-family:var(--font-heading);font-size:1.2rem;display:flex;justify-content:space-between;gap:1rem}
 .faq summary::after{content:"+";color:var(--acc);flex:none}.faq details[open] summary::after{content:"−"}
 .faq p{color:var(--quiet);padding-top:.6rem;max-width:60ch}
-.end{background:var(--acc);color:var(--on-acc);border-top:.75rem solid transparent;border-image:repeating-linear-gradient(-45deg,var(--on-acc) 0 .9rem,var(--sun) .9rem 1.8rem,var(--on-acc) 1.8rem 2.7rem,color-mix(in oklab,var(--acc) 55%,#000) 2.7rem 3.6rem) 1}
+.end{background:var(--acc);color:var(--on-acc)}
 .end .cl{display:grid;grid-template-columns:minmax(0,6fr) minmax(0,5fr);gap:clamp(2rem,5vw,5rem);padding-block:var(--sec)}
 .end h2{font-size:clamp(2.2rem,4.6vw,3.8rem);line-height:1.05;margin-bottom:1.25rem}
 .end .sub{font-size:1.15rem;opacity:.92;max-width:38ch;margin-bottom:2rem}
@@ -91,7 +83,7 @@ h2{font-size:clamp(1.9rem,3.4vw,2.8rem);line-height:1.1;margin-bottom:clamp(1.75
 .end dl{display:grid;gap:1.3rem;align-content:start}
 .end dt{font-size:.9rem;opacity:.75}.end dd{font-family:var(--font-heading);font-size:1.15rem;overflow-wrap:break-word}.end dd a{text-decoration:none;border-bottom:1px solid currentColor}
 .foot{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding-block:1.75rem;font-size:.92rem;opacity:.85;border-top:1px solid color-mix(in oklab,var(--on-acc) 25%,transparent)}
-@media (max-width:760px){.top nav{display:none}.card{grid-template-columns:minmax(0,1fr);rotate:none}.front{min-height:0;aspect-ratio:4/3}.card:has(.front ${ART}) .back{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"tag stamp" "msg msg" "addr addr"}.card:has(.front ${ART}) .addr{border-inline-start:0;padding-inline-start:0}.about,.offer,.strip,.end .cl{grid-template-columns:minmax(0,1fr)}.about figure{max-width:17rem}.offer .print{max-width:17rem}.mark{width:3.5rem;inset-inline-start:-2rem}.mark::after{width:3rem}}`
+@media (max-width:760px){.top nav{display:none}.card{grid-template-columns:minmax(0,1fr);rotate:none}.front{min-height:0;aspect-ratio:4/3}.card:has(.front ${ART}) .back{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"tag tag" "msg msg" "addr addr"}.card:has(.front ${ART}) .addr{border-inline-start:0;padding-inline-start:0}.about,.offer,.strip,.end .cl{grid-template-columns:minmax(0,1fr)}.about figure{max-width:17rem}.offer .print{max-width:17rem}}`
 
 function Extras({ c, x }: { c: TemplateProps['c']; x: Extra }) {
   if (x === 'statement')
@@ -180,10 +172,6 @@ function Page({ c, extras }: TemplateProps) {
             </figure>
             <div className="back">
               <p className="tag">{c.tagline}</p>
-              <div className="stamp" aria-hidden="true">
-                <i />
-                <span className="mark" />
-              </div>
               <div className="msg">
                 <h1>{c.headline}</h1>
                 <p className="sub">{c.subhead}</p>
@@ -268,7 +256,7 @@ function Page({ c, extras }: TemplateProps) {
 export const postcard: Template = {
   id: 'postcard',
   label: 'Postcard',
-  text: 'Opens with a postcard on a warm table: the photo in a white border beside a writing side with a drawn stamp, the promise as the message and the address on ruled lines; below, photos as white-bordered prints, the offer like an itinerary and an airmail edge on the closing: relaxed, personal and full of travel, for B&Bs, holiday lets, guesthouses, tours and campsites.',
+  text: 'Opens with a postcard on a warm table: the photo in a white border beside a writing side with the promise as the message and the address on ruled lines; below, photos as white-bordered prints, the offer like an itinerary: relaxed, personal and full of travel, for B&Bs, holiday lets, guesthouses, tours and campsites.',
   dark: false,
   css: CSS,
   Page,

@@ -303,12 +303,17 @@ async function judge(
         model,
         messages: [{ role: 'user', content }],
         temperature: 0,
+        // Without a cap OpenRouter reserves 65,535 tokens a call, and a key near its limit is
+        // refused (402, 2026-11-21); the answer is a few hundred.
+        max_tokens: 800,
         response_format: {
           type: 'json_schema',
           json_schema: { name: 'photos', strict: true, schema },
         },
         usage: { include: true },
       }),
+      // A stuck provider once held an edit for five minutes (2026-11-21).
+      signal: AbortSignal.timeout(20000),
     }).catch(() => null)
   let res = await ask()
   // "Temporarily rate-limited upstream" (429) passes in a moment; a refusal (502) does not.
@@ -353,6 +358,7 @@ async function townSuits(
     body: JSON.stringify({
       model,
       temperature: 0,
+      max_tokens: 100,
       messages: [
         {
           role: 'user',
@@ -374,6 +380,7 @@ async function townSuits(
       },
       usage: { include: true },
     }),
+    signal: AbortSignal.timeout(8000),
   }).catch(() => null)
   const body = (await res?.json().catch(() => null)) as {
     choices?: { message?: { content?: string } }[]
@@ -391,7 +398,7 @@ export async function findPhotos(
   keys: { pixabay?: string; openrouter?: string },
   q: Slots<string>,
   about: { name: string; kind: string; town: string },
-  o: { model?: string; perSubject?: number } = {},
+  o: { model?: string; perSubject?: number; avoid?: string[] } = {},
 ): Promise<Found> {
   const per = o.perSubject ?? 6
   const t0 = performance.now()
@@ -409,6 +416,10 @@ export async function findPhotos(
   const found = await Promise.all(
     SUBJECTS.map((s) => (keys.pixabay ? pixabay(keys.pixabay, q[s], per) : [])),
   )
+  // Photos the page shows already go when the owner asks for different ones ("show more
+  // photos" brought back the same three, 2026-11-21).
+  const avoid = new Set(o.avoid ?? [])
+  for (const [i, f] of found.entries()) found[i] = f.filter((c) => !avoid.has(c.id))
   const pools: Slots<Candidate[]> = {
     place: found[0] ?? [],
     people: found[1] ?? [],

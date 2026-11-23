@@ -1,7 +1,5 @@
-// Market: playful and warm, like a stall on market day. A striped awning in the business's colour
-// and a butter yellow hangs across the top with a scalloped edge; the closing hangs the same
-// scallops the other way. The main button is a round sticker stuck on the corner of the opening
-// photo, prices sit on small tilted tags, and photos are soft rounded shapes and one circle.
+// Market: playful and warm, like a stall on market day. No drawn awning, scallops or sticker
+// button (Robert, 2026-11-23: no fake decorations): prices sit on small tilted tags, and photos are soft rounded shapes and one circle.
 // Everything else stays calm on a warm cream page. For bakeries, ice cream, children's
 // activities and market stalls.
 
@@ -26,8 +24,6 @@ const CSS = `${RESET}
 :root{--acc:var(--band);--on-acc:var(--band-foreground);--paper:color-mix(in oklab,var(--band) 5%,#fffaf1);--blush:color-mix(in oklab,var(--band) 9%,#fff1e0);--sun:color-mix(in oklab,var(--band) 10%,#ffd36e);--ink:color-mix(in oklab,var(--band) 30%,#1d1a17);--quiet:color-mix(in oklab,var(--ink) 70%,var(--paper));--line:color-mix(in oklab,var(--band) 22%,#f1e6d6);--round:calc(var(--radius) * 2.5 + .75rem);--w:72rem;--gut:clamp(1.25rem,4vw,3rem);--sec:clamp(4rem,8vw,7rem);--sw:clamp(1.75rem,3.2vw,2.75rem)}
 body{background:var(--paper);color:var(--ink);font-size:1.0625rem;line-height:1.6}
 .w{max-width:var(--w);margin-inline:auto;padding-inline:var(--gut)}
-.awn{position:relative;height:clamp(1.75rem,3.5vw,2.75rem);background:repeating-linear-gradient(90deg,var(--acc) 0 var(--sw),var(--sun) var(--sw) calc(var(--sw) * 2));margin-bottom:calc(var(--sw) / 2)}
-.awn::after{content:"";position:absolute;inset-inline:0;top:100%;height:calc(var(--sw) / 2);background:radial-gradient(circle at calc(var(--sw) / 2) 0,var(--acc) calc(var(--sw) / 2 - .5px),transparent calc(var(--sw) / 2)) 0 0/calc(var(--sw) * 2) 100% repeat-x,radial-gradient(circle at calc(var(--sw) * 1.5) 0,var(--sun) calc(var(--sw) / 2 - .5px),transparent calc(var(--sw) / 2)) 0 0/calc(var(--sw) * 2) 100% repeat-x}
 .top{display:flex;align-items:center;justify-content:space-between;gap:1.5rem;padding-block:1.5rem 1rem}
 .top b{font-family:var(--font-heading);font-weight:var(--heading-weight);font-size:1.45rem;letter-spacing:var(--heading-tracking);line-height:1.15}
 .top nav{display:flex;gap:.5rem;font-size:.95rem}
@@ -35,15 +31,12 @@ body{background:var(--paper);color:var(--ink);font-size:1.0625rem;line-height:1.
 .hero{display:grid;grid-template-columns:minmax(0,6fr) minmax(0,5fr);gap:clamp(2rem,5vw,4.5rem);align-items:center;padding-block:clamp(2rem,5vw,4rem) var(--sec)}
 .tag{display:inline-block;background:var(--sun);color:var(--ink);padding:.4rem 1rem;border-radius:1.2rem;font-weight:600;font-size:.95rem;rotate:-2deg;margin-bottom:1.5rem}
 .hero h1{font-size:clamp(2.6rem,5.8vw,5rem);line-height:1.02;margin-bottom:1.5rem}
-.hero .sub{font-size:clamp(1.1rem,1.6vw,1.3rem);color:var(--quiet);max-width:36ch}
+.hero .sub{font-size:clamp(1.1rem,1.6vw,1.3rem);color:var(--quiet);max-width:36ch;margin-bottom:2rem}
 .media{position:relative;padding-bottom:2.5rem}
 .media img{width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;border-radius:var(--round) var(--round) 50% 50% / var(--round) var(--round) 14% 14%}
-.stk{position:absolute;inset-inline-start:-1.75rem;bottom:0;display:grid;place-items:center;text-align:center;width:clamp(8rem,12vw,10.5rem);aspect-ratio:1;padding:1rem;border-radius:50%;background:var(--sun);color:var(--ink);font-family:var(--font-heading);font-weight:var(--heading-weight);font-size:clamp(1rem,1.4vw,1.2rem);line-height:1.15;text-decoration:none;rotate:-10deg;box-shadow:0 0 0 .4rem var(--paper);transition:rotate .2s}
-.stk:hover{rotate:-4deg}
-.hero:has(.media ${ART}){grid-template-columns:minmax(0,1fr) auto;align-items:end}
+.hero:has(.media ${ART}){grid-template-columns:minmax(0,1fr)}
 .hero:has(.media ${ART}) figure{display:none}
-.hero:has(.media ${ART}) .media{padding:0}
-.hero:has(.media ${ART}) .stk{position:static;width:clamp(9rem,14vw,12rem)}
+.hero:has(.media ${ART}) .media{display:none}
 .sec{padding-block:var(--sec)}
 h2{font-size:clamp(1.9rem,3.4vw,2.8rem);line-height:1.08;margin-bottom:clamp(1.75rem,3vw,2.5rem)}
 .about{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,7fr);gap:clamp(2rem,5vw,5rem);align-items:center}
@@ -75,8 +68,7 @@ h2{font-size:clamp(1.9rem,3.4vw,2.8rem);line-height:1.08;margin-bottom:clamp(1.7
 .faq summary::after{content:"+";flex:none;display:grid;place-items:center;width:1.7rem;height:1.7rem;border-radius:50%;background:var(--sun);font-size:1.1rem;line-height:1}
 .faq details[open] summary::after{content:"−"}
 .faq p{color:var(--quiet);padding-top:.6rem;max-width:60ch}
-.end{position:relative;background:var(--acc);color:var(--on-acc);margin-top:calc(var(--sw) / 2)}
-.end::before{content:"";position:absolute;inset-inline:0;bottom:100%;height:calc(var(--sw) / 2);background:radial-gradient(circle at calc(var(--sw) / 2) 100%,var(--acc) calc(var(--sw) / 2 - .5px),transparent calc(var(--sw) / 2)) 0 0/var(--sw) 100% repeat-x}
+.end{position:relative;background:var(--acc);color:var(--on-acc)}
 .end .cl{display:grid;grid-template-columns:minmax(0,6fr) minmax(0,5fr);gap:clamp(2rem,5vw,5rem);padding-block:var(--sec)}
 .end h2{font-size:clamp(2.2rem,4.6vw,3.9rem);line-height:1.04;margin-bottom:1.25rem}
 .end .sub{font-size:1.15rem;opacity:.92;max-width:38ch;margin-bottom:2rem}
@@ -85,7 +77,7 @@ h2{font-size:clamp(1.9rem,3.4vw,2.8rem);line-height:1.08;margin-bottom:clamp(1.7
 .end dt{display:inline-block;font-size:.88rem;font-weight:700;padding:.15rem .7rem;border-radius:999px;background:color-mix(in oklab,var(--on-acc) 18%,var(--acc));margin-bottom:.35rem}
 .end dd{font-size:1.1rem;overflow-wrap:break-word}.end dd a{text-decoration:none;border-bottom:1px solid currentColor}
 .foot{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding-block:1.75rem;font-size:.92rem;border-top:2px dotted color-mix(in oklab,var(--on-acc) 35%,var(--acc))}
-@media (max-width:760px){.top nav{display:none}.hero,.about,.offer,.end .cl{grid-template-columns:minmax(0,1fr)}.media{max-width:24rem;margin-inline:auto;width:100%}.stk{inset-inline-start:-.5rem}.about figure{max-width:15rem}.side img{min-height:0;aspect-ratio:4/3}.hero:has(.media ${ART}){grid-template-columns:minmax(0,1fr);align-items:start}.hero:has(.media ${ART}) .media{margin-inline:0}}`
+@media (max-width:760px){.top nav{display:none}.hero,.about,.offer,.end .cl{grid-template-columns:minmax(0,1fr)}.media{max-width:24rem;margin-inline:auto;width:100%}.about figure{max-width:15rem}.side img{min-height:0;aspect-ratio:4/3}.hero:has(.media ${ART}){grid-template-columns:minmax(0,1fr);align-items:start}.hero:has(.media ${ART}) .media{margin-inline:0}}`
 
 function Extras({ c, x }: { c: TemplateProps['c']; x: Extra }) {
   if (x === 'statement')
@@ -155,7 +147,6 @@ function Page({ c, extras }: TemplateProps) {
   const reach = f.find((x) => x.href)
   return (
     <>
-      <div className="awn" aria-hidden="true" />
       <div className="w top">
         <b>{c.name}</b>
         <nav>
@@ -171,14 +162,14 @@ function Page({ c, extras }: TemplateProps) {
           <p className="tag">{c.tagline}</p>
           <h1>{c.headline}</h1>
           <p className="sub">{c.subhead}</p>
+          <a className="btn" href="#visit">
+            {c.cta.label}
+          </a>
         </div>
         <div className="media">
           <figure>
             <Pic photo={c.photos.hero} eager />
           </figure>
-          <a className="stk" href="#visit">
-            {c.cta.label}
-          </a>
         </div>
       </header>
       <main>
@@ -251,7 +242,7 @@ function Page({ c, extras }: TemplateProps) {
 export const market: Template = {
   id: 'market',
   label: 'Market',
-  text: 'Playful and warm like a market stall: a striped awning with a scalloped edge across the top, a round sticker for a button, prices on little tilted tags and soft rounded photos on a warm cream page; cheerful and friendly without clutter, for bakeries, ice cream shops, cake makers, children’s activities and market stalls.',
+  text: 'Playful and warm like a market stall: prices on little tilted tags and soft rounded photos on a warm cream page; cheerful and friendly without clutter, for bakeries, ice cream shops, cake makers, children’s activities and market stalls.',
   dark: false,
   css: CSS,
   Page,

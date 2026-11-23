@@ -1,6 +1,6 @@
 // Atelier: crafted and personal, like a maker's workroom kept tidy. Warm pale paper; the name sewn
-// on like a garment label; beside the promise, a photo in a stitched mount with a swatch card over
-// its corner, five pinked swatches in tints of the business's colour. The offer hangs from a rail
+// on like a garment label; beside the promise, a photo in a stitched mount (no swatch card: Robert,
+// 2026-11-23, no fake decorations). The offer hangs from a rail
 // as fabric tags, each on its own thread with a punched hole and a stitched edge, the price at the
 // foot. Sections are parted by dashed seams; the facts at the close sit on a sewn-in care label.
 // Calm and premium, with the maker's hand only in the details. For tailors, dressmakers, interior
@@ -58,10 +58,7 @@ body{background:var(--paper);color:var(--ink);font-size:1.0625rem;line-height:1.
 .st img{width:100%;object-fit:cover;border-radius:calc(var(--r) * .5)}
 .visual{position:relative;padding-bottom:3.5rem;padding-inline-start:2.5rem}
 .visual img{aspect-ratio:4/5}
-.sw{position:absolute;inset-inline-start:0;bottom:0;display:flex;gap:.5rem;padding:.9rem .9rem 1.1rem;background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:0 1px 2px rgb(0 0 0 / .06),0 10px 24px -14px rgb(0 0 0 / .35)}
-.sw::after{content:"";position:absolute;inset:.35rem;border:1.5px dashed var(--seam);border-radius:calc(var(--r) * .6);pointer-events:none}
-.sw i{display:block;width:clamp(2rem,3.4vw,2.6rem);height:clamp(2.9rem,5vw,3.6rem);clip-path:${PINK}}
-${TINTS.map((t, i) => `.sw i:nth-child(${i + 1}),.sq:nth-child(5n+${i + 1}) .mark{background:color-mix(in oklab,var(--band) ${t}%,var(--paper))}`).join('\n')}
+${TINTS.map((t, i) => `.sq:nth-child(5n+${i + 1}) .mark{background:color-mix(in oklab,var(--band) ${t}%,var(--paper))}`).join('\n')}
 .sec{padding-block:var(--sec)}
 .sec+.sec,.seam{border-top:1.5px dashed var(--seam)}
 h2{font-size:clamp(1.9rem,3.4vw,2.75rem);line-height:1.12;max-width:24ch;margin-bottom:clamp(2rem,4vw,3rem)}
@@ -112,7 +109,7 @@ h2{font-size:clamp(1.9rem,3.4vw,2.75rem);line-height:1.12;max-width:24ch;margin-
 .care dd a{text-decoration:none;border-bottom:1px solid var(--line)}
 .foot{display:flex;justify-content:space-between;gap:.5rem 2rem;flex-wrap:wrap;padding-block:2rem 2.5rem;font-size:.92rem;opacity:.85;border-top:1.5px dashed color-mix(in oklab,var(--on-acc) 35%,transparent)}
 @media (max-width:860px){.hero,.about,.end .in{grid-template-columns:minmax(0,1fr)}.visual{max-width:30rem}.visual img{aspect-ratio:4/3}.about figure{max-width:22rem}.cols{grid-template-columns:minmax(0,1fr)}.top nav a:not(:last-child){display:none}}
-@media (max-width:560px){.rail{grid-template-columns:minmax(0,1fr);row-gap:0;border-inline-start:3px solid var(--ink)}.rail>li{border-top:0;padding-block:.75rem;padding-inline:1.5rem 0}.rail>li::before{top:2rem;left:auto;inset-inline-start:0;width:1.5rem;height:1px}.ft,.rail>li:nth-child(n) .ft{margin-top:0;transform:none;clip-path:none;padding:1.2rem 1.2rem 1.2rem 2.75rem}.ft::before{top:1.6rem;left:auto;inset-inline-start:.9rem;margin:0}.ft::after{inset:.4rem;border-top:1.5px dashed var(--seam)}.pair{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:1rem}.sw i{width:1.7rem;height:2.5rem}}`
+@media (max-width:560px){.rail{grid-template-columns:minmax(0,1fr);row-gap:0;border-inline-start:3px solid var(--ink)}.rail>li{border-top:0;padding-block:.75rem;padding-inline:1.5rem 0}.rail>li::before{top:2rem;left:auto;inset-inline-start:0;width:1.5rem;height:1px}.ft,.rail>li:nth-child(n) .ft{margin-top:0;transform:none;clip-path:none;padding:1.2rem 1.2rem 1.2rem 2.75rem}.ft::before{top:1.6rem;left:auto;inset-inline-start:.9rem;margin:0}.ft::after{inset:.4rem;border-top:1.5px dashed var(--seam)}.pair{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:1rem}}`
 
 function Extras({ c, x }: { c: TemplateProps['c']; x: Extra }) {
   if (x === 'statement')
@@ -207,11 +204,6 @@ function Page({ c, extras }: TemplateProps) {
           <figure className="st">
             <Pic photo={c.photos.hero} eager />
           </figure>
-          <div className="sw" aria-hidden="true">
-            {TINTS.map((t) => (
-              <i key={t} />
-            ))}
-          </div>
         </div>
       </header>
       <main>
@@ -299,7 +291,7 @@ function Page({ c, extras }: TemplateProps) {
 export const atelier: Template = {
   id: 'atelier',
   label: 'Atelier',
-  text: "Crafted and personal like a maker's workroom: the name sewn on like a garment label, a card of pinked fabric swatches in tints of the business's own colour beside the opening photo, the offer hanging from a rail as fabric tags with stitched edges and prices, dashed seams between sections and the details on a sewn-in care label; calm and premium with a handmade touch, for tailors, dressmakers, alterations, interior designers, upholsterers, curtain makers and dog groomers.",
+  text: "Crafted and personal like a maker's workroom: the name sewn on like a garment label, the opening photo in a stitched mount, the offer hanging from a rail as fabric tags with stitched edges and prices, dashed seams between sections and the details on a sewn-in care label; calm and premium with a handmade touch, for tailors, dressmakers, alterations, interior designers, upholsterers, curtain makers and dog groomers.",
   dark: false,
   css: CSS,
   Page,

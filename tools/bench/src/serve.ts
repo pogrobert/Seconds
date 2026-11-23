@@ -112,7 +112,11 @@ createServer((req, res) => {
       : []
     return send(
       200,
-      JSON.stringify({ briefs, ratings: readVs(set), base: set && /^vs\d$/.test(set) ? set : 'vs' }),
+      JSON.stringify({
+        briefs,
+        ratings: readVs(set),
+        base: set && /^vs\d$/.test(set) ? set : 'vs',
+      }),
       TYPES['.json'],
     )
   }

@@ -1,9 +1,8 @@
 // Price tickets: a butcher's or greengrocer's window. The opening and the offer stand against a
 // wall of white glazed tiles. Each item of the offer is a bold price ticket: a white card with a
 // heavy border in the business's colour and a fine inner line, the price set very large with the
-// name beneath, standing on a thin metal stand with a round foot, the way tickets stand in a
-// shop window. Every third ticket is turned out in the brand colour. Tickets in a row share one
-// floor, so short tickets stand on taller stands. With no price the name carries the ticket. The
+// name beneath (no drawn metal stands: Robert, 2026-11-23, no fake decorations). Every third
+// ticket is turned out in the brand colour. With no price the name carries the ticket. The
 // headline is the biggest ticket of all, standing beside the opening photo, or alone on the tiles
 // without one. The opening hours close the page on a ticket of their own. For butchers,
 // fishmongers, greengrocers and delis.
@@ -35,8 +34,6 @@ body{background:var(--page);color:var(--ink);font-size:1.0625rem;line-height:1.6
 .top nav{display:flex;gap:1.6rem;font-size:.95rem;flex:none}
 .top nav a{text-decoration:none}.top nav a:hover{text-decoration:underline;text-underline-offset:.3em}
 .tk{position:relative;background:var(--white);color:var(--ink);border:var(--bd) solid var(--acc);border-radius:var(--rd);outline:1px solid var(--acc);outline-offset:calc(var(--bd) * -1 - .45rem);padding:clamp(1.2rem,2.2vw,1.6rem) clamp(1.1rem,2vw,1.5rem) clamp(1.3rem,2.4vw,1.75rem);text-align:center;overflow-wrap:break-word}
-.stand{position:relative;flex:1;min-height:2.4rem;width:4px;margin-inline:auto;background:var(--steel);margin-bottom:.55rem}
-.stand::after{content:"";position:absolute;left:50%;bottom:-.55rem;translate:-50% 0;width:3.6rem;height:.75rem;border-radius:50%;background:var(--steel)}
 .hero{padding-block:clamp(2.5rem,6vw,5rem)}
 .hero .w{display:grid;grid-template-columns:minmax(0,6fr) minmax(0,5fr);gap:clamp(1.5rem,4vw,3.5rem);align-items:stretch}
 .hero .card{display:flex;flex-direction:column;min-width:0}
@@ -88,7 +85,6 @@ h2{font-size:clamp(1.9rem,3.6vw,3rem);line-height:1.08;margin-bottom:clamp(1.75r
 .end .sub{font-size:1.15rem;opacity:.92;max-width:38ch;margin-bottom:2rem}
 .end .btn{background:var(--white);color:var(--acc)}.end .btn:hover{background:var(--tile)}
 .end .card{display:flex;flex-direction:column}
-.end .stand{flex:none;height:2.4rem;background:color-mix(in oklab,var(--on-acc) 55%,var(--acc))}.end .stand::after{background:color-mix(in oklab,var(--on-acc) 55%,var(--acc))}
 .end .tk{border-color:var(--white);outline-color:var(--acc);text-align:start}
 .end dl div{padding-block:.8rem;border-bottom:1px dashed var(--line)}.end dl div:first-child{padding-top:0}.end dl div:last-child{border-bottom:0;padding-bottom:0}
 .end dt{font-size:.88rem;color:var(--quiet)}
@@ -186,7 +182,6 @@ function Page({ c, extras }: TemplateProps) {
                 {c.cta.label}
               </a>
             </div>
-            <div className="stand" aria-hidden="true" />
           </div>
           <figure>
             <Pic photo={c.photos.hero} eager />
@@ -218,7 +213,6 @@ function Page({ c, extras }: TemplateProps) {
                           <H>{it.name}</H>
                           {it.detail && <p>{it.detail}</p>}
                         </div>
-                        <div className="stand" aria-hidden="true" />
                       </li>
                     ))}
                   </ul>
@@ -257,7 +251,6 @@ function Page({ c, extras }: TemplateProps) {
                   </div>
                 ))}
               </dl>
-              <div className="stand" aria-hidden="true" />
             </div>
           )}
         </div>
@@ -273,7 +266,7 @@ function Page({ c, extras }: TemplateProps) {
 export const tickets: Template = {
   id: 'tickets',
   label: 'Price tickets',
-  text: "A butcher's or greengrocer's shop window on white glazed tiles: the headline on one giant price ticket, then every item of the offer on its own bold ticket with a heavy border in the business's colour, the price set huge and the name beneath, each standing on a little metal stand; direct, cheerful and local, for butchers, fishmongers, greengrocers, delis, cheese shops, farm shops and bakers.",
+  text: "A butcher's or greengrocer's shop window on white glazed tiles: the headline on one giant price ticket, then every item of the offer on its own bold ticket with a heavy border in the business's colour, the price set huge and the name beneath; direct, cheerful and local, for butchers, fishmongers, greengrocers, delis, cheese shops, farm shops and bakers.",
   dark: false,
   css: CSS,
   Page,

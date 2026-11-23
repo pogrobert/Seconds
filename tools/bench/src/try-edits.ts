@@ -20,7 +20,11 @@ type Result = {
   state: unknown
   photoJob: unknown
 }
-type Photos = { slots: Record<string, string>; images: Record<string, string>; notes: string[] } | null
+type Photos = {
+  slots: Record<string, string>
+  images: Record<string, string>
+  notes: string[]
+} | null
 
 const cases = JSON.parse(readFileSync(process.argv[2] ?? '', 'utf8')) as Case[]
 const out = join(root, 'runs', `try-${new Date().toISOString().slice(0, 16).replace(/[:T]/g, '-')}`)
@@ -38,7 +42,12 @@ async function step(messages: string[], state: unknown) {
   let photos: Photos = null
   let pageMs = 0
   for (const line of text.split('\n').filter(Boolean)) {
-    const e = JSON.parse(line) as { type: string; result?: Result; photos?: Photos; message?: string }
+    const e = JSON.parse(line) as {
+      type: string
+      result?: Result
+      photos?: Photos
+      message?: string
+    }
     if (e.type === 'result') {
       result = e.result ?? null
       pageMs = Math.round(performance.now() - t0)
@@ -51,7 +60,10 @@ async function step(messages: string[], state: unknown) {
 }
 
 const browser = await chromium.launch()
-const page = await browser.newPage({ viewport: { width: 1280, height: 800 }, deviceScaleFactor: 0.5 })
+const page = await browser.newPage({
+  viewport: { width: 1280, height: 800 },
+  deviceScaleFactor: 0.5,
+})
 const log: unknown[] = []
 for (const [n, c] of cases.entries()) {
   const messages = [c.prompt]
@@ -59,15 +71,38 @@ for (const [n, c] of cases.entries()) {
   let slots: Record<string, string> = {}
   let images: Record<string, string> = {}
   const steps = [c.prompt, ...c.edits]
+  // As the build page does: each version with its photos, so "undo" can bring one back.
+  const versions: {
+    state: unknown
+    slots: Record<string, string>
+    images: Record<string, string>
+    result: Result
+  }[] = []
   for (const [i, said] of steps.entries()) {
     if (i > 0) messages.push(said)
     const r = await step(messages, state)
+    if ((r.result as { undo?: boolean }).undo) {
+      versions.pop()
+      const v = versions[versions.length - 1]
+      if (v) {
+        state = v.state
+        slots = v.slots
+        images = v.images
+        r.result = v.result
+      }
+      console.log(`${n + 1}.${i} undo → ${v ? 'back one version' : 'nothing to undo'}`)
+      if (v) versions.push(v)
+      continue
+    }
     state = r.result.state
     // Photos found now replace the earlier ones; an edit without new photos keeps them.
     if (r.photos) {
       slots = r.photos.slots
       images = r.photos.images
     }
+    // As the build page does: the photos shown, for an edit asking for different ones.
+    const shown = Object.values(slots).filter((id) => !images[id]?.startsWith('data:image/svg'))
+    if (state && typeof state === 'object') state = { ...state, shown }
     const site = r.result.sites[0] as Site
     const html = site.html.replace(/__IMG_([A-Za-z0-9]+)__/g, (t, slot: string) => {
       const id = slots[slot]
@@ -85,14 +120,16 @@ for (const [n, c] of cases.entries()) {
       changed: r.result.changed ?? null,
       already: (r.result as { already?: string[] }).already ?? [],
       versions: r.result.sites.map((s) => s.label),
+      extras: (r.result.state as { extras?: string[] } | null)?.extras ?? [],
       notes: [...r.result.notes, ...(r.photos?.notes ?? [])],
       pageMs: r.pageMs,
       totalMs: r.totalMs,
       file,
     }
     log.push(row)
+    versions.push({ state, slots, images, result: r.result })
     console.log(
-      `${n + 1}.${i} ${(r.pageMs / 1000).toFixed(1)}s/${(r.totalMs / 1000).toFixed(1)}s ${said.slice(0, 50)} → ${row.changed ? row.changed.join(', ') || 'nothing' : 'new site'} | ${row.name} | ${row.versions.join(', ')}${row.already.length ? ` | already: ${row.already.join('; ')}` : ''}${row.notes.length ? ` | ${row.notes.join(' ')}` : ''}`,
+      `${n + 1}.${i} ${(r.pageMs / 1000).toFixed(1)}s/${(r.totalMs / 1000).toFixed(1)}s ${said.slice(0, 50)} → ${row.changed ? row.changed.join(', ') || 'nothing' : 'new site'} | ${row.name} | ${row.versions.join(', ')} [${row.extras.join(' ')}]${row.already.length ? ` | already: ${row.already.join('; ')}` : ''}${(r.result as { reply?: string }).reply ? ` | reply: ${(r.result as { reply?: string }).reply}` : ''}${row.notes.length ? ` | ${row.notes.join(' ')}` : ''}`,
     )
   }
 }

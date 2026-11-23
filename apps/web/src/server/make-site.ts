@@ -65,6 +65,10 @@ export type PhotoJob = {
   seed: string
   /** Jev's pick for drawn art, where no photo fits. */
   art: { style: ArtStyle; strength: ArtStrength }
+  /** Photos the page shows now, left out when the owner asks for different ones. */
+  avoid?: string[]
+  /** The owner asked for no photos: every space shows drawn art. */
+  none?: boolean
 }
 
 /** The photo step's answer: each slot token's image, by id, so a photo used twice is sent once. */
@@ -83,6 +87,10 @@ export type BuildResult = {
   state: SiteState | null
   /** On an edit: what was changed, in plain words. */
   changed?: string[]
+  /** On an edit: the owner asked to undo it; the build page brings back the version before. */
+  undo?: boolean
+  /** On an edit: the reply to show instead of the usual "Changed …" (a question back). */
+  reply?: string
   /** On an edit: what was asked for but already so ("the colour is already navy"). */
   already?: string[]
   name: string
@@ -340,6 +348,8 @@ export type SiteState = {
   extras: Extra[]
   art: { style: ArtStyle; strength: ArtStrength }
   seed: string
+  /** The photo ids the page shows, set by the build page when the photos arrive. */
+  shown?: string[]
 }
 
 /** The three versions: one template each, in the site's type and colour. */
@@ -665,14 +675,28 @@ export async function sitePhotos(job: PhotoJob): Promise<PhotoResult> {
   const t0 = performance.now()
   const env = getEnv()
   const notes: string[] = []
-  const found = await findPhotos(
-    {
-      ...(env.PIXABAY_API_KEY ? { pixabay: env.PIXABAY_API_KEY } : {}),
-      ...(env.OPENROUTER_API_KEY ? { openrouter: env.OPENROUTER_API_KEY } : {}),
-    },
-    job.queries,
-    job.about,
-  )
+  const empty = { place: [], people: [], detail: [] }
+  const found = job.none
+    ? {
+        natural: empty,
+        lowkey: empty,
+        images: {},
+        ms: 0,
+        limited: false,
+        limitInfo: '',
+        judged: true,
+        commons: 0,
+        costUsd: 0,
+      }
+    : await findPhotos(
+        {
+          ...(env.PIXABAY_API_KEY ? { pixabay: env.PIXABAY_API_KEY } : {}),
+          ...(env.OPENROUTER_API_KEY ? { openrouter: env.OPENROUTER_API_KEY } : {}),
+        },
+        job.queries,
+        job.about,
+        { avoid: job.avoid ?? [] },
+      )
   const n = found.natural
   const k = found.lowkey
   // Each space a photo no other space shows (Robert, 2026-11-20: "repeating images"); a space
@@ -736,7 +760,7 @@ export async function sitePhotos(job: PhotoJob): Promise<PhotoResult> {
   const credits = [...n.place, ...n.people, ...n.detail, ...k.place, ...k.people, ...k.detail]
     .filter((p) => used.has(p.id) && !seen.has(p.id) && seen.add(p.id))
     .map((p) => p.credit)
-  if (art) {
+  if (art && !job.none) {
     if (!env.PIXABAY_API_KEY) notes.push('No PIXABAY_API_KEY, so the photo spaces show drawn art.')
     else if (found.limited)
       notes.push(

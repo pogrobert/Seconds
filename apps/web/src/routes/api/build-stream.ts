@@ -40,6 +40,11 @@ export const Route = createFileRoute('/api/build-stream')({
                       photos(p),
                     )
                   : null
+              if (edited && 'undo' in edited) {
+                send({ type: 'result', result: { undo: true } })
+                c.close()
+                return
+              }
               const result =
                 edited && !edited.restart
                   ? edited.result

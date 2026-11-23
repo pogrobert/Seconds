@@ -115,7 +115,91 @@ browser.
 - colour, design and section edits: 0.2–0.4 s;
 - new photos: about 3.5–4.7 s.
 
+## Second testing loop (2026-11-21)
+
+Twenty new businesses with two or three edits each (a dog groomer, Krakow council, a Lisbon record
+bar, a Bristol plumber, a wedding photographer, a Berlin club, a physio, a Welsh school, a bakery,
+a UX designer, then a ramen bar, a climbing gym, an accountant, a cat café, a bookshop, a roofer, a
+jazz trio, a yoga studio, a food bank and a tattoo studio). The first ten found these; each was
+fixed and run again.
+
+| Found | Fix |
+|---|---|
+| "Make it blue" on a navy site did nothing: Jev gave "a different colour" 0.49 | The question asks for any colour, even one it has; the reply says "the colour is already navy" |
+| "Less text" did nothing: the writer shortened every part, but no part was asked for on its own, so all went back | A new question, "change all the text at once"; when yes, every change the writer made stays |
+| "Remove anything about cats" added steps and questions: Jev read it as removing a part (0.83) | The parts question excludes facts and mentions; only the part the request names follows Jev's lean, others move only on answers above 0.75 or below 0.25 |
+| "Remove the steps" kept them (0.34 on keeping them) | When Jev is sure the request is about parts (over 0.85), the named part follows 0.5 |
+| Adding a phone number replaced "Leak detection" with "Phone support" | Each list item the writer drops is put to Jev ("does the request take it off?") and comes back unless yes; offer items an edit adds must be ones the request names; the writer is told contact details are never offer items |
+| "We stopped doing boiler installs" made up "Boiler servicing" | Same check on added offer items |
+| "Rubbish collection days" brought "bins every Tuesday and Friday" | Items an edit adds get the made-up check at 0.5, with no minimum kept; what the page had, unchanged, is not asked again (Jev once dropped "Initial assessment" that way) |
+| "Show more photos" and "different photos" showed the same photos | The build page sends the photo ids it shows; new searches leave them out. "More photos" adds a gallery only when the gallery question agrees |
+| "Add a gallery" on a page that has one, "remove the steps" on one without: no reply | A question names the part; the reply says it is already there, or not there |
+| "Add questions and answers" changed nothing: the check emptied every answer | One real answer is enough when asked for, the rest say "Get in touch"; with none, the reply asks the owner for them |
+| "Add how to donate": the writer wrote "donations", which did not count as the request's own word | Words match on their first five letters |
+| A subhead cut at its length limit read "…or volunteer your…" | One-sentence text cut short ends at its last clause, with a full stop |
+
+**Still weak:** photos (a wrecked camper van and a train station for a dog groomer, a home kitchen
+for a food bank, 5 of 8 spaces with drawn art for a Brooklyn tattoo studio).
+
+**Timings (measured):** new sites 2.7–6.4 s with photos; word edits 1.3–3.2 s; colour, design and
+section edits 0.2–0.4 s; new photos 2.8–4.4 s.
+
+## Third testing loop: messy edits (2026-11-21)
+
+Ten more businesses with edits as people really type them: several changes in one message,
+"undo that", "I don't like it", a language switch, "remove the photos", a fact taken back.
+
+| Found | Fix | Checked again (2026-11-23)? |
+|---|---|---|
+| "We're called Bean There" threw the site away (start again scored over 0.5) | Starting again needs 0.75, and a new name or new facts is said not to count | Yes |
+| "Undo that last change" did nothing | A question for undo; the build page keeps each version with its photo links and steps back one | Yes |
+| "I don't like it" changed nothing, with no useful reply | A question for a vague dislike; the reply asks what to change and points to the other two designs | Yes |
+| "Fewer sections", "remove the photos", "more trustworthy" changed nothing and said nothing | Fewer parts drops the one or two parts Jev wants least; no photos gives every space drawn art; the design needs 0.75 only beside another change (0.5 alone); any edit that changes nothing now gets a reply | Yes |
+| "Write it in Irish" translated only the subhead | A language change counts as changing all the text; the writer is told every field changes language | Yes |
+| "Make it purple, more modern" wrote "a modern purple setting" into the subhead; "red" got into a headline | Style words never count as the request's own words; the writer is told looks are not text | Yes |
+| Adding opening hours added four questions, all "Get in touch" | The one-real-answer fallback runs only when questions were asked for, and never counts "Get in touch" as real | Yes |
+| "Remove the delivery stuff" left two delivery questions | When a request removes something, every list item is put to Jev and those about it go | Yes |
+| Steps of 15–20 s, then one edit stuck for five minutes | OpenRouter refused the photo check (402: the key was near its limit and each call reserved 65,535 tokens), and the slow backup model was rate-limited. Every OpenRouter call now has a token cap and a time limit | Yes: no 402 or stuck edit since |
+
+Testing paused on 2026-11-21 when the OpenRouter key reached its $3 limit, and went on on
+2026-11-23 with a new limit. The re-run found these, each fixed and run again:
+
+| Found | Fix |
+|---|---|
+| "Fewer parts" scored 0.79–0.94 for "remove the photos", "less text" and "I don't like it" | It acts only when the sections question also agrees (over 0.7); a vague dislike never takes anything away |
+| "I don't like it" took the photos off | Same: a vague dislike gets a question back |
+| "Write it in Irish" left the steps in English: the strict check on new items took every translated item as new | A whole-text rewrite gets only the new site's check, and falls back to the writer's own (translated) list |
+| "We deliver across Copenhagen…" once came back unchanged | When none of the request's new words reach the page, the writer is asked once more |
+| "More premium", "calmer and more minimal": "already the closest design" | Asked only for a look, the owner gets the next-best designs |
+| "No more photos of food please" took every photo off | That asks for other photos; no photos only for "none at all" |
+| "Make the headline funnier" for a Dublin dog walker: "no leprechauns" | The writer is told humour never leans on stereotypes |
+| A new hostel site said "Free Wi-Fi" nobody stated | The banned-phrase filter also catches "Wi-Fi" |
+
+Fresh round (barber, taverna, pilates, electrician, pottery, dog walker, recording studio, church,
+farm software, hostel): undo, a rename with prices, "hmm not sure", Spanish, "too long", "remove the
+FAQ", "less boring" and "I hate the colours" all did what was asked.
+
+## Detailed prompts and no fake decorations (2026-11-23)
+
+Robert: no drawn decorations like the postcard's stamp. Taken out: Postcard's stamp, postmark and
+airmail edge; Atelier's card of fabric swatches over the opening photo; Clubhouse's made-up crest
+(a club has its own). All three pass the template gate without them.
+
+Six detailed prompts (a Thai takeaway with hours, prices and a phone number; a physio clinic with
+fees, hours and insurers; a one-man electrician; a kids' coding club; a Porto wine bar; a
+photographer), three edits each. Every stated fact reached the page. Found and fixed:
+
+| Found | Fix |
+|---|---|
+| Renaming "Marta Light Photo" to "Marta Light Photography" gave "…Photographyphotography": the old name is inside the new one | The old name is replaced only as a whole name, never inside the new one |
+| A price edit left "Portrait session" twice | Each list keeps an item once |
+| "Remove fault finding" left "Fault located and fixed" among the reasons | The removal check drops items at 0.5 (was 0.6) |
+| "Add a section about what to bring" on a page with steps: "steps already on the page" | A part that is already there gets the writer when the request also asks for words |
+
+Still weak: photos (a home kitchen for a takeaway, Bitcoin coins for a kids' coding club).
+OpenRouter spent on this round: about $0.08 (measured).
+
 ## Not yet done
 
-- **No undo:** an edit cannot be undone yet; the earlier versions stay only in the chat.
+- **Undo goes back one version at a time,** and only within the open page: a reload forgets the versions.
 - **No clicking text to edit it:** the preview's text cannot be clicked and edited in place.

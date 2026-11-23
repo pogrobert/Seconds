@@ -218,7 +218,7 @@ function prompt(words: string): string {
  * counts as invented unless the owner's words contain it.
  */
 const CLAIMS =
-  /\b(deliver(?:y|ed|s)? to your door|home delivery|free delivery|shipping|ships? (?:worldwide|nationwide|anywhere)|award[- ]winning|awards?|highly rated|five[- ]stars?|certified|accredited|since \d{4}|\d+\+? years|years of experience|online (?:form|booking)|book online|free (?:parking|wifi|consultation|quotes?))\b/gi
+  /\b(deliver(?:y|ed|s)? to your door|home delivery|free delivery|shipping|ships? (?:worldwide|nationwide|anywhere)|award[- ]winning|awards?|highly rated|five[- ]stars?|certified|accredited|since \d{4}|\d+\+? years|years of experience|online (?:form|booking)|book online|free (?:parking|wi-?fi|consultation|quotes?))\b/gi
 
 export function checkSiteCopy(c: SiteCopy, words = ''): string[] {
   const L = SITE_LIMITS
@@ -290,7 +290,24 @@ export function cutToSentence(s: string, cap = 0): string {
   // stop is finished (the bench found "…" added to whole phrases).
   if (!t || /[.!?…"”')]$/.test(t) || (cap && t.length < cap)) return t
   const end = Math.max(...['. ', '! ', '? '].map((m) => t.lastIndexOf(m)))
-  return end > t.length / 3 ? t.slice(0, end + 1) : t.replace(/[\s,;:-]*\S*$/, '…')
+  return end > t.length / 3 ? t.slice(0, end + 1) : toClause(t)
+}
+
+/**
+ * A one-sentence text cut short ends at its last clause break instead, with a full stop: "…to those
+ * in need; you can donate food, money or volunteer your…" read as broken on a food bank's page
+ * (2026-11-21). "…" only when no break is far enough in.
+ */
+function toClause(t: string): string {
+  const end = Math.max(...['; ', ' – ', ' — ', ', ', ': '].map((m) => t.lastIndexOf(m)))
+  if (end > t.length / 2) {
+    const head = t
+      .slice(0, end)
+      .replace(/\s+(and|or|but|with|so|to|for|the|a|an|of|in)$/i, '')
+      .trim()
+    return /[.!?]$/.test(head) ? head : `${head}.`
+  }
+  return t.replace(/[\s,;:-]*\S*$/, '…')
 }
 
 function fitLengths(c: SiteCopy): SiteCopy {
@@ -298,7 +315,7 @@ function fitLengths(c: SiteCopy): SiteCopy {
     if (s.length <= max) return s
     const cut = s.slice(0, max)
     const end = Math.max(cut.lastIndexOf('. '), cut.lastIndexOf('! '), cut.lastIndexOf('? '))
-    return end > max / 3 ? cut.slice(0, end + 1) : `${cut.replace(/[\s,;:-]*\S*$/, '')}…`
+    return end > max / 3 ? cut.slice(0, end + 1) : toClause(cut)
   }
   return {
     ...c,
@@ -354,7 +371,7 @@ export async function writeSiteCopy(o: {
               'The owner has seen the website and now asks:',
               o.edit.request,
               '',
-              'Answer with the whole JSON again, changed only as this asks. Keep every other field exactly as it is, word for word. All the rules above still apply, with one exception: what the owner states in this request is theirs to promise and must be used, even where the rules above forbid it unasked (delivery, online booking, an area served, hours, prices, an address, a name). Put it where a visitor will see it: the subhead, the introduction, the offer or the contact details. If the request does not concern the words at all, return them unchanged.',
+              'Answer with the whole JSON again, changed only as this asks. Keep every other field exactly as it is, word for word. All the rules above still apply, with one exception: what the owner states in this request is theirs to promise and must be used, even where the rules above forbid it unasked (delivery, online booking, an area served, hours, prices, an address, a name). Put it where a visitor will see it: the subhead, the introduction, the offer or the contact details. When the owner asks to remove something, or says the organisation does not do or offer something, take it out of every field, questions and answers included, and do not write about what it does not do. Requests about the colour, design, fonts or photos are handled elsewhere: never write them into the text (no "a modern purple setting"), and a headline asked to be "about fire" is about fire, not about a colour named in the same request. A request to write in another language means every field in that language. Humour never leans on national, ethnic or regional stereotypes (no leprechauns for Dublin). A phone number, email, address or opening hours go in the contact details (and may be mentioned in a sentence), never as an item of the offer. If the request does not concern the words at all, return them unchanged.',
             ].join('\n'),
           },
         ]
@@ -378,6 +395,9 @@ export async function writeSiteCopy(o: {
           model,
           messages,
           temperature: 0.7,
+          // A cap keeps a key near its credit limit usable (402 without one, 2026-11-21); a site's
+          // words and low-effort thinking take about 3,000.
+          max_tokens: 12000,
           reasoning: { effort: o.effort ?? 'low' },
           provider: { order: ['cerebras', 'groq'], allow_fallbacks: true },
           response_format: {
@@ -386,7 +406,8 @@ export async function writeSiteCopy(o: {
           },
           usage: { include: true },
         }),
-        ...(o.signal ? { signal: o.signal } : {}),
+        // A stuck provider must not hold the page (2026-11-21).
+        signal: o.signal ?? AbortSignal.timeout(25000),
       })
       const body = (await res.json().catch(() => null)) as {
         choices?: { message?: { content?: string } }[]
@@ -658,6 +679,7 @@ export async function writePhotoQueries(o: {
         },
       ],
       temperature: 0.4,
+      max_tokens: 3000,
       reasoning: { effort: 'low' },
       provider: { order: ['cerebras', 'groq'], allow_fallbacks: true },
       response_format: {
@@ -674,6 +696,7 @@ export async function writePhotoQueries(o: {
       },
       usage: { include: true },
     }),
+    signal: AbortSignal.timeout(10000),
   }).catch(() => null)
   const body = (await res?.json().catch(() => null)) as {
     choices?: { message?: { content?: string } }[]
