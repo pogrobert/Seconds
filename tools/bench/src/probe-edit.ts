@@ -11,7 +11,7 @@ const block = src.slice(
 )
 const asks: [string, string][] = []
 for (const m of block.matchAll(/^\s+(\w+):\s*\n?\s*(['"])([\s\S]*?)\2,\n/gm))
-  asks.push([m[1], m[3]])
+  asks.push([m[1] ?? '', m[3] ?? ''])
 for (const [id, what] of Object.entries(
   JSON.parse(process.env.EXTRA ?? '{}') as Record<string, string>,
 ))
