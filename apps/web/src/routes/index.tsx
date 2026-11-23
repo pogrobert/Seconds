@@ -12,6 +12,7 @@ import {
   MonitorIcon,
   WarningCircleIcon,
   WifiHighIcon,
+  XIcon,
 } from '@phosphor-icons/react'
 import { createFileRoute } from '@tanstack/react-router'
 import { AnimatePresence, motion } from 'motion/react'
@@ -63,6 +64,7 @@ import {
   TraceTitle,
 } from '@/components/ui/trace'
 import { EXAMPLES, type Example } from '../examples'
+import { ago, listSites, loadSite, removeSite, type SiteSummary, saveSite } from '../history'
 import type { BuildResult, PhotoJob, PhotoResult } from '../server/build'
 import { suggestionsFor } from '../suggest'
 
@@ -237,6 +239,12 @@ function Build() {
   const generation = useRef(0)
   /** Which conversation is current: "Builder" starts a new one, and late answers are dropped. */
   const session = useRef(0)
+  /** The site being made, for the Recent list (history.ts); a new one per new site. */
+  const siteId = useRef<string | null>(null)
+  /** Each photo's file, by its link, so the photos can be kept with the site. */
+  const photoBlobs = useRef(new Map<string, Blob>())
+  const [recent, setRecent] = useState<SiteSummary[]>([])
+  const [allRecent, setAllRecent] = useState(false)
   /** Each version shown, with its photo links, newest last: "undo" steps back one. */
   const versions = useRef<{ result: BuildResult; links: Record<string, string> }[]>([])
   const [links, setLinks] = useState<Record<string, string>>({})
@@ -346,7 +354,9 @@ function Build() {
       if (!edited) {
         for (const u of photoUrls.current) URL.revokeObjectURL(u)
         photoUrls.current = []
+        photoBlobs.current.clear()
         versions.current = []
+        siteId.current = crypto.randomUUID()
       }
       if (!edited || built.photoJob) setLinks({})
       const r: BuildResult = {
@@ -390,8 +400,10 @@ function Build() {
         const byId: Record<string, string> = {}
         await Promise.all(
           Object.entries(p.images).map(async ([id, data]) => {
-            const url = URL.createObjectURL(await (await fetch(data)).blob())
+            const blob = await (await fetch(data)).blob()
+            const url = URL.createObjectURL(blob)
             photoUrls.current.push(url)
+            photoBlobs.current.set(url, blob)
             byId[id] = url
           }),
         )
@@ -435,6 +447,8 @@ function Build() {
     const reset = () => {
       for (const u of photoUrls.current) URL.revokeObjectURL(u)
       photoUrls.current = []
+      photoBlobs.current.clear()
+      siteId.current = null
       versions.current = []
       setMessages([])
       setResult(null)
@@ -447,6 +461,84 @@ function Build() {
     const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     if (document.startViewTransition && !still) document.startViewTransition(() => flushSync(reset))
     else reset()
+  }
+
+  // Each finished step is kept in this browser (history.ts), shortly after it lands: the chat,
+  // the versions undo can reach, and the photos as files. Photos still on their way are left out
+  // and saved when they arrive.
+  useEffect(() => {
+    const id = siteId.current
+    if (busy || !result || !id) return
+    const t = setTimeout(() => {
+      const kept = new Set<string>()
+      for (const l of [links, ...versions.current.map((v) => v.links)])
+        for (const u of Object.values(l)) if (u.startsWith('blob:')) kept.add(u)
+      const photos: Record<string, Blob> = {}
+      for (const u of kept) {
+        const b = photoBlobs.current.get(u)
+        if (b) photos[u] = b
+      }
+      void saveSite<Kept>({
+        id,
+        name: result.name,
+        kind: result.kindLabel,
+        updated: Date.now(),
+        data: {
+          messages: messages.map((m) =>
+            m.role !== 'assistant' || !m.photos
+              ? m
+              : m.photos === 'waiting'
+                ? { role: m.role, text: m.text, ...(m.result ? { result: m.result } : {}) }
+                : { ...m, photos: { ...m.photos, images: {} } },
+          ),
+          versions: versions.current,
+          result,
+          look,
+          links,
+        },
+        photos,
+      })
+    }, 400)
+    return () => clearTimeout(t)
+  }, [busy, result, messages, look, links])
+
+  // The Recent list, read whenever the first screen shows.
+  useEffect(() => {
+    if (onStart) void listSites().then(setRecent)
+  }, [onStart])
+
+  /** Brings a kept site back as it was left, ready to edit, dissolving in as a new one does. */
+  async function reopen(id: string) {
+    const saved = await loadSite<Kept>(id)
+    if (!saved) return setRecent(await listSites())
+    session.current++
+    generation.current++
+    const swap: Record<string, string> = {}
+    for (const [old, blob] of Object.entries(saved.photos)) {
+      const url = URL.createObjectURL(blob)
+      photoUrls.current.push(url)
+      photoBlobs.current.set(url, blob)
+      swap[old] = url
+    }
+    // Links to photos that were not kept point nowhere now: their spaces stay empty.
+    const relink = (l: Record<string, string>) =>
+      Object.fromEntries(
+        Object.entries(l).map(([k, v]) => [k, v.startsWith('blob:') ? (swap[v] ?? '') : v]),
+      )
+    const d = saved.data
+    const apply = () => {
+      siteId.current = saved.id
+      versions.current = d.versions.map((v) => ({ result: v.result, links: relink(v.links) }))
+      setMessages(d.messages)
+      setResult(d.result)
+      setLook(d.look)
+      setLinks(relink(d.links))
+      setBusy(false)
+      setDraft('')
+    }
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (document.startViewTransition && !still) document.startViewTransition(() => flushSync(apply))
+    else apply()
   }
 
   const onSubmit = (e: FormEvent) => {
@@ -603,6 +695,54 @@ function Build() {
                 composer.current?.focus()
               }}
             />
+            {recent.length > 0 && (
+              // Sites made here before, newest first (history.ts); kept only in this browser.
+              <section aria-labelledby="recent-title" className="mx-auto mt-4 w-full max-w-md">
+                <h2 id="recent-title" className="mb-1 px-2.5 text-xs font-medium text-zinc-400">
+                  Recent
+                </h2>
+                <ul className="flex flex-col">
+                  {recent.slice(0, allRecent ? undefined : 4).map((x) => (
+                    <li
+                      key={x.id}
+                      className="group flex items-center rounded-lg transition-colors hover:bg-zinc-200/50"
+                    >
+                      <button
+                        type="button"
+                        onClick={() => void reopen(x.id)}
+                        className="flex min-w-0 flex-1 cursor-pointer items-baseline gap-2 rounded-lg px-2.5 py-1.5 text-left text-sm outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+                      >
+                        <span className="truncate font-medium text-zinc-800">{x.name}</span>
+                        <span className="truncate text-zinc-500">{x.kind}</span>
+                        <span className="ml-auto shrink-0 pl-2 text-xs text-zinc-400 tabular-nums">
+                          {ago(x.updated)}
+                        </span>
+                      </button>
+                      <button
+                        type="button"
+                        aria-label={`Remove ${x.name}`}
+                        onClick={async () => {
+                          await removeSite(x.id)
+                          setRecent(await listSites())
+                        }}
+                        className="mr-1 grid size-7 shrink-0 cursor-pointer place-items-center rounded-md text-zinc-400 transition-colors outline-none hover:bg-zinc-200 hover:text-zinc-700 focus-visible:ring-3 focus-visible:ring-ring/50 pointer-fine:opacity-0 pointer-fine:group-hover:opacity-100 pointer-fine:focus-visible:opacity-100"
+                      >
+                        <XIcon className="size-3.5" />
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+                {recent.length > 4 && !allRecent && (
+                  <button
+                    type="button"
+                    onClick={() => setAllRecent(true)}
+                    className="mt-0.5 cursor-pointer rounded-md px-2.5 py-1 text-xs text-zinc-500 outline-none hover:text-zinc-800 focus-visible:ring-3 focus-visible:ring-ring/50"
+                  >
+                    Show {recent.length - 4} more
+                  </button>
+                )}
+              </section>
+            )}
           </div>
         </main>
       </div>
@@ -1027,6 +1167,15 @@ function Mark() {
 /** How chat replies and chips arrive: a 4px rise and a fade, 200ms, strong ease-out. */
 const ENTER =
   'motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-1 animation-duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] fill-mode-both'
+
+/** What is kept of a site in this browser (history.ts). */
+type Kept = {
+  messages: Message[]
+  versions: { result: BuildResult; links: Record<string, string> }[]
+  result: BuildResult
+  look: string | null
+  links: Record<string, string>
+}
 
 type Tone = { bg: string; dark: boolean }
 const LIGHT: Tone = { bg: '#ffffff', dark: false }
