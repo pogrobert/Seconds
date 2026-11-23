@@ -1,4 +1,4 @@
-// POST /api/template {template, content, brand, type, extras} → one template drawn as HTML. For
+// POST /api/template {template, content, brand, type, extras, variant} → one template drawn as HTML. For
 // the template quality gate and review wall (tools/bench/src/template-gate.ts,
 // docs/m0/25-template-plan.md): it draws test content without any model call.
 import { COLOUR_RULES } from '@repo/eval/grammar/colour-rules'
@@ -22,6 +22,7 @@ export const Route = createFileRoute('/api/template')({
           brand?: string
           type?: string
           extras?: Extra[]
+          variant?: string
         } | null
         if (!b?.template || !b.content)
           return Response.json({ error: 'template and content' }, { status: 400 })
@@ -33,6 +34,7 @@ export const Route = createFileRoute('/api/template')({
           b.template,
           theme(cream.palette(b.brand ?? '#1f4d3a'), type),
           b.extras ?? [],
+          b.variant,
         )
         return new Response(html, { headers: { 'content-type': 'text/html; charset=utf-8' } })
       },

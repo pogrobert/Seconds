@@ -38,7 +38,7 @@ import { postcard } from './postcard.tsx'
 import { poster } from './poster.tsx'
 import { programme } from './programme.tsx'
 import { repair } from './repair.tsx'
-import type { Extra, Template } from './shared.tsx'
+import { type Extra, spacingVariants, type Template, type Variant } from './shared.tsx'
 import { shopfront } from './shopfront.tsx'
 import { sidebar } from './sidebar.tsx'
 import { signal } from './signal.tsx'
@@ -53,7 +53,7 @@ import { bigType } from './type.tsx'
 import { units } from './units.tsx'
 import { workshop } from './workshop.tsx'
 
-export type { Extra, Template } from './shared.tsx'
+export type { Extra, Template, Variant } from './shared.tsx'
 // Drafts (docs/m0/25-template-plan.md) are drawn by the gate and the wall only; LIVE are offered.
 export const TEMPLATES: Template[] = [
   field,
@@ -106,9 +106,22 @@ export const TEMPLATES: Template[] = [
 ]
 export const LIVE = TEMPLATES.filter((t) => !t.draft)
 
-export function renderTemplate(c: SiteContent, id: string, t: Theme, extras: Extra[]): string {
+/** A template's variants: its own, then the shared spacing ones. */
+export function variantsOf(id: string): Variant[] {
+  const tpl = TEMPLATES.find((x) => x.id === id)
+  return tpl ? [...(tpl.variants ?? []), ...spacingVariants(tpl.css)] : []
+}
+
+export function renderTemplate(
+  c: SiteContent,
+  id: string,
+  t: Theme,
+  extras: Extra[],
+  variant?: string,
+): string {
   const tpl = TEMPLATES.find((x) => x.id === id) ?? field
+  const v = variant ? (variantsOf(tpl.id).find((x) => x.id === variant)?.css ?? '') : ''
   const body = renderToStaticMarkup(<tpl.Page c={c} extras={extras} />)
   const esc = (s: string) => s.replace(/[&<>"]/g, (x) => `&#${x.charCodeAt(0)};`)
-  return `<!doctype html><html lang="en"${tpl.dark ? ' class="dark"' : ''}><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${esc(c.name)}: ${esc(c.tagline)}</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="${t.fontsHref}"><style>${t.css}${tpl.css}</style></head><body data-template="${tpl.id}">${body}</body></html>`
+  return `<!doctype html><html lang="en"${tpl.dark ? ' class="dark"' : ''}><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${esc(c.name)}: ${esc(c.tagline)}</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="${t.fontsHref}"><style>${t.css}${tpl.css}${v}</style></head><body data-template="${tpl.id}">${body}</body></html>`
 }

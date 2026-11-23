@@ -20,6 +20,37 @@ export type Template = {
   draft?: boolean
   css: string
   Page: (p: TemplateProps) => ReactNode
+  /** Its own variants, if any, on top of the shared ones (`variantsOf`, index.tsx). */
+  variants?: Variant[]
+}
+
+/**
+ * A variant of a template: a few CSS rules laid over its own, for more looks from one design
+ * (docs/m0/25-template-plan.md). Drafts until reviewed, like templates: never offered to an owner
+ * while `draft` is set.
+ */
+export type Variant = { id: string; label: string; css: string; draft?: boolean }
+
+/**
+ * Spacing variants for any template that sets its section spacing with `--sec` (38 of 47 do):
+ * the same page with tighter or roomier sections and side margins, from the template's own values
+ * scaled, so its proportions stay its own.
+ */
+export function spacingVariants(css: string): Variant[] {
+  const sec = css.match(/--sec:([^;}]+)/)?.[1]
+  if (!sec) return []
+  const gut = css.match(/--gut:([^;}]+)/)?.[1]
+  const scale = (v: string, k: number) =>
+    v.replace(
+      /(\d*\.?\d+)(rem|vw|px|em)/g,
+      (_, n: string, u: string) => `${+(Number(n) * k).toFixed(3)}${u}`,
+    )
+  const at = (k: number, g: number) =>
+    `:root{--sec:${scale(sec, k)}${gut ? `;--gut:${scale(gut, g)}` : ''}}`
+  return [
+    { id: 'snug', label: 'Snug', css: at(0.7, 0.85), draft: true },
+    { id: 'roomy', label: 'Roomy', css: at(1.3, 1.25), draft: true },
+  ]
 }
 
 /** The facts the owner gave, as label and value, in the order a visitor looks for them. */
