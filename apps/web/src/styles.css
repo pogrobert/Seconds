@@ -3,14 +3,23 @@
 @import "shadcn/tailwind.css";
 
 /* Atkinson Hyperlegible Next, the type of Robert's Portfolio and Surfaces (OFL), from
-   @fontsource-variable/atkinson-hyperlegible-next. Declared here, not imported,
-   for font-display: optional: preloaded in __root.tsx, it is almost always ready for the first
-   paint; when it is not, that page view keeps the system font instead of jumping when the font
-   swaps in (layout shift on reload, 2026-11-23). The page used Geist until 2026-11-23. */
+   @fontsource-variable/atkinson-hyperlegible-next, preloaded in __root.tsx. Until it arrives the
+   page uses "Atkinson Fallback": Arial sized and spaced to take exactly Atkinson's room, so the
+   swap moves nothing. font-display: optional (tried first, 2026-11-23) avoided the shift but left
+   a first visit in plain Arial. Measured in the browser: Atkinson's ascent 0.98 em, descent
+   0.32 em, and text 98.33% of Arial's width; the overrides are those divided by 0.9833. */
+@font-face {
+  font-family: "Atkinson Fallback";
+  src: local("Arial"), local("ArialMT");
+  size-adjust: 98.33%;
+  ascent-override: 99.66%;
+  descent-override: 32.54%;
+  line-gap-override: 0%;
+}
 @font-face {
   font-family: "Atkinson Hyperlegible Next Variable";
   font-style: normal;
-  font-display: optional;
+  font-display: swap;
   font-weight: 200 800;
   src: url("../node_modules/@fontsource-variable/atkinson-hyperlegible-next/files/atkinson-hyperlegible-next-latin-ext-wght-normal.woff2")
     format("woff2-variations");
@@ -22,7 +31,7 @@
 @font-face {
   font-family: "Atkinson Hyperlegible Next Variable";
   font-style: normal;
-  font-display: optional;
+  font-display: swap;
   font-weight: 200 800;
   src: url("../node_modules/@fontsource-variable/atkinson-hyperlegible-next/files/atkinson-hyperlegible-next-latin-wght-normal.woff2")
     format("woff2-variations");
@@ -78,7 +87,7 @@
 
 @theme inline {
   --font-heading: var(--font-sans);
-  --font-sans: "Atkinson Hyperlegible Next Variable", Arial, sans-serif;
+  --font-sans: "Atkinson Hyperlegible Next Variable", "Atkinson Fallback", Arial, sans-serif;
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);

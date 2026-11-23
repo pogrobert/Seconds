@@ -530,7 +530,7 @@ function Build() {
         <main className="flex min-h-0 flex-1 flex-col items-center overflow-y-auto px-5 pb-10">
           <div className="my-auto flex w-full max-w-2xl flex-col gap-7 pt-10">
             <div className="text-center">
-              <h1 className="text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
+              <h1 className="text-[2rem] leading-tight font-medium tracking-[-0.02em] text-balance sm:text-[2.5rem]">
                 Websites in seconds.
               </h1>
             </div>
@@ -832,7 +832,7 @@ function TryRow({ onPick }: { onPick: (ex: Example) => void }) {
   return (
     // biome-ignore lint/a11y/noStaticElementInteractions: pausing on hover only, no action
     <div
-      className="flex min-h-8 items-center justify-center gap-1 text-[13px] whitespace-nowrap"
+      className="flex min-h-9 items-center justify-center gap-2 text-sm whitespace-nowrap"
       onMouseEnter={() => {
         paused.current = true
       }}
@@ -840,7 +840,7 @@ function TryRow({ onPick }: { onPick: (ex: Example) => void }) {
         paused.current = false
       }}
     >
-      <span className="mr-1 shrink-0 cursor-default text-zinc-500 select-none">Try</span>
+      <span className="shrink-0 cursor-default text-zinc-500 select-none">Try</span>
       <motion.div
         className="-my-1 overflow-hidden py-1"
         initial={false}
@@ -851,7 +851,7 @@ function TryRow({ onPick }: { onPick: (ex: Example) => void }) {
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
               key={shown.map((x) => x.title).join('|')}
-              className="flex min-w-0 items-center gap-1"
+              className="flex min-w-0 items-center gap-2"
               initial="hidden"
               animate="show"
               exit="exit"
@@ -881,16 +881,11 @@ function TryRow({ onPick }: { onPick: (ex: Example) => void }) {
                     },
                   }}
                 >
-                  {i > 0 && (
-                    <span aria-hidden className="mr-1 cursor-default text-zinc-300 select-none">
-                      ·
-                    </span>
-                  )}
                   <Button
-                    variant="ghost"
+                    variant="outline"
                     size="sm"
                     onClick={() => onPick(x)}
-                    className="min-w-0 truncate px-2.5 text-[13px] text-zinc-800 hover:bg-zinc-200/70 hover:text-zinc-950"
+                    className="h-8 min-w-0 truncate rounded-full bg-white px-3 text-sm font-medium text-zinc-700 hover:bg-zinc-100 hover:text-zinc-950"
                   >
                     {x.title}
                   </Button>

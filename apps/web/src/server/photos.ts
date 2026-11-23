@@ -210,7 +210,7 @@ async function commons(town: string, n: number): Promise<Candidate[]> {
       const i = pg.imageinfo?.[0]
       const m = i?.extmetadata ?? {}
       const about = plain(`${pg.title} ${text(m.ImageDescription?.value)}`)
-      if (!i || i.mime !== 'image/jpeg' || i.width < 1280 || i.width < i.height * 1.2) return []
+      if (i?.mime !== 'image/jpeg' || i.width < 1280 || i.width < i.height * 1.2) return []
       if (!about.includes(want)) return []
       const artist = text(m.Artist?.value).slice(0, 60) || 'Wikimedia Commons'
       const licence = text(m.LicenseShortName?.value)

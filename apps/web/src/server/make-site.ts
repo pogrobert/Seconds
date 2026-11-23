@@ -722,7 +722,7 @@ export async function sitePhotos(job: PhotoJob): Promise<PhotoResult> {
   const slots: Record<string, string> = {}
   const images: Record<string, string> = {}
   let art = 0
-  for (const [slot, subject] of Object.entries(SLOTS) as [keyof typeof SLOTS, string][]) {
+  for (const [slot] of Object.entries(SLOTS) as [keyof typeof SLOTS, string][]) {
     const p = chosen[slot]
     if (p && found.images[p.id]) {
       // A photo is the same in light and dark versions.
