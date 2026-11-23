@@ -2,6 +2,8 @@
 
 An AI builder that turns a few words into a website in seconds.
 
+Try it at [seconds.pogrobert.com](https://seconds.pogrobert.com).
+
 Type something like "a ramen bar in Leeds, open late, gyoza and tonkotsu". In about two seconds
 you get a complete one-page site, shown in three different designs. Then change it by talking to
 it: "make it green", "roomier", "our number is 0113 496 0123", "write it in Spanish", "undo".
