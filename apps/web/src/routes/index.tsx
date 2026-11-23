@@ -2,8 +2,10 @@ import { createFileRoute } from '@tanstack/react-router'
 import {
   AlertCircleIcon,
   ArrowUpIcon,
-  ChevronRightIcon,
+  CheckIcon,
+  CircleIcon,
   ExternalLinkIcon,
+  InfoIcon,
   LayoutTemplateIcon,
   MonitorIcon,
   RotateCwIcon,
@@ -15,7 +17,6 @@ import { flushSync } from 'react-dom'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Bubble, BubbleContent } from '@/components/ui/bubble'
 import { Button } from '@/components/ui/button'
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
 import {
   InputGroup,
@@ -24,6 +25,7 @@ import {
   InputGroupTextarea,
 } from '@/components/ui/input-group'
 import { Kbd } from '@/components/ui/kbd'
+import { Marker, MarkerContent, MarkerIcon } from '@/components/ui/marker'
 import { Message as ChatMessage } from '@/components/ui/message'
 import {
   MessageScroller,
@@ -35,9 +37,20 @@ import {
 } from '@/components/ui/message-scroller'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Spinner } from '@/components/ui/spinner'
+import { Suggestion, Suggestions } from '@/components/ui/suggestion'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
+import {
+  Trace,
+  TraceCollapsible,
+  TraceCollapsibleContent,
+  TraceCollapsibleTrigger,
+  TraceDescription,
+  TraceIcon,
+  TraceLine,
+  TraceTitle,
+} from '@/components/ui/trace'
 import { EXAMPLES, type Example } from '../examples'
 import type { BuildResult, PhotoJob, PhotoResult } from '../server/build'
 
@@ -603,7 +616,7 @@ function Build() {
                     // What can be said next, one click each: shows that a site is edited by just
                     // saying it (launch, 2026-11-23).
                     <MessageScrollerItem>
-                      <ul aria-label="Suggested changes" className="flex flex-wrap gap-1.5 pl-9">
+                      <Suggestions aria-label="Suggested changes" className="pl-9">
                         {[
                           ...(versions.current.length > 1 ? ['Undo that'] : []),
                           'Warmer colours',
@@ -611,18 +624,14 @@ function Build() {
                           'Less text',
                           'Write it in Spanish',
                         ].map((x) => (
-                          <li key={x}>
-                            <Button
-                              variant="outline"
-                              size="xs"
-                              onClick={() => send(x)}
-                              className="rounded-full bg-white px-3 font-normal text-zinc-600"
-                            >
-                              {x}
-                            </Button>
-                          </li>
+                          <Suggestion
+                            key={x}
+                            suggestion={x}
+                            onClick={send}
+                            className="h-7 bg-white text-xs font-normal text-zinc-600"
+                          />
                         ))}
-                      </ul>
+                      </Suggestions>
                     </MessageScrollerItem>
                   )}
                   {busy && (
@@ -955,31 +964,37 @@ function liveSteps(p: Progress, elapsed: number) {
     },
   ]
 }
+/** The build's steps as a trace: done with a check, running with a spinner, waiting dimmed. */
 function Steps({ steps }: { steps: { label: string; state: StepState; note?: string }[] }) {
   return (
-    <ol className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+    <Trace className="gap-1">
       {steps.map((s) => (
-        <li
+        <TraceLine
           key={s.label}
-          className={`flex items-center gap-1.5 ${s.state === 'todo' ? 'text-zinc-400' : 'text-zinc-600'}`}
+          className="text-xs"
+          {...(s.state === 'active'
+            ? { status: 'running' as const }
+            : s.state === 'todo'
+              ? { status: 'pending' as const }
+              : {})}
         >
-          <span
-            aria-hidden
-            className={`grid size-3.5 place-items-center rounded-full text-[9px] ${
-              s.state === 'done'
-                ? 'bg-zinc-900 text-white'
-                : s.state === 'active'
-                  ? 'animate-pulse bg-zinc-300 motion-reduce:animate-none'
-                  : 'ring-1 ring-zinc-300'
-            }`}
-          >
-            {s.state === 'done' ? '✓' : ''}
+          <TraceIcon>
+            {s.state === 'done' ? (
+              <CheckIcon />
+            ) : s.state === 'active' ? (
+              <Spinner />
+            ) : (
+              <CircleIcon />
+            )}
+          </TraceIcon>
+          <TraceTitle>{s.label}</TraceTitle>
+          {s.note && <TraceDescription className="tabular-nums">{s.note}</TraceDescription>}
+          <span className="sr-only">
+            {s.state === 'done' ? ', done' : s.state === 'active' ? ', in progress' : ', waiting'}
           </span>
-          {s.label}
-          {s.note && <span className="text-zinc-400 tabular-nums">{s.note}</span>}
-        </li>
+        </TraceLine>
       ))}
-    </ol>
+    </Trace>
   )
 }
 
@@ -1023,16 +1038,18 @@ function Reply({
               ]}
             />
             {notes.length > 0 && (
-              <p className="mt-2 rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-xs text-zinc-600">
-                {notes.join(' ')}
-              </p>
+              <Marker variant="border" className="mt-2 text-xs">
+                <MarkerIcon>
+                  <InfoIcon />
+                </MarkerIcon>
+                <MarkerContent>{notes.join(' ')}</MarkerContent>
+              </Marker>
             )}
-            <Collapsible className="mt-2 text-xs text-zinc-500">
-              <CollapsibleTrigger className="group/details -ml-1 flex items-center gap-0.5 rounded-md px-1 text-zinc-400 outline-none transition-colors hover:text-zinc-700 focus-visible:ring-2 focus-visible:ring-ring/50">
-                <ChevronRightIcon className="size-3 transition-transform group-data-[state=open]/details:rotate-90" />
-                Details
-              </CollapsibleTrigger>
-              <CollapsibleContent>
+            <TraceCollapsible className="mt-2 text-xs text-zinc-500">
+              <TraceCollapsibleTrigger className="text-xs">
+                <TraceTitle>Details</TraceTitle>
+              </TraceCollapsibleTrigger>
+              <TraceCollapsibleContent>
                 <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1.5 rounded-xl bg-white/70 p-3 ring-1 ring-zinc-900/[.06]">
                   <dt className="text-zinc-400">Time</dt>
                   <dd>
@@ -1079,8 +1096,8 @@ function Reply({
                     </>
                   )}
                 </dl>
-              </CollapsibleContent>
-            </Collapsible>
+              </TraceCollapsibleContent>
+            </TraceCollapsible>
           </div>
         )}
       </div>
