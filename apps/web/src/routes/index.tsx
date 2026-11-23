@@ -237,20 +237,33 @@ function Build() {
   // How the first screen turns into the split view; a switch while Robert picks (dev only).
   const [vt, setVt] = useState<Vt>(DEFAULT_VT)
   const named = (role: VtRole) => vtName(vt, role)
+  /** Dev only: play the transition slower, to look at it. */
+  const [speed, setSpeed] = useState(1)
+  /**
+   * Dev only: "Replay" puts the finished site aside and goes back to the start with the first
+   * message in the box; Enter then plays the transition and the making steps without building,
+   * and brings the site back. As often as wanted, at no cost.
+   */
+  const shelved = useRef<{
+    messages: Message[]
+    result: BuildResult | null
+    links: Record<string, string>
+    look: string | null
+    versions: typeof versions.current
+  } | null>(null)
 
-  // The first screen starts with the cursor in the message box.
+  // The first screen starts with the cursor in the message box (also after a dev Replay).
+  const onStart = messages.length === 0
   useEffect(() => {
-    composer.current?.focus()
+    if (onStart) composer.current?.focus()
+  }, [onStart])
+  useEffect(() => {
     if (!import.meta.env.DEV) return
     try {
       const saved = localStorage.getItem('builder.vt') as Vt | null
       if (saved && VTS.includes(saved)) setVt(saved)
-      // "Replay" reloads the page with the last first message back in the box.
-      const replay = sessionStorage.getItem('builder.replay')
-      if (replay) {
-        sessionStorage.removeItem('builder.replay')
-        setDraft(replay)
-      }
+      const pace = Number(localStorage.getItem('builder.vt-speed'))
+      if (SPEEDS.includes(pace)) setSpeed(pace)
     } catch {}
   }, [])
 
@@ -296,10 +309,32 @@ function Build() {
     // The first message moves the page from the centred start to the split view as one motion
     // (View Transitions; where the browser has none, or motion is reduced, it simply switches).
     const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const dry = import.meta.env.DEV && !messages.length ? shelved.current : null
     if (!messages.length && document.startViewTransition && !still) {
       document.documentElement.dataset.vt = vt
-      document.startViewTransition(() => flushSync(start))
+      const t = document.startViewTransition(() => flushSync(start))
+      if (import.meta.env.DEV && speed !== 1)
+        t.ready.then(() => {
+          for (const a of document.getAnimations())
+            if ((a.effect as KeyframeEffect | null)?.pseudoElement?.startsWith('::view-transition'))
+              a.playbackRate = speed
+        })
     } else start()
+    if (dry) {
+      // The steps tick for about as long as a real build, then the shelved site comes back.
+      const wait = 1400 / speed
+      setTimeout(() => setProgress({ choices: 600, words: 700 }), wait / 2)
+      setTimeout(() => {
+        shelved.current = null
+        versions.current = dry.versions
+        setMessages(dry.messages)
+        setResult(dry.result)
+        setLinks(dry.links)
+        setLook(dry.look)
+        setBusy(false)
+      }, wait)
+      return
+    }
     try {
       // Photos arrive on the same stream once found; they wait here until the page is in.
       let photos: (p: PhotoResult | null) => void = () => {}
@@ -579,6 +614,13 @@ function Build() {
         {import.meta.env.DEV && (
           <VtSwitch
             vt={vt}
+            speed={speed}
+            onSpeed={(x) => {
+              setSpeed(x)
+              try {
+                localStorage.setItem('builder.vt-speed', String(x))
+              } catch {}
+            }}
             onPick={(v) => {
               setVt(v)
               try {
@@ -875,6 +917,13 @@ function Build() {
       {import.meta.env.DEV && (
         <VtSwitch
           vt={vt}
+          speed={speed}
+          onSpeed={(x) => {
+            setSpeed(x)
+            try {
+              localStorage.setItem('builder.vt-speed', String(x))
+            } catch {}
+          }}
           onPick={(v) => {
             setVt(v)
             try {
@@ -883,10 +932,12 @@ function Build() {
           }}
           onReplay={() => {
             const first = messages.find((m) => m.role === 'user')
-            try {
-              if (first) sessionStorage.setItem('builder.replay', first.text)
-            } catch {}
-            location.reload()
+            // Not while the page or its photos are still coming: they would land on the start.
+            if (ticking || !first) return
+            shelved.current = { messages, result, links, look, versions: versions.current }
+            setMessages([])
+            setResult(null)
+            setDraft(first.text)
           }}
         />
       )}
@@ -1034,14 +1085,19 @@ function vtName(vt: Vt, role: VtRole): string | undefined {
   return vt === 'grow' ? 'stage' : vt === 'slide' ? 'preview' : undefined
 }
 
-/** Dev only: pick the transition, and replay it with the same first message. */
+/** Dev only: pick the transition and its speed; Replay plays it again without building. */
+const SPEEDS = [1, 0.5, 0.25]
 function VtSwitch({
   vt,
   onPick,
+  speed,
+  onSpeed,
   onReplay,
 }: {
   vt: Vt
   onPick: (v: Vt) => void
+  speed: number
+  onSpeed: (x: number) => void
   onReplay?: () => void
 }) {
   return (
@@ -1056,6 +1112,18 @@ function VtSwitch({
           className={`rounded-lg px-2.5 py-1.5 capitalize ${vt === v ? 'bg-white text-zinc-900' : 'hover:bg-zinc-800'}`}
         >
           {v}
+        </button>
+      ))}
+      <span className="mx-1 h-4 w-px bg-zinc-700" />
+      {SPEEDS.map((x) => (
+        <button
+          key={x}
+          type="button"
+          onClick={() => onSpeed(x)}
+          aria-pressed={speed === x}
+          className={`rounded-lg px-2 py-1.5 tabular-nums ${speed === x ? 'bg-white text-zinc-900' : 'hover:bg-zinc-800'}`}
+        >
+          {x === 1 ? '1×' : x === 0.5 ? '½×' : '¼×'}
         </button>
       ))}
       {onReplay && (
