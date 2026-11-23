@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <!-- Seconds: three pages fanned out, smeared sideways like a quick pick (2026-11-24, "b3"). -->
+  <defs>
+    <filter id="side" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="9 1.5"/></filter>
+    <filter id="centre" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.5 0.6"/></filter>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="14"/></filter>
+    <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="1.4" numOctaves="2" seed="3"/><feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .22 0"/><feComposite in2="SourceGraphic" operator="in"/></filter>
+    <clipPath id="sq"><rect width="128" height="128" rx="30"/></clipPath>
+  </defs>
+  <g clip-path="url(#sq)">
+    <rect width="128" height="128" fill="#121211"/>
+    <ellipse cx="64" cy="70" rx="46" ry="30" fill="#0f766e" filter="url(#glow)" opacity=".8"/>
+    <g filter="url(#side)">
+      <rect x="22" y="38" width="34" height="52" rx="8" fill="#5eafa5" transform="rotate(-14 64 120)"/>
+      <rect x="72" y="38" width="34" height="52" rx="8" fill="#b7d98a" transform="rotate(14 64 120)"/>
+    </g>
+    <rect x="46" y="28" width="36" height="58" rx="9" fill="#fff" filter="url(#centre)"/>
+    <rect width="128" height="128" filter="url(#grain)" opacity=".9"/>
+  </g>
+</svg>

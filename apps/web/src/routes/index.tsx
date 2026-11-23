@@ -1212,13 +1212,9 @@ function TryRow({ onPick, typing }: { onPick: (ex: Example) => void; typing: boo
   )
 }
 
-/** The mark: the small logo, also the assistant's avatar in the chat. */
+/** The mark: the small logo (public/icon.svg, also the tab icon), and the assistant's avatar in the chat. */
 function Mark() {
-  return (
-    <span aria-hidden className="grid size-6 shrink-0 place-items-center rounded-lg bg-zinc-900">
-      <span className="size-2.5 rounded-[3px] bg-white" />
-    </span>
-  )
+  return <img src="/icon.svg" alt="" width={24} height={24} className="size-6 shrink-0" />
 }
 
 /** How chat replies and chips arrive: a 4px rise and a fade, 200ms, strong ease-out. */

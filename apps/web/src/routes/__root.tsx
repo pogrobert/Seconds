@@ -19,10 +19,7 @@ export const Route = createRootRoute({
       // arrived after the first paint and the text shifted when it swapped in (2026-11-23).
       { rel: 'preload', href: sans, as: 'font', type: 'font/woff2', crossOrigin: 'anonymous' },
       { rel: 'stylesheet', href: appCss },
-      {
-        rel: 'icon',
-        href: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2309090b'/%3E%3Cpath d='M9 22V10h7a4 4 0 0 1 0 8H9' fill='none' stroke='%23fff' stroke-width='3'/%3E%3C/svg%3E",
-      },
+      { rel: 'icon', href: '/icon.svg', type: 'image/svg+xml' },
     ],
   }),
   shellComponent: RootDocument,
