@@ -32,3 +32,4 @@ tools/bench/.browsers/
 # Comparison screenshots (docs/m0/21): large, and they include Lovable's and v0's pages. The
 # ratings and timings beside them are kept.
 tools/bench/vs*/**/*.png
+packages/library/test/.out/
