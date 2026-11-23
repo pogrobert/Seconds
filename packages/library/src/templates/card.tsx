@@ -212,7 +212,7 @@ function Page({ c, extras }: TemplateProps) {
 export const card: Template = {
   id: 'card',
   label: 'Card',
-  text: "One white card, narrow like a letter, on pale paper, holding the whole business in a single column: name, promise, a short price list and contact details at the foot like a business card: simple, personal and tidy, for dog walkers, cleaners, tutors, childminders and other sole traders.",
+  text: 'One white card, narrow like a letter, on pale paper, holding the whole business in a single column: name, promise, a short price list and contact details at the foot like a business card: simple, personal and tidy, for dog walkers, cleaners, tutors, childminders and other sole traders.',
   dark: false,
   css: CSS,
   Page,

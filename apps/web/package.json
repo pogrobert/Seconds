@@ -14,12 +14,9 @@
   },
   "dependencies": {
     "@pogrobert/surfaces": "catalog:",
-    "@repo/blocks": "workspace:*",
     "@repo/eval": "workspace:*",
     "@repo/library": "workspace:*",
     "@repo/pipeline": "workspace:*",
-    "@repo/render": "workspace:*",
-    "@repo/spec": "workspace:*",
     "@shadcn/react": "catalog:",
     "@tanstack/react-router": "catalog:",
     "@tanstack/react-start": "catalog:",

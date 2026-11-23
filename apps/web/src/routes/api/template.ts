@@ -10,7 +10,9 @@ import { benchOnly } from '../../server/limit'
 export const Route = createFileRoute('/api/template')({
   server: {
     handlers: {
-      GET: () => Response.json(TEMPLATES.map((t) => ({ id: t.id, label: t.label, dark: t.dark }))),
+      GET: () =>
+        benchOnly() ??
+        Response.json(TEMPLATES.map((t) => ({ id: t.id, label: t.label, dark: t.dark }))),
       POST: async ({ request }) => {
         const hidden = benchOnly()
         if (hidden) return hidden

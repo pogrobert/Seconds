@@ -1,58 +1,58 @@
 [
- {
-  "brief": "cafe-short",
-  "best": "lovable",
-  "middle": "v0",
-  "worst": "builder",
-  "at": "2026-11-18T21:16:55.141Z"
- },
- {
-  "brief": "restaurant-full",
-  "best": "v0",
-  "middle": "lovable",
-  "worst": "builder",
-  "at": "2026-11-18T21:17:08.006Z"
- },
- {
-  "brief": "barber-full",
-  "best": "lovable",
-  "middle": "v0",
-  "worst": "builder",
-  "at": "2026-11-18T21:17:20.193Z"
- },
- {
-  "brief": "dentist",
-  "best": "v0",
-  "middle": "lovable",
-  "worst": "builder",
-  "at": "2026-11-18T21:17:37.572Z"
- },
- {
-  "brief": "plumber",
-  "best": "lovable",
-  "middle": "v0",
-  "worst": "builder",
-  "at": "2026-11-18T21:17:53.931Z"
- },
- {
-  "brief": "yoga",
-  "best": "lovable",
-  "middle": "v0",
-  "worst": "builder",
-  "at": "2026-11-19T09:02:57.475Z"
- },
- {
-  "brief": "zamosc-council",
-  "best": "lovable",
-  "middle": "v0",
-  "worst": "builder",
-  "at": "2026-11-19T09:03:04.809Z"
- },
- {
-  "brief": "tattoo",
-  "best": "lovable",
-  "middle": "v0",
-  "worst": "builder",
-  "at": "2026-11-19T09:03:13.478Z"
- }
+  {
+    "brief": "cafe-short",
+    "best": "lovable",
+    "middle": "v0",
+    "worst": "builder",
+    "at": "2026-11-18T21:16:55.141Z"
+  },
+  {
+    "brief": "restaurant-full",
+    "best": "v0",
+    "middle": "lovable",
+    "worst": "builder",
+    "at": "2026-11-18T21:17:08.006Z"
+  },
+  {
+    "brief": "barber-full",
+    "best": "lovable",
+    "middle": "v0",
+    "worst": "builder",
+    "at": "2026-11-18T21:17:20.193Z"
+  },
+  {
+    "brief": "dentist",
+    "best": "v0",
+    "middle": "lovable",
+    "worst": "builder",
+    "at": "2026-11-18T21:17:37.572Z"
+  },
+  {
+    "brief": "plumber",
+    "best": "lovable",
+    "middle": "v0",
+    "worst": "builder",
+    "at": "2026-11-18T21:17:53.931Z"
+  },
+  {
+    "brief": "yoga",
+    "best": "lovable",
+    "middle": "v0",
+    "worst": "builder",
+    "at": "2026-11-19T09:02:57.475Z"
+  },
+  {
+    "brief": "zamosc-council",
+    "best": "lovable",
+    "middle": "v0",
+    "worst": "builder",
+    "at": "2026-11-19T09:03:04.809Z"
+  },
+  {
+    "brief": "tattoo",
+    "best": "lovable",
+    "middle": "v0",
+    "worst": "builder",
+    "at": "2026-11-19T09:03:13.478Z"
+  }
 ]

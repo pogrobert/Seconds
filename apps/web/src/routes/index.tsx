@@ -904,7 +904,7 @@ function Build() {
                                 aria-hidden
                                 className={`size-2.5 rounded-[3px] ${dark ? 'bg-zinc-800' : 'bg-white ring-1 ring-inset ring-zinc-300'}`}
                               />
-                              {s.label.startsWith('Blocks') ? `Version ${i + 1}` : s.label}
+                              {s.label}
                               <span className="sr-only">{dark ? '(dark)' : '(light)'}</span>
                             </TabsTrigger>
                           </span>
@@ -1080,9 +1080,9 @@ function TryRow({ onPick, typing }: { onPick: (ex: Example) => void; typing: boo
     return () => clearInterval(t)
   }, [])
   return (
-    // biome-ignore lint/a11y/noStaticElementInteractions: pausing on hover only, no action
     // From the message box's text edge, like Recent below (Robert, 2026-11-23): "Try" never moves
     // when the names change, and the two lists share one edge.
+    // biome-ignore lint/a11y/noStaticElementInteractions: pausing on hover only, no action
     <div
       className="flex min-h-9 items-center gap-1 px-4 text-sm whitespace-nowrap"
       onMouseEnter={() => {
@@ -1405,10 +1405,7 @@ function Reply({
                   <dt className="text-zinc-400">Designs</dt>
                   <dd className="text-zinc-700">
                     {r.sites
-                      .map((s, i) => {
-                        const name = s.label.startsWith('Blocks') ? `Version ${i + 1}` : s.label
-                        return / night ·/.test(s.rules) ? `${name} (dark)` : name
-                      })
+                      .map((s) => (/ night ·/.test(s.rules) ? `${s.label} (dark)` : s.label))
                       .join(', ')}
                   </dd>
                   {styleOf(r.sites[0]?.rules ?? '') && (
