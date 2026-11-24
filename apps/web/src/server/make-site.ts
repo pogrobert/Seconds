@@ -487,9 +487,10 @@ export async function build(
   let [reading, art, parts] = r
   // A famous person, character or organisation: Jev chose from the brief alone, which for
   // "portfolio page for Dutch van der Linde" means a light portfolio (2026-11-24). Asked again
-  // with who they are, beside the check below so the page waits little longer.
+  // with who they are, their spirit and voice (Saul Goodman's brash ads, not a calm navy law
+  // firm), beside the check below so the page waits little longer.
   const who = w.copy?.known
-    ? `${words}\nWho this is: ${w.copy.kind}. ${w.copy.subhead} ${w.copy.about}`
+    ? `${words}\nWho this is: ${w.copy.kind}. Its spirit: ${w.copy.idea}; its voice: ${w.copy.voice}. ${w.copy.headline}. ${w.copy.subhead} ${w.copy.about}`
     : null
   const again = who
     ? Promise.all([
