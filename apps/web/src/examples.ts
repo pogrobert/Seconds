@@ -31,7 +31,7 @@ export const EXAMPLES: Example[] = [
   },
   {
     title: 'Lumon Industries',
-    prompt: 'Lumon Industries. Now hiring for Macrodata Refinement.',
+    prompt: 'Lumon Industries, from Severance. Now hiring for Macrodata Refinement.',
   },
   {
     title: 'Electrician',
