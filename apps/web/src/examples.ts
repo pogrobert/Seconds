@@ -4,8 +4,8 @@
 // round). The businesses are made up; every fact in a prompt reaches the page, so none names a
 // real business or a real living person. Some are for fun (2026-11-24, Robert: "a side project
 // after all, not a B2B startup"): famous fictional places and characters, written from what the
-// writer knows of them, and made-up absurd ones whose jokes are in the prompt. One sits second,
-// so the first set shows it even on a phone, and the rest are spread through the rotation.
+// writer knows of them, and made-up absurd ones whose jokes are in the prompt. They alternate
+// with the serious ones; one sits second, so the first set shows it even on a phone.
 
 export type Example = { title: string; prompt: string }
 
@@ -25,6 +25,11 @@ export const EXAMPLES: Example[] = [
       'A mobile dog grooming van in Leeds called Suds & Scissors. We come to your house so your dog never has to travel. Small dogs £35, medium £45, large £60. Bath, brush, trim and nails. Monday to Saturday, book by phone on 0113 496 0721.',
   },
   {
+    title: 'Lumon Industries',
+    prompt:
+      'Lumon Industries, from Severance. Now hiring for Macrodata Refinement. Your outie will never know. Waffle parties for top performers.',
+  },
+  {
     title: 'Physio clinic',
     prompt:
       'Physio clinic in Leith, Edinburgh, for runners and people recovering from surgery. Three physios. First assessment £65 (60 minutes), follow-ups £50 (45 minutes). Open Mon–Fri 7am–8pm, Saturday 9am–1pm. Call 0131 496 0142.',
@@ -37,6 +42,11 @@ export const EXAMPLES: Example[] = [
     title: 'Electrician',
     prompt:
       'Electrician, one-man band, covering Swansea and Gower. NICEIC registered, 20 years in the trade. Rewires, consumer unit upgrades, EV charger installs and landlord certificates (EICR from £150). Free quotes, no callouts after 9pm.',
+  },
+  {
+    title: 'Better Call Saul',
+    prompt:
+      'Saul Goodman & Associates, attorney at law in Albuquerque, from Better Call Saul. Slip and fall? Wrongly accused? Better call Saul!',
   },
   {
     title: 'Wine bar',
@@ -54,6 +64,11 @@ export const EXAMPLES: Example[] = [
       'A Saturday morning coding club for kids aged 8–14 at a community centre in Bristol, 10am–12pm in term time. Free, but places must be booked, 20 children at most. Scratch, Python and little robots with micro:bits. Run by volunteers.',
   },
   {
+    title: 'Fletcher',
+    prompt:
+      'Portfolio page for Terence Fletcher, the studio band conductor at Shaffer Conservatory, from Whiplash. Not quite my tempo.',
+  },
+  {
     title: 'Hair colour',
     prompt:
       'A calm, upmarket hair colour studio in Leith. Unhurried appointments and honest advice. Colour consultations are free, full colour from £95, balayage from £140. Tuesday to Saturday, late nights on Thursday.',
@@ -67,6 +82,11 @@ export const EXAMPLES: Example[] = [
     title: 'Bakery',
     prompt:
       'Artisan sourdough bakery in Hackney, open Thursday to Sunday only, 8am until we sell out. Country loaf £5.50, seeded rye £6, cardamom buns £3.50. Everything is baked overnight in a wood-fired oven.',
+  },
+  {
+    title: 'Los Pollos Hermanos',
+    prompt:
+      'Los Pollos Hermanos, the fried chicken restaurant in Albuquerque from Breaking Bad. Owner: Gustavo Fring. Ingredients of the finest quality.',
   },
   {
     title: 'Wedding photos',
@@ -84,6 +104,11 @@ export const EXAMPLES: Example[] = [
       'Family-run plumbing company in Bristol with 24/7 emergency callouts. Burst pipes, leaks, boiler repairs and bathroom fitting. Fixed prices quoted before we start. Phone 0117 496 0123.',
   },
   {
+    title: 'AFC Richmond',
+    prompt:
+      'AFC Richmond, the football club from Ted Lasso. Manager: Ted Lasso, from Kansas. Believe.',
+  },
+  {
     title: 'Pottery classes',
     prompt:
       'A pottery studio in Kyoto offering two-hour beginner wheel classes for ¥6,000, clay and firing included. Small groups of six. Classes in Japanese and English, Tuesday to Sunday, 10am and 2pm.',
@@ -97,6 +122,11 @@ export const EXAMPLES: Example[] = [
     title: 'Climbing gym',
     prompt:
       'A bouldering gym in Sheffield with 200 problems reset every week. Day pass £12, monthly membership £48, shoe hire £4. Beginner sessions on Monday and Wednesday evenings. Café upstairs. Open 7am to 10pm every day.',
+  },
+  {
+    title: 'Retired stormtrooper',
+    prompt:
+      'A retired stormtrooper now teaching archery in Swindon. Thirty years in the Imperial army and has never once hit a target. Lessons £20 an hour. Helmet optional.',
   },
   {
     title: 'Town council',
@@ -114,6 +144,11 @@ export const EXAMPLES: Example[] = [
       'A florist in Copenhagen with seasonal bouquets from 350 DKK and single stems by the counter. Same-day delivery across the city if you order before noon. Open Monday to Saturday, 9am to 6pm.',
   },
   {
+    title: 'Scoops Ahoy',
+    prompt:
+      'Scoops Ahoy, the ice cream parlour at Starcourt Mall in Hawkins, Indiana, 1985, from Stranger Things. Ahoy, ladies!',
+  },
+  {
     title: 'Barber',
     prompt:
       'A barber in Leeds called Sharp & Co. Haircuts £18, skin fades £20, beard trims £10, hot towel shave £22. Walk-ins welcome, open Monday to Saturday 9am–6pm, late until 8pm on Thursdays.',
@@ -127,6 +162,10 @@ export const EXAMPLES: Example[] = [
     title: 'Jazz trio',
     prompt:
       'A jazz trio — piano, double bass and drums — available for weddings, private parties and corporate events across the south of England. Two 45-minute sets from £1,200. We play standards, swing and bossa nova.',
+  },
+  {
+    title: 'Monsters, Inc.',
+    prompt: 'Monsters, Inc., the scream factory in Monstropolis. We scare because we care.',
   },
   {
     title: 'Hostel',
@@ -144,9 +183,19 @@ export const EXAMPLES: Example[] = [
       'A driving school in Leeds with five instructors, manual and automatic cars. Lessons £38 an hour, block of ten for £350. Intensive courses before your test. Pick-up from home, college or work.',
   },
   {
+    title: 'Volcano lair',
+    prompt:
+      'Volcano lair to let on a private island. Four bedrooms, a shark tank, a monorail and a big red button (please do not press it). £40,000 a week. Cats welcome, especially white ones.',
+  },
+  {
     title: 'Food bank',
     prompt:
       'A local food bank in Birmingham. Open Tuesday and Thursday, 10am to 2pm. We need tins, pasta, rice and nappies. Anyone can donate at the door; parcels need a referral from a GP, school or advice centre.',
+  },
+  {
+    title: 'Pawnee Parks',
+    prompt:
+      'The Pawnee Parks and Recreation Department, Indiana, from Parks and Recreation. Deputy director: Leslie Knope. Treat yo self.',
   },
   {
     title: 'Tattoo studio',
@@ -154,14 +203,28 @@ export const EXAMPLES: Example[] = [
       'A tattoo studio in Brooklyn specialising in fine-line and single-needle work. Two artists, appointments only, closed Mondays. Minimum $150. Deposits secure your booking. Walk-in flash days once a month.',
   },
   {
+    title: 'Double R Diner',
+    prompt: 'The Double R Diner in Twin Peaks: damn fine coffee and cherry pie, from Twin Peaks.',
+  },
+  {
     title: 'Yoga studio',
     prompt:
       'A yoga studio in Ubud, Bali, with an open-air shala above the rice fields. Drop-in classes 150k IDR, ten-class pass 1.2m IDR. Vinyasa at 7am, yin at 5pm, every day. Mats and props provided.',
   },
   {
+    title: 'Grand Budapest',
+    prompt:
+      'The Grand Budapest Hotel, high in the mountains of the Republic of Zubrowka. Concierge: Monsieur Gustave H.',
+  },
+  {
     title: 'Coworking',
     prompt:
       'A coworking space in Lisbon with a rooftop terrace and fast fibre. Day pass €20, monthly hot desk €220, fixed desk €290. Meeting room bookable by the hour. Open 8am to 8pm on weekdays.',
+  },
+  {
+    title: 'Vandelay Industries',
+    prompt:
+      'Vandelay Industries, importer and exporter, from Seinfeld. Latex goods a speciality. Ask for Art Vandelay.',
   },
   {
     title: 'Vet practice',

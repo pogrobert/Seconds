@@ -187,3 +187,34 @@ Gemini 2.5 Flash has the same single provider, so the backup had to be another c
 The look and the town question now send `models: [first, backup]`: OpenRouter tries the backup in
 the same request when the first fails or is busy. With a first model that cannot take images, all
 six businesses still got checked photos, in 3.4–4.3 s.
+
+## Real photos for famous subjects (2026-11-24, measured)
+
+Robert: Dutch van der Linde's page showed a photo studio; "show pics from RDR". Game and film
+stills, and photos of the actors, are not used: they are copyrighted or are real people's
+likenesses. What is used instead is real, freely licensed photos tied to the subject on Wikimedia
+Commons: cosplay, props, exhibits, filming locations, the real places a story is set in.
+
+- The early photo call (`writePhotoQueries`) writes a Commons search per space when the words
+  name or refer to a famous film, show, game, character, person or organisation, e.g.
+  "stormtrooper costume" or "Jurassic Park dinosaur models"; never an actor's name, a logo or a
+  poster. Empty for ordinary businesses.
+- `commonsFor` (photos.ts) fetches up to three JPEGs of at least 1280px per search, leaves out
+  files named as logos, posters, screenshots or drawings, keeps author and licence for the
+  credits, and marks them as the subject's own.
+- The look sees them beside the Pixabay candidates. Told only to prefer them, Gemini still chose
+  stock every time, so it now answers a separate question (which marked photos are good real
+  photographs, not logos, stills or actors?), and an approved one goes first in its space, one a
+  space, so the work itself still shows beside it. Every photo must also fit the era and setting
+  of that world (no office or bicycle photos for a Wild West gang).
+- Commons' thumbnails now come from `thumb.wikimedia.org`, which the photo store did not allow,
+  so a chosen Commons photo could not be downloaded; it is now allowed.
+
+Results: a retired stormtrooper gets a stormtrooper cosplay photo beside the archery range;
+Jurassic Park a museum Triceratops and an animatronic Velociraptor; Gandalf a Gandalf cosplay
+from New York Comic Con (CC BY 2.0); Fletcher a jazz band rehearsal. Dutch van der Linde gets
+none (Commons has only the game's logos) and stays with campfires, colts and cowboys. Ordinary
+businesses are unchanged.
+
+**Before publishing:** most Commons licences (CC BY, CC BY-SA) need the credit beside the photo
+on the published page, not only in the builder's details.

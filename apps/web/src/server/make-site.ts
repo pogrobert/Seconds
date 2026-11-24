@@ -51,6 +51,8 @@ export type BuiltSite = { id: string; label: string; rules: string; html: string
 /** What the photo step needs, handed back by the page step (docs/m0/17-photos.md). */
 export type PhotoJob = {
   queries: { place: string; people: string; detail: string }
+  /** Wikimedia Commons searches for a famous subject, per space (photos.ts, commonsFor). */
+  commons?: { place: string; people: string; detail: string }
   about: { name: string; kind: string; town: string }
   seed: string
   /** Jev's pick for drawn art, where no photo fits. */
@@ -436,6 +438,7 @@ export async function build(
         const job: PhotoJob | null = e
           ? {
               queries: e.queries,
+              ...(Object.values(e.commons).some(Boolean) ? { commons: e.commons } : {}),
               about: { name: 'this organisation', kind: e.kind, town: e.town },
               seed: seedOf(words),
               art: style,
@@ -699,7 +702,7 @@ export async function sitePhotos(
         },
         job.queries,
         job.about,
-        { avoid: job.avoid ?? [] },
+        { avoid: job.avoid ?? [], ...(job.commons ? { commons: job.commons } : {}) },
       )
   const n = found.natural
   const spare = found.spare

@@ -13,6 +13,8 @@ const SOURCES = [
   /^https:\/\/pixabay\.com\/get\//,
   /^https:\/\/cdn\.pixabay\.com\//,
   /^https:\/\/upload\.wikimedia\.org\//,
+  // Commons' thumbnails moved here (2026-11-24): chosen Commons photos failed to download.
+  /^https:\/\/thumb\.wikimedia\.org\//,
 ]
 
 /** A photo's id as the photo step makes it: Pixabay's (p…) or Commons' (c…). */

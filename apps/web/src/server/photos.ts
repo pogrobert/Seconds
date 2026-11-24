@@ -62,6 +62,8 @@ type Candidate = {
   height: number
   alt: string
   credit: { photographer: string; page: string }
+  /** A real photo tied to the famous subject (commonsFor), preferred by the look when good. */
+  fan?: boolean
 }
 
 /* --------------------------------------------------------------------------------- Pixabay */
@@ -244,6 +246,77 @@ async function commons(town: string, n: number): Promise<Candidate[]> {
     .slice(0, n)
 }
 
+/**
+ * Real photos tied to a famous subject (2026-11-24, Robert: Dutch van der Linde's page showed a
+ * photo studio): Commons files for one search, such as "stormtrooper cosplay" or "Kualoa Ranch".
+ * Freely licensed; logos, posters, screenshots and drawings are left out here, and the look
+ * rejects photos of actors. Each keeps its author and licence for the credits.
+ */
+async function commonsFor(q: string, n: number): Promise<Candidate[]> {
+  if (!q.trim()) return []
+  const p = new URLSearchParams({
+    action: 'query',
+    format: 'json',
+    generator: 'search',
+    gsrnamespace: '6',
+    gsrsearch: `${q} filetype:bitmap`,
+    gsrlimit: '20',
+    prop: 'imageinfo',
+    iiprop: 'url|size|mime|extmetadata',
+    iiurlwidth: '330',
+    origin: '*',
+  })
+  const res = await fetch(`https://commons.wikimedia.org/w/api.php?${p}`, {
+    headers: UA,
+    signal: AbortSignal.timeout(4000),
+  }).catch(() => null)
+  if (!res?.ok) return []
+  type Page = {
+    index: number
+    title: string
+    imageinfo?: {
+      thumburl: string
+      descriptionurl: string
+      width: number
+      height: number
+      mime: string
+      extmetadata?: Record<string, { value?: string }>
+    }[]
+  }
+  const body = (await res.json().catch(() => null)) as { query?: { pages?: Record<string, Page> } }
+  const text = (s = '') => s.replace(/<[^>]+>/g, '').trim()
+  const notPhoto =
+    /\b(logo|poster|screenshot|screen ?shot|cover|icon|map|diagram|drawing|illustration|render|banner|sign ?in|svg)\b/i
+  return Object.values(body?.query?.pages ?? {})
+    .sort((a, b) => a.index - b.index)
+    .flatMap((pg) => {
+      const i = pg.imageinfo?.[0]
+      const m = i?.extmetadata ?? {}
+      if (i?.mime !== 'image/jpeg' || i.width < 1280) return []
+      if (notPhoto.test(pg.title)) return []
+      // Only free licences: no fair-use files (Commons holds none, but the field says so).
+      const licence = text(m.LicenseShortName?.value)
+      if (/fair use|non-free/i.test(licence)) return []
+      const artist = text(m.Artist?.value).slice(0, 60) || 'Wikimedia Commons'
+      return [
+        {
+          id: `c${pg.title.replace(/[^A-Za-z0-9]+/g, '').slice(4, 40)}`,
+          preview: i.thumburl,
+          full: i.thumburl.replace(/\/330px-/, '/1280px-'),
+          width: 1280,
+          height: Math.round((1280 * i.height) / i.width),
+          alt: pg.title.replace(/^File:|\.\w+$/g, ''),
+          credit: {
+            photographer: licence ? `${artist} (${licence})` : artist,
+            page: i.descriptionurl,
+          },
+          fan: true,
+        },
+      ]
+    })
+    .slice(0, n)
+}
+
 /* ---------------------------------------------------------------------------- The look */
 
 type Choice = Slots<string[]> & { townFits: boolean }
@@ -277,6 +350,7 @@ async function judge(
         `Photos for the website of ${about.name}, a ${about.kind}${about.town ? ` in ${about.town}` : ''}.`,
         'Each photo below has an id. For each subject, list the ids of photos that clearly fit this organisation, best first, at most 3. Leave a list empty rather than include a photo that does not fit.',
         'Reject: anything that is not a real photograph (illustrations, cartoons, 3D renders, AI-generated images with their too-smooth, too-perfect look), the wrong trade or setting, a different country or city than the one named, staged or cheesy stock, text or watermarks, people in poor taste, blurry or dull pictures.',
+        'Some photos may come from the world of a film, show, game or character this organisation is about or refers to: fans in costume, props, exhibits, filming locations or the real places it is set in. They are marked. fans = the ids of the marked photos that are good, sharp real photographs worth showing on this page (costumes, props, exhibits, places), even if they show the world it refers to rather than its work. Leave out logos, posters, screenshots, game or film stills, and any photo of an actor or other famous real person. Every photo, marked or not, must also fit the era and setting of that world: no modern offices, computers, bicycles or sports gear for a Wild West gang, a fantasy realm or a historical setting. Also reject in the lists logos, posters, screenshots, game or film stills, and any photo of an actor or other famous real person.',
         'place = the room or setting where it works; people = people doing its kind of work or being served; detail = a close-up object or material typical of it.',
         `townFits: true only if a photo of ${about.town || 'the town'} itself (its streets, square or buildings) would suit this organisation's home page, as for a council, a civic or tourist body, or a museum. False for a shop, clinic, studio, trade, firm or restaurant.`,
       ].join('\n'),
@@ -284,16 +358,20 @@ async function judge(
   ]
   for (const { s, c } of all)
     content.push(
-      { type: 'text', text: `id ${c.id} (offered for ${s})` },
+      {
+        type: 'text',
+        text: `id ${c.id} (offered for ${s}${c.fan ? '; a real photo from the world it refers to' : ''})`,
+      },
       { type: 'image_url', image_url: { url: inline.get(c.id) } },
     )
   const ids = { type: 'array', items: { type: 'string' }, maxItems: 3 }
   const schema = {
     type: 'object',
     additionalProperties: false,
-    required: ['townFits', ...SUBJECTS],
+    required: ['townFits', 'fans', ...SUBJECTS],
     properties: {
       townFits: { type: 'boolean' },
+      fans: { type: 'array', items: { type: 'string' }, maxItems: 9 },
       place: ids,
       people: ids,
       detail: ids,
@@ -331,7 +409,22 @@ async function judge(
   } | null
   const costUsd = body?.usage?.cost ?? 0
   try {
-    return { choice: JSON.parse(body?.choices?.[0]?.message?.content ?? '') as Choice, costUsd }
+    const choice = JSON.parse(body?.choices?.[0]?.message?.content ?? '') as Choice & {
+      fans?: string[]
+    }
+    // A famous subject's own photos, when the look approves them, go first in their space: told
+    // only to prefer them, the look still chose stock archery over cosplay for a retired
+    // stormtrooper (2026-11-24).
+    const fans = new Set(choice.fans ?? [])
+    for (const s of SUBJECTS) {
+      // One a space, so the page still shows the work itself beside it.
+      const mine = pools[s]
+        .filter((c) => c.fan && fans.has(c.id))
+        .map((c) => c.id)
+        .slice(0, 1)
+      choice[s] = [...mine, ...(choice[s] ?? []).filter((id) => !mine.includes(id))].slice(0, 3)
+    }
+    return { choice, costUsd }
   } catch {
     console.error('photo look failed', res?.status, inline.size, JSON.stringify(body).slice(0, 300))
     return { choice: null, costUsd }
@@ -403,7 +496,13 @@ export async function findPhotos(
   keys: { pixabay?: string; openrouter?: string },
   q: Slots<string>,
   about: { name: string; kind: string; town: string },
-  o: { model?: string; perSubject?: number; avoid?: string[] } = {},
+  o: {
+    model?: string
+    perSubject?: number
+    avoid?: string[]
+    /** Commons searches for a famous subject, per space (commonsFor). */
+    commons?: Slots<string>
+  } = {},
 ): Promise<Found> {
   const per = o.perSubject ?? 6
   const t0 = performance.now()
@@ -418,17 +517,23 @@ export async function findPhotos(
     about.town && keys.openrouter
       ? Promise.all([townSuits(keys.openrouter, about, model), commons(about.town, 2)])
       : Promise.resolve([{ fits: false, costUsd: 0 }, []])
-  const found = await Promise.all(
-    SUBJECTS.map((s) => (keys.pixabay ? pixabay(keys.pixabay, q[s], per) : [])),
-  )
+  const [found, fans] = await Promise.all([
+    Promise.all(SUBJECTS.map((s) => (keys.pixabay ? pixabay(keys.pixabay, q[s], per) : []))),
+    // Commons for a famous subject, beside Pixabay: never unchecked, so only with the look.
+    Promise.all(
+      SUBJECTS.map((s) => (o.commons?.[s] && keys.openrouter ? commonsFor(o.commons[s], 3) : [])),
+    ),
+  ])
   // Photos the page shows already go when the owner asks for different ones ("show more
   // photos" brought back the same three, 2026-11-21).
   const avoid = new Set(o.avoid ?? [])
   for (const [i, f] of found.entries()) found[i] = f.filter((c) => !avoid.has(c.id))
+  for (const [i, f] of fans.entries()) fans[i] = f.filter((c) => !avoid.has(c.id))
+  // A famous subject's own photos first, so the look sees them beside the stock ones.
   const pools: Slots<Candidate[]> = {
-    place: found[0] ?? [],
-    people: found[1] ?? [],
-    detail: found[2] ?? [],
+    place: [...(fans[0] ?? []), ...(found[0] ?? [])],
+    people: [...(fans[1] ?? []), ...(found[1] ?? [])],
+    detail: [...(fans[2] ?? []), ...(found[2] ?? [])],
   }
   const byId = new Map(SUBJECTS.flatMap((s) => pools[s].map((c) => [c.id, c] as const)))
   const suits = { fits: false, costUsd: 0 }
