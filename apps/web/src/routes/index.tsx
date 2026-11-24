@@ -855,12 +855,11 @@ function Build() {
           </div>
         </main>
         {/* Who made it, on the first screen only (2026-11-24): one quiet word, linking to the
-            author's site in a new tab, so a half-typed brief is not lost. */}
+            author's site in the same tab, as the author's Portfolio and Surfaces link (nothing is
+            built yet on this screen; a new tab until 2026-11-24). */}
         <footer className="flex shrink-0 justify-center px-5 pt-2 pb-[max(1rem,env(safe-area-inset-bottom))] text-xs">
           <a
             href="https://pogrobert.com"
-            target="_blank"
-            rel="noopener"
             className="rounded-sm text-zinc-400 underline-offset-4 outline-none transition-colors hover:text-zinc-800 hover:underline focus-visible:ring-3 focus-visible:ring-ring/50"
           >
             Author
