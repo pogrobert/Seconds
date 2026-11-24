@@ -723,6 +723,7 @@ export async function sitePhotos(
           ...(env.PIXABAY_API_KEY ? { pixabay: env.PIXABAY_API_KEY } : {}),
           ...(env.OPENROUTER_API_KEY ? { openrouter: env.OPENROUTER_API_KEY } : {}),
           ...(env.TMDB_TOKEN ? { tmdb: env.TMDB_TOKEN } : {}),
+          ...(env.RAWG_API_KEY ? { rawg: env.RAWG_API_KEY } : {}),
           ...(env.TWITCH_CLIENT_ID && env.TWITCH_CLIENT_SECRET
             ? { twitchId: env.TWITCH_CLIENT_ID, twitchSecret: env.TWITCH_CLIENT_SECRET }
             : {}),

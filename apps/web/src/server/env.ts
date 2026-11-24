@@ -9,6 +9,8 @@ export type Keys = Env & {
   TMDB_TOKEN?: string
   TWITCH_CLIENT_ID?: string
   TWITCH_CLIENT_SECRET?: string
+  /** Game screenshots from RAWG when IGDB is not set up (photos.ts, rawgFor). */
+  RAWG_API_KEY?: string
 }
 
 export function getEnv(): Keys {

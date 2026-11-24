@@ -12,6 +12,9 @@ TMDB_TOKEN=
 # https://dev.twitch.tv/console
 TWITCH_CLIENT_ID=
 TWITCH_CLIENT_SECRET=
+# Optional. Game screenshots without Twitch (RAWG, free for non-commercial use, email sign-up):
+# https://rawg.io/apidocs
+RAWG_API_KEY=
 
 # Turns on the bench-only routes (/api/build, /api/template, /api/template-pick) for tools/bench.
 # Never set in production.

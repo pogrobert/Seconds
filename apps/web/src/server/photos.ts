@@ -466,6 +466,42 @@ async function igdbFor(id: string, secret: string, m: Media, n: number): Promise
     }))
 }
 
+/**
+ * A game's screenshots from RAWG (2026-11-24): free for non-commercial use with a credit and a
+ * link to RAWG, and its key needs only an email (Twitch's, for IGDB, needs an SMS that did not
+ * reach Armenia). Used when IGDB is not set up.
+ */
+async function rawgFor(key: string, m: Media, n: number): Promise<Candidate[]> {
+  const get = (path: string, q: Record<string, string> = {}) =>
+    fetch(`https://api.rawg.io/api/${path}?${new URLSearchParams({ key, ...q })}`, {
+      headers: UA,
+      signal: AbortSignal.timeout(4000),
+    })
+      .then((r) => (r.ok ? r.json() : null))
+      .catch(() => null)
+  const found = (await get('games', { search: m.title, page_size: '1' })) as {
+    results?: { id: number; slug: string; name: string }[]
+  } | null
+  const game = found?.results?.[0]
+  if (!game) return []
+  const shots = (await get(`games/${game.id}/screenshots`)) as {
+    results?: { id: number; image: string; width?: number; height?: number }[]
+  } | null
+  return (shots?.results ?? [])
+    .filter((x) => /^https:\/\/media\.rawg\.io\/media\//.test(x.image) && (x.width ?? 1920) >= 1280)
+    .slice(0, n)
+    .map((x) => ({
+      id: `r${game.id}x${x.id}`,
+      preview: x.image.replace('/media/', '/media/resize/420/-/'),
+      full: x.image.replace('/media/', '/media/resize/1280/-/'),
+      width: 1280,
+      height: Math.round((1280 * (x.height ?? 1080)) / (x.width ?? 1920)),
+      alt: game.name,
+      credit: { photographer: 'Image from RAWG', page: `https://rawg.io/games/${game.slug}` },
+      still: true,
+    }))
+}
+
 /* ---------------------------------------------------------------------------- The look */
 
 type Choice = Slots<string[]> & { townFits: boolean }
@@ -648,6 +684,7 @@ export async function findPhotos(
     tmdb?: string
     twitchId?: string
     twitchSecret?: string
+    rawg?: string
   },
   q: Slots<string>,
   about: { name: string; kind: string; town: string },
@@ -682,7 +719,9 @@ export async function findPhotos(
       : media.kind === 'game'
         ? keys.twitchId && keys.twitchSecret
           ? igdbFor(keys.twitchId, keys.twitchSecret, media, 6).catch(() => [])
-          : Promise.resolve([])
+          : keys.rawg
+            ? rawgFor(keys.rawg, media, 6).catch(() => [])
+            : Promise.resolve([])
         : keys.tmdb
           ? tmdbFor(keys.tmdb, media, 6).catch(() => [])
           : Promise.resolve([])
