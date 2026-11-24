@@ -517,17 +517,11 @@ async function judge(
   pools: Slots<Candidate[]>,
   model: string,
 ): Promise<{ choice: Choice | null; costUsd: number }> {
-  // Small copies go inside the request: letting the provider fetch ~30 links took ~5 s.
-  const inline = new Map<string, string>()
-  await Promise.all(
-    SUBJECTS.flatMap((s) => pools[s]).map(async (c) => {
-      const res = await fetch(c.preview, { headers: UA }).catch(() => null)
-      if (res?.ok) inline.set(c.id, toDataUri(await res.arrayBuffer(), 'image/jpeg'))
-    }),
-  )
-  const all = SUBJECTS.flatMap((s) =>
-    pools[s].filter((c) => inline.has(c.id)).map((c) => ({ s, c })),
-  )
+  // The model's provider fetches each small preview by its link. Copies sent inside the request
+  // (until 2026-11-24) cost one download per candidate, 30 to 58 outgoing requests a build against
+  // the free Workers plan's 50, and about 6.5 ms of CPU to encode; links were no slower when
+  // re-measured that day (13 paired builds, docs/m0/17-photos.md).
+  const all = SUBJECTS.flatMap((s) => pools[s].map((c) => ({ s, c })))
   const content: unknown[] = [
     {
       type: 'text',
@@ -547,7 +541,7 @@ async function judge(
         type: 'text',
         text: `id ${c.id} (offered for ${s}${c.still ? '; an official still or screenshot of it' : c.fan ? '; a real photo from the world it refers to' : ''})`,
       },
-      { type: 'image_url', image_url: { url: inline.get(c.id) } },
+      { type: 'image_url', image_url: { url: c.preview } },
     )
   const ids = { type: 'array', items: { type: 'string' }, maxItems: 3 }
   const schema = {
@@ -611,7 +605,7 @@ async function judge(
     }
     return { choice, costUsd }
   } catch {
-    console.error('photo look failed', res?.status, inline.size, JSON.stringify(body).slice(0, 300))
+    console.error('photo look failed', res?.status, all.length, JSON.stringify(body).slice(0, 300))
     return { choice: null, costUsd }
   }
 }

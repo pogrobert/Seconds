@@ -243,3 +243,28 @@ on stills of their series; Dutch van der Linde's on five Red Dead Redemption 2 s
 **Before publishing:** these images stay the studios'; the APIs allow showing them with credit
 in a non-commercial product, which previews are. Published sites, and any paid plan, need this
 looked at again.
+
+## The photo check takes links again (2026-11-24, measured)
+
+A smoke test of the live site found famous subjects sometimes without photos (one Dutch van der
+Linde build had none, another a cosplay photo). Counted on the local server, one build made
+30–35 outgoing requests for an ordinary business and 47–58 for a famous subject; the free
+Workers plan allows 50 a request. Most were the photo check's own downloads: a small copy of
+every candidate, sent inside the request, plus about 6.5 ms of CPU to encode them (measured in
+Node, 27 copies, 318 KB), against the free plan's 10 ms.
+
+The check now gives the model each preview's link and the provider fetches it. On 2026-11-17
+that took about 5 s longer; re-measured over 13 paired builds the same day as the change, it did
+not:
+
+| | Copies inside the request | Links |
+| --- | --- | --- |
+| Requests, ordinary business | 30–35 | 9–15 |
+| Requests, famous subject | 47–58 | 19–22 |
+| Photos ready | 1.9–7.9 s | 1.8–7.4 s |
+| Spaces left without a photo | 2 | 1 |
+| Failed checks | 0 | 0 |
+
+The rest of a build's CPU, measured the same way: drawing the three designs about 5 ms on a cold
+start and under 1 ms warm; drawn art 0.5–2.7 ms a space without a photo. Those are Node on a
+laptop; Cloudflare's machines may be slower (estimated).
