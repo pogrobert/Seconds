@@ -1144,7 +1144,10 @@ function Build() {
                     const page = (
                       <iframe
                         ref={frame}
-                        onLoad={() => {
+                        onLoad={(e) => {
+                          // Shown once its page is in: before that the frame is a white box,
+                          // a flash in dark mode (2026-11-24).
+                          e.currentTarget.dataset.ready = ''
                           const doc = frame.current?.contentDocument
                           wireLinks(doc)
                           fillSpaces(doc, linksRef.current)
@@ -1153,7 +1156,7 @@ function Build() {
                         key={`${site.id}-${result?.name}-${reloads}-${device}`}
                         title={`${result?.name}, version ${site.id.slice(1)}`}
                         srcDoc={site.html}
-                        className="h-full w-full bg-[#fff]"
+                        className="h-full w-full bg-[#fff] opacity-0 data-ready:opacity-100"
                       />
                     )
                     return device === 'phone' ? <Phone tone={tone}>{page}</Phone> : page
