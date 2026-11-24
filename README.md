@@ -50,22 +50,26 @@ You need Node 25 or newer and pnpm 10.
 
 ```bash
 pnpm install
-cp apps/web/.dev.vars.example apps/web/.dev.vars
+cp apps/web/.dev.vars.example .env
+ln -s ../../.env apps/web/.dev.vars
 pnpm dev
 ```
 
 Then open http://localhost:5173.
 
-Put your keys in `apps/web/.dev.vars`:
+Put your keys in the root `.env`. The app reads them through `apps/web/.dev.vars`, which points to
+it, and the tools in `tools/` read `.env` directly, so each key goes in once:
 
-| Key                  | For                           | Without it            |
-| -------------------- | ----------------------------- | --------------------- |
-| `TYPESAFE_API_KEY`   | the decision model            | choices are random    |
-| `OPENROUTER_API_KEY` | the words and the photo check | sample words are used |
-| `PIXABAY_API_KEY`    | photos (free account)         | drawn art only        |
+| Key                    | For                                                     | Without it                                    |
+| ---------------------- | ------------------------------------------------------- | --------------------------------------------- |
+| `TYPESAFE_API_KEY`     | the decision model                                      | the backup on OpenRouter decides             |
+| `OPENROUTER_API_KEY`   | the words, the photo check and the decision backup      | sample words are used                         |
+| `PIXABAY_API_KEY`      | stock photos (free account)                             | drawn art only                                |
+| `TMDB_TOKEN`           | film and TV stills for famous subjects (optional)       | no stills; stock and openly licensed photos   |
+| `RAWG_API_KEY`         | game screenshots for famous subjects (optional)         | no screenshots                                |
 
-The app runs without any keys, just with worse results. The tools in `tools/` read the same keys
-from a `.env` file at the root (see `.env.example`).
+The app runs without any keys, just with worse results. On Cloudflare, the same keys are the
+Worker's secrets.
 
 Run every check (lint, types, tests) with:
 

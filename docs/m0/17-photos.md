@@ -218,3 +218,28 @@ businesses are unchanged.
 
 **Before publishing:** most Commons licences (CC BY, CC BY-SA) need the credit beside the photo
 on the published page, not only in the builder's details.
+
+## Official stills: TMDB and RAWG (2026-11-24, measured)
+
+Robert: "pick pictures that are specific to the context, and not always go after generic." Web
+research found no single source that is both broad and allowed (docs: the README of this round
+in the session, summarised here): stock sites hold no film or game imagery; Google's image API
+closes on 1 January 2027 and scraped search results grant no rights; Getty's free embeds are
+frames with its branding; editorial agencies are paid and news-only. What is allowed, for a
+non-commercial project with a credit:
+
+- **TMDB** for films and TV: textless backdrops, credited "Image from TMDB".
+- **RAWG** for games: screenshots, credited with a link to RAWG. (IGDB, through a Twitch app,
+  stays as an option: Twitch's SMS for its required two-step check did not reach Armenia.)
+- **Openverse** for openly licensed Flickr photos (cosplay, events, places), before Commons.
+
+The photo call names the film, show or game; its stills join the candidates and the look approves
+them like the Commons ones (characters in a scene are fine; posters, logos and title cards are
+not). A bug hid them at first: the photo route took only Pixabay and Commons ids.
+
+Results: Fletcher's page opens on a Whiplash still at the drum kit; Saul's and Dunder Mifflin's
+on stills of their series; Dutch van der Linde's on five Red Dead Redemption 2 screenshots.
+
+**Before publishing:** these images stay the studios'; the APIs allow showing them with credit
+in a non-commercial product, which previews are. Published sites, and any paid plan, need this
+looked at again.

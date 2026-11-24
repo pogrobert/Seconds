@@ -1,4 +1,6 @@
-# Copy to .dev.vars (gitignored) and fill in. Never commit real keys.
+# The keys the app reads. Copy to the root .env (gitignored) and link this folder's .dev.vars
+# to it (ln -s ../../.env apps/web/.dev.vars), so the app and the tools share one file. Never
+# commit real keys.
 # Decision model (Jev) through TypeSafe: https://typesafe.ai
 TYPESAFE_API_KEY=
 # Text model through OpenRouter: https://openrouter.ai
