@@ -17,9 +17,7 @@ import {
   groundAnswers,
   itemKey,
   type Question,
-  randomDecisions,
   type SiteCopy,
-  typesafeDecisions,
   writePhotoQueries,
   writeSiteCopy,
 } from '@repo/pipeline'
@@ -28,6 +26,7 @@ import {
   type BuildResult,
   type BuildStep,
   contentFor,
+  decisionsFor,
   drawTemplates,
   type PhotoLanded,
   type PhotoResult,
@@ -618,11 +617,7 @@ export async function edit(
 ): Promise<EditOutcome> {
   const t0 = performance.now()
   const env = getEnv()
-  const decide = remembering(
-    env.TYPESAFE_API_KEY
-      ? typesafeDecisions({ apiKey: env.TYPESAFE_API_KEY })
-      : randomDecisions(request),
-  )
+  const decide = remembering(decisionsFor(env, request))
   const type = TYPE_RULES.find((t) => t.key === state.type)
   const site = [
     `Name: ${state.copy.name}, a ${state.copy.kind}.`,

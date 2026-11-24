@@ -117,6 +117,11 @@ export function typesafeDecisions(o: {
   model?: string
   baseUrl?: string
   fetch?: typeof fetch
+  /**
+   * Each attempt's time limit: Jev answers in 0.2–1 s, so a slow one is better handed to the
+   * backup (withBackup) than waited for.
+   */
+  timeoutMs?: number
 }): DecisionPort {
   const model = o.model ?? 'jev-1.14.0'
   const doFetch = o.fetch ?? fetch
@@ -143,7 +148,9 @@ export function typesafeDecisions(o: {
             method: 'POST',
             headers: { authorization: `Bearer ${o.apiKey}`, 'content-type': 'application/json' },
             body: JSON.stringify(request),
-            ...(signal ? { signal } : {}),
+            signal: signal
+              ? AbortSignal.any([signal, AbortSignal.timeout(o.timeoutMs ?? 8000)])
+              : AbortSignal.timeout(o.timeoutMs ?? 8000),
           })
           response = await res.json().catch(() => null)
           if (res.ok) body = response as Body
@@ -200,6 +207,230 @@ export function typesafeDecisions(o: {
         answers.set(q.id, { kind: 'missing', id: q.id, reason: 'unsupported' })
       }
       return { answers, calls }
+    },
+  }
+}
+
+/* ---------------------------------------------------------------- the backup */
+
+/**
+ * The same questions answered by a text model on OpenRouter, for when Jev is down or slow
+ * (2026-11-24, Robert: "a backup for Jev via OpenRouter"). One call carries every question; the
+ * model gives a probability for each yes or no and its likeliest options, best first, for each
+ * choice. Its probabilities are a model's estimate, not Jev's calibrated ones, so it stands in
+ * only when Jev cannot answer (withBackup).
+ */
+export function openrouterDecisions(o: {
+  apiKey: string
+  model?: string
+  fetch?: typeof fetch
+  timeoutMs?: number
+}): DecisionPort {
+  const model = o.model ?? 'openai/gpt-oss-120b'
+  const doFetch = o.fetch ?? fetch
+  return {
+    id: 'openrouter',
+    model,
+    async decide(state, questions, signal) {
+      const names = questions.map((_, i) => `q${String(i + 1).padStart(3, '0')}`)
+      const lines = questions.map((q, i) => {
+        const n = names[i]
+        if (q.kind === 'bool') return `${n} (yes or no): ${q.prompt}`
+        if (q.kind === 'score')
+          return `${n} (a level from 0 to ${q.levels.length - 1}): ${q.prompt}\n${q.levels.map((l, k) => `  ${k}: ${l}`).join('\n')}`
+        return `${n} (choose one option by its key): ${q.prompt}\n${q.options.map((x, k) => `  k${k + 1}: ${x.text}`).join('\n')}`
+      })
+      const props: Record<string, unknown> = {}
+      questions.forEach((q, i) => {
+        const n = names[i] ?? ''
+        if (q.kind === 'bool')
+          props[n] = {
+            type: 'object',
+            additionalProperties: false,
+            required: ['p'],
+            properties: { p: { type: 'number' } },
+          }
+        else if (q.kind === 'score')
+          props[n] = {
+            type: 'object',
+            additionalProperties: false,
+            required: ['level'],
+            properties: { level: { type: 'number' } },
+          }
+        else
+          props[n] = {
+            type: 'object',
+            additionalProperties: false,
+            required: ['ranked'],
+            properties: {
+              ranked: {
+                type: 'array',
+                maxItems: 5,
+                items: {
+                  type: 'object',
+                  additionalProperties: false,
+                  required: ['key', 'p'],
+                  properties: {
+                    key: { type: 'string', enum: q.options.map((_, k) => `k${k + 1}`) },
+                    p: { type: 'number' },
+                  },
+                },
+              },
+            },
+          }
+      })
+      const request = {
+        model,
+        messages: [
+          {
+            role: 'system',
+            content:
+              'You answer judgement questions about the given state honestly and carefully. You answer with JSON only.',
+          },
+          {
+            role: 'user',
+            content: [
+              'State:',
+              JSON.stringify(state),
+              '',
+              'Answer every question. For a yes or no question give p, the probability from 0 to 1 that the answer is yes. For a choice give up to five likeliest options by key, best first, each with its probability; the probabilities add up to at most 1. For a level give the level.',
+              '',
+              ...lines,
+            ].join('\n'),
+          },
+        ],
+        temperature: 0,
+        max_tokens: 6000,
+        reasoning: { effort: 'low' },
+        provider: { order: ['cerebras', 'groq'], allow_fallbacks: true },
+        response_format: {
+          type: 'json_schema',
+          json_schema: {
+            name: 'answers',
+            strict: true,
+            schema: {
+              type: 'object',
+              additionalProperties: false,
+              required: names,
+              properties: props,
+            },
+          },
+        },
+        usage: { include: true },
+      }
+      const t0 = performance.now()
+      let response: unknown = null
+      let error: string | undefined
+      let parsed: Record<
+        string,
+        { p?: number; level?: number; ranked?: { key: string; p: number }[] }
+      > | null = null
+      let costUsd = 0
+      try {
+        const res = await doFetch('https://openrouter.ai/api/v1/chat/completions', {
+          method: 'POST',
+          headers: { authorization: `Bearer ${o.apiKey}`, 'content-type': 'application/json' },
+          body: JSON.stringify(request),
+          signal: signal
+            ? AbortSignal.any([signal, AbortSignal.timeout(o.timeoutMs ?? 15000)])
+            : AbortSignal.timeout(o.timeoutMs ?? 15000),
+        })
+        response = await res.json().catch(() => null)
+        const body = response as {
+          choices?: { message?: { content?: string } }[]
+          usage?: { cost?: number }
+        } | null
+        costUsd = body?.usage?.cost ?? 0
+        if (!res.ok) error = `HTTP ${res.status}`
+        else parsed = JSON.parse(body?.choices?.[0]?.message?.content ?? '')
+      } catch (e) {
+        error = e instanceof Error ? e.message : String(e)
+      }
+      const clamp = (x: unknown) =>
+        typeof x === 'number' && Number.isFinite(x) ? Math.min(1, Math.max(0, x)) : null
+      const answers = new Map<string, Answer>()
+      questions.forEach((q, i) => {
+        const a = parsed?.[names[i] ?? '']
+        if (q.kind === 'bool') {
+          const p = clamp(a?.p)
+          answers.set(
+            q.id,
+            p === null
+              ? { kind: 'missing', id: q.id, reason: 'error' }
+              : { kind: 'bool', id: q.id, pTrue: p },
+          )
+          return
+        }
+        if (q.kind === 'score') {
+          const level =
+            typeof a?.level === 'number'
+              ? Math.min(q.levels.length - 1, Math.max(0, a.level))
+              : null
+          answers.set(
+            q.id,
+            level === null
+              ? { kind: 'missing', id: q.id, reason: 'error' }
+              : { kind: 'score', id: q.id, score: level, dist: null },
+          )
+          return
+        }
+        const dist: Dist = {}
+        for (const r of a?.ranked ?? []) {
+          const key = q.options[Number(r.key.slice(1)) - 1]?.key
+          const p = clamp(r.p)
+          if (key && p !== null && !(key in dist)) dist[key] = p
+        }
+        if (!Object.keys(dist).length) {
+          answers.set(q.id, { kind: 'missing', id: q.id, reason: 'error' })
+          return
+        }
+        const sm = summarise(dist)
+        answers.set(q.id, { kind: 'choice', id: q.id, dist, ...sm })
+      })
+      return {
+        answers,
+        calls: [
+          {
+            adapter: 'openrouter',
+            model,
+            request,
+            response,
+            latencyMs: Math.round(performance.now() - t0),
+            costUsd,
+            ...(error ? { error } : {}),
+          },
+        ],
+      }
+    },
+  }
+}
+
+/**
+ * Jev first; questions it leaves unanswered (an error, a time-out, a refusal) go to the backup in
+ * one call. Answers either gave are kept as they are.
+ */
+export function withBackup(first: DecisionPort, backup: DecisionPort): DecisionPort {
+  return {
+    id: `${first.id}+${backup.id}`,
+    model: first.model,
+    async decide(state, questions, signal) {
+      const a = await first
+        .decide(state, questions, signal)
+        .catch(() => ({ answers: new Map<string, Answer>(), calls: [] }) as DecisionResult)
+      const left = questions.filter((q) => {
+        const x = a.answers.get(q.id)
+        return !x || x.kind === 'missing'
+      })
+      if (!left.length) return a
+      const b = await backup
+        .decide(state, left, signal)
+        .catch(() => ({ answers: new Map<string, Answer>(), calls: [] }) as DecisionResult)
+      const answers = new Map(a.answers)
+      for (const q of left) {
+        const x = b.answers.get(q.id)
+        answers.set(q.id, x ?? { kind: 'missing', id: q.id, reason: 'error' })
+      }
+      return { answers, calls: [...a.calls, ...b.calls] }
     },
   }
 }

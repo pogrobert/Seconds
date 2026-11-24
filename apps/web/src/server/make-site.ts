@@ -26,10 +26,12 @@ import {
   KIND_LABEL,
   KINDS,
   type Kind,
+  openrouterDecisions,
   randomDecisions,
   rng,
   type SiteCopy,
   typesafeDecisions,
+  withBackup,
   writePhotoQueries,
   writeSiteCopy,
 } from '@repo/pipeline'
@@ -48,6 +50,22 @@ import { type FoundPhoto, findPhotos, toDataUri } from './photos'
 // Nothing is invented: prices, hours, address and contact appear only if the owner gave them.
 
 export type BuiltSite = { id: string; label: string; rules: string; html: string }
+/**
+ * Who answers the design questions: Jev, with the same questions on OpenRouter as a backup for
+ * whatever Jev cannot answer (down, slow or refusing; 2026-11-24). Without Jev's key the backup
+ * answers alone; without either, a seeded random pick.
+ */
+export function decisionsFor(
+  env: { TYPESAFE_API_KEY?: string; OPENROUTER_API_KEY?: string },
+  seed: string,
+): DecisionPort {
+  const jev = env.TYPESAFE_API_KEY ? typesafeDecisions({ apiKey: env.TYPESAFE_API_KEY }) : null
+  const backup = env.OPENROUTER_API_KEY
+    ? openrouterDecisions({ apiKey: env.OPENROUTER_API_KEY })
+    : null
+  return jev && backup ? withBackup(jev, backup) : (jev ?? backup ?? randomDecisions(seed))
+}
+
 /** What the photo step needs, handed back by the page step (docs/m0/17-photos.md). */
 export type PhotoJob = {
   queries: { place: string; people: string; detail: string }
@@ -394,10 +412,9 @@ export async function build(
   const env = getEnv()
   const words = messages.join('\n')
   const notes: string[] = []
-  const decide = env.TYPESAFE_API_KEY
-    ? typesafeDecisions({ apiKey: env.TYPESAFE_API_KEY })
-    : randomDecisions(words)
-  if (!env.TYPESAFE_API_KEY) notes.push('No TYPESAFE_API_KEY: design choices are random.')
+  const decide = decisionsFor(env, words)
+  if (!env.TYPESAFE_API_KEY && !env.OPENROUTER_API_KEY)
+    notes.push('No TYPESAFE_API_KEY: design choices are random.')
 
   // 1. Reading and words, in parallel.
   const td = performance.now()
