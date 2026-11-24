@@ -666,7 +666,7 @@ function Build() {
           <button
             type="button"
             onClick={startOver}
-            className="-mx-1 flex items-center gap-2 transition-transform duration-150 ease-out active:scale-[0.97] rounded-lg px-1 text-[15px] font-semibold tracking-tight outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+            className="-mx-1 flex shrink-0 items-center gap-2 transition-transform duration-150 ease-out active:scale-[0.97] rounded-lg px-1 text-[15px] font-semibold tracking-tight outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
           >
             <Mark />
             Seconds
@@ -676,7 +676,9 @@ function Build() {
       </Tooltip>
       {result && (
         <>
-          <span aria-hidden className="text-zinc-300">
+          {/* Neither the name nor the slash may shrink: Safari squeezed "Seconds" over the slash
+              when the site's name was long (2026-11-24); only the site's name is cut short. */}
+          <span aria-hidden className="shrink-0 text-zinc-300">
             /
           </span>
           <span className="truncate text-sm font-medium text-zinc-600">{result.name}</span>
