@@ -183,6 +183,9 @@ const WAITING_CSS =
   '<style>img[data-img]{background:linear-gradient(110deg,rgba(127,127,127,.10) 35%,rgba(127,127,127,.24) 50%,rgba(127,127,127,.10) 65%) 0 0/300% 100%;animation:img-wait 1.6s linear infinite}@keyframes img-wait{from{background-position:100% 0}to{background-position:-50% 0}}.img-in{animation:img-in .5s ease-out}@keyframes img-in{from{opacity:0}to{opacity:1}}@media (prefers-reduced-motion:reduce){img[data-img],.img-in{animation:none}}</style>'
 const withSpaces = (html: string) =>
   html
+    // React adds a preload link for the hero photo; with the token as its address the browser
+    // asked for /__IMG_hero__ and got a 404 on every preview (prod smoke test, 2026-11-24).
+    .replace(/<link rel="preload" as="image" href="__IMG_[A-Za-z0-9]+__"\/>/g, '')
     .replace(/src="__IMG_([A-Za-z0-9]+)__"/g, `src="${BLANK}" data-img="$1" data-slot="$1"`)
     .replace('</head>', `${WAITING_CSS}</head>`)
 
