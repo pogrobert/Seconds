@@ -1295,9 +1295,9 @@ function TryRow({ onPick, typing }: { onPick: (ex: Example) => void; typing: boo
   )
 }
 
-/** The mark: the small logo (public/icon.svg, also the tab icon), and the assistant's avatar in the chat. */
+/** The mark: the small logo (public/icon-96.png, drawn from icon.svg), and the assistant's avatar in the chat. */
 function Mark() {
-  return <img src="/icon.svg" alt="" width={24} height={24} className="size-6 shrink-0" />
+  return <img src="/icon-96.png" alt="" width={24} height={24} className="size-6 shrink-0" />
 }
 
 /** How chat replies and chips arrive: a 4px rise and a fade, 200ms, strong ease-out. */

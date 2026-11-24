@@ -19,7 +19,10 @@ export const Route = createRootRoute({
       // arrived after the first paint and the text shifted when it swapped in (2026-11-23).
       { rel: 'preload', href: sans, as: 'font', type: 'font/woff2', crossOrigin: 'anonymous' },
       { rel: 'stylesheet', href: appCss },
-      { rel: 'icon', href: '/icon.svg', type: 'image/svg+xml' },
+      // PNGs drawn from public/icon.svg in Chromium: Safari draws the SVG's blurs and grain
+      // coarsely, and its dark tile vanished into the dark page (iPhone, 2026-11-24).
+      { rel: 'icon', href: '/icon-48.png', type: 'image/png', sizes: '48x48' },
+      { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
     ],
   }),
   shellComponent: RootDocument,
