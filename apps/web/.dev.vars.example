@@ -5,6 +5,13 @@ TYPESAFE_API_KEY=
 OPENROUTER_API_KEY=
 # Stock photos through Pixabay (free account): https://pixabay.com/api/docs/
 PIXABAY_API_KEY=
+# Optional. Film and TV stills for famous subjects (TMDB, free for non-commercial use, API Read
+# Access Token): https://www.themoviedb.org/settings/api
+TMDB_TOKEN=
+# Optional. Game screenshots for famous subjects (IGDB, through a Twitch app):
+# https://dev.twitch.tv/console
+TWITCH_CLIENT_ID=
+TWITCH_CLIENT_SECRET=
 
 # Turns on the bench-only routes (/api/build, /api/template, /api/template-pick) for tools/bench.
 # Never set in production.

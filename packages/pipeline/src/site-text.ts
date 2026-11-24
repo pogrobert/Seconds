@@ -740,6 +740,8 @@ export async function writePhotoQueries(o: {
    * photos tied to it, such as cosplay of a character or a filming location. Empty when none.
    */
   commons: { place: string; people: string; detail: string }
+  /** The film, TV show or game the words are about, for its official stills (photos.ts). */
+  media: { kind: 'film' | 'tv' | 'game' | 'none'; title: string }
   kind: string
   town: string
   ms: number
@@ -765,6 +767,7 @@ export async function writePhotoQueries(o: {
             `photos: three short English stock-photo searches (2 to 4 words, at most ${L.photo} characters) for things a camera can see in this organisation's own world. No place names, no brand names, no abstract words (not "community", "information", "quality"): place = the room or setting where it works, such as "bakery counter" or "dental surgery"; people = someone doing its work, such as "baker kneading dough"; detail = a close-up object or material, such as "sourdough loaf".`,
             // "Portfolio page for Dutch van der Linde" searched a photo studio and laptops: these
             // searches run beside the words, so they need the writer's rule on famous names.
+            'media: the one film, TV show or video game the words are about or come from, by its original English title, with kind film, tv or game: "Better Call Saul" (tv) for Saul Goodman, "Whiplash" (film) for Terence Fletcher, "Red Dead Redemption 2" (game) for Dutch van der Linde, "The Office" (tv) for Dunder Mifflin, "SpongeBob SquarePants" (tv) for the Krusty Krab. Otherwise kind none and an empty title, also for a business only named after or themed on one.',
             `commons: only when the words name or refer to a famous film, show, game, book, character, real person or organisation you know: three searches of Wikimedia Commons for real, freely licensed photographs tied to it, one per space, such as cosplay or costumes of a character ("stormtrooper cosplay"), a filming location ("Kualoa Ranch"), the real place it is set in ("Scranton Pennsylvania"), a fan replica or exhibit ("Krusty Krab exhibit"), or props. Never an actor's or celebrity's name, never a logo, poster or screenshot. Otherwise three empty strings. Each at most ${L.photo} characters.`,
             'If the words are for or about a famous real person, a well-known fictional character or a famous organisation that you know, kind and photos come from their world as you know it, not from the kind of page asked for: for a Wild West outlaw, kind "outlaw gang leader" and photos such as "campfire at night", "cowboy on horseback" and "old revolver"; never a photo of the person themselves Name each thing fully, the way a stock library would file it ("horse saddle", not "saddle"), and avoid words with a second, modern meaning there ("planning", "heist", "team"), which bring office and sport photos. A business only named after or themed on one is an ordinary business. If the words do not say what the person or organisation does, choose photos that fit any work, such as "desk with notebook".',
           ].join('\n'),
@@ -784,6 +787,10 @@ export async function writePhotoQueries(o: {
             town: str(60),
             photos: obj({ place: str(L.photo), people: str(L.photo), detail: str(L.photo) }),
             commons: obj({ place: str(L.photo), people: str(L.photo), detail: str(L.photo) }),
+            media: obj({
+              kind: { type: 'string', enum: ['film', 'tv', 'game', 'none'] },
+              title: str(80),
+            }),
           }),
         },
       },
@@ -801,11 +808,13 @@ export async function writePhotoQueries(o: {
       town: string
       photos: { place: string; people: string; detail: string }
       commons?: { place: string; people: string; detail: string }
+      media?: { kind: 'film' | 'tv' | 'game' | 'none'; title: string }
     }
     if (!a.photos?.place) return null
     return {
       queries: a.photos,
       commons: a.commons ?? { place: '', people: '', detail: '' },
+      media: a.media?.title ? a.media : { kind: 'none', title: '' },
       kind: a.kind,
       town: a.town,
       ms: Math.round(performance.now() - t0),

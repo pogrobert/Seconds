@@ -64,7 +64,12 @@ type Candidate = {
   credit: { photographer: string; page: string }
   /** A real photo tied to the famous subject (commonsFor), preferred by the look when good. */
   fan?: boolean
+  /** An official still or screenshot of the film, show or game itself (TMDB, IGDB). */
+  still?: boolean
 }
+
+/** The film, TV show or game the words are about (writePhotoQueries), for its stills. */
+export type Media = { kind: 'film' | 'tv' | 'game'; title: string }
 
 /* --------------------------------------------------------------------------------- Pixabay */
 
@@ -317,6 +322,150 @@ async function commonsFor(q: string, n: number): Promise<Candidate[]> {
     .slice(0, n)
 }
 
+/* ---------------------------------------------------------- Openverse, TMDB and IGDB */
+
+/**
+ * Openly licensed Flickr photos for a famous subject through Openverse (2026-11-24): far more fan,
+ * event and real-world photos than Commons alone. No derivative-free licences (pages crop them);
+ * non-commercial ones are fine, as Seconds is. Anonymous use allows 20 searches a minute and 200
+ * a day, and only famous subjects search here, three a build.
+ */
+async function openverseFor(q: string, n: number): Promise<Candidate[]> {
+  if (!q.trim()) return []
+  const p = new URLSearchParams({
+    q,
+    page_size: '20',
+    license_type: 'modification',
+    category: 'photograph',
+    mature: 'false',
+    source: 'flickr',
+  })
+  const res = await fetch(`https://api.openverse.org/v1/images/?${p}`, {
+    headers: UA,
+    signal: AbortSignal.timeout(4000),
+  }).catch(() => null)
+  if (!res?.ok) return []
+  type Hit = {
+    id: string
+    title?: string
+    url: string
+    creator?: string
+    license: string
+    license_version?: string
+    foreign_landing_url?: string
+    width?: number
+    height?: number
+  }
+  const body = (await res.json().catch(() => null)) as { results?: Hit[] } | null
+  return (body?.results ?? [])
+    .filter((h) => /^https:\/\/live\.staticflickr\.com\/.+_b\.jpg$/.test(h.url))
+    .filter((h) => Math.max(h.width ?? 0, h.height ?? 0) >= 1000)
+    .slice(0, n)
+    .map((h) => ({
+      id: `o${h.id.replace(/[^A-Za-z0-9]/g, '').slice(0, 40)}`,
+      preview: h.url.replace(/_b\.jpg$/, '_n.jpg'),
+      full: h.url,
+      width: h.width ?? 1024,
+      height: h.height ?? 683,
+      alt: h.title?.slice(0, 120) || q,
+      credit: {
+        photographer:
+          `${(h.creator ?? 'Flickr').slice(0, 60)} (CC ${h.license.toUpperCase()} ${h.license_version ?? ''})`.trim(),
+        page: h.foreign_landing_url ?? h.url,
+      },
+      fan: true,
+    }))
+}
+
+/**
+ * A film's or show's official stills from TMDB (2026-11-24): its backdrops without text, the
+ * best voted first. Free for non-commercial use, credited to TMDB.
+ */
+async function tmdbFor(token: string, m: Media, n: number): Promise<Candidate[]> {
+  const kind = m.kind === 'tv' ? 'tv' : 'movie'
+  const get = (path: string) =>
+    fetch(`https://api.themoviedb.org/3/${path}`, {
+      headers: { authorization: `Bearer ${token}`, accept: 'application/json' },
+      signal: AbortSignal.timeout(4000),
+    })
+      .then((r) => (r.ok ? r.json() : null))
+      .catch(() => null)
+  const found = (await get(`search/${kind}?query=${encodeURIComponent(m.title)}`)) as {
+    results?: { id: number; title?: string; name?: string }[]
+  } | null
+  const hit = found?.results?.[0]
+  if (!hit) return []
+  const images = (await get(`${kind}/${hit.id}/images?include_image_language=null`)) as {
+    backdrops?: { file_path: string; width: number; height: number; iso_639_1: string | null }[]
+  } | null
+  const page = `https://www.themoviedb.org/${kind}/${hit.id}`
+  return (images?.backdrops ?? [])
+    .filter((b) => !b.iso_639_1 && b.width >= 1280)
+    .slice(0, n)
+    .map((b, i) => ({
+      id: `t${hit.id}x${i}${b.file_path.replace(/[^A-Za-z0-9]/g, '').slice(0, 24)}`,
+      preview: `https://image.tmdb.org/t/p/w300${b.file_path}`,
+      full: `https://image.tmdb.org/t/p/w1280${b.file_path}`,
+      width: 1280,
+      height: Math.round((1280 * b.height) / b.width),
+      alt: hit.title ?? hit.name ?? m.title,
+      credit: { photographer: 'Image from TMDB', page },
+      still: true,
+    }))
+}
+
+/** Twitch's app token for IGDB, kept until shortly before it expires. */
+let igdbToken: { value: string; until: number } | null = null
+
+/**
+ * A game's screenshots and artwork from IGDB, through a Twitch app (2026-11-24). Free for
+ * non-commercial use, credited to IGDB.
+ */
+async function igdbFor(id: string, secret: string, m: Media, n: number): Promise<Candidate[]> {
+  if (!igdbToken || igdbToken.until < Date.now()) {
+    const p = new URLSearchParams({
+      client_id: id,
+      client_secret: secret,
+      grant_type: 'client_credentials',
+    })
+    const t = (await fetch(`https://id.twitch.tv/oauth2/token?${p}`, {
+      method: 'POST',
+      signal: AbortSignal.timeout(4000),
+    })
+      .then((r) => (r.ok ? r.json() : null))
+      .catch(() => null)) as { access_token?: string; expires_in?: number } | null
+    if (!t?.access_token) return []
+    igdbToken = { value: t.access_token, until: Date.now() + ((t.expires_in ?? 3600) - 300) * 1000 }
+  }
+  const res = await fetch('https://api.igdb.com/v4/games', {
+    method: 'POST',
+    headers: { 'client-id': id, authorization: `Bearer ${igdbToken.value}` },
+    body: `search "${m.title.replace(/"/g, '')}"; fields name,url,screenshots.image_id,screenshots.width,screenshots.height,artworks.image_id,artworks.width,artworks.height; limit 1;`,
+    signal: AbortSignal.timeout(4000),
+  }).catch(() => null)
+  if (!res?.ok) return []
+  type Img = { image_id: string; width?: number; height?: number }
+  const game = (
+    (await res.json().catch(() => null)) as
+      | { name: string; url?: string; screenshots?: Img[]; artworks?: Img[] }[]
+      | null
+  )?.[0]
+  if (!game) return []
+  return [...(game.artworks ?? []), ...(game.screenshots ?? [])]
+    .filter((x) => (x.width ?? 1920) >= 1280)
+    .slice(0, n)
+    .map((x) => ({
+      id: `g${x.image_id.replace(/[^A-Za-z0-9]/g, '').slice(0, 40)}`,
+      preview: `https://images.igdb.com/igdb/image/upload/t_screenshot_med/${x.image_id}.jpg`,
+      full: `https://images.igdb.com/igdb/image/upload/t_1080p/${x.image_id}.jpg`,
+      width: 1920,
+      height: Math.round((1920 * (x.height ?? 1080)) / (x.width ?? 1920)),
+      alt: game.name,
+      credit: { photographer: 'Image from IGDB', page: game.url ?? 'https://www.igdb.com' },
+      still: true,
+    }))
+}
+
 /* ---------------------------------------------------------------------------- The look */
 
 type Choice = Slots<string[]> & { townFits: boolean }
@@ -350,7 +499,7 @@ async function judge(
         `Photos for the website of ${about.name}, a ${about.kind}${about.town ? ` in ${about.town}` : ''}.`,
         'Each photo below has an id. For each subject, list the ids of photos that clearly fit this organisation, best first, at most 3. Leave a list empty rather than include a photo that does not fit.',
         'Reject: anything that is not a real photograph (illustrations, cartoons, 3D renders, AI-generated images with their too-smooth, too-perfect look), the wrong trade or setting, a different country or city than the one named, staged or cheesy stock, text or watermarks, people in poor taste, blurry or dull pictures.',
-        'Some photos may come from the world of a film, show, game or character this organisation is about or refers to: fans in costume, props, exhibits, filming locations or the real places it is set in. They are marked. fans = the ids of the marked photos that are good, sharp real photographs worth showing on this page (costumes, props, exhibits, places), even if they show the world it refers to rather than its work. Leave out logos, posters, screenshots, game or film stills, and any photo of an actor or other famous real person. Every photo, marked or not, must also fit the era and setting of that world: no modern offices, computers, bicycles or sports gear for a Wild West gang, a fantasy realm or a historical setting. Also reject in the lists logos, posters, screenshots, game or film stills, and any photo of an actor or other famous real person.',
+        'Some images may come from the film, show or game this organisation is about or refers to, and they are marked: official stills or screenshots of it, and real photos from its world (fans in costume, props, exhibits, filming locations, real places it is set in). fans = the ids of the marked images worth showing on this page: sharp, striking stills and screenshots that capture it (characters in a scene are fine there), and good real photos of costumes, props, exhibits and places. Leave out posters, logos, title cards, images with large text, and real photos of an actor or other famous real person at an event. Every image, marked or not, must also fit the era and setting of that world: no modern offices, computers, bicycles or sports gear for a Wild West gang, a fantasy realm or a historical setting. In the lists, unmarked stock photos follow the rules above as before.',
         'place = the room or setting where it works; people = people doing its kind of work or being served; detail = a close-up object or material typical of it.',
         `townFits: true only if a photo of ${about.town || 'the town'} itself (its streets, square or buildings) would suit this organisation's home page, as for a council, a civic or tourist body, or a museum. False for a shop, clinic, studio, trade, firm or restaurant.`,
       ].join('\n'),
@@ -360,7 +509,7 @@ async function judge(
     content.push(
       {
         type: 'text',
-        text: `id ${c.id} (offered for ${s}${c.fan ? '; a real photo from the world it refers to' : ''})`,
+        text: `id ${c.id} (offered for ${s}${c.still ? '; an official still or screenshot of it' : c.fan ? '; a real photo from the world it refers to' : ''})`,
       },
       { type: 'image_url', image_url: { url: inline.get(c.id) } },
     )
@@ -419,7 +568,7 @@ async function judge(
     for (const s of SUBJECTS) {
       // One a space, so the page still shows the work itself beside it.
       const mine = pools[s]
-        .filter((c) => c.fan && fans.has(c.id))
+        .filter((c) => (c.fan || c.still) && fans.has(c.id))
         .map((c) => c.id)
         .slice(0, 1)
       choice[s] = [...mine, ...(choice[s] ?? []).filter((id) => !mine.includes(id))].slice(0, 3)
@@ -493,7 +642,13 @@ async function townSuits(
 }
 
 export async function findPhotos(
-  keys: { pixabay?: string; openrouter?: string },
+  keys: {
+    pixabay?: string
+    openrouter?: string
+    tmdb?: string
+    twitchId?: string
+    twitchSecret?: string
+  },
   q: Slots<string>,
   about: { name: string; kind: string; town: string },
   o: {
@@ -502,6 +657,8 @@ export async function findPhotos(
     avoid?: string[]
     /** Commons searches for a famous subject, per space (commonsFor). */
     commons?: Slots<string>
+    /** The film, show or game a famous subject comes from, for its stills (TMDB, IGDB). */
+    media?: Media
   } = {},
 ): Promise<Found> {
   const per = o.perSubject ?? 6
@@ -517,13 +674,33 @@ export async function findPhotos(
     about.town && keys.openrouter
       ? Promise.all([townSuits(keys.openrouter, about, model), commons(about.town, 2)])
       : Promise.resolve([{ fits: false, costUsd: 0 }, []])
-  const [found, fans] = await Promise.all([
+  // The film's, show's or game's own stills, shared out across the three spaces.
+  const media = o.media
+  const stillsP: Promise<Candidate[]> =
+    !media || !keys.openrouter
+      ? Promise.resolve([])
+      : media.kind === 'game'
+        ? keys.twitchId && keys.twitchSecret
+          ? igdbFor(keys.twitchId, keys.twitchSecret, media, 6).catch(() => [])
+          : Promise.resolve([])
+        : keys.tmdb
+          ? tmdbFor(keys.tmdb, media, 6).catch(() => [])
+          : Promise.resolve([])
+  const [found, fans, stills] = await Promise.all([
     Promise.all(SUBJECTS.map((s) => (keys.pixabay ? pixabay(keys.pixabay, q[s], per) : []))),
     // Commons for a famous subject, beside Pixabay: never unchecked, so only with the look.
+    // Openverse's Flickr photos first, then Commons' own if Openverse found too few.
     Promise.all(
-      SUBJECTS.map((s) => (o.commons?.[s] && keys.openrouter ? commonsFor(o.commons[s], 3) : [])),
+      SUBJECTS.map(async (s) => {
+        const q = o.commons?.[s]
+        if (!q || !keys.openrouter) return []
+        const ov = await openverseFor(q, 3)
+        return ov.length >= 2 ? ov : [...ov, ...(await commonsFor(q, 3 - ov.length))]
+      }),
     ),
+    stillsP,
   ])
+
   // Photos the page shows already go when the owner asks for different ones ("show more
   // photos" brought back the same three, 2026-11-21).
   const avoid = new Set(o.avoid ?? [])
@@ -531,9 +708,9 @@ export async function findPhotos(
   for (const [i, f] of fans.entries()) fans[i] = f.filter((c) => !avoid.has(c.id))
   // A famous subject's own photos first, so the look sees them beside the stock ones.
   const pools: Slots<Candidate[]> = {
-    place: [...(fans[0] ?? []), ...(found[0] ?? [])],
-    people: [...(fans[1] ?? []), ...(found[1] ?? [])],
-    detail: [...(fans[2] ?? []), ...(found[2] ?? [])],
+    place: [...stills.filter((_, i) => i % 3 === 0), ...(fans[0] ?? []), ...(found[0] ?? [])],
+    people: [...stills.filter((_, i) => i % 3 === 1), ...(fans[1] ?? []), ...(found[1] ?? [])],
+    detail: [...stills.filter((_, i) => i % 3 === 2), ...(fans[2] ?? []), ...(found[2] ?? [])],
   }
   const byId = new Map(SUBJECTS.flatMap((s) => pools[s].map((c) => [c.id, c] as const)))
   const suits = { fits: false, costUsd: 0 }

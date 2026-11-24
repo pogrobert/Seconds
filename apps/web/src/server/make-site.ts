@@ -71,6 +71,8 @@ export type PhotoJob = {
   queries: { place: string; people: string; detail: string }
   /** Wikimedia Commons searches for a famous subject, per space (photos.ts, commonsFor). */
   commons?: { place: string; people: string; detail: string }
+  /** The film, show or game a famous subject comes from, for its official stills. */
+  media?: { kind: 'film' | 'tv' | 'game'; title: string }
   about: { name: string; kind: string; town: string }
   seed: string
   /** Jev's pick for drawn art, where no photo fits. */
@@ -456,6 +458,9 @@ export async function build(
           ? {
               queries: e.queries,
               ...(Object.values(e.commons).some(Boolean) ? { commons: e.commons } : {}),
+              ...(e.media.kind !== 'none' && e.media.title
+                ? { media: { kind: e.media.kind, title: e.media.title } }
+                : {}),
               about: { name: 'this organisation', kind: e.kind, town: e.town },
               seed: seedOf(words),
               art: style,
@@ -717,10 +722,18 @@ export async function sitePhotos(
         {
           ...(env.PIXABAY_API_KEY ? { pixabay: env.PIXABAY_API_KEY } : {}),
           ...(env.OPENROUTER_API_KEY ? { openrouter: env.OPENROUTER_API_KEY } : {}),
+          ...(env.TMDB_TOKEN ? { tmdb: env.TMDB_TOKEN } : {}),
+          ...(env.TWITCH_CLIENT_ID && env.TWITCH_CLIENT_SECRET
+            ? { twitchId: env.TWITCH_CLIENT_ID, twitchSecret: env.TWITCH_CLIENT_SECRET }
+            : {}),
         },
         job.queries,
         job.about,
-        { avoid: job.avoid ?? [], ...(job.commons ? { commons: job.commons } : {}) },
+        {
+          avoid: job.avoid ?? [],
+          ...(job.commons ? { commons: job.commons } : {}),
+          ...(job.media ? { media: job.media } : {}),
+        },
       )
   const n = found.natural
   const spare = found.spare

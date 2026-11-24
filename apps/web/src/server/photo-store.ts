@@ -15,6 +15,11 @@ const SOURCES = [
   /^https:\/\/upload\.wikimedia\.org\//,
   // Commons' thumbnails moved here (2026-11-24): chosen Commons photos failed to download.
   /^https:\/\/thumb\.wikimedia\.org\//,
+  // For famous subjects (photos.ts): openly licensed Flickr photos found through Openverse, film
+  // and TV stills from TMDB, game screenshots from IGDB.
+  /^https:\/\/(live|farm\d+)\.staticflickr\.com\//,
+  /^https:\/\/image\.tmdb\.org\/t\/p\//,
+  /^https:\/\/images\.igdb\.com\/igdb\/image\/upload\//,
 ]
 
 /** A photo's id as the photo step makes it: Pixabay's (p…) or Commons' (c…). */
