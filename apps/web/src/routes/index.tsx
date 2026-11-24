@@ -83,6 +83,36 @@ async function findSitePhotos(job: PhotoJob): Promise<PhotoResult> {
 
 type Progress = { choices?: number; words?: number; check?: number }
 
+const warmed = new Set<string>()
+/**
+ * Fetches a page's fonts before the page arrives (the build sends their link early, make-site.ts
+ * fontsAhead): the preview waits for its fonts so the text does not jump when they swap in, and
+ * fonts already in the browser's cache make that wait short. Only the Latin files are fetched.
+ */
+function warmFonts(href: string) {
+  if (warmed.has(href)) return
+  warmed.add(href)
+  const link = document.createElement('link')
+  link.rel = 'stylesheet'
+  link.href = href
+  const families = [...new URL(href).searchParams.getAll('family')].map((f) =>
+    (f.split(':')[0] ?? '').replace(/\+/g, ' '),
+  )
+  link.onload = () => {
+    // Each style and weight once, for Latin letters (the browser picks the files that cover them).
+    const seen = new Set<string>()
+    for (const face of document.fonts) {
+      const family = face.family.replace(/^["']|["']$/g, '')
+      if (!families.includes(family)) continue
+      const font = `${face.style} ${face.weight.split(' ')[0]} 1em "${family}"`
+      if (seen.has(font)) continue
+      seen.add(font)
+      document.fonts.load(font, 'Aa').catch(() => {})
+    }
+  }
+  document.head.appendChild(link)
+}
+
 /**
  * The build, read as it happens (routes/api/build-stream.ts): each part reports when it is done,
  * so the progress shows what is really finished, then the result.
@@ -128,14 +158,17 @@ async function streamBuild(
         nl = buf.indexOf('\n')
         if (!line) continue
         const ev = JSON.parse(line) as
-          | { type: 'step'; step: keyof Progress; ms: number }
+          | { type: 'step'; step: keyof Progress | 'fonts'; ms: number; fonts?: string }
           | { type: 'result'; result: BuildResult }
           | ({ type: 'photo' } & PhotoLanded)
           | { type: 'photos'; photos: PhotoResult | null }
           | { type: 'error'; message: string }
         if (ev.type === 'step') {
-          done[ev.step] = ev.ms
-          onStep({ ...done })
+          if (ev.fonts) warmFonts(ev.fonts)
+          if (ev.step !== 'fonts') {
+            done[ev.step] = ev.ms
+            onStep({ ...done })
+          }
         } else if (ev.type === 'result') {
           got = true
           resolve(ev.result)
@@ -1145,9 +1178,19 @@ function Build() {
                       <iframe
                         ref={frame}
                         onLoad={(e) => {
-                          // Shown once its page is in: before that the frame is a white box,
-                          // a flash in dark mode (2026-11-24).
-                          e.currentTarget.dataset.ready = ''
+                          // Shown once its page is in and its fonts have arrived (at most a
+                          // second): before that the frame is a white box, a flash in dark mode,
+                          // and the text sits in a stand-in font that jumps when the real one
+                          // swaps in (both 2026-11-24).
+                          const el = e.currentTarget
+                          const fonts = el.contentDocument?.fonts
+                          el.contentDocument?.body?.getBoundingClientRect()
+                          Promise.race([
+                            fonts?.ready,
+                            new Promise((ok) => setTimeout(ok, 1000)),
+                          ]).then(() => {
+                            el.dataset.ready = ''
+                          })
                           const doc = frame.current?.contentDocument
                           wireLinks(doc)
                           fillSpaces(doc, linksRef.current)

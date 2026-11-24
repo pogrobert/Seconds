@@ -393,7 +393,39 @@ export function drawTemplates(
 }
 
 /** A step of the build finishing, for the build page's live progress (routes/api/build-stream.ts). */
-export type BuildStep = { step: 'choices' | 'words' | 'check'; ms: number }
+export type BuildStep = {
+  step: 'choices' | 'words' | 'check' | 'fonts'
+  ms: number
+  /** The fonts link of the lettering the page will use, sent ahead (see fontsAhead). */
+  fonts?: string
+}
+
+/**
+ * The fonts link of the lettering a reading leads to, sent before the page so the browser
+ * fetches the fonts while the words are still being written: the preview waits for its fonts,
+ * so a page whose fonts start only when it arrives shows about 0.6 s later (measured 2026-11-24).
+ * The page content only steers colour and photos, so a stand-in does here; a wrong guess costs
+ * only the head start.
+ */
+function fontsAhead(
+  reading: Awaited<ReturnType<typeof readBrief>>,
+  brand: string,
+  seed: string,
+): string | undefined {
+  try {
+    const c = sampleContent('salon', brand, null)
+    const pick = pickDesigns(
+      weigh(reading.profile, reading.direct, ruleProfiles as RuleCache, c, QUIET),
+      seed,
+      3,
+    )[0]
+    return pick
+      ? `https://fonts.googleapis.com/css2?${design(pick).type.fonts}&display=swap`
+      : undefined
+  } catch {
+    return undefined
+  }
+}
 
 export async function build(
   messages: string[],
@@ -426,7 +458,8 @@ export async function build(
     pickParts(decide, words),
   ]).then((r) => {
     const ms = Math.round(performance.now() - td)
-    onStep({ step: 'choices', ms })
+    const fonts = fontsAhead(r[0], r[1].brand, seedOf(words))
+    onStep({ step: 'choices', ms, ...(fonts ? { fonts } : {}) })
     return { r, ms }
   })
   const written = (
@@ -502,7 +535,14 @@ export async function build(
         readBrief(decide, { business: 'organisation', name: '', place: '', words: who }),
         pickArt(decide, who),
         pickParts(decide, who),
-      ]).catch(() => null)
+      ])
+        .then((r) => {
+          // Asked again, the lettering may change: its fonts go ahead too.
+          const fonts = fontsAhead(r[0], r[1].brand, seedOf(words))
+          if (fonts) onStep({ step: 'fonts', ms: 0, fonts })
+          return r
+        })
+        .catch(() => null)
     : Promise.resolve(null)
   // Jev checks each answer against the owner's words (docs/m0/19-fuller-pages.md).
   const tg = performance.now()
