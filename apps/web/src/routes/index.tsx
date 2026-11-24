@@ -929,8 +929,9 @@ function Build() {
                       scrollAnchor={m.role === 'user'}
                       // Its paint is clipped to its box (content-visibility: auto), so a little
                       // room below keeps the focus ring on Details whole.
-                      // Replies ease in; the visitor's own message shows at once.
-                      className={m.role === 'user' ? 'pb-1' : `pb-1 ${ENTER}`}
+                      // A reply takes the place of the progress below, which already eased in,
+                      // so it shows at once (a second rise and fade read as a jump).
+                      className="pb-1"
                     >
                       {m.role === 'user' ? (
                         <ChatMessage align="end">
@@ -960,10 +961,20 @@ function Build() {
                   ))}
                   {busy && (
                     <MessageScrollerItem className={ENTER}>
-                      <div aria-live="polite" className="flex gap-3">
+                      {/* Laid out as the reply that replaces it, with the same rows, so nothing
+                          jumps when the result comes in (until 2026-11-24 a boxed list of four
+                          steps, Design and Check among them, became the reply's three). */}
+                      <div aria-live="polite" className="flex gap-3 text-sm leading-relaxed">
                         <Mark />
-                        <div className="min-w-0 flex-1 rounded-lg border border-zinc-200 bg-white px-3 py-2.5">
-                          <Steps steps={liveSteps(progress, Math.max(0, now - started))} />
+                        <div className="min-w-0 flex-1 pt-0.5">
+                          <p className="text-zinc-500">
+                            {result ? 'Changing it…' : 'Making three versions…'}
+                          </p>
+                          <div className="mt-2">
+                            <Steps
+                              steps={liveSteps(progress, Math.max(0, now - started), !!result)}
+                            />
+                          </div>
                         </div>
                       </div>
                     </MessageScrollerItem>
@@ -1424,25 +1435,21 @@ const styleOf = (rules: string) => {
 type StepState = 'done' | 'active' | 'todo'
 
 /**
- * The build's steps as they stand (from the stream): the design choices and the words run at
- * the same time, then the check on the words, then the page is drawn.
+ * The build's steps as they stand (from the stream), in the rows the finished reply shows: the
+ * words, then the page (the design choices and the check run alongside), then the photos. An edit
+ * is one row.
  */
-function liveSteps(p: Progress, elapsed: number) {
-  const run = (doneMs: number | undefined, ready = true) =>
-    doneMs !== undefined
-      ? { state: 'done' as const, note: seconds(doneMs) }
-      : ready
-        ? { state: 'active' as const, note: seconds(elapsed) }
-        : { state: 'todo' as const }
-  const both = p.choices !== undefined && p.words !== undefined
+function liveSteps(p: Progress, elapsed: number, editing: boolean) {
+  const now = seconds(elapsed)
+  if (editing) return [{ label: 'Edit', state: 'active' as const, note: now }]
   return [
-    { label: 'Design', ...run(p.choices) },
-    { label: 'Words', ...run(p.words) },
-    { label: 'Check', ...run(p.check, both) },
-    {
-      label: 'Page',
-      ...(p.check !== undefined ? { state: 'active' as const } : { state: 'todo' as const }),
-    },
+    p.words !== undefined
+      ? { label: 'Words', state: 'done' as const, note: seconds(p.words) }
+      : { label: 'Words', state: 'active' as const, note: now },
+    p.words !== undefined
+      ? { label: 'Page', state: 'active' as const, note: now }
+      : { label: 'Page', state: 'todo' as const },
+    { label: 'Photos', state: 'todo' as const },
   ]
 }
 /** The build's steps as a trace: done with a check, running with a spinner, waiting dimmed. */
