@@ -20,6 +20,25 @@ export type SavedSite<T> = {
 
 export type SiteSummary = { id: string; name: string; kind: string; updated: number }
 
+/**
+ * A photo as stored: its bytes and type. Safari will not store a Blob in IndexedDB ("Error
+ * preparing Blob/File data to be stored in object store", WebKit, 2026-11-24): every save that
+ * carried photos failed, and a site reopened from Recent showed a broken image. Bytes store
+ * everywhere. Sites saved before keep Blobs, read below.
+ */
+type StoredPhoto = { type: string; bytes: ArrayBuffer }
+type Stored<T> = Omit<SavedSite<T>, 'photos'> & { photos: Record<string, StoredPhoto | Blob> }
+
+/** A stored photo as a Blob again, or null when it cannot be read (it then stays out). */
+async function toBlob(p: StoredPhoto | Blob): Promise<Blob | null> {
+  try {
+    if (p instanceof Blob) return new Blob([await p.arrayBuffer()], { type: p.type })
+    return new Blob([p.bytes], { type: p.type })
+  } catch {
+    return null
+  }
+}
+
 let opening: Promise<IDBDatabase | null> | null = null
 function open(): Promise<IDBDatabase | null> {
   opening ??= new Promise((done) => {
@@ -60,11 +79,23 @@ export async function listSites(): Promise<SiteSummary[]> {
 }
 
 export async function loadSite<T>(id: string): Promise<SavedSite<T> | null> {
-  return ((await run('readonly', (s) => s.get(id))) as SavedSite<T> | undefined) ?? null
+  const stored = (await run('readonly', (s) => s.get(id))) as Stored<T> | undefined
+  if (!stored) return null
+  const photos: Record<string, Blob> = {}
+  for (const [link, p] of Object.entries(stored.photos ?? {})) {
+    const blob = await toBlob(p)
+    if (blob) photos[link] = blob
+  }
+  return { ...stored, photos }
 }
 
 export async function saveSite<T>(site: SavedSite<T>) {
-  await run('readwrite', (s) => s.put(site))
+  const photos: Record<string, StoredPhoto> = {}
+  for (const [link, blob] of Object.entries(site.photos)) {
+    const bytes = await blob.arrayBuffer().catch(() => null)
+    if (bytes) photos[link] = { type: blob.type, bytes }
+  }
+  await run('readwrite', (s) => s.put({ ...site, photos } satisfies Stored<T>))
   const old = (await listSites()).slice(KEEP)
   for (const x of old) await removeSite(x.id)
 }
