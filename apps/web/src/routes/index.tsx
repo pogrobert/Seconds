@@ -4,12 +4,14 @@ import {
   ArrowUpIcon,
   BatteryFullIcon,
   CellSignalFullIcon,
+  ChatsIcon,
   CheckIcon,
   CircleIcon,
   DeviceMobileIcon,
   InfoIcon,
   LayoutIcon,
   MonitorIcon,
+  PlayCircleIcon,
   TrashIcon,
   WarningCircleIcon,
   WifiHighIcon,
@@ -680,24 +682,6 @@ function Build() {
           <span className="truncate text-sm font-medium text-zinc-600">{result.name}</span>
         </>
       )}
-      <ToggleGroup
-        type="single"
-        value={pane}
-        onValueChange={(v) => v && setPane(v as typeof pane)}
-        aria-label="Show"
-        variant="outline"
-        size="sm"
-        spacing={0}
-        rovingFocus={false}
-        className="ml-auto shrink-0 md:hidden"
-      >
-        <ToggleGroupItem value="preview" className="px-3 text-[13px]">
-          Preview
-        </ToggleGroupItem>
-        <ToggleGroupItem value="chat" className="px-3 text-[13px]">
-          Chat
-        </ToggleGroupItem>
-      </ToggleGroup>
     </header>
   )
 
@@ -868,7 +852,42 @@ function Build() {
   return (
     <div className="flex h-dvh flex-col bg-zinc-50 text-zinc-900 antialiased selection:bg-teal-600/25">
       <div className="md:hidden">{top}</div>
-      <div className="flex min-h-0 flex-1 flex-col gap-3 px-3 pb-3 md:flex-row md:pt-3">
+      {/* On a phone, Chat and Preview as a tab bar under the top bar, in Meerlume's style
+          (2026-11-24, Robert: "Match the bar"). Preview shows first and after each change. */}
+      <div
+        role="tablist"
+        aria-label="Show"
+        className="flex shrink-0 border-b border-zinc-200 bg-zinc-50 px-2 md:hidden"
+      >
+        {(
+          [
+            { value: 'chat', label: 'Chat', Icon: ChatsIcon },
+            { value: 'preview', label: 'Preview', Icon: PlayCircleIcon },
+          ] as const
+        ).map(({ value, label, Icon }) => {
+          const on = pane === value
+          return (
+            <button
+              key={value}
+              type="button"
+              role="tab"
+              aria-selected={on}
+              onClick={() => setPane(value)}
+              className={`relative flex flex-1 items-center justify-center gap-1.5 px-3 py-3 text-[12px] font-medium tracking-[0.04em] uppercase outline-none transition-colors duration-200 focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:ring-inset ${on ? 'text-zinc-900' : 'text-zinc-500'}`}
+            >
+              <Icon size={14} weight={on ? 'bold' : 'regular'} />
+              {label}
+              {on && (
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute inset-x-3 -bottom-px h-0.5 rounded-t-full bg-zinc-900 motion-safe:animate-[tab-line_0.22s_ease_both]"
+                />
+              )}
+            </button>
+          )
+        })}
+      </div>
+      <div className="flex min-h-0 flex-1 flex-col gap-3 px-3 pb-3 pt-3 md:flex-row">
         <aside
           className={`order-2 flex min-h-0 w-full flex-1 flex-col md:order-none md:w-[400px] md:flex-none md:shrink-0 ${pane === 'chat' ? '' : 'max-md:hidden'}`}
           aria-label="Chat"

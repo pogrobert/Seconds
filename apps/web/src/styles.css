@@ -189,3 +189,15 @@
     @apply font-sans;
   }
 }
+
+/* The phone tab bar's line under the chosen tab grows in (routes/index.tsx). */
+@keyframes tab-line {
+  from {
+    transform: scaleX(0.4);
+    opacity: 0;
+  }
+  to {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+}
