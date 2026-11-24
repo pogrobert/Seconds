@@ -24,7 +24,6 @@ import {
   useLayoutEffect,
   useRef,
   useState,
-  useSyncExternalStore,
 } from 'react'
 import { flushSync } from 'react-dom'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
@@ -177,20 +176,6 @@ const tooShort = (text: string) => {
 
 const seconds = (ms: number) => `${(ms / 1000).toFixed(1)} s`
 
-/** True below Tailwind's md breakpoint, where the chat sits under the preview. */
-const NARROW = '(max-width: 767px)'
-function useNarrow() {
-  return useSyncExternalStore(
-    (on) => {
-      const q = window.matchMedia(NARROW)
-      q.addEventListener('change', on)
-      return () => q.removeEventListener('change', on)
-    },
-    () => window.matchMedia(NARROW).matches,
-    () => false,
-  )
-}
-
 // The page shows before its photos (docs/m0/17-photos.md): each photo space starts as a soft
 // shimmer and the photo fades in when the photo step returns, without reloading the page.
 const BLANK = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
@@ -303,7 +288,9 @@ function Build() {
 
   // The first screen starts with the cursor in the message box.
   const onStart = messages.length === 0
-  const narrow = useNarrow()
+  // On a phone the preview and the chat take turns on the whole screen (2026-11-24, Robert:
+  // "on mobile we need two tabs - chat and preview"). From md up both show side by side.
+  const [pane, setPane] = useState<'preview' | 'chat'>('preview')
   useEffect(() => {
     if (onStart) composer.current?.focus()
   }, [onStart])
@@ -389,6 +376,7 @@ function Build() {
           setResult(before.result)
           setLinks(before.links)
           setLook(before.result.suggested)
+          setPane('preview')
         }
         setMessages((m) => [
           ...m,
@@ -423,6 +411,7 @@ function Build() {
       const was = result?.sites.find((x) => x.id === look)?.label
       const same = edited ? r.sites.find((x) => x.label === was) : undefined
       setResult(r)
+      setPane('preview')
       setLook(r.show ?? same?.id ?? r.suggested)
       versions.current.push({
         result: r,
@@ -691,6 +680,24 @@ function Build() {
           <span className="truncate text-sm font-medium text-zinc-600">{result.name}</span>
         </>
       )}
+      <ToggleGroup
+        type="single"
+        value={pane}
+        onValueChange={(v) => v && setPane(v as typeof pane)}
+        aria-label="Show"
+        variant="outline"
+        size="sm"
+        spacing={0}
+        rovingFocus={false}
+        className="ml-auto shrink-0 md:hidden"
+      >
+        <ToggleGroupItem value="preview" className="px-3 text-[13px]">
+          Preview
+        </ToggleGroupItem>
+        <ToggleGroupItem value="chat" className="px-3 text-[13px]">
+          Chat
+        </ToggleGroupItem>
+      </ToggleGroup>
     </header>
   )
 
@@ -863,7 +870,7 @@ function Build() {
       <div className="md:hidden">{top}</div>
       <div className="flex min-h-0 flex-1 flex-col gap-3 px-3 pb-3 md:flex-row md:pt-3">
         <aside
-          className="order-2 flex min-h-0 w-full flex-1 flex-col md:order-none md:w-[400px] md:flex-none md:shrink-0"
+          className={`order-2 flex min-h-0 w-full flex-1 flex-col md:order-none md:w-[400px] md:flex-none md:shrink-0 ${pane === 'chat' ? '' : 'max-md:hidden'}`}
           aria-label="Chat"
         >
           <div className="-mt-3 hidden md:block">{top}</div>
@@ -880,12 +887,7 @@ function Build() {
                   {messages.map((m, i) => (
                     <MessageScrollerItem
                       key={i}
-                      // The visitor's message is pinned to the top of the chat, so the reply
-                      // grows below it. On a phone the chat is about 140px tall: a long prompt
-                      // filled it and the reply sat out of view under the scroll button (prod
-                      // smoke test, 2026-11-24), so there the chat follows the newest reply.
-                      // (Pinning the reply there instead left it partly hidden, under the button.)
-                      scrollAnchor={m.role === 'user' && !narrow}
+                      scrollAnchor={m.role === 'user'}
                       // Its paint is clipped to its box (content-visibility: auto), so a little
                       // room below keeps the focus ring on Details whole.
                       // Replies ease in; the visitor's own message shows at once.
@@ -971,7 +973,7 @@ function Build() {
           // The border is drawn on top, not around: a site clipped to the rounded corner leaves
           // half-covered pixels where the panel's own colour showed as a light rim;
           // the border laid over them covers exactly those pixels.
-          className="relative order-1 flex min-w-0 flex-col overflow-hidden rounded-xl bg-white shadow-[0_1px_2px_rgba(9,9,11,.04)] after:pointer-events-none after:absolute after:inset-0 after:z-10 after:rounded-[inherit] after:border after:border-zinc-200 max-md:h-[58dvh] max-md:shrink-0 md:order-none md:flex-1"
+          className={`relative order-1 flex min-w-0 flex-col overflow-hidden rounded-xl bg-white shadow-[0_1px_2px_rgba(9,9,11,.04)] after:pointer-events-none after:absolute after:inset-0 after:z-10 after:rounded-[inherit] after:border after:border-zinc-200 md:order-none max-md:flex-1 md:flex-1 ${pane === 'preview' ? '' : 'max-md:hidden'}`}
         >
           <Tabs
             value={site?.id ?? ''}
