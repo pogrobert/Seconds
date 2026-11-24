@@ -24,6 +24,7 @@ import {
   useLayoutEffect,
   useRef,
   useState,
+  useSyncExternalStore,
 } from 'react'
 import { flushSync } from 'react-dom'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
@@ -176,6 +177,20 @@ const tooShort = (text: string) => {
 
 const seconds = (ms: number) => `${(ms / 1000).toFixed(1)} s`
 
+/** True below Tailwind's md breakpoint, where the chat sits under the preview. */
+const NARROW = '(max-width: 767px)'
+function useNarrow() {
+  return useSyncExternalStore(
+    (on) => {
+      const q = window.matchMedia(NARROW)
+      q.addEventListener('change', on)
+      return () => q.removeEventListener('change', on)
+    },
+    () => window.matchMedia(NARROW).matches,
+    () => false,
+  )
+}
+
 // The page shows before its photos (docs/m0/17-photos.md): each photo space starts as a soft
 // shimmer and the photo fades in when the photo step returns, without reloading the page.
 const BLANK = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
@@ -288,6 +303,7 @@ function Build() {
 
   // The first screen starts with the cursor in the message box.
   const onStart = messages.length === 0
+  const narrow = useNarrow()
   useEffect(() => {
     if (onStart) composer.current?.focus()
   }, [onStart])
@@ -864,7 +880,12 @@ function Build() {
                   {messages.map((m, i) => (
                     <MessageScrollerItem
                       key={i}
-                      scrollAnchor={m.role === 'user'}
+                      // The visitor's message is pinned to the top of the chat, so the reply
+                      // grows below it. On a phone the chat is about 140px tall: a long prompt
+                      // filled it and the reply sat out of view under the scroll button (prod
+                      // smoke test, 2026-11-24), so there the chat follows the newest reply.
+                      // (Pinning the reply there instead left it partly hidden, under the button.)
+                      scrollAnchor={m.role === 'user' && !narrow}
                       // Its paint is clipped to its box (content-visibility: auto), so a little
                       // room below keeps the focus ring on Details whole.
                       // Replies ease in; the visitor's own message shows at once.
