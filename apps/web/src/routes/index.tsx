@@ -182,7 +182,7 @@ const seconds = (ms: number) => `${(ms / 1000).toFixed(1)} s`
 // shimmer and the photo fades in when the photo step returns, without reloading the page.
 const BLANK = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
 const WAITING_CSS =
-  '<style>img[data-img]{background:linear-gradient(110deg,rgba(127,127,127,.10) 35%,rgba(127,127,127,.24) 50%,rgba(127,127,127,.10) 65%) 0 0/300% 100%;animation:img-wait 1.6s linear infinite}@keyframes img-wait{from{background-position:100% 0}to{background-position:-50% 0}}.img-in{animation:img-in .5s ease-out}@keyframes img-in{from{opacity:0}to{opacity:1}}@media (prefers-reduced-motion:reduce){img[data-img],.img-in{animation:none}}</style>'
+  '<style>img[data-img]{background:linear-gradient(110deg,rgba(127,127,127,.10) 35%,rgba(127,127,127,.24) 50%,rgba(127,127,127,.10) 65%) 0 0/300% 100%;animation:img-wait 1.6s linear infinite}@keyframes img-wait{from{background-position:100% 0}to{background-position:-50% 0}}.img-in{animation:img-in .5s ease-out}img[data-empty]{background:rgba(127,127,127,.12)}@keyframes img-in{from{opacity:0}to{opacity:1}}@media (prefers-reduced-motion:reduce){img[data-img],.img-in{animation:none}}</style>'
 const withSpaces = (html: string) =>
   html
     // React adds a preload link for the hero photo; with the token as its address the browser
@@ -221,6 +221,9 @@ function wireLinks(doc: Document | null | undefined) {
  * edit asking for other photos, or undoing one), so a space already showing a photo takes the new
  * one, and goes back to waiting while its links are cleared for photos still to come.
  */
+/** In a version's links: its photo step is over, so a space with no link will not get one. */
+const DONE = 'done:'
+
 function fillSpaces(doc: Document | null | undefined, links: Record<string, string>) {
   // Slots that got drawn art are listed under "art:<slot>"; templates hide some of those.
   if (!doc) return
@@ -230,6 +233,15 @@ function fillSpaces(doc: Document | null | undefined, links: Record<string, stri
   for (const img of Array.from(doc.querySelectorAll<HTMLImageElement>('img[data-slot]'))) {
     const slot = img.dataset.slot ?? ''
     const url = links[slot]
+    if (!url && links[DONE]) {
+      // The photo step is over and this space got nothing (a site kept in Recent before its
+      // photos were saved, or a photo that failed to download): it stops waiting.
+      img.removeAttribute('data-img')
+      img.dataset.empty = ''
+      img.src = BLANK
+      continue
+    }
+    delete img.dataset.empty
     if (!url) {
       if (img.hasAttribute('data-img')) continue
       img.dataset.img = slot
@@ -492,6 +504,10 @@ function Build() {
           if (!mineLinks[slot]) landed({ slots: [slot], id, src: p.images[id] ?? '' })
         await Promise.all(puts)
         if (!current()) return
+        mineLinks = { ...mineLinks, [DONE]: '1' }
+        setLinks((l) => ({ ...l, [DONE]: '1' }))
+        const last = versions.current[versions.current.length - 1]
+        if (last?.result === r) last.links = mineLinks
         // The server leaves these out when the owner later asks for different photos.
         const shown = Object.values(p.slots).filter(
           (id) => !p.images[id]?.startsWith('data:image/svg'),
@@ -601,10 +617,12 @@ function Build() {
       swap[old] = url
     }
     // Links to photos that were not kept point nowhere now: their spaces stay empty.
-    const relink = (l: Record<string, string>) =>
-      Object.fromEntries(
+    const relink = (l: Record<string, string>) => ({
+      ...Object.fromEntries(
         Object.entries(l).map(([k, v]) => [k, v.startsWith('blob:') ? (swap[v] ?? '') : v]),
-      )
+      ),
+      [DONE]: '1',
+    })
     const d = saved.data
     const apply = () => {
       siteId.current = saved.id
