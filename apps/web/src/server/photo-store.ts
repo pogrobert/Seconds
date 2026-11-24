@@ -22,8 +22,12 @@ const SOURCES = [
   /^https:\/\/images\.igdb\.com\/igdb\/image\/upload\//,
 ]
 
-/** A photo's id as the photo step makes it: Pixabay's (p…) or Commons' (c…). */
-const ID = /^[pc][A-Za-z0-9]{1,60}$/
+/**
+ * A photo's id as the photo step makes it: Pixabay's (p…), Commons' (c…), Openverse's (o…),
+ * TMDB's (t…) or IGDB's (g…). The last three were refused here at first, so their photos were
+ * found and approved but never shown (2026-11-24).
+ */
+const ID = /^[pcotg][A-Za-z0-9]{1,60}$/
 
 // Commons asks automated clients for a descriptive User-Agent; a generic one, no personal details.
 const UA = { 'user-agent': 'SecondsSiteMaker/0.1 (hobby project; small, hand-run builds)' }
